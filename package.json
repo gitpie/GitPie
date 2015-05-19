@@ -1,0 +1,12 @@
+{
+  "name": "github",
+  "description": "GitHub client for Linux",
+  "version": "1.0.0",
+  "devDependencies": {
+    "electron-prebuilt": "^0.25.1"
+  },
+  "main": "index.js",
+  "scripts": {
+    "start": "electron ."
+  }
+}
