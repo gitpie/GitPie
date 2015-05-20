@@ -6,6 +6,8 @@
     margin-top: -100px;
     text-align: center;
     width: 100%;
+    color: #99999D;
+    text-shadow: 1px 1px 1px #FFFFFF;
 }
 
 body, html {
@@ -15,17 +17,19 @@ body, html {
 
 /* top bar */
 .top-bar {
-    background: red;
+    background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,rgba(226, 226, 226, 0.5)), color-stop(100%,rgba(208, 208, 208, 0.53)));
     padding-top: 5px;
-    padding-bottom: 6px;
+    padding-bottom: 5px;
     position: fixed;
     top: 0;
     right: 0;
     left: 0;
+    border-bottom: 1px solid #D7D7D7;
 }
 
 .create-repository {
-   color: white;
+   color: #99999D;
+   text-shadow: 1px 1px 1px #fff;
 }
 
 .content-wrapper {
@@ -52,16 +56,18 @@ body, html {
 
 .main-container .section.left {
     width: 300px;
-    background: white;
+    background: #F0F0F0;
     left: 0;
 }
 
 .main-container .section.right {
     left: 300px;
     right: 0;
-    background: gray;
+    background: #ECECEC;
+    border-left: 1px solid #E2E2E2;
 }
 
 .main-container .section.right .create-repo-message {
 
 }
+
