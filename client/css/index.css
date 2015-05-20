@@ -1,4 +1,5 @@
 @import url("https://cdnjs.cloudflare.com/ajax/libs/octicons/2.2.2/octicons.css");
+@import url(http://fonts.googleapis.com/css?family=Open+Sans:400,600,800,300&subset=latin,latin-ext);
 
 .create-repo-message {
     position: absolute;
@@ -13,6 +14,7 @@
 body, html {
     margin: 0;
     padding: 0;
+    font-family: "Open Sans", sans-serif;
 }
 
 /* top bar */
