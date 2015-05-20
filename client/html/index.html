@@ -2,14 +2,12 @@
 <html>
   <head>
     <title>Hello World!</title>
+    <script src="../js/index.js"></script>
+    <link rel="stylesheet" href="../css/index.css" type="text/css" media="screen" charset="utf-8">
   </head>
   <body>
     <h1>Hello World!</h1>
     We are using io.js <script>document.write(process.version)</script>
     and Electron <script>document.write(process.versions['electron'])</script>.
   </body>
-  <script>
-    var remote = require('remote');
-    console.log(remote.require('app').getVersion());
-  </script>
 </html>
