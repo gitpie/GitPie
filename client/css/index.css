@@ -1,4 +1,67 @@
-body {
-    background: black;
-    color: white;
+@import url("https://cdnjs.cloudflare.com/ajax/libs/octicons/2.2.2/octicons.css");
+
+.create-repo-message {
+    position: absolute;
+    top: 50%;
+    margin-top: -100px;
+    text-align: center;
+    width: 100%;
+}
+
+body, html {
+    margin: 0;
+    padding: 0;
+}
+
+/* top bar */
+.top-bar {
+    background: red;
+    padding-top: 5px;
+    padding-bottom: 6px;
+    position: fixed;
+    top: 0;
+    right: 0;
+    left: 0;
+}
+
+.create-repository {
+   color: white;
+}
+
+.content-wrapper {
+    padding: 0 10px;
+}
+
+/* content */
+.main-container {
+    position: fixed;
+    top: 30px;
+    right: 0;
+    left: 0;
+    bottom: 0;
+    background: blue;
+}
+
+.main-container .section {
+    float: left;
+    height: 100%;
+    position: fixed;
+    top: 30px;
+    bottom: 0;
+}
+
+.main-container .section.left {
+    width: 300px;
+    background: white;
+    left: 0;
+}
+
+.main-container .section.right {
+    left: 300px;
+    right: 0;
+    background: gray;
+}
+
+.main-container .section.right .create-repo-message {
+
 }
