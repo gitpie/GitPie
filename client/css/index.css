@@ -50,6 +50,7 @@ body, html {
 .create-repository {
     color: #99999D;
     text-shadow: 1px 1px 1px #fff;
+    cursor: pointer;
 }
 
 .content-wrapper {
@@ -143,6 +144,7 @@ body, html {
     color: #7B7A76;
 }
 
+.create-repository:hover,
 .bubble .popup-bar a.selected {
     color: #4AA8E3;
 }

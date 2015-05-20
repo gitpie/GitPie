@@ -1,5 +1,3 @@
-var $ = require("jquery");
-
 $(document).ready(function () {
     (function (root) {
         function Ui() {
@@ -18,6 +16,11 @@ $(document).ready(function () {
 
         this.GitHub = new GitHub();
     })(window);
+
+    $(".main-container").split({
+        limit: 100
+      , orientation: "vertical"
+    });
 
     $(".create-repository").on("click", function () {
         GitHub.ui.repository.popup("toggle");
