@@ -1,0 +1,106 @@
+<section id="content" ng-click="appCtrl.hideHeaderMenus()">
+
+  <section id="left">
+    <div class="empty-msg" ng-show="appCtrl.repositories.length == 0">
+      <span class="mega-octicon octicon-rocket"></span>
+      All clean here. Start adding or clonning some awesome things! <3
+    </div>
+    <nav>
+      <ul ng-repeat="repository in appCtrl.repositories">
+        <li ng-class="{ selected:repository.selected }" ng-click="appCtrl.showRepositoryInfo(repository)"><span class="octicon octicon-repo"></span> {{ repository.name }}</li>
+      </ul>
+    </nav>
+  </section>
+
+  <section id="center" ng-scroll="appCtrl.loadMoreCommits($event)">
+
+    <form name="commitForm" class="commit-block" ng-show="appCtrl.commitChanges.length > 0">
+      <div class="input-wraper">
+        <input type="text" ng-model="commitMessage" placeholder="Type a message for your commit" />
+      </div>
+      <button type="button" ng-click="appCtrl.commitSelectedChanges(commitMessage)"><span class="octicon octicon-cloud-upload"></span> COMMIT</button>
+    </form>
+
+    <nav>
+      <ul>
+        <li class="commit-number">
+          <div ng-show="appCtrl.commitNumber != 'counting' && appCtrl.commitNumber.length > 0">
+            <span class="octicon octicon-git-commit"></span> {{ appCtrl.commitNumber | number:0}} commits
+          </div>
+          <div ng-show="appCtrl.commitNumber == 'counting'">
+            Counting...
+          </div>
+        </li>
+        <li ng-repeat="commit in appCtrl.repositoryHistory" ng-class="{ selected:commit.selected }" ng-click="appCtrl.showCommitChanges(commit, $index)">
+          <div class="commit-message">{{ commit.message }}</div>
+          <div class="commit-details"><span class="date">{{ commit.date }} by</span> {{ commit.user }} </div>
+        </li>
+      </ul>
+    </nav>
+
+  </section>
+
+  <section id="right" ng-class="{ mask:appCtrl.loading }">
+
+    <tabs>
+      <pane pane-title="History">
+        <header class="commit-message" ng-show="appCtrl.getCommitMessage()">
+          <h2>{{ appCtrl.getCommitMessage() }}</h2>
+
+          <h4 ng-show="appCtrl.getCommitUser()">
+            <span class="octicon octicon-person"></span> {{ appCtrl.getCommitUser() }}
+          </h4>
+          <h4 ng-show="appCtrl.getCommitHash()">
+            <span class="octicon octicon-git-commit"></span> {{ appCtrl.getCommitHash() }}
+          </h4>
+        </header>
+
+        <nav>
+          <ul>
+
+            <li ng-repeat="history in appCtrl.commitHistory">
+              <header>
+                <span ng-click="appCtrl.showFileDiff(history)" ng-class="{ 'octicon-triangle-right': !history.showCode, 'octicon-triangle-down': history.showCode}" class="octicon octicon-triangle-right"></span>
+                {{ history.name.length > 50 ? '...' : ''}} {{ history.name | limitTo: - 50 }}
+                <menuitem ng-bind-html="history.changes"></menuitem>
+              </header>
+              <code ng-show="history.showCode">
+                {{ history.code }}
+              </code>
+            </li>
+
+          </ul>
+        </nav>
+      </pane>
+
+      <pane pane-title="Changes">
+
+        <header class="commit-message">
+          <h2>Unsyncronized Changes</h2>
+        </header>
+
+        <nav>
+          <ul>
+
+            <li ng-repeat="change in appCtrl.commitChanges">
+              <header>
+                <span ng-click="appCtrl.showFileDiff(change)" ng-class="{ 'octicon-triangle-right': !change.showCode, 'octicon-triangle-down': change.showCode}" class="octicon octicon-triangle-right"></span>
+                <input id="change{{$index}}" type="checkbox" ng-model="change.checked" checked="true" />
+                <label for="change{{$index}}"></label>
+                {{ change.name }}
+                <menuitem>{{ change.type }}</menuitem>
+              </header>
+              <code ng-show="change.showCode">
+                {{ change.code }}
+              </code>
+            </li>
+
+          </ul>
+        </nav>
+
+      </div>
+    </tabs>
+
+  </section>
+
+</section>

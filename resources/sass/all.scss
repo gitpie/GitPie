@@ -1,0 +1,581 @@
+@import "../fonts/octicons/octicons.css";
+@import "../fonts/Menlo/menlo.css";
+@import "../fonts/Roboto/roboto.css";
+
+$font: 'Roboto', Helvetica, Arial;
+$code-font: 'Menlo', monospace, consolas, sans-serif;
+$font-size: 14px;
+$border-color: #DDD;
+
+/* Global styles */
+* {
+  outline: none;
+
+  .rotate {
+		-webkit-animation: spin 2s linear infinite;
+	}
+
+	/* Scrollbar style */
+	&::-webkit-scrollbar-track {
+		border-radius: 10px;
+		background-color: #F5F5F5;
+	}
+
+	&::-webkit-scrollbar {
+		width: 6px;
+    height: 6px;
+		background-color: #F5F5F5;
+	}
+
+	&::-webkit-scrollbar-thumb {
+		border-radius: 10px;
+		background-color: rgba(0, 0, 0, 0.5);
+	}
+
+  // Default style for input text
+  input[type="text"] {
+		padding: 8px;
+		border: #DDD 1px solid;
+    background-color: #FAFAFA;
+    box-shadow: inset 0 1px 2px rgba(0,0,0,0.075);
+		border-radius: 3px;
+    transition: all 0.3s linear;
+
+    &:focus {
+      background-color: #FFF;
+      border-color: #51a7e8;
+      box-shadow: inset 0 1px 2px rgba(0,0,0,0.075),0 0 5px rgba(81,167,232,0.5);
+    }
+	}
+
+  // Default style for input file
+  input[type="file"] {
+		width: 70px;
+	  overflow: hidden;
+	  height: 35px;
+	  display: inline-block;
+    float: right;
+    border-radius: 3px;
+    margin: 0 5px;
+
+		&::before {
+			content: 'Browse';
+			display: block;
+			background-color: #F7F7F7;
+			padding: 10px;
+
+      &:hover {
+        background-color: #DDD;
+      }
+		}
+	}
+
+  // Default style for button and input button
+  button, input[type="button"] {
+    background-color: #DBDBDB;
+    border: #DDD 1px solid;
+    padding: 8px 15px;
+    border-radius: 3px;
+    box-shadow: 0 1px 2px rgba(51, 51, 51, 0.48);
+
+    &:active {
+      box-shadow: 0 0px 2px rgba(51, 51, 51, 0.48);
+    }
+  }
+}
+
+/* Enable spin rotation */
+@-moz-keyframes spin { 100% { -moz-transform: rotate(360deg); } }
+@-webkit-keyframes spin { 100% { -webkit-transform: rotate(360deg); } }
+@keyframes spin { 100% { -webkit-transform: rotate(360deg); transform:rotate(360deg); } }
+
+/* Mixins */
+@mixin tabPanel($color, $hoverColor, $borderColor, $activeBorderColor) {
+
+  nav.tabHeader {
+    margin: 0;
+    padding: 0;
+    display: flex;
+    width: 100%;
+    box-sizing: border-box;
+    overflow: hidden;
+    box-shadow: 0 4px 5px -2px rgba(1, 1, 1, 0.3);
+
+    div {
+      flex: 1 1 auto;
+      text-align: center;
+      padding: 10px;
+      border-bottom: $borderColor 3px solid;
+      color: $color;
+      cursor: default;
+      font-weight: bold;
+
+      &:hover {
+        color: $hoverColor;
+      }
+    }
+
+    div.active {
+      border-color: $activeBorderColor;
+      color: inherit;
+    }
+  }
+}
+
+@mixin basicDialog {
+	background-color: #FFF;
+	padding: 10px;
+	border-radius: 3px;
+	box-shadow: 1px 1px 10px #666;
+	color: #333;
+
+  ul {
+    list-style: none;
+    display: inline-block;
+    margin: 0;
+    padding: 0;
+
+    li {
+      padding: 15px 10px;
+      display: block;
+      cursor: default;
+      text-shadow: none;
+      background-color: #FFF;
+
+      &:hover {
+        color: #000;
+        background-color: #FFF;
+      }
+    }
+  }
+
+  .label {
+    padding: 20px 0;
+    display: block;
+    color: #666;
+    font-size: 0.9em;
+  }
+
+	header {
+		font-weight: bold;
+    padding-bottom: 10px;
+    overflow: hidden;
+	}
+
+  .tabPanel {
+    @include tabPanel(#999, #666, #FFF, #DDD);
+
+    nav.tabHeader {
+      margin-bottom: 10px;
+    }
+  }
+
+	footer {
+		text-align: right;
+		padding-top: 15px;
+		overflow: hidden;
+		clear: both;
+		padding-bottom: 5px;
+		padding-right: 2px;
+	}
+}
+
+/* Mask class for loadings */
+.mask {
+	-webkit-filter: blur(5px);
+}
+
+/* App style */
+html {
+  height: 100%;
+	margin: 0px;
+	padding: 0px;
+	font-family: $font;
+	font-size: $font-size;
+	color: #333;
+
+  body {
+  	@extend html;
+
+  	/* Header of the application */
+  	#header {
+  		$default-box-shadow: 0 1px 2px #49575d;
+  		$default-text-color: #CCCCCC;
+  		$default-background-color: #636e73;
+      $default-hover-background-color: #596368;
+
+  		width: 100%;
+  		height: 47px;
+      position: relative;
+      z-index: 9;
+  		background-color: $default-background-color;
+  		color: $default-text-color;
+      overflow: hidden;
+  		-webkit-app-region: drag;
+
+      nav {
+        float: left;
+
+        ul {
+          list-style: none;
+          display: inline-block;
+          margin: 0;
+          padding: 0;
+
+          li {
+            -webkit-app-region: no-drag;
+            padding: 15px 20px;
+            display: inline-block;
+            cursor: pointer;
+            text-shadow: $default-box-shadow;
+
+            .sync-status {
+              margin-left: 10px;
+            }
+          }
+
+          .menu {
+            @include basicDialog;
+            position: fixed;
+            margin-left: 5px;
+            text-shadow: none;
+            min-width: 200px;
+
+            // Arrow
+            &::before {
+              content: '';
+              width: 0;
+              height: 0;
+              border-left: 10px solid transparent;
+              border-right: 10px solid transparent;
+              border-bottom: 10px solid #FFF;
+              position: absolute;
+              top: -5px;
+            }
+          }
+        }
+      }
+
+  		#left {
+  			width: 17%;
+  			float: left;
+  		}
+
+  		#right {
+  			width: 83%;
+  			float: left;
+
+  			#corner {
+  				float: right;
+
+          nav {
+
+            .menu {
+              margin-left: -174px !important;
+
+              // Arrow
+              &::before {
+                right: 10px;
+              }
+            }
+          }
+
+  				.pending-sync-container {
+  					display: inline-block;
+  					margin-left: 5px;
+  				}
+  			}
+  		}
+  	}
+
+  	/* Wrapper of the content */
+  	#wrapper {
+      width: 100%;
+      height: 100%;
+      box-sizing: border-box;
+      padding-top: 47px;
+      margin-top: -47px;
+
+  		#content {
+  	    width:100%;
+  	    overflow: auto;
+  	    background-color: #FFF;
+  	    color: #666;
+  	    height: 100%;
+
+  			// Pattern size of the application columns
+  			.column {
+  		    height: 100%;
+  		    float: left;
+  		    overflow: auto;
+  		    box-sizing: border-box;
+  		  }
+
+  			#left {
+  				@extend .column;
+  		    width: 17%;
+  		    background-color: #F7F7F7;
+  				border-right: $border-color 1px solid;
+
+          nav {
+
+            ul {
+              list-style: none;
+              margin: 0;
+              padding: 0;
+
+              li {
+                padding: 15px 20px;
+      					color: #555;
+      					cursor: default;
+
+      					.octicon {
+      					  margin-right: 8px;
+      						font-size: 1.5em;
+      					  float: left;
+      					}
+
+      					&:hover {
+      						background-color: #EEE;
+      						color: #45413A;
+      					}
+      				}
+
+      				li.selected {
+      					background-color: #DBDEE0;
+      					color: #444;
+      				}
+            }
+          }
+
+          .empty-msg {
+            margin: 10px auto;
+            background-color: #636e73;
+            color: #CCC;
+            border-radius: 50%;
+            padding: 30px;
+            text-align: center;
+            width: 105px;
+            height: 105px;
+            cursor: default;
+
+            .mega-octicon {
+              display: block;
+            }
+          }
+  		  }
+
+  		  #center {
+  				@extend .column;
+  		    width: 40%;
+  				box-shadow: 0 1px 10px rgba(0, 0, 0, 0.14);
+  				z-index: 10;
+
+          nav {
+
+            ul {
+              list-style: none;
+              margin: 0;
+              padding: 0;
+
+              .commit-number {
+                color: #111;
+                font-weight: 500;
+                text-align: center;
+                font-weight: bold;
+              }
+
+              li {
+                border-bottom: $border-color 1px solid;
+                padding: 15px;
+    						cursor: default;
+                word-wrap: break-word;
+
+    						.commit-message {
+    							font-size: 1.2em;
+    							color: #111;
+    							margin-bottom: 5px;
+    						}
+
+    						.commit-details {
+
+    							.date {
+    								color: #999;
+    								display: inline-block;
+    							}
+    						}
+              }
+
+    					li.selected {
+    						background-color: #3998D6;
+    						color: #FFF !important;
+
+    						.commit-message {
+    							color: #FFF;
+    						}
+
+    						.commit-details {
+
+    							.date {
+    								color: #C3E0EC;
+    							}
+    						}
+    					}
+            }
+          }
+
+          .commit-block {
+            border-bottom: #DDD 1px solid;
+  					overflow: hidden;
+  					background-color: #FBFBFB;
+
+  					button {
+  						margin: 10px;
+  						margin-top: 0;
+  						float: right;
+  					}
+
+  					.input-wraper {
+  						padding: 10px;
+
+  						input {
+  						  width: 100%;
+  						  box-sizing: border-box;
+  						}
+            }
+          }
+  		  }
+
+  		  #right {
+  				@extend .column;
+  		    width: 43%;
+  				border-left: $border-color 1px solid;
+          color: #111;
+
+          .tabPanel {
+            @include tabPanel(#999, #666, #FFF, #DDD);
+          }
+
+          header.commit-message {
+  					padding: 15px;
+  					border-bottom: #DDD 1px solid;
+            word-break: break-word;
+
+            .h{
+              margin: 0;
+              font-weight: normal;
+            }
+
+            h2 {
+              @extend .h;
+            }
+
+            h4 {
+              @extend .h;
+              font-family: $code-font;
+              color: #1B577E;
+              display: inline-block;
+              font-size: 0.85em;
+              margin-right: 10px;
+              margin-top: 10px;
+            }
+          }
+
+          nav {
+
+            ul {
+              list-style: none;
+              display: inline-block;
+              margin: 0;
+              padding: 0;
+              width: 100%;
+
+              li {
+                border-bottom: #DDD 1px solid;
+                width: 100%;
+                box-sizing: border-box;
+    						cursor: default;
+    						word-wrap: break-word;
+
+                header {
+                  padding: 10px;
+
+                  span.octicon {
+      							padding-right: 8px;
+                    cursor: pointer;
+      						}
+
+                  label {
+
+                    &:before {
+                      font-family: 'octicons';
+                      content: '\f03a';
+                      text-align: center;
+                      color: #FFF;
+                      display: inline-block;
+                      width: 13px;
+                      height: 13px;
+                      border: 2px solid #999;
+                      border-radius: 3px;
+                      margin-right: 10px;
+                    }
+                  }
+
+                  input[type=checkbox] {
+                    display: none;
+
+                    &:checked + label:before {
+                      background-color: #3998D6;
+                      border-color: #3998D6;
+                    }
+                  }
+
+                  menuitem {
+      							display: inline-block;
+                    overflow: hidden;
+      							float: right;
+      							font-size: 0.9em;
+
+      							.plus {
+      								padding: 3px 3px;
+      								display: inline-block;
+      								background-color: #6CC644;
+      							}
+
+                    .plus-text {
+                      color: #6CC644;
+                      font-weight: bold;
+                      margin: 0 3px;
+                      display: inline-block;
+                    }
+
+      							.minor {
+      								padding: 3px 3px;
+      								display: inline-block;
+      								background-color: #D7431B;
+      							}
+
+                    .minor-text {
+                      color: #D7431B;
+                      font-weight: bold;
+                      margin: 0 3px;
+                      display: inline-block;
+                    }
+      						}
+                }
+
+                code {
+                  font-family: $code-font;
+                  white-space: pre;
+                  word-wrap: normal;
+                  font-size: 0.9em;
+                  word-break: break-word;
+                }
+              }
+            }
+          }
+  		  }
+  	  }
+    }
+  }
+}
