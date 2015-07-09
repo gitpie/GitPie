@@ -29,19 +29,19 @@ With GitPie you can:
 
 Available on 32-bit and 64-bit.
 
-Download the latest Pie from the GitPie release page.
+Download the latest Pie from the GitPie [release page](https://github.com/mapaiva/GitPie/releases).
 
 ### OS X
 
 Available on 32-bit and 64-bit.
 
-Download the latest Pie from the GitPie release page.
+Download the latest Pie from the GitPie [release page](https://github.com/mapaiva/GitPie/releases).
 
 ### Windows
 
 Available on 32-bit and 64-bit.
 
-Download the latest Pie from the GitPie release page.
+Download the latest Pie from the GitPie [release page](https://github.com/mapaiva/GitPie/releases).
 
 ## Contributing
 Want to contribute with the project? This is awesome. But before doing that we prepare a recipe to you do it the right way.
