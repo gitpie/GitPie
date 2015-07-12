@@ -40,6 +40,8 @@ $border-color: #DDD;
     box-shadow: inset 0 1px 2px rgba(0,0,0,0.075);
 		border-radius: 3px;
     transition: all 0.3s linear;
+    margin-bottom: 6px;
+    font-family: $font;
 
     &:focus {
       background-color: #FFF;
@@ -47,6 +49,14 @@ $border-color: #DDD;
       box-shadow: inset 0 1px 2px rgba(0,0,0,0.075),0 0 5px rgba(81,167,232,0.5);
     }
 	}
+
+  textarea {
+    @extend input[type="text"];
+    height: 130px;
+    width: 100%;
+    box-sizing: border-box;
+    resize: none;
+  }
 
   // Default style for input file
   input[type="file"] {
@@ -428,9 +438,9 @@ html {
           }
 
           .commit-block {
-            border-bottom: #DDD 1px solid;
+            box-shadow: 0 0 10px #666;
   					overflow: hidden;
-  					background-color: #FBFBFB;
+  					background-color: #FFF;
 
   					button {
   						margin: 10px;

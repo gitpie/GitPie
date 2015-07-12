@@ -22,7 +22,7 @@ With GitPie you can:
 - Add files to commit
 - Commit changes
 - Pull changes (Only for public projects yet :/)
-- Create new brachs
+- Create new branchs
 - Switch between branchs
 
 ## Installing
