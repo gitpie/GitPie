@@ -183,7 +183,7 @@
           }
         };
 
-        this.commitSelectedChanges = function (commitMessage) {
+        this.commitSelectedChanges = function (commitMessage, commitDescription) {
 
           if (commitMessage) {
 
@@ -207,6 +207,7 @@
 
               GIT.commit(selectedRepository.path, {
                 message: commitMessage,
+                description: commitDescription,
                 forceSync: true
               });
 
@@ -216,6 +217,7 @@
             }
 
             $scope.commitMessage = null;
+            $scope.commitDescription = null;
           }
         };
 

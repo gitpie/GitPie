@@ -288,7 +288,7 @@ Git.prototype.add = function (path, opts) {
 Git.prototype.commit = function (path, opts) {
 
   if (opts.forceSync) {
-    return execSync('git commit -m "'.concat(opts.message).concat('"'), { cwd: path});
+    return execSync('git commit -m "'.concat(opts.message).concat('"').concat(' -m "').concat(opts.description).concat('"'), { cwd: path});
   } else {
 
     exec(

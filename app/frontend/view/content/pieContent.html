@@ -16,9 +16,10 @@
 
     <form name="commitForm" class="commit-block" ng-show="appCtrl.commitChanges.length > 0">
       <div class="input-wraper">
-        <input type="text" ng-model="commitMessage" placeholder="Type a message for your commit" />
+        <input type="text" ng-model="commitMessage" placeholder="Type a message for your commit" required />
+        <textarea ng-model="commitDescription" placeholder="Give a description to the commit. Tell more about your changes..."></textarea>
       </div>
-      <button type="button" ng-click="appCtrl.commitSelectedChanges(commitMessage)"><span class="octicon octicon-cloud-upload"></span> COMMIT</button>
+      <button type="button" ng-click="appCtrl.commitSelectedChanges(commitMessage, commitDescription)"><span class="octicon octicon-cloud-upload"></span> COMMIT</button>
     </form>
 
     <nav>
