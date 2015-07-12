@@ -1,4 +1,5 @@
-# GitPie
+![GitPie](https://github.com/mapaiva/GitPie/blob/master/resources/images/gitpie-banner.png)
+
 GitPie is a Multiplataform Client for [Git](https://git-scm.com/) that have the goal to be a simple and elegant solution to manage any git project don't matter what git service you use. And the best is 100% open source.
 
 ## Warning
