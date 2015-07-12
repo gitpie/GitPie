@@ -286,14 +286,17 @@ Git.prototype.add = function (path, opts) {
 };
 
 Git.prototype.commit = function (path, opts) {
+  var commad = 'git commit -m "'.concat(opts.message).concat('"');
+
+  if (opts.description) {
+    commad = commad.concat(' -m "').concat(opts.description).concat('"');
+  }
 
   if (opts.forceSync) {
-    return execSync('git commit -m "'.concat(opts.message).concat('"').concat(' -m "').concat(opts.description).concat('"'), { cwd: path});
+    return execSync(commad, { cwd: path});
   } else {
 
-    exec(
-      'git commit -m "'.concat(opts.message).concat('"'),
-      { cwd: path}, function (error, stdout, stderr) {
+    exec(commad, { cwd: path}, function (error, stdout, stderr) {
       var err = null;
 
       if (error !== null) {
