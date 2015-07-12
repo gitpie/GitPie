@@ -47,18 +47,6 @@
         });
       }
     };
-
-    // return function (scope, element, attrs) {
-    //   var fn = $parse(attrs.ngInputChange);
-    //
-    //   element.bind('change', function (event) {
-    //
-    //     scope.$apply(function() {
-    //       event.preventDefault();
-    //       fn(scope, {$event:event});
-    //     });
-    //   });
-    // };
   });
 
 })();
