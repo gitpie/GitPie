@@ -8,7 +8,7 @@ GitPie is under hard development. And can have a lot of bug and unterminated cap
 
 ## What's in the pie stuffing?
 
-GitPie is built on [NW.js](https://github.com/nwjs/nw.js) and [Angular](https://github.com/nwjs/nw.js) to have a maintainable and organized source to anyone understand what's going on behind the scenes.
+GitPie is built on [NW.js](https://github.com/nwjs/nw.js) and [Angular](https://github.com/angular/angular) to have a maintainable and organized source to anyone understand what's going on behind the scenes.
 
 ## What's the taste of GitPie?
 
@@ -22,6 +22,8 @@ With GitPie you can:
 - Add files to commit
 - Commit changes
 - Pull changes (Only for public projects yet :/)
+- Create new brachs
+- Switch between branchs
 
 ## Installing
 
