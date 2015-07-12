@@ -29,6 +29,36 @@
         });
       });
     };
+  })
+
+  .directive('ngInputChange', function ($parse) {
+
+    return {
+      restrict: 'A',
+      require: '?ngModel',
+
+      link: function(scope, element, attrs, ngModel) {
+
+        element.on('change', function (e) {
+
+          if (ngModel) {
+            ngModel.$setViewValue(e.srcElement.value);
+          }
+        });
+      }
+    };
+
+    // return function (scope, element, attrs) {
+    //   var fn = $parse(attrs.ngInputChange);
+    //
+    //   element.bind('change', function (event) {
+    //
+    //     scope.$apply(function() {
+    //       event.preventDefault();
+    //       fn(scope, {$event:event});
+    //     });
+    //   });
+    // };
   });
 
 })();

@@ -41,10 +41,10 @@
 
         CommomService.hideHeaderMenu = this.hideAllMenu.bind(this);
 
-        $scope.updateRepositoryPath = function (e) {
-          $scope.repositoryPath = e.value;
-
-          $scope.$apply();
+        this.updateRepositoryPath = function (event) {
+          $scope.repositoryPath = event.srcElement.value;
+          //
+          // $scope.$apply();
         };
 
         $scope.$on('repositorychanged', function (event, repository) {

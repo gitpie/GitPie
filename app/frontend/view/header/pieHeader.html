@@ -13,7 +13,7 @@
                   <input type="text" style="width: 200px" name="repository" ng-model="repositoryPath"
                     placeholder="Where are your stuffs?" />
                   <input type="file" value="BROWSE"
-                    onchange="angular.element(this).scope().updateRepositoryPath(this)" nwdirectory />
+                    ng-model="repositoryPath" ng-input-change nwdirectory />
                 </section>
                 <footer><button ng-click="headerCtrl.addRepository(repositoryPath)"><span class="octicon octicon-file-directory"></span> ADD REPOSITORY</button> </footer>
 

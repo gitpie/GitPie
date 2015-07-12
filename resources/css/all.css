@@ -230,14 +230,16 @@ html, html body {
               background-color: #DBDEE0;
               color: #444; }
           html body #wrapper #content #left .empty-msg {
-            margin: 10px auto;
-            background-color: #636e73;
-            color: #CCC;
+            margin: auto;
+            margin-top: 50px;
+            color: #636e73;
+            border: #636e73 2px solid;
             border-radius: 50%;
             padding: 30px;
             text-align: center;
-            width: 105px;
-            height: 105px;
+            width: 90px;
+            height: 90px;
+            line-height: 1;
             cursor: default; }
             html body #wrapper #content #left .empty-msg .mega-octicon {
               display: block; }
