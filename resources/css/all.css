@@ -283,9 +283,15 @@ html, html body {
               html body #wrapper #content #center nav ul li.selected .commit-details .date {
                 color: #C3E0EC; }
           html body #wrapper #content #center .commit-block {
-            box-shadow: 0 0 10px #666;
+            box-shadow: 0 4px 10px -2px rgba(1, 1, 1, 0.3);
             overflow: hidden;
             background-color: #FFF; }
+            html body #wrapper #content #center .commit-block h3 {
+              color: #111;
+              margin: 0;
+              padding-top: 10px;
+              padding-left: 10px;
+              padding-bottom: 0; }
             html body #wrapper #content #center .commit-block button {
               margin: 10px;
               margin-top: 0;

@@ -15,6 +15,7 @@
   <section id="center" ng-scroll="appCtrl.loadMoreCommits($event)">
 
     <form name="commitForm" class="commit-block" ng-show="appCtrl.commitChanges.length > 0">
+      <h3><span class="octicon octicon-diff"></span> Commit changes</h3>
       <div class="input-wraper">
         <input type="text" ng-model="commitMessage" placeholder="Type a message for your commit" required />
         <textarea ng-model="commitDescription" placeholder="Give a description to the commit. Tell more about your changes..."></textarea>
