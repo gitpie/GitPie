@@ -1,6 +1,9 @@
 <div class="tabPanel">
   <nav class="tabHeader">
-    <div ng-repeat="pane in panes" ng-click="select(pane)" ng-class="{active:pane.selected}">{{pane.paneTitle}}</div>
+    <div ng-repeat="pane in panes" ng-click="select(pane)" ng-class="{active:pane.selected}">
+      <span class="{{ pane.icon }}"></span>
+      {{pane.paneTitle}}
+    </div>
   </nav>
   <div class="tab-content" ng-transclude></div>
 </div>

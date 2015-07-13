@@ -44,7 +44,7 @@
   <section id="right" ng-class="{ mask:appCtrl.loading }">
 
     <tabs>
-      <pane pane-title="History">
+      <pane pane-title="History" icon="octicon octicon-history">
         <header class="commit-message" ng-show="appCtrl.getCommitMessage()">
           <h2>{{ appCtrl.getCommitMessage() }}</h2>
 
@@ -74,7 +74,7 @@
         </nav>
       </pane>
 
-      <pane pane-title="Changes">
+      <pane pane-title="Changes" icon="octicon octicon-radio-tower">
 
         <header class="commit-message">
           <h2>Unsyncronized Changes</h2>
