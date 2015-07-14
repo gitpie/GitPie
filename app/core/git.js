@@ -112,7 +112,7 @@ Git.prototype.getCommitHistory = function (opts, callback) {
  */
 Git.prototype.getStatus = function (path, callback) {
 
-  exec('git status -sb && git fetch --prune', {cwd: path, env: ENV}, function (error, stdout, stderr) {
+  exec('git status -sb', {cwd: path, env: ENV}, function (error, stdout, stderr) {
     var err = null,
       syncStatus = {
         ahead: null,

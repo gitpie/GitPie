@@ -53,13 +53,19 @@
             $scope.$apply();
           }.bind(this));
 
-          GIT.getStatus(repository.path, function (err, syncStatus, files) {
-            this.syncStatus = syncStatus;
-            this.loading = false;
+          GIT.fetch(selectedRepository.path, function (err) {
 
-            $scope.$broadcast('unsynChanges', files);
+            // Ignored error for while to not block status for private repositories
 
-            $scope.$apply();
+            GIT.getStatus(repository.path, function (err, syncStatus, files) {
+              this.syncStatus = syncStatus;
+              this.loading = false;
+
+              $scope.$broadcast('unsynChanges', files);
+
+              $scope.$apply();
+            }.bind(this));
+
           }.bind(this));
 
         }.bind(this));
