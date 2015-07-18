@@ -70,10 +70,50 @@
   100% {
     -webkit-transform: rotate(360deg);
     transform: rotate(360deg); } }
+/* Loading componente */
+.loading-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: absolute;
+  z-index: 10000; }
+@-webkit-keyframes rotator {
+  0% {
+    -webkit-transform: rotate(0deg); }
+  100% {
+    -webkit-transform: rotate(270deg); } }
+  .loading-container .spinner {
+    -webkit-animation: rotator 1.4s linear infinite; }
+  .loading-container .path {
+    stroke-dasharray: 187;
+    stroke-dashoffset: 0;
+    transform-origin: center;
+    -webkit-animation: dash 1.4s ease-in-out infinite, colors 5.6s ease-in-out infinite; }
+@-webkit-keyframes colors {
+  0% {
+    stroke: #4285F4; }
+  25% {
+    stroke: #DE3E35; }
+  50% {
+    stroke: #F7C223; }
+  75% {
+    stroke: #1B9A59; }
+  100% {
+    stroke: #4285F4; } }
+@-webkit-keyframes dash {
+  0% {
+    stroke-dashoffset: 187; }
+  50% {
+    stroke-dashoffset: 46.75;
+    -webkit-transform: rotate(135deg); }
+  100% {
+    stroke-dashoffset: 187;
+    -webkit-transform: rotate(450deg); } }
 /* Mixins */
 /* Mask class for loadings */
 .mask {
-  -webkit-filter: blur(5px); }
+  -webkit-filter: blur(2px);
+  pointer-events: none; }
 
 /* App style */
 html, html body {
