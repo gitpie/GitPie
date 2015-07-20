@@ -327,6 +327,7 @@ html {
   		    width: 17%;
   		    background-color: #F7F7F7;
   				border-right: $border-color 1px solid;
+          box-shadow: inset 0 1px 10px rgba(0, 0, 0, 0.14);
 
           nav {
 
@@ -384,12 +385,12 @@ html {
           width: 83%;
           box-sizing: border-box;
           margin: auto;
-          margin-top: 50px;
           color: #636e73;
           font-size: 2.5em;
           font-weight: lighter;
 
           padding: 30px;
+          padding-top: 50px;
           text-align: center;
           line-height: 1;
           cursor: default;
@@ -404,7 +405,6 @@ html {
   		  #center {
   				@extend .column;
   		    width: 40%;
-  				box-shadow: 0 1px 10px rgba(0, 0, 0, 0.14);
   				z-index: 10;
 
           nav {
