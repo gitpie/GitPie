@@ -1,6 +1,5 @@
 <section id="content" ng-click="appCtrl.hideHeaderMenus()">
 
-  <!-- <section id="left" ng-loading="true"> -->
   <section id="left">
     <div class="empty-msg" ng-show="appCtrl.repositories.length == 0">
       <span class="mega-octicon octicon-rocket"></span>
@@ -13,7 +12,12 @@
     </nav>
   </section>
 
-  <section id="center" ng-scroll="appCtrl.loadMoreCommits($event)">
+  <section class="getting-start-message" ng-hide="appCtrl.repositoryHistory.length > 0">
+    <span class="mega-octicon octicon-inbox"></span>
+    Select a repository to start
+  </section>
+
+  <section id="center" ng-scroll="appCtrl.loadMoreCommits($event)" ng-show="appCtrl.repositoryHistory.length > 0">
 
     <form name="commitForm" class="commit-block" ng-show="appCtrl.commitChanges.length > 0">
       <h3><span class="octicon octicon-diff"></span> Commit changes</h3>
@@ -24,7 +28,7 @@
       <button type="button" ng-click="appCtrl.commitSelectedChanges(commitMessage, commitDescription)"><span class="octicon octicon-cloud-upload"></span> COMMIT</button>
     </form>
 
-    <nav>
+    <nav ng-class="{ mask:appCtrl.loadingHistory }">
       <ul>
         <li class="commit-number">
           <div ng-show="appCtrl.commitNumber != 'counting' && appCtrl.commitNumber.length > 0">
@@ -43,7 +47,7 @@
 
   </section>
 
-  <section id="right" ng-class="{ mask:appCtrl.loading }">
+  <section id="right" ng-class="{ mask:appCtrl.loadingChanges }" ng-show="appCtrl.repositoryHistory.length > 0">
 
     <tabs>
       <pane pane-title="History" icon="octicon octicon-history">

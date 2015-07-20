@@ -11,7 +11,9 @@
           selectedCommit = {},
           selectedCommitAncestor = null;
 
-        this.loading = false;
+        this.loadingHistory = false;
+
+        this.loadingChanges = false;
 
         this.repositories = CommomService.repositories;
 
@@ -31,6 +33,8 @@
 
         this.showRepositoryInfo = function (repository, forceReload) {
 
+          this.loadingHistory = true;
+
           if (forceReload || selectedRepository.name != repository.name) {
 
             if (selectedRepository) {
@@ -47,6 +51,7 @@
               path: repository.path
             }, function (err, historyList) {
               this.repositoryHistory = historyList;
+              this.loadingHistory = false;
 
               $scope.$apply();
               $scope.$broadcast('repositorychanged', selectedRepository);
@@ -78,7 +83,7 @@
 
           selectedCommitAncestor = ancestorCommit;
 
-          this.loading = true;
+          this.loadingChanges = true;
 
           if (selectedCommit) {
             selectedCommit.selected = false;
@@ -115,7 +120,7 @@
               }
             }.bind(this));
 
-            this.loading = false;
+            this.loadingChanges = false;
 
             $scope.$apply();
           }.bind(this));

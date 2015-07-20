@@ -99,57 +99,6 @@ $border-color: #DDD;
 @-webkit-keyframes spin { 100% { -webkit-transform: rotate(360deg); } }
 @keyframes spin { 100% { -webkit-transform: rotate(360deg); transform:rotate(360deg); } }
 
-/* Loading componente */
-
-
-.loading-container {
-  // Here is where the magic happens
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  position: absolute;
-  z-index: 10000;
-
-  $offset: 187;
-  $duration: 1.4s;
-
-  @-webkit-keyframes rotator {
-    0% { -webkit-transform: rotate(0deg); }
-    100% { -webkit-transform: rotate(270deg); }
-  }
-
-  .spinner {
-    -webkit-animation: rotator $duration linear infinite;
-  }
-
-  .path {
-    stroke-dasharray: $offset;
-    stroke-dashoffset: 0;
-    transform-origin: center;
-    -webkit-animation: dash $duration ease-in-out infinite, colors ($duration*4) ease-in-out infinite;
-  }
-
-  @-webkit-keyframes colors {
-      0% { stroke: #4285F4; }
-      25% { stroke: #DE3E35; }
-      50% { stroke: #F7C223; }
-      75% { stroke: #1B9A59; }
-    100% { stroke: #4285F4; }
-  }
-
-  @-webkit-keyframes dash {
-   0% { stroke-dashoffset: $offset; }
-   50% {
-     stroke-dashoffset: $offset/4;
-     -webkit-transform:rotate(135deg);
-   }
-   100% {
-     stroke-dashoffset: $offset;
-     -webkit-transform:rotate(450deg);
-   }
-  }
-}
-
 /* Mixins */
 @mixin tabPanel($color, $hoverColor, $borderColor, $activeBorderColor) {
 
@@ -429,6 +378,28 @@ html {
             }
           }
   		  }
+
+        .getting-start-message {
+          @extend .column;
+          width: 83%;
+          box-sizing: border-box;
+          margin: auto;
+          margin-top: 50px;
+          color: #636e73;
+          font-size: 2.5em;
+          font-weight: lighter;
+
+          padding: 30px;
+          text-align: center;
+          line-height: 1;
+          cursor: default;
+
+          .mega-octicon {
+            display: block;
+            margin-bottom: 30px;
+            font-size: 3em;
+          }
+        }
 
   		  #center {
   				@extend .column;
