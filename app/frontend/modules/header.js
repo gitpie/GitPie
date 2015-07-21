@@ -116,12 +116,14 @@
         };
 
         this.addRepository = function (repositoryPath) {
-          var repository = CommomService.addRepository(repositoryPath);
 
-          if (repository) {
-            $scope.$broadcast('changedbranch', repository);
-            CommomService.hideHeaderMenu();
-          }
+          CommomService.addRepository(repositoryPath, function (repository) {
+
+            if (repository) {
+              $scope.$broadcast('changedbranch', repository);
+              CommomService.hideHeaderMenu();
+            }
+          });
         };
 
         this.checkoutBranch = function ($event, newBranch) {

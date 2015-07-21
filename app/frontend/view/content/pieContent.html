@@ -1,13 +1,40 @@
 <section id="content" ng-click="appCtrl.hideHeaderMenus()">
 
   <section id="left">
-    <div class="empty-msg" ng-show="appCtrl.repositories.length == 0">
+    <div class="empty-msg" ng-show="appCtrl.repositories.isEmpty">
       <span class="mega-octicon octicon-rocket"></span>
       Start adding or clonning some awesome things! <3
     </div>
+
     <nav>
-      <ul ng-repeat="repository in appCtrl.repositories">
-        <li ng-class="{ selected:repository.selected }" ng-click="appCtrl.showRepositoryInfo(repository)"><span class="octicon octicon-repo"></span> {{ repository.name }}</li>
+      <ul>
+        <li ng-show="appCtrl.repositories.github.length > 0">
+          <div class="label"><span class="octicon octicon-mark-github"></span> Github</div>
+          <ul>
+            <li ng-repeat="repository in appCtrl.repositories.github" ng-class="{ selected:repository.selected }"
+              ng-click="appCtrl.showRepositoryInfo(repository)">
+              <span class="octicon octicon-repo"></span> {{ repository.name }}
+            </li>
+          </ul>
+        </li>
+        <li ng-show="appCtrl.repositories.bitbucket.length > 0">
+          <div class="label"><i class="fa fa-bitbucket-square"></i> Bitbucket</div>
+          <ul>
+            <li ng-repeat="repository in appCtrl.repositories.bitbucket" ng-class="{ selected:repository.selected }"
+              ng-click="appCtrl.showRepositoryInfo(repository)">
+              <i class="fa fa-bitbucket"></i> {{ repository.name }}
+            </li>
+          </ul>
+        </li>
+        <li ng-show="appCtrl.repositories.outhers.length > 0">
+          <div class="label"><i class="fa fa-git"></i> Others</div>
+          <ul>
+            <li ng-repeat="repository in appCtrl.repositories.outhers" ng-class="{ selected:repository.selected }"
+              ng-click="appCtrl.showRepositoryInfo(repository)">
+              <i class="fa fa-git-square"></i> {{ repository.name }}
+            </li>
+          </ul>
+        </li>
       </ul>
     </nav>
   </section>

@@ -335,22 +335,36 @@ html {
               list-style: none;
               margin: 0;
               padding: 0;
+              padding-bottom: 10px;
 
               li {
-                padding: 15px 20px;
       					color: #555;
       					cursor: default;
 
-      					.octicon {
+      					.octicon, .fa {
       					  margin-right: 8px;
       						font-size: 1.5em;
-      					  float: left;
       					}
 
-      					&:hover {
-      						background-color: #EEE;
-      						color: #45413A;
-      					}
+                .label {
+                  padding: 10px;
+                  // box-shadow: 0 1px 5px #666;
+                  // background-color: #FFF;
+                  color: #333;
+                  // margin-bottom: 10px;
+                }
+
+      					ul {
+
+                  li {
+                    padding: 15px 20px;
+
+                    &:hover {
+          						background-color: #EEE;
+          						color: #45413A;
+          					}
+                  }
+                }
       				}
 
       				li.selected {

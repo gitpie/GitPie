@@ -344,4 +344,19 @@ Git.prototype.getCommitCount = function (path, callback) {
   });
 };
 
+Git.prototype.listRemotes = function (path, callback) {
+
+  exec('git remote -v', { cwd: path,  env: ENV}, function (error, stdout, stderr) {
+    var err = null;
+
+    if (error !== null) {
+      err = error.message;
+    }
+
+    if (callback && typeof callback == 'function') {
+      callback.call(this, err, stdout);
+    }
+  });
+};
+
 module.exports = new Git();

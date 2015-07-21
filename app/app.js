@@ -25,7 +25,7 @@ process.on('uncaughtException', function(err) {
   var app = angular.module('gitpie', ['components', 'attributes', 'header', 'content']);
 
   app.factory('CommomService', function () {
-    var storagedRepos = JSON.parse(localStorage.getItem('repos')) || [],
+    var repositories = JSON.parse(localStorage.getItem('repos')) || {},
 
       findWhere = function (array, object) {
 
@@ -37,20 +37,21 @@ process.on('uncaughtException', function(err) {
         }
 
         return null;
-      },
+      };
 
-      repositories = [];
+    repositories.github = repositories.github || [];
+    repositories.bitbucket = repositories.bitbucket || [];
+    repositories.outhers = repositories.outhers || [];
 
-    storagedRepos.forEach(function (item) {
-      delete item.$$hashKey;
-      delete item.selected;
-
-      repositories.push(item);
-    });
+    if (repositories.github.length > 0 || repositories.bitbucket.length > 0 || repositories.outhers > 0) {
+      repositories.isEmpty = false;
+    } else {
+      repositories.isEmpty = true;
+    }
 
     return {
 
-      addRepository: function (repositoryPath) {
+      addRepository: function (repositoryPath, callback) {
 
         if (repositoryPath) {
           var repositoryExists = findWhere(repositories, { path: repositoryPath});
@@ -60,17 +61,52 @@ process.on('uncaughtException', function(err) {
             alert('It happends with me all the time too. But let\'s try find your project again!');
 
           } else if (!repositoryExists) {
-            var name = GIT_REPO_NAME(repositoryPath);
+            var name = GIT_REPO_NAME(repositoryPath),
+              type,
+              index;
 
             if (name) {
-              var index = repositories.push({
-                name: name,
-                path: repositoryPath
+
+              GIT.listRemotes(repositoryPath, function (err, stdout) {
+
+                if (stdout.toLowerCase().indexOf('github.com') != -1) {
+
+                  index = repositories.github.push({
+                    name: name,
+                    path: repositoryPath,
+                    type : 'GITHUB'
+                  });
+
+                  type = 'github';
+
+                } else if (stdout.toLowerCase().indexOf('bitbucket.org') != -1) {
+
+                  index = repositories.bitbucket.push({
+                    name: name,
+                    path: repositoryPath,
+                    type : 'BITBUCKET'
+                  });
+
+                  type = 'bitbucket';
+                } else {
+
+                  index = repositories.outhers.push({
+                    name: name,
+                    path: repositoryPath,
+                    type : 'OUTHERS'
+                  });
+
+                  type = 'outhers';
+                }
+
+                localStorage.setItem('repos', JSON.stringify(repositories));
+                repositories.isEmpty = false;
+
+                if (callback && typeof callback == 'function') {
+                  callback.call(this, repositories[type][index - 1]);
+                }
               });
 
-              localStorage.setItem('repos', JSON.stringify(repositories));
-
-              return repositories[index-1];
             } else {
               alert('Nothing for me here.\n The folder ' + repositoryPath + ' is not a git project');
             }
