@@ -9,7 +9,7 @@
     <nav>
       <ul>
         <li ng-show="appCtrl.repositories.github.length > 0">
-          <div class="label"><span class="octicon octicon-mark-github"></span> Github</div>
+          <div class="label">Github</div>
           <ul>
             <li ng-repeat="repository in appCtrl.repositories.github" ng-class="{ selected:repository.selected }"
               ng-click="appCtrl.showRepositoryInfo(repository)">
@@ -18,7 +18,7 @@
           </ul>
         </li>
         <li ng-show="appCtrl.repositories.bitbucket.length > 0">
-          <div class="label"><i class="fa fa-bitbucket-square"></i> Bitbucket</div>
+          <div class="label">Bitbucket</div>
           <ul>
             <li ng-repeat="repository in appCtrl.repositories.bitbucket" ng-class="{ selected:repository.selected }"
               ng-click="appCtrl.showRepositoryInfo(repository)">
@@ -27,7 +27,7 @@
           </ul>
         </li>
         <li ng-show="appCtrl.repositories.outhers.length > 0">
-          <div class="label"><i class="fa fa-git"></i> Others</div>
+          <div class="label">Others</div>
           <ul>
             <li ng-repeat="repository in appCtrl.repositories.outhers" ng-class="{ selected:repository.selected }"
               ng-click="appCtrl.showRepositoryInfo(repository)">

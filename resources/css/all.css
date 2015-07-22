@@ -233,7 +233,8 @@ html, html body {
                 font-size: 1.5em; }
               html body #wrapper #content #left nav ul li .label {
                 padding: 10px;
-                color: #333; }
+                color: #959595;
+                font-weight: bold; }
               html body #wrapper #content #left nav ul li ul li {
                 padding: 15px 20px; }
                 html body #wrapper #content #left nav ul li ul li:hover {
