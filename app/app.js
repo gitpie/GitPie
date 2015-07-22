@@ -63,6 +63,7 @@ process.on('uncaughtException', function(err) {
         }
 
         localStorage.setItem('repos', JSON.stringify(storagedRepositories));
+        repositoriesStr = JSON.stringify(storagedRepositories);
       };
 
     repositories.github = repositories.github || [];
