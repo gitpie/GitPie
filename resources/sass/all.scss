@@ -152,6 +152,10 @@ $border-color: #DDD;
       text-shadow: none;
       background-color: #FFF;
 
+      .octicon {
+        margin-right: 10px;
+      }
+
       &:hover {
         color: #000;
         background-color: #FFF;
@@ -207,6 +211,23 @@ html {
 
   body {
   	@extend html;
+
+    /* Context Menu style */
+    .context-menu {
+      @include basicDialog;
+      position: fixed;
+      overflow: hidden;
+      z-index: 1000;
+      padding: 0 !important;
+
+      li {
+        padding: 15px 20px !important;
+
+        &:hover {
+          background-color: #F5F5F5 !important;
+        }
+      }
+    }
 
   	/* Header of the application */
   	#header {

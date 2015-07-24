@@ -139,6 +139,14 @@ process.on('uncaughtException', function(err) {
         }
       },
 
+      closeAnyContextMenu: function () {
+        var contextMenus = document.querySelectorAll('.context-menu');
+
+        angular.forEach(contextMenus, function (item) {
+          document.body.removeChild(item);
+        });
+      },
+
       repositories: repositories
     };
   });

@@ -37,6 +37,8 @@
           this.showAddMenu = false;
           this.showBranchMenu = false;
           this.showSettingsMenu = false;
+
+          CommomService.closeAnyContextMenu();
         };
 
         CommomService.hideHeaderMenu = this.hideAllMenu.bind(this);

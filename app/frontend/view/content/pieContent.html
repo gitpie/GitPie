@@ -8,7 +8,7 @@
 
     <nav>
       <ul>
-        <li ng-show="appCtrl.repositories.github.length > 0">
+        <li ng-show="appCtrl.repositories.github.length > 0" ng-right-click="appCtrl.openRepositoryContextualMenu($event)">
           <div class="label">Github</div>
           <ul>
             <li ng-repeat="repository in appCtrl.repositories.github" ng-class="{ selected:repository.selected }"
@@ -21,7 +21,7 @@
           <div class="label">Bitbucket</div>
           <ul>
             <li ng-repeat="repository in appCtrl.repositories.bitbucket" ng-class="{ selected:repository.selected }"
-              ng-click="appCtrl.showRepositoryInfo(repository)">
+              ng-click="appCtrl.showRepositoryInfo(repository)" ng-right-click="appCtrl.openRepositoryContextualMenu($event)">
               <i class="fa fa-bitbucket"></i> {{ repository.name }}
             </li>
           </ul>
@@ -30,7 +30,7 @@
           <div class="label">Others</div>
           <ul>
             <li ng-repeat="repository in appCtrl.repositories.outhers" ng-class="{ selected:repository.selected }"
-              ng-click="appCtrl.showRepositoryInfo(repository)">
+              ng-click="appCtrl.showRepositoryInfo(repository)" ng-right-click="appCtrl.openRepositoryContextualMenu($event)">
               <i class="fa fa-git-square"></i> {{ repository.name }}
             </li>
           </ul>
@@ -116,7 +116,7 @@
         <nav>
           <ul>
 
-            <li ng-repeat="change in appCtrl.commitChanges">
+            <li ng-repeat="change in appCtrl.commitChanges" ng-right-click="appCtrl.openChangesContextualMenu($event)">
               <header>
                 <span ng-click="appCtrl.showFileDiff(change)" ng-class="{ 'octicon-triangle-right': !change.showCode, 'octicon-triangle-down': change.showCode}" class="octicon octicon-triangle-right"></span>
                 <input id="change{{$index}}" type="checkbox" ng-model="change.checked" checked="true" />

@@ -269,6 +269,59 @@
             $scope.$apply();
           }
         }.bind(this));
+
+        this.openRepositoryContextualMenu = function (event) {
+          var body = angular.element(document.body);
+
+          CommomService.closeAnyContextMenu();
+
+          body.append([
+
+            '<div class="context-menu" style="top: ' + event.y + 'px;  left: ' + event.x +  'px">',
+              '<ul>',
+                '<li>Rename</li>',
+                '<li>Remove</li>',
+                '<li>Open folder</li>',
+              '</ul>',
+            '</div>'
+
+          ].join(''));
+
+          // var menu = new GUI.Menu(),
+          // Add some items
+          // menu.append(new GUI.MenuItem({ label: 'Rename' }));
+          // menu.append(new GUI.MenuItem({ label: 'Remove' }));
+          // menu.append(new GUI.MenuItem({ type: 'separator' }));
+          // menu.append(new GUI.MenuItem({ label: 'Open folder' }));
+          //
+          // menu.popup(event.x, event.y);
+        };
+
+        this.openChangesContextualMenu = function (event) {
+          var body = angular.element(document.body);
+
+          CommomService.closeAnyContextMenu();
+
+          body.append([
+
+            '<div class="context-menu" style="top: ' + event.y + 'px;  left: ' + event.x +  'px">',
+              '<ul>',
+                '<li>Discart</li>',
+                '<li>Open file</li>',
+              '</ul>',
+            '</div>'
+
+          ].join(''));
+
+          // var menu = new GUI.Menu();
+          //
+          // // Add some items
+          // menu.append(new GUI.MenuItem({ label: 'Discart' }));
+          // menu.append(new GUI.MenuItem({ type: 'separator' }));
+          // menu.append(new GUI.MenuItem({ label: 'Open file' }));
+          //
+          // menu.popup(event.x, event.y);
+        };
       },
 
       controllerAs: 'appCtrl'
