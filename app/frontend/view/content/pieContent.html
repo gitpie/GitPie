@@ -8,11 +8,11 @@
 
     <nav>
       <ul>
-        <li ng-show="appCtrl.repositories.github.length > 0" ng-right-click="appCtrl.openRepositoryContextualMenu($event)">
+        <li ng-show="appCtrl.repositories.github.length > 0">
           <div class="label">Github</div>
           <ul>
             <li ng-repeat="repository in appCtrl.repositories.github" ng-class="{ selected:repository.selected }"
-              ng-click="appCtrl.showRepositoryInfo(repository)">
+              ng-click="appCtrl.showRepositoryInfo(repository)" ng-right-click="appCtrl.openRepositoryContextualMenu($event, repository)">
               <span class="octicon octicon-repo"></span> {{ repository.name }}
             </li>
           </ul>
@@ -21,7 +21,7 @@
           <div class="label">Bitbucket</div>
           <ul>
             <li ng-repeat="repository in appCtrl.repositories.bitbucket" ng-class="{ selected:repository.selected }"
-              ng-click="appCtrl.showRepositoryInfo(repository)" ng-right-click="appCtrl.openRepositoryContextualMenu($event)">
+              ng-click="appCtrl.showRepositoryInfo(repository)" ng-right-click="appCtrl.openRepositoryContextualMenu($event, repository)">
               <i class="fa fa-bitbucket"></i> {{ repository.name }}
             </li>
           </ul>
@@ -30,13 +30,20 @@
           <div class="label">Others</div>
           <ul>
             <li ng-repeat="repository in appCtrl.repositories.outhers" ng-class="{ selected:repository.selected }"
-              ng-click="appCtrl.showRepositoryInfo(repository)" ng-right-click="appCtrl.openRepositoryContextualMenu($event)">
+              ng-click="appCtrl.showRepositoryInfo(repository)" ng-right-click="appCtrl.openRepositoryContextualMenu($event, repository)">
               <i class="fa fa-git-square"></i> {{ repository.name }}
             </li>
           </ul>
         </li>
       </ul>
     </nav>
+
+    <pie-dialog show="false">
+      Are you sure to remove <strong>{{ repository }}</strong>?
+      <div style="text-align:right">
+        <button type="button">No</button> <button type="button" class="featured">Yes</button>
+      </div>
+    </pie-dialog>
   </section>
 
   <section class="getting-start-message" ng-hide="appCtrl.repositoryHistory.length > 0">
@@ -52,7 +59,7 @@
         <input type="text" ng-model="commitMessage" placeholder="Type a message for your commit" required />
         <textarea ng-model="commitDescription" placeholder="Give a description to the commit. Tell more about your changes..."></textarea>
       </div>
-      <button type="button" ng-click="appCtrl.commitSelectedChanges(commitMessage, commitDescription)"><span class="octicon octicon-cloud-upload"></span> COMMIT</button>
+      <button type="button" class="featured" ng-click="appCtrl.commitSelectedChanges(commitMessage, commitDescription)"><span class="octicon octicon-cloud-upload"></span> COMMIT</button>
     </form>
 
     <nav ng-class="{ mask:appCtrl.loadingHistory }">

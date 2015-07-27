@@ -270,7 +270,7 @@
           }
         }.bind(this));
 
-        this.openRepositoryContextualMenu = function (event) {
+        this.openRepositoryContextualMenu = function (event, repository) {
           var body = angular.element(document.body);
 
           CommomService.closeAnyContextMenu();

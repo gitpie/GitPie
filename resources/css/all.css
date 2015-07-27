@@ -52,12 +52,17 @@
         background-color: #DDD; }
   * button, * input[type="button"] {
     background-color: #DBDBDB;
+    font-weight: bold;
     border: #DDD 1px solid;
     padding: 8px 15px;
     border-radius: 3px;
     box-shadow: 0 1px 2px rgba(51, 51, 51, 0.48); }
     * button:active, * input[type="button"]:active {
       box-shadow: 0 0px 2px rgba(51, 51, 51, 0.48); }
+  * button.featured, * input[type="button"].featured {
+    background-color: #3998D6;
+    color: #FFF;
+    border-color: #3998D6; }
 
 /* Enable spin rotation */
 @-moz-keyframes spin {
@@ -86,6 +91,7 @@ html, html body {
   color: #333; }
   html body {
     /* Context Menu style */
+    /* Dialog style */
     /* Header of the application */
     /* Wrapper of the content */ }
     html body .context-menu {
@@ -157,6 +163,40 @@ html, html body {
         padding: 15px 20px !important; }
         html body .context-menu li:hover {
           background-color: #F5F5F5 !important; }
+    html body .modal .modal-overlay {
+      position: absolute;
+      z-index: 9999;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-color: #000000;
+      opacity: 0.8; }
+    html body .modal .modal-dialog {
+      z-index: 10000;
+      position: absolute;
+      width: 50%;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      -webkit-transform: translate(-50%, -50%);
+      -moz-transform: translate(-50%, -50%);
+      color: #111 !important;
+      background-color: #fff;
+      box-shadow: 4px 4px 80px #000; }
+      html body .modal .modal-dialog .modal-dialog-content {
+        padding: 10px;
+        text-align: left; }
+      html body .modal .modal-dialog .modal-close {
+        position: absolute;
+        top: 3px;
+        right: 5px;
+        padding: 5px;
+        cursor: pointer;
+        font-size: 120%;
+        display: inline-block;
+        font-weight: bold;
+        font-family: 'arial', 'sans-serif'; }
     html body #header {
       width: 100%;
       height: 47px;
