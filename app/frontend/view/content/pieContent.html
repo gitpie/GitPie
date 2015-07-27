@@ -87,6 +87,9 @@
       <pane pane-title="History" icon="octicon octicon-history">
         <header class="commit-message" ng-show="appCtrl.getCommitMessage()">
           <h2>{{ appCtrl.getCommitMessage() }}</h2>
+          <p class="commit-body" ng-show="appCtrl.getCommitBody()">
+            {{ appCtrl.getCommitBody() }}
+          </p>
 
           <h4 ng-show="appCtrl.getCommitUser()">
             <span class="octicon octicon-person"></span> {{ appCtrl.getCommitUser() }}

@@ -138,6 +138,10 @@
           return selectedCommit.user;
         };
 
+        this.getCommitBody = function () {
+          return selectedCommit.body;
+        };
+
         this.showFileDiff = function (change) {
 
           if (!change.isUnsyc) {

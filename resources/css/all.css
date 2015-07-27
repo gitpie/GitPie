@@ -474,6 +474,8 @@ html, html body {
               font-size: 0.85em;
               margin-right: 10px;
               margin-top: 10px; }
+            html body #wrapper #content #right header.commit-message .commit-body {
+              white-space: pre-line; }
           html body #wrapper #content #right nav ul {
             list-style: none;
             display: inline-block;
@@ -532,7 +534,7 @@ html, html body {
                     display: inline-block; }
               html body #wrapper #content #right nav ul li code {
                 font-family: "Menlo", monospace, consolas, sans-serif;
-                white-space: pre;
+                white-space: pre-line;
                 word-wrap: normal;
                 font-size: 0.9em;
                 word-break: break-word; }

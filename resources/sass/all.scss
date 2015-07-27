@@ -610,6 +610,10 @@ html {
               margin-right: 10px;
               margin-top: 10px;
             }
+
+            .commit-body {
+              white-space: pre-line;
+            }
           }
 
           nav {
@@ -697,7 +701,7 @@ html {
 
                 code {
                   font-family: $code-font;
-                  white-space: pre;
+                  white-space: pre-line;
                   word-wrap: normal;
                   font-size: 0.9em;
                   word-break: break-word;

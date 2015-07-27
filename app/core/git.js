@@ -73,12 +73,12 @@ Git.prototype.getCurrentBranch = function (path, callback) {
 Git.prototype.getCommitHistory = function (opts, callback) {
 
   exec(
-    "git --no-pager log -n 50 --pretty=format:%an-gtseparator-%cr-gtseparator-%h-gtseparator-%s" + (opts.skip ? ' --skip '.concat(opts.skip) : '' ),
+    "git --no-pager log -n 50 --pretty=format:%an-gtseparator-%cr-gtseparator-%h-gtseparator-%s-gtseparator-%b-pieLineBreak-" + (opts.skip ? ' --skip '.concat(opts.skip) : '' ),
 
     { cwd: opts.path, env: ENV },
 
     function (error, stdout, stderr) {
-    var lines = stdout.split('\n'),
+    var lines = stdout.split('-pieLineBreak-'),
       historyList = [],
       err = null;
 
@@ -93,7 +93,8 @@ Git.prototype.getCommitHistory = function (opts, callback) {
           user: historyItem[0],
           date: historyItem[1],
           hash: historyItem[2],
-          message: historyItem[3]
+          message: historyItem[3],
+          body: historyItem[4]
         });
       }
     }
