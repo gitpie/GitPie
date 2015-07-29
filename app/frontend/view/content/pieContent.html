@@ -128,11 +128,11 @@
 
             <li ng-repeat="change in appCtrl.commitChanges" ng-right-click="appCtrl.openChangesContextualMenu($event)">
               <header>
-                <span ng-click="appCtrl.showFileDiff(change)" ng-class="{ 'octicon-triangle-right': !change.showCode, 'octicon-triangle-down': change.showCode}" class="octicon octicon-triangle-right"></span>
+                <span ng-hide="change.type == 'DELETED'" ng-click="appCtrl.showFileDiff(change)" ng-class="{ 'octicon-triangle-right': !change.showCode, 'octicon-triangle-down': change.showCode}" class="octicon octicon-triangle-right"></span>
                 <input id="change{{$index}}" type="checkbox" ng-model="change.checked" checked="true" />
                 <label for="change{{$index}}"></label>
                 {{ change.name.length > 50 ? '...' : ''}} {{ change.name | limitTo: - 50 }}
-                <menuitem>{{ change.type }}</menuitem>
+                <menuitem ng-class="appCtrl.getChangeTypeClass(change.type)">{{ change.type }}</menuitem>
               </header>
               <code ng-show="change.showCode">
                 {{ change.code }}

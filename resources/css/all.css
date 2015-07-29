@@ -117,7 +117,7 @@ html, html body {
           html body .context-menu ul li:hover {
             color: #000;
             background-color: #FFF; }
-      html body .context-menu .label, html body .context-menu #wrapper #content #right nav ul li header .label-modified, html body #wrapper #content #right nav ul li header .context-menu .label-modified {
+      html body .context-menu .label, html body .context-menu #wrapper #content #right nav ul li header .label-modified, html body #wrapper #content #right nav ul li header .context-menu .label-modified, html body .context-menu #wrapper #content #right nav ul li header .label-new, html body #wrapper #content #right nav ul li header .context-menu .label-new, html body .context-menu #wrapper #content #right nav ul li header .label-deleted, html body #wrapper #content #right nav ul li header .context-menu .label-deleted {
         padding: 20px 0;
         display: block;
         color: #666;
@@ -245,7 +245,7 @@ html, html body {
                 html body #header nav ul .menu ul li:hover {
                   color: #000;
                   background-color: #FFF; }
-            html body #header nav ul .menu .label, html body #header #wrapper #content #right nav ul .menu li header .label-modified, html body #wrapper #content #right #header nav ul .menu li header .label-modified, html body #header #wrapper #content #right nav ul li header .menu .label-modified, html body #wrapper #content #right #header nav ul li header .menu .label-modified {
+            html body #header nav ul .menu .label, html body #header #wrapper #content #right nav ul .menu li header .label-modified, html body #wrapper #content #right #header nav ul .menu li header .label-modified, html body #header #wrapper #content #right nav ul li header .menu .label-modified, html body #wrapper #content #right #header nav ul li header .menu .label-modified, html body #header #wrapper #content #right nav ul .menu li header .label-new, html body #wrapper #content #right #header nav ul .menu li header .label-new, html body #header #wrapper #content #right nav ul li header .menu .label-new, html body #wrapper #content #right #header nav ul li header .menu .label-new, html body #header #wrapper #content #right nav ul .menu li header .label-deleted, html body #wrapper #content #right #header nav ul .menu li header .label-deleted, html body #header #wrapper #content #right nav ul li header .menu .label-deleted, html body #wrapper #content #right #header nav ul li header .menu .label-deleted {
               padding: 20px 0;
               display: block;
               color: #666;
@@ -341,7 +341,7 @@ html, html body {
               html body #wrapper #content #left nav ul li .octicon, html body #wrapper #content #left nav ul li .fa {
                 margin-right: 8px;
                 font-size: 1.5em; }
-              html body #wrapper #content #left nav ul li .label, html body #wrapper #content #left #right nav ul li header .label-modified, html body #wrapper #content #right #left nav ul li header .label-modified {
+              html body #wrapper #content #left nav ul li .label, html body #wrapper #content #left #right nav ul li header .label-modified, html body #wrapper #content #right #left nav ul li header .label-modified, html body #wrapper #content #left #right nav ul li header .label-new, html body #wrapper #content #right #left nav ul li header .label-new, html body #wrapper #content #left #right nav ul li header .label-deleted, html body #wrapper #content #right #left nav ul li header .label-deleted {
                 padding: 10px;
                 color: #959595;
                 font-weight: bold; }
@@ -539,16 +539,20 @@ html, html body {
                     font-weight: bold;
                     margin: 0 3px;
                     display: inline-block; }
-                html body #wrapper #content #right nav ul li header .label, html body #wrapper #content #right nav ul li header .label-modified {
+                html body #wrapper #content #right nav ul li header .label, html body #wrapper #content #right nav ul li header .label-modified, html body #wrapper #content #right nav ul li header .label-new, html body #wrapper #content #right nav ul li header .label-deleted {
                   padding: 3px 10px;
                   border-radius: 2px;
                   font-weight: bold;
                   color: #FFF; }
                 html body #wrapper #content #right nav ul li header .label-modified {
                   background-color: #ffaf00; }
+                html body #wrapper #content #right nav ul li header .label-new {
+                  background-color: #6CC644; }
+                html body #wrapper #content #right nav ul li header .label-deleted {
+                  background-color: #D7431B; }
               html body #wrapper #content #right nav ul li code {
                 font-family: "Menlo", monospace, consolas, sans-serif;
-                white-space: pre-line;
+                white-space: pre;
                 word-wrap: normal;
                 font-size: 0.9em;
                 word-break: break-word; }

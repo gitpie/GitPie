@@ -35,7 +35,7 @@
 
           if (forceReload || selectedRepository.name != repository.name) {
             this.loadingHistory = true;
-            
+
             if (selectedRepository) {
               selectedRepository.selected = false;
             }
@@ -324,6 +324,23 @@
           // menu.append(new GUI.MenuItem({ label: 'Open file' }));
           //
           // menu.popup(event.x, event.y);
+        };
+
+        this.getChangeTypeClass = function (type) {
+          
+          switch (type) {
+            case 'MODIFIED':
+              return 'label-modified';
+
+            case 'DELETED':
+              return  'label-deleted';
+
+            case 'NEW':
+                return  'label-new';
+
+            default:
+              return '';
+          }
         };
       },
 

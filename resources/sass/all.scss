@@ -716,11 +716,21 @@ html {
                     @extend .label;
                     background-color: #ffaf00;
                   }
+
+                  .label-new {
+                    @extend .label;
+                    background-color: #6CC644;
+                  }
+
+                  .label-deleted {
+                    @extend .label;
+                    background-color: #D7431B;
+                  }
                 }
 
                 code {
                   font-family: $code-font;
-                  white-space: pre-line;
+                  white-space: pre;
                   word-wrap: normal;
                   font-size: 0.9em;
                   word-break: break-word;
