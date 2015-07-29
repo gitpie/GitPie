@@ -33,10 +33,9 @@
 
         this.showRepositoryInfo = function (repository, forceReload) {
 
-          this.loadingHistory = true;
-
           if (forceReload || selectedRepository.name != repository.name) {
-
+            this.loadingHistory = true;
+            
             if (selectedRepository) {
               selectedRepository.selected = false;
             }

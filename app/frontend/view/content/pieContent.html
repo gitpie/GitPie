@@ -40,9 +40,9 @@
 
     <pie-dialog show="false">
       Are you sure to remove <strong>{{ repository }}</strong>?
-      <div style="text-align:right">
-        <button type="button">No</button> <button type="button" class="featured">Yes</button>
-      </div>
+      <footer>
+        <button type="button">NO</button> <button type="button" class="featured">YES</button>
+      </footer>
     </pie-dialog>
   </section>
 
@@ -131,7 +131,7 @@
                 <span ng-click="appCtrl.showFileDiff(change)" ng-class="{ 'octicon-triangle-right': !change.showCode, 'octicon-triangle-down': change.showCode}" class="octicon octicon-triangle-right"></span>
                 <input id="change{{$index}}" type="checkbox" ng-model="change.checked" checked="true" />
                 <label for="change{{$index}}"></label>
-                {{ change.name }}
+                {{ change.name.length > 50 ? '...' : ''}} {{ change.name | limitTo: - 50 }}
                 <menuitem>{{ change.type }}</menuitem>
               </header>
               <code ng-show="change.showCode">

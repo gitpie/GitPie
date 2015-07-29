@@ -87,15 +87,18 @@ Git.prototype.getCommitHistory = function (opts, callback) {
     } else {
 
       for (var i = 0; i < lines.length; i++) {
-        var historyItem = lines[i].split('-gtseparator-');
 
-        historyList.push({
-          user: historyItem[0],
-          date: historyItem[1],
-          hash: historyItem[2],
-          message: historyItem[3],
-          body: historyItem[4]
-        });
+        if (lines[i] !== '') {
+          var historyItem = lines[i].split('-gtseparator-');
+
+          historyList.push({
+            user: historyItem[0],
+            date: historyItem[1],
+            hash: historyItem[2],
+            message: historyItem[3],
+            body: historyItem[4]
+          });
+        }
       }
     }
 

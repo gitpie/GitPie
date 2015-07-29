@@ -17,19 +17,16 @@ $border-color: #DDD;
 
 	/* Scrollbar style */
 	&::-webkit-scrollbar-track {
-		border-radius: 10px;
 		background-color: #F5F5F5;
 	}
 
 	&::-webkit-scrollbar {
 		width: 6px;
     height: 6px;
-		background-color: #F5F5F5;
 	}
 
 	&::-webkit-scrollbar-thumb {
-		border-radius: 10px;
-		background-color: rgba(0, 0, 0, 0.5);
+		background-color: rgba(0, 0, 0, 0.4);
 	}
 
   // Default style for input text
@@ -247,12 +244,13 @@ html {
         width:100%;
         height:100%;
         background-color:#000000;
-        opacity: 0.8;
+        opacity: 0.5;
       }
 
       .modal-dialog {
         z-index:10000;
         position: absolute;
+        border-radius: 2px;
         width: 50%;
         top: 50%;
         left: 50%;
@@ -262,7 +260,7 @@ html {
         color: #111 !important;
 
         background-color: #fff;
-        box-shadow: 4px 4px 80px #000;
+        box-shadow: 4px 4px 40px #333;
 
         .modal-dialog-content {
           padding:10px;
@@ -613,6 +611,9 @@ html {
 
             .commit-body {
               white-space: pre-line;
+              line-height: 1.5;
+              margin: 0;
+              color: #666;
             }
           }
 
@@ -678,7 +679,10 @@ html {
       							}
 
                     .plus-text {
-                      color: #6CC644;
+                      color: #58B231;
+                      background-color: #ccffcc;
+                      border-radius: 2px;
+                      padding: 3px 15px;
                       font-weight: bold;
                       margin: 0 3px;
                       display: inline-block;
@@ -692,11 +696,26 @@ html {
 
                     .minor-text {
                       color: #D7431B;
+                      background-color: #ffdddd;
+                      border-radius: 2px;
+                      padding: 3px 15px;
                       font-weight: bold;
                       margin: 0 3px;
                       display: inline-block;
                     }
       						}
+
+                  .label {
+                    padding: 3px 10px;
+                    border-radius: 2px;
+                    font-weight: bold;
+                    color: #FFF;
+                  }
+
+                  .label-modified {
+                    @extend .label;
+                    background-color: #ffaf00;
+                  }
                 }
 
                 code {
