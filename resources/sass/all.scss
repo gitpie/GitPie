@@ -283,17 +283,16 @@ html {
 
   	/* Header of the application */
   	#header {
-  		$default-box-shadow: 0 1px 2px #49575d;
-  		$default-text-color: #CCCCCC;
-  		$default-background-color: #636e73;
-      $default-hover-background-color: #596368;
+      $header-font-shadow: 0 1px 2px #49575d;
+      $header-font-color: #CCCCCC;
+      $header-background-color: #636e73;
 
   		width: 100%;
   		height: 47px;
       position: relative;
       z-index: 9;
-  		background-color: $default-background-color;
-  		color: $default-text-color;
+  		background-color: $header-background-color;
+  		color: $header-font-color;
       overflow: hidden;
   		-webkit-app-region: drag;
 
@@ -311,7 +310,7 @@ html {
             padding: 15px 20px;
             display: inline-block;
             cursor: pointer;
-            text-shadow: $default-box-shadow;
+            text-shadow: $header-font-shadow;
 
             .sync-status {
               margin-left: 10px;
