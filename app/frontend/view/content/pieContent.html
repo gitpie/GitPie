@@ -126,7 +126,7 @@
         <nav>
           <ul>
 
-            <li ng-repeat="change in appCtrl.commitChanges" ng-right-click="appCtrl.openChangesContextualMenu($event)">
+            <li ng-repeat="change in appCtrl.commitChanges" ng-right-click="appCtrl.openChangesContextualMenu($event, change, $index)">
               <header>
                 <span ng-hide="change.type == 'DELETED'" ng-click="appCtrl.showFileDiff(change)" ng-class="{ 'octicon-triangle-right': !change.showCode, 'octicon-triangle-down': change.showCode}" class="octicon octicon-triangle-right"></span>
                 <input id="change{{$index}}" type="checkbox" ng-model="change.checked" checked="true" />

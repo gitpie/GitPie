@@ -363,4 +363,20 @@ Git.prototype.listRemotes = function (path, callback) {
   });
 };
 
+Git.prototype.discartChangesInFile = function (path, opts) {
+  opts = opts || {};
+
+  exec('git clean -df '.concat(opts.file), { cwd: path,  env: ENV}, function (error, stdout, stderr) {
+    var err = null;
+
+    if (error !== null) {
+      err = error.message;
+    }
+
+    if (opts.callback && typeof opts.callback == 'function') {
+      opts.callback.call(this, err, stdout);
+    }
+  });
+};
+
 module.exports = new Git();

@@ -300,34 +300,53 @@
           // menu.popup(event.x, event.y);
         };
 
-        this.openChangesContextualMenu = function (event) {
-          var body = angular.element(document.body);
+        this.openChangesContextualMenu = function (event, change, index) {
+          var body = angular.element(document.body),
+            me = this;
 
           CommomService.closeAnyContextMenu();
 
-          body.append([
-
-            '<div class="context-menu" style="top: ' + event.y + 'px;  left: ' + event.x +  'px">',
-              '<ul>',
-                '<li>Discart</li>',
-                '<li>Open file</li>',
-              '</ul>',
-            '</div>'
-
-          ].join(''));
-
-          // var menu = new GUI.Menu();
+          // body.append([
           //
-          // // Add some items
-          // menu.append(new GUI.MenuItem({ label: 'Discart' }));
-          // menu.append(new GUI.MenuItem({ type: 'separator' }));
-          // menu.append(new GUI.MenuItem({ label: 'Open file' }));
+          //   '<div class="context-menu" style="top: ' + event.y + 'px;  left: ' + event.x +  'px">',
+          //     '<ul>',
+          //       '<li>Discart</li>',
+          //       '<li>Open file</li>',
+          //     '</ul>',
+          //   '</div>'
           //
-          // menu.popup(event.x, event.y);
+          // ].join(''));
+
+          var menu = new GUI.Menu();
+
+          // Add some items
+          menu.append(new GUI.MenuItem({ label: 'Discart' }));
+          menu.append(new GUI.MenuItem({ type: 'separator' }));
+          menu.append(new GUI.MenuItem({ label: 'Open file' }));
+
+          menu.popup(event.x, event.y);
+
+          menu.items[0].click = function () {
+
+            GIT.discartChangesInFile(selectedRepository.path, {
+
+              file: change.path,
+
+              callback: function (err) {
+
+                if (err) {
+                  alert(err);
+                } else {
+                  me.commitChanges.splice(index, 1);
+                  $scope.$apply();
+                }
+              }
+            });
+          };
         };
 
         this.getChangeTypeClass = function (type) {
-          
+
           switch (type) {
             case 'MODIFIED':
               return 'label-modified';
