@@ -239,7 +239,7 @@ Git.prototype.getUnsyncFileDiff = function (opts, callback) {
 
 Git.prototype.getFileDiff = function (opts, callback) {
 
-  exec('git log -p -1 ' + opts.hash + ' -- ' + opts.file, { cwd: opts.path, env: ENV}, function (error, stdout, stderr) {
+  exec('git log --format=\'%N\' -p -1 ' + opts.hash + ' -- ' + opts.file, { cwd: opts.path, env: ENV}, function (error, stdout, stderr) {
     var err = null;
 
     if (error !== null) {
