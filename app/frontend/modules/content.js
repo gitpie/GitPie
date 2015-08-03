@@ -294,11 +294,12 @@
 
         this.openChangesContextualMenu = function (event, change, index) {
           var body = angular.element(document.body),
+            isUnknowChange = change.type == 'NEW',
             contextMenu = $compile([
 
               '<div class="context-menu" style="top: ' + event.y + 'px;  left: ' + event.x +  'px">',
                 '<ul>',
-                  '<li ng-click="appCtrl.discartChanges(\'', change.path,'\', \'', index,'\')">Discart</li>',
+                  '<li ng-click="appCtrl.discartChanges(\'', change.path,'\', \'', index,'\', ' + isUnknowChange + ')">Discart</li>',
                   '<li ng-click="appCtrl.openItemInFolder(\'', selectedRepository.path + '/' + change.path + '\')">Show file in folder</li>',
                 '</ul>',
               '</div>'
@@ -327,12 +328,14 @@
           }
         };
 
-        this.discartChanges = function (filePath, index) {
+        this.discartChanges = function (filePath, index, isUnknow) {
           var me = this;
 
           GIT.discartChangesInFile(selectedRepository.path, {
 
             file: filePath,
+
+            isUnknow: isUnknow,
 
             callback: function (err) {
 

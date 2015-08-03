@@ -364,9 +364,17 @@ Git.prototype.listRemotes = function (path, callback) {
 };
 
 Git.prototype.discartChangesInFile = function (path, opts) {
+  var command;
+
   opts = opts || {};
 
-  exec('git clean -df '.concat(opts.file), { cwd: path,  env: ENV}, function (error, stdout, stderr) {
+  if (opts.isUnknow) {
+    command = 'git clean -df '.concat(opts.file);
+  } else {
+    command = 'git checkout -- '.concat(opts.file);
+  }
+
+  exec(command, { cwd: path,  env: ENV}, function (error, stdout, stderr) {
     var err = null;
 
     if (error !== null) {
