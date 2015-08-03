@@ -21,12 +21,14 @@ $border-color: #DDD;
 	}
 
 	&::-webkit-scrollbar {
-		width: 6px;
-    height: 6px;
+		width: 11px;
+    height: 11px;
 	}
 
 	&::-webkit-scrollbar-thumb {
 		background-color: rgba(0, 0, 0, 0.4);
+    border-radius: 5px;
+    border: 2px #F5F5F5 solid;
 	}
 
   // Default style for input text

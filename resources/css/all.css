@@ -10,10 +10,12 @@
   *::-webkit-scrollbar-track {
     background-color: #F5F5F5; }
   *::-webkit-scrollbar {
-    width: 6px;
-    height: 6px; }
+    width: 11px;
+    height: 11px; }
   *::-webkit-scrollbar-thumb {
-    background-color: rgba(0, 0, 0, 0.4); }
+    background-color: rgba(0, 0, 0, 0.4);
+    border-radius: 5px;
+    border: 2px #F5F5F5 solid; }
   * input[type="text"], * textarea {
     padding: 8px;
     border: #DDD 1px solid;
