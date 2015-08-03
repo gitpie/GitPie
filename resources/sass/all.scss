@@ -492,8 +492,13 @@ html {
   				@extend .column;
   		    width: 40%;
   				z-index: 10;
+          display: flex;
+          flex-direction: column;
+          overflow: hidden;
 
           nav {
+            overflow: auto;
+            flex: 1;
 
             ul {
               list-style: none;
@@ -550,6 +555,7 @@ html {
             box-shadow: 0 4px 10px -2px rgba(1, 1, 1, 0.3);
   					overflow: hidden;
   					background-color: #FFF;
+            min-height: 271px;
 
             h3 {
               color: #111;
@@ -584,6 +590,20 @@ html {
 
           .tabPanel {
             @include tabPanel(#999, #666, #FFF, #DDD);
+
+            display: flex;
+            flex-direction: column;
+            height: 100%;
+
+            .tab-content {
+              flex: 1 1 auto;
+              box-sizing: border-box;
+              overflow: auto;
+            }
+
+            nav.tabHeader {
+              min-height: 39px;
+            }
           }
 
           header.commit-message {

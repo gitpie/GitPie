@@ -387,39 +387,46 @@ html, html body {
             font-size: 3em; }
         html body #wrapper #content #center {
           width: 40%;
-          z-index: 10; }
-          html body #wrapper #content #center nav ul {
-            list-style: none;
-            margin: 0;
-            padding: 0; }
-            html body #wrapper #content #center nav ul .commit-number {
-              color: #111;
-              font-weight: 500;
-              text-align: center;
-              font-weight: bold; }
-            html body #wrapper #content #center nav ul li {
-              border-bottom: #DDD 1px solid;
-              padding: 15px;
-              cursor: default;
-              word-wrap: break-word; }
-              html body #wrapper #content #center nav ul li .commit-message {
-                font-size: 1.2em;
+          z-index: 10;
+          display: flex;
+          flex-direction: column;
+          overflow: hidden; }
+          html body #wrapper #content #center nav {
+            overflow: auto;
+            flex: 1; }
+            html body #wrapper #content #center nav ul {
+              list-style: none;
+              margin: 0;
+              padding: 0; }
+              html body #wrapper #content #center nav ul .commit-number {
                 color: #111;
-                margin-bottom: 5px; }
-              html body #wrapper #content #center nav ul li .commit-details .date {
-                color: #999;
-                display: inline-block; }
-            html body #wrapper #content #center nav ul li.selected {
-              background-color: #3998D6;
-              color: #FFF !important; }
-              html body #wrapper #content #center nav ul li.selected .commit-message {
-                color: #FFF; }
-              html body #wrapper #content #center nav ul li.selected .commit-details .date {
-                color: #C3E0EC; }
+                font-weight: 500;
+                text-align: center;
+                font-weight: bold; }
+              html body #wrapper #content #center nav ul li {
+                border-bottom: #DDD 1px solid;
+                padding: 15px;
+                cursor: default;
+                word-wrap: break-word; }
+                html body #wrapper #content #center nav ul li .commit-message {
+                  font-size: 1.2em;
+                  color: #111;
+                  margin-bottom: 5px; }
+                html body #wrapper #content #center nav ul li .commit-details .date {
+                  color: #999;
+                  display: inline-block; }
+              html body #wrapper #content #center nav ul li.selected {
+                background-color: #3998D6;
+                color: #FFF !important; }
+                html body #wrapper #content #center nav ul li.selected .commit-message {
+                  color: #FFF; }
+                html body #wrapper #content #center nav ul li.selected .commit-details .date {
+                  color: #C3E0EC; }
           html body #wrapper #content #center .commit-block {
             box-shadow: 0 4px 10px -2px rgba(1, 1, 1, 0.3);
             overflow: hidden;
-            background-color: #FFF; }
+            background-color: #FFF;
+            min-height: 271px; }
             html body #wrapper #content #center .commit-block h3 {
               color: #111;
               margin: 0;
@@ -439,27 +446,37 @@ html, html body {
           width: 43%;
           border-left: #DDD 1px solid;
           color: #111; }
-          html body #wrapper #content #right .tabPanel nav.tabHeader {
-            margin: 0;
-            padding: 0;
+          html body #wrapper #content #right .tabPanel {
             display: flex;
-            width: 100%;
-            box-sizing: border-box;
-            overflow: hidden;
-            box-shadow: 0 4px 5px -2px rgba(1, 1, 1, 0.3); }
-            html body #wrapper #content #right .tabPanel nav.tabHeader div {
+            flex-direction: column;
+            height: 100%; }
+            html body #wrapper #content #right .tabPanel nav.tabHeader {
+              margin: 0;
+              padding: 0;
+              display: flex;
+              width: 100%;
+              box-sizing: border-box;
+              overflow: hidden;
+              box-shadow: 0 4px 5px -2px rgba(1, 1, 1, 0.3); }
+              html body #wrapper #content #right .tabPanel nav.tabHeader div {
+                flex: 1 1 auto;
+                text-align: center;
+                padding: 10px;
+                border-bottom: #FFF 3px solid;
+                color: #999;
+                cursor: default;
+                font-weight: bold; }
+                html body #wrapper #content #right .tabPanel nav.tabHeader div:hover {
+                  color: #666; }
+              html body #wrapper #content #right .tabPanel nav.tabHeader div.active {
+                border-color: #DDD;
+                color: inherit; }
+            html body #wrapper #content #right .tabPanel .tab-content {
               flex: 1 1 auto;
-              text-align: center;
-              padding: 10px;
-              border-bottom: #FFF 3px solid;
-              color: #999;
-              cursor: default;
-              font-weight: bold; }
-              html body #wrapper #content #right .tabPanel nav.tabHeader div:hover {
-                color: #666; }
-            html body #wrapper #content #right .tabPanel nav.tabHeader div.active {
-              border-color: #DDD;
-              color: inherit; }
+              box-sizing: border-box;
+              overflow: auto; }
+            html body #wrapper #content #right .tabPanel nav.tabHeader {
+              min-height: 39px; }
           html body #wrapper #content #right header.commit-message {
             padding: 15px;
             border-bottom: #DDD 1px solid;
