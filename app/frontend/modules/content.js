@@ -6,7 +6,7 @@
       restrict: 'E',
       templateUrl: 'app/frontend/view/content/pieContent.html',
 
-      controller: function ($scope, $sce, CommomService) {
+      controller: function ($scope, $sce, $compile, CommomService) {
         var selectedRepository = {},
           selectedCommit = {},
           selectedCommitAncestor = null;
@@ -274,75 +274,40 @@
         }.bind(this));
 
         this.openRepositoryContextualMenu = function (event, repository) {
-          var body = angular.element(document.body);
+          var body = angular.element(document.body),
+            contextMenu = $compile([
+
+              '<div class="context-menu" style="top: ' + event.y + 'px;  left: ' + event.x +  'px">',
+                '<ul>',
+                  '<li>Rename</li>',
+                  '<li>Remove</li>',
+                  '<li ng-click="appCtrl.openItemInFolder(\'', repository.path , '\')">Show in folder</li>',
+                '</ul>',
+              '</div>'
+
+            ].join(''))($scope);
 
           CommomService.closeAnyContextMenu();
 
-          body.append([
-
-            '<div class="context-menu" style="top: ' + event.y + 'px;  left: ' + event.x +  'px">',
-              '<ul>',
-                '<li>Rename</li>',
-                '<li>Remove</li>',
-                '<li>Open folder</li>',
-              '</ul>',
-            '</div>'
-
-          ].join(''));
-
-          // var menu = new GUI.Menu(),
-          // Add some items
-          // menu.append(new GUI.MenuItem({ label: 'Rename' }));
-          // menu.append(new GUI.MenuItem({ label: 'Remove' }));
-          // menu.append(new GUI.MenuItem({ type: 'separator' }));
-          // menu.append(new GUI.MenuItem({ label: 'Open folder' }));
-          //
-          // menu.popup(event.x, event.y);
+          body.append(contextMenu);
         };
 
         this.openChangesContextualMenu = function (event, change, index) {
           var body = angular.element(document.body),
-            me = this;
+            contextMenu = $compile([
+
+              '<div class="context-menu" style="top: ' + event.y + 'px;  left: ' + event.x +  'px">',
+                '<ul>',
+                  '<li ng-click="appCtrl.discartChanges(\'', change.path,'\', \'', index,'\')">Discart</li>',
+                  '<li ng-click="appCtrl.openItemInFolder(\'', selectedRepository.path + '/' + change.path + '\')">Show file in folder</li>',
+                '</ul>',
+              '</div>'
+
+            ].join(''))($scope);
 
           CommomService.closeAnyContextMenu();
 
-          // body.append([
-          //
-          //   '<div class="context-menu" style="top: ' + event.y + 'px;  left: ' + event.x +  'px">',
-          //     '<ul>',
-          //       '<li>Discart</li>',
-          //       '<li>Open file</li>',
-          //     '</ul>',
-          //   '</div>'
-          //
-          // ].join(''));
-
-          var menu = new GUI.Menu();
-
-          // Add some items
-          menu.append(new GUI.MenuItem({ label: 'Discart' }));
-          menu.append(new GUI.MenuItem({ type: 'separator' }));
-          menu.append(new GUI.MenuItem({ label: 'Open file' }));
-
-          menu.popup(event.x, event.y);
-
-          menu.items[0].click = function () {
-
-            GIT.discartChangesInFile(selectedRepository.path, {
-
-              file: change.path,
-
-              callback: function (err) {
-
-                if (err) {
-                  alert(err);
-                } else {
-                  me.commitChanges.splice(index, 1);
-                  $scope.$apply();
-                }
-              }
-            });
-          };
+          body.append(contextMenu);
         };
 
         this.getChangeTypeClass = function (type) {
@@ -360,6 +325,34 @@
             default:
               return '';
           }
+        };
+
+        this.discartChanges = function (filePath, index) {
+          var me = this;
+
+          GIT.discartChangesInFile(selectedRepository.path, {
+
+            file: filePath,
+
+            callback: function (err) {
+
+              if (err) {
+                alert(err);
+              } else {
+                me.commitChanges.splice(index, 1);
+                $scope.$apply();
+              }
+
+              CommomService.closeAnyContextMenu();
+
+            }
+          });
+        };
+
+        this.openItemInFolder = function (path) {
+          GUI.Shell.showItemInFolder(path);
+
+          CommomService.closeAnyContextMenu();
         };
       },
 
