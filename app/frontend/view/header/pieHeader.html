@@ -12,8 +12,7 @@
                 <section class="content">
                   <input type="text" style="width: 200px" name="repository" ng-model="repositoryPath"
                     placeholder="{{ MSGS['Where are your stuffs'] }}?" />
-                  <input type="file" value="{{ MSGS.BROWSE }}"
-                    ng-model="repositoryPath" ng-input-change nwdirectory />
+                  <input type="file" ng-model="repositoryPath" ng-input-change nwdirectory />
                 </section>
                 <footer><button class="featured" ng-click="headerCtrl.addRepository(repositoryPath)"><span class="octicon octicon-file-directory"></span> {{ MSGS["ADD REPOSITORY"] }}</button> </footer>
 
