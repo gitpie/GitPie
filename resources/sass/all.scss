@@ -555,7 +555,8 @@ html {
             box-shadow: 0 4px 10px -2px rgba(1, 1, 1, 0.3);
   					overflow: hidden;
   					background-color: #FFF;
-            min-height: 271px;
+            height: 271px;
+            transition: height 0.2s ease;
 
             h3 {
               color: #111;
@@ -746,6 +747,13 @@ html {
                   .label-deleted {
                     @extend .label;
                     background-color: #D7431B;
+                  }
+
+                  .label-binary {
+                    @extend .label;
+                    color: #986B45;
+                    display: inline-block;
+                    background-color: #F5E8DB;
                   }
                 }
 

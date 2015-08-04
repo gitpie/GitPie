@@ -9,7 +9,13 @@ var
   GIT_REPO_NAME = require('./node_modules/git-repo-name'),
 
   // Git class that perfoms git commands
-  GIT = require('./app/core/git');
+  GIT = require('./app/core/git'),
+
+  // Locale language
+  LANG = window.navigator.userLanguage || window.navigator.language,
+
+  // Messages and labels of the application
+  MSGS;
 
 WIN.focus();
 
@@ -20,11 +26,20 @@ process.on('uncaughtException', function(err) {
   alert(err);
 });
 
+/* Get the locale language */
+try {
+  MSGS = require('./language/'.concat(LANG).concat('.json'));
+} catch (err){
+  MSGS = require('./language/en.json');
+}
+
+console.log(MSGS);
+
 /* AngularJS app init */
 (function () {
   var app = angular.module('gitpie', ['components', 'attributes', 'header', 'content']);
 
-  app.factory('CommomService', function () {
+  app.factory('CommomService', function ($rootScope) {
     var repositoriesStr = localStorage.getItem('repos'),
 
       repositories = JSON.parse(repositoriesStr) || {},
@@ -76,6 +91,9 @@ process.on('uncaughtException', function(err) {
       repositories.isEmpty = true;
     }
 
+    // Set the application messages globally
+    $rootScope.MSGS = MSGS;
+
     return {
 
       addRepository: function (repositoryPath, callback) {
@@ -83,8 +101,8 @@ process.on('uncaughtException', function(err) {
         if (repositoryPath) {
 
           // Easter egg :D
-          if (repositoryPath.toLowerCase() === 'i have no idea') {
-            alert('It happends with me all the time too. But let\'s try find your project again!');
+          if (repositoryPath.toLowerCase() === $rootScope.MSGS['i have no idea']) {
+            alert($rootScope.MSGS['It happends with me all the time too. But lets\'s try find your project again!']);
 
           } else {
             var name = GIT_REPO_NAME(repositoryPath),
@@ -133,7 +151,7 @@ process.on('uncaughtException', function(err) {
               });
 
             } else {
-              alert('Nothing for me here.\n The folder ' + repositoryPath + ' is not a git project');
+              alert($rootScope.MSGS['Nothing for me here.\n The folder {folder} is not a git project'].replace('{folder}', repositoryPath));
             }
           }
         }

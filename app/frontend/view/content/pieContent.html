@@ -3,7 +3,7 @@
   <section id="left">
     <div class="empty-msg" ng-show="appCtrl.repositories.isEmpty">
       <span class="mega-octicon octicon-rocket"></span>
-      Start adding or clonning some awesome things! <3
+      {{ MSGS["Start adding or clonning some awesome things"] }}! <3
     </div>
 
     <nav>
@@ -48,18 +48,19 @@
 
   <section class="getting-start-message" ng-hide="appCtrl.repositoryHistory.length > 0">
     <span class="mega-octicon octicon-inbox"></span>
-    Select a repository to start
+    {{ MSGS["Select a repository to start"] }}
   </section>
 
   <section id="center" ng-show="appCtrl.repositoryHistory.length > 0">
 
     <form name="commitForm" class="commit-block" ng-show="appCtrl.commitChanges.length > 0">
-      <h3><span class="octicon octicon-diff"></span> Commit changes</h3>
+      <h3><span class="octicon octicon-diff"></span> {{ MSGS["Commit changes"] }}</h3>
       <div class="input-wraper">
-        <input type="text" ng-model="commitMessage" placeholder="Type a message for your commit" required />
-        <textarea ng-model="commitDescription" placeholder="Give a description to the commit. Tell more about your changes..."></textarea>
+        <input type="text" ng-model="commitMessage" placeholder="{{ MSGS['Type a message for your commit'] }}" required />
+        <textarea ng-model="commitDescription"
+          placeholder="{{ MSGS['Give a description to the commit. Tell more about your changes...'] }}"></textarea>
       </div>
-      <button type="button" class="featured" ng-click="appCtrl.commitSelectedChanges(commitMessage, commitDescription)"><span class="octicon octicon-cloud-upload"></span> COMMIT</button>
+      <button type="button" class="featured" ng-click="appCtrl.commitSelectedChanges(commitMessage, commitDescription)"><span class="octicon octicon-cloud-upload"></span> {{ MSGS.COMMIT }}</button>
     </form>
 
     <nav ng-class="{ mask:appCtrl.loadingHistory }" ng-scroll="appCtrl.loadMoreCommits($event)">
@@ -69,7 +70,7 @@
             <span class="octicon octicon-git-commit"></span> {{ appCtrl.commitNumber | number:0}} commits
           </div>
           <div ng-show="appCtrl.commitNumber == 'counting'">
-            Counting...
+            {{ MSGS["Counting..."] }}
           </div>
         </li>
         <li ng-repeat="commit in appCtrl.repositoryHistory" ng-class="{ selected:commit.selected }" ng-click="appCtrl.showCommitChanges(commit, $index)">
@@ -84,7 +85,7 @@
   <section id="right" ng-class="{ mask:appCtrl.loadingChanges }" ng-show="appCtrl.repositoryHistory.length > 0">
 
     <tabs>
-      <pane pane-title="History" icon="octicon octicon-history">
+      <pane pane-title="{{ MSGS.History }}" icon="octicon octicon-history">
         <header class="commit-message" ng-show="appCtrl.getCommitMessage()">
           <h2>{{ appCtrl.getCommitMessage() }}</h2>
           <p class="commit-body" ng-show="appCtrl.getCommitBody()">
@@ -117,10 +118,10 @@
         </nav>
       </pane>
 
-      <pane pane-title="Changes" icon="octicon octicon-radio-tower">
+      <pane pane-title="{{ MSGS.Changes }}" icon="octicon octicon-radio-tower">
 
         <header class="commit-message">
-          <h2>Unsyncronized Changes</h2>
+          <h2>{{ MSGS['Unsyncronized Changes'] }}</h2>
         </header>
 
         <nav>
@@ -132,7 +133,7 @@
                 <input id="change{{$index}}" type="checkbox" ng-model="change.checked" checked="true" />
                 <label for="change{{$index}}"></label>
                 {{ change.name.length > 50 ? '...' : ''}} {{ change.name | limitTo: - 50 }}
-                <menuitem ng-class="appCtrl.getChangeTypeClass(change.type)">{{ change.type }}</menuitem>
+                <menuitem ng-class="appCtrl.getChangeTypeClass(change.type)">{{ MSGS[change.type] }}</menuitem>
               </header>
               <code ng-show="change.showCode">
                 {{ change.code }}
