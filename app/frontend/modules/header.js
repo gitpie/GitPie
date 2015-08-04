@@ -7,7 +7,8 @@
       templateUrl: 'app/frontend/view/header/pieHeader.html',
 
       controller: function ($scope, $element, CommomService) {
-        var selectedRepository = null;
+        var selectedRepository = null,
+          MSGS = $scope.MSGS;
 
         this.remoteBranchs = [];
         this.syncStatus = {};
@@ -81,7 +82,7 @@
           }, function (err) {
 
             if (err) {
-              alert('Error switching branch. Error:' + err);
+              alert(MSGS['Error switching branch. Error: '] + err);
             } else {
               this.currentBranch = branch;
 
@@ -106,7 +107,7 @@
               GIT.sync(selectedRepository.path, function (err) {
 
                 if (err) {
-                  alert('Error syncronazing repository. \n Error: ' + err.message);
+                  alert(MSGS['Error syncronazing repository. \n Error: '] + err.message);
                 } else {
                   $scope.$broadcast('changedbranch', selectedRepository);
                 }
