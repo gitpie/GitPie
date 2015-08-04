@@ -33,8 +33,6 @@ try {
   MSGS = require('./language/en.json');
 }
 
-console.log(MSGS);
-
 /* AngularJS app init */
 (function () {
   var app = angular.module('gitpie', ['components', 'attributes', 'header', 'content']);
