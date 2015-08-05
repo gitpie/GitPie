@@ -374,17 +374,22 @@ Git.prototype.discartChangesInFile = function (path, opts) {
     command = 'git checkout -- '.concat(opts.file);
   }
 
-  exec(command, { cwd: path,  env: ENV}, function (error, stdout, stderr) {
-    var err = null;
+  if (opts.forceSync) {
+    return execSync(command, { cwd: path,  env: ENV });
+  } else {
 
-    if (error !== null) {
-      err = error.message;
-    }
+    exec(command, { cwd: path,  env: ENV}, function (error, stdout, stderr) {
+      var err = null;
 
-    if (opts.callback && typeof opts.callback == 'function') {
-      opts.callback.call(this, err, stdout);
-    }
-  });
+      if (error !== null) {
+        err = error.message;
+      }
+
+      if (opts.callback && typeof opts.callback == 'function') {
+        opts.callback.call(this, err, stdout);
+      }
+    });
+  }
 };
 
 module.exports = new Git();
