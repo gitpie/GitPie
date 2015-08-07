@@ -97,7 +97,7 @@
 
         this.sync = function () {
 
-          if (selectedRepository) {
+          if (selectedRepository && !this.loading) {
             this.loading = true;
 
             GIT.fetch(selectedRepository.path, function (err) {
