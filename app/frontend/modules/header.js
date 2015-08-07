@@ -104,7 +104,10 @@
 
               // Ignored error for while to not block status for private repositories
 
-              GIT.sync(selectedRepository.path, function (err) {
+              GIT.sync({
+                path: selectedRepository.path,
+                branch: this.currentBranch
+              }, function (err) {
 
                 if (err) {
                   alert(MSGS['Error syncronazing repository. \n Error: '] + err.message);
@@ -114,7 +117,7 @@
 
                 this.loading = false;
               });
-            });
+            }.bind(this));
           }
         };
 

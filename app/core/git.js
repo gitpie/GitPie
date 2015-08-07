@@ -252,13 +252,20 @@ Git.prototype.getFileDiff = function (opts, callback) {
   });
 };
 
-Git.prototype.sync = function (path, callback) {
+Git.prototype.sync = function (opts, callback) {
 
-  exec('git pull', { cwd: path,  env: ENV}, function (error, stdout, stderr) {
+  exec('git pull', { cwd: opts.path,  env: ENV}, function (error, stdout, stderr) {
     var err = null;
 
     if (error !== null) {
       err = error;
+    } else {
+
+      try {
+        execSync('git push origin ' + opts.branch, { cwd: opts.path,  env: ENV});
+      } catch (pushError) {
+        err = pushError.message;
+      }
     }
 
     if (callback && typeof callback == 'function') {
