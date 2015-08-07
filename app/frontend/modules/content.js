@@ -280,7 +280,6 @@
 
               '<div class="context-menu" style="top: ' + event.y + 'px;  left: ' + event.x +  'px">',
                 '<ul>',
-                  '<li>', MSGS.Rename, '</li>',
                   '<li>', MSGS.Remove, '</li>',
                   '<li ng-click="appCtrl.openItemInFolder(\'', repository.path , '\')">',
                     MSGS['Show in folder'],
