@@ -231,9 +231,7 @@ html, html body {
             margin-left: 5px;
             text-shadow: none;
             min-width: 200px;
-            z-index: 10000;
-            max-height: 500px;
-            overflow: auto; }
+            z-index: 10000; }
             html body #header nav ul .menu ul {
               list-style: none;
               display: inline-block;
@@ -292,6 +290,7 @@ html, html body {
               padding-right: 2px; }
             html body #header nav ul .menu::before {
               content: '';
+              position: absolute;
               width: 0;
               height: 0;
               border-left: 10px solid transparent;
