@@ -39,7 +39,7 @@
           <span class="label" ng-show="newBranch.length > 0 && !headerCtrl.branchExists(newBranch)">
             {{ MSGS['Create new branch'] }} <strong>"{{ headerCtrl.treatBranch(newBranch) }}"</strong></span>
 
-          <ul style="display: block; overflow: auto; max-height: 500px;">
+          <ul style="display: block; overflow: auto; max-height: 400px;">
             <li style="display:block" ng-repeat="branch in headerCtrl.remoteBranchs | filter:headerCtrl.treatBranch(newBranch) || ''" ng-click="headerCtrl.switchBranch(branch)"><span class="octicon octicon-git-branch"></span> {{ branch }}</li>
           </ul>
 
