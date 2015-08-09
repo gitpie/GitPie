@@ -118,6 +118,7 @@ html, html body {
             margin-right: 10px; }
           html body .context-menu ul li:hover {
             color: #000;
+            cursor: pointer;
             background-color: #FFF; }
       html body .context-menu .label, html body .context-menu #wrapper #content #right nav ul li header .label-modified, html body #wrapper #content #right nav ul li header .context-menu .label-modified, html body .context-menu #wrapper #content #right nav ul li header .label-new, html body #wrapper #content #right nav ul li header .context-menu .label-new, html body .context-menu #wrapper #content #right nav ul li header .label-deleted, html body #wrapper #content #right nav ul li header .context-menu .label-deleted, html body .context-menu #wrapper #content #right nav ul li header .label-binary, html body #wrapper #content #right nav ul li header .context-menu .label-binary {
         padding: 20px 0;
@@ -230,7 +231,9 @@ html, html body {
             margin-left: 5px;
             text-shadow: none;
             min-width: 200px;
-            z-index: 10000; }
+            z-index: 10000;
+            max-height: 500px;
+            overflow: auto; }
             html body #header nav ul .menu ul {
               list-style: none;
               display: inline-block;
@@ -246,6 +249,7 @@ html, html body {
                   margin-right: 10px; }
                 html body #header nav ul .menu ul li:hover {
                   color: #000;
+                  cursor: pointer;
                   background-color: #FFF; }
             html body #header nav ul .menu .label, html body #header #wrapper #content #right nav ul .menu li header .label-modified, html body #wrapper #content #right #header nav ul .menu li header .label-modified, html body #header #wrapper #content #right nav ul li header .menu .label-modified, html body #wrapper #content #right #header nav ul li header .menu .label-modified, html body #header #wrapper #content #right nav ul .menu li header .label-new, html body #wrapper #content #right #header nav ul .menu li header .label-new, html body #header #wrapper #content #right nav ul li header .menu .label-new, html body #wrapper #content #right #header nav ul li header .menu .label-new, html body #header #wrapper #content #right nav ul .menu li header .label-deleted, html body #wrapper #content #right #header nav ul .menu li header .label-deleted, html body #header #wrapper #content #right nav ul li header .menu .label-deleted, html body #wrapper #content #right #header nav ul li header .menu .label-deleted, html body #header #wrapper #content #right nav ul .menu li header .label-binary, html body #wrapper #content #right #header nav ul .menu li header .label-binary, html body #header #wrapper #content #right nav ul li header .menu .label-binary, html body #wrapper #content #right #header nav ul li header .menu .label-binary {
               padding: 20px 0;

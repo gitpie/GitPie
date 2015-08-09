@@ -33,7 +33,7 @@
       <ul>
         <li ng-show="headerCtrl.currentBranch" ng-click="headerCtrl.toggleMenu(2)"><span class="octicon octicon-git-branch"></span> {{ headerCtrl.currentBranch }}</li>
         <div class="menu" ng-show="headerCtrl.showBranchMenu">
-          <input style="display:block; width:300px" type="text" name="newBranch" ng-model="newBranch"
+          <input style="display:block; width:100%; box-sizing: border-box;" type="text" name="newBranch" ng-model="newBranch"
             placeholder="{{ MSGS['Select or create a new branch'] }}" ng-keypress="headerCtrl.checkoutBranch($event, newBranch)" />
 
           <span class="label" ng-show="newBranch.length > 0 && !headerCtrl.branchExists(newBranch)">

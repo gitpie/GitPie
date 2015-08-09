@@ -164,6 +164,7 @@ $border-color: #DDD;
 
       &:hover {
         color: #000;
+        cursor: pointer;
         background-color: #FFF;
       }
     }
@@ -325,6 +326,8 @@ html {
             text-shadow: none;
             min-width: 200px;
             z-index: 10000;
+            max-height: 500px;
+            overflow: auto;
 
             // Arrow
             &::before {
