@@ -12,7 +12,7 @@
           <div class="label">Github</div>
           <ul>
             <li ng-repeat="repository in appCtrl.repositories.github" ng-class="{ selected:repository.selected }"
-              ng-click="appCtrl.showRepositoryInfo(repository)" ng-right-click="appCtrl.openRepositoryContextualMenu($event, repository)">
+              ng-click="appCtrl.showRepositoryInfo(repository)" ng-right-click="appCtrl.openRepositoryContextualMenu($event, repository, $index)">
               <span class="octicon octicon-repo"></span> {{ repository.name }}
             </li>
           </ul>
@@ -21,7 +21,7 @@
           <div class="label">Bitbucket</div>
           <ul>
             <li ng-repeat="repository in appCtrl.repositories.bitbucket" ng-class="{ selected:repository.selected }"
-              ng-click="appCtrl.showRepositoryInfo(repository)" ng-right-click="appCtrl.openRepositoryContextualMenu($event, repository)">
+              ng-click="appCtrl.showRepositoryInfo(repository)" ng-right-click="appCtrl.openRepositoryContextualMenu($event, repository, $index)">
               <i class="fa fa-bitbucket"></i> {{ repository.name }}
             </li>
           </ul>
@@ -30,7 +30,7 @@
           <div class="label">Others</div>
           <ul>
             <li ng-repeat="repository in appCtrl.repositories.outhers" ng-class="{ selected:repository.selected }"
-              ng-click="appCtrl.showRepositoryInfo(repository)" ng-right-click="appCtrl.openRepositoryContextualMenu($event, repository)">
+              ng-click="appCtrl.showRepositoryInfo(repository)" ng-right-click="appCtrl.openRepositoryContextualMenu($event, repository, $index)">
               <i class="fa fa-git-square"></i> {{ repository.name }}
             </li>
           </ul>

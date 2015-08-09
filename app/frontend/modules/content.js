@@ -274,13 +274,15 @@
           }
         }.bind(this));
 
-        this.openRepositoryContextualMenu = function (event, repository) {
+        this.openRepositoryContextualMenu = function (event, repository, index) {
           var body = angular.element(document.body),
             contextMenu = $compile([
 
               '<div class="context-menu" style="top: ' + event.y + 'px;  left: ' + event.x +  'px">',
                 '<ul>',
-                  '<li>', MSGS.Remove, '</li>',
+                  '<li ng-click="appCtrl.removeRepository(\'' + repository.type + '\', ' + index + ')">',
+                    MSGS.Remove,
+                  '</li>',
                   '<li ng-click="appCtrl.openItemInFolder(\'', repository.path , '\')">',
                     MSGS['Show in folder'],
                   '</li>',
@@ -360,6 +362,16 @@
 
         this.openItemInFolder = function (path) {
           GUI.Shell.showItemInFolder(path);
+
+          CommomService.closeAnyContextMenu();
+        };
+
+        this.removeRepository = function (repositoryType, index) {
+          var repositoryWasSelected = CommomService.removeRepository(repositoryType, index);
+
+          if (repositoryWasSelected) {
+            this.repositoryHistory = [];
+          }
 
           CommomService.closeAnyContextMenu();
         };

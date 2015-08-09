@@ -229,7 +229,8 @@ html, html body {
             position: fixed;
             margin-left: 5px;
             text-shadow: none;
-            min-width: 200px; }
+            min-width: 200px;
+            z-index: 10000; }
             html body #header nav ul .menu ul {
               list-style: none;
               display: inline-block;

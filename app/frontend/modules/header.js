@@ -111,12 +111,13 @@
 
                 if (err) {
                   alert(MSGS['Error syncronazing repository. \n Error: '] + err.message);
-                } else {
-                  $scope.$broadcast('changedbranch', selectedRepository);
                 }
 
+                // Emit changedbranch event even on error case as a workaround to git push command fail
+                $scope.$broadcast('changedbranch', selectedRepository);
                 this.loading = false;
-              });
+                $scope.$apply();
+              }.bind(this));
             }.bind(this));
           }
         };

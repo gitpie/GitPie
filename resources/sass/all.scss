@@ -324,6 +324,7 @@ html {
             margin-left: 5px;
             text-shadow: none;
             min-width: 200px;
+            z-index: 10000;
 
             // Arrow
             &::before {

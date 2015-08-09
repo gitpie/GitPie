@@ -155,6 +155,25 @@ try {
         }
       },
 
+      // Return true if the repository was selected and false case not
+      removeRepository: function (repositoryType, index) {
+        var storagedRepositories = JSON.parse(repositoriesStr) || {},
+          type = repositoryType.toLowerCase(),
+          removedRepository;
+
+        storagedRepositories.github = storagedRepositories.github || [];
+        storagedRepositories.bitbucket = storagedRepositories.bitbucket || [];
+        storagedRepositories.outhers = storagedRepositories.outhers || [];
+
+        storagedRepositories[type].splice(index, 1);
+        removedRepository = repositories[type].splice(index, 1);
+
+        localStorage.setItem('repos', JSON.stringify(storagedRepositories));
+        repositoriesStr = JSON.stringify(storagedRepositories);
+
+        return removedRepository[0].selected;
+      },
+
       closeAnyContextMenu: function () {
         var contextMenus = document.querySelectorAll('.context-menu');
 
