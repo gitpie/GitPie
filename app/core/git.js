@@ -73,12 +73,12 @@ Git.prototype.getCurrentBranch = function (path, callback) {
 Git.prototype.getCommitHistory = function (opts, callback) {
 
   exec(
-    "git --no-pager log -n 50 --pretty=format:%an-gtseparator-%cr-gtseparator-%h-gtseparator-%s" + (opts.skip ? ' --skip '.concat(opts.skip) : '' ),
+    "git --no-pager log -n 50 --pretty=format:%an-gtseparator-%cr-gtseparator-%h-gtseparator-%s-gtseparator-%b-pieLineBreak-" + (opts.skip ? ' --skip '.concat(opts.skip) : '' ),
 
     { cwd: opts.path, env: ENV },
 
     function (error, stdout, stderr) {
-    var lines = stdout.split('\n'),
+    var lines = stdout.split('-pieLineBreak-'),
       historyList = [],
       err = null;
 
@@ -87,14 +87,18 @@ Git.prototype.getCommitHistory = function (opts, callback) {
     } else {
 
       for (var i = 0; i < lines.length; i++) {
-        var historyItem = lines[i].split('-gtseparator-');
 
-        historyList.push({
-          user: historyItem[0],
-          date: historyItem[1],
-          hash: historyItem[2],
-          message: historyItem[3]
-        });
+        if (lines[i] !== '') {
+          var historyItem = lines[i].split('-gtseparator-');
+
+          historyList.push({
+            user: historyItem[0],
+            date: historyItem[1],
+            hash: historyItem[2],
+            message: historyItem[3],
+            body: historyItem[4]
+          });
+        }
       }
     }
 
@@ -235,7 +239,7 @@ Git.prototype.getUnsyncFileDiff = function (opts, callback) {
 
 Git.prototype.getFileDiff = function (opts, callback) {
 
-  exec('git log -p -1 ' + opts.hash + ' -- ' + opts.file, { cwd: opts.path, env: ENV}, function (error, stdout, stderr) {
+  exec('git log --format=\'%N\' -p -1 ' + opts.hash + ' -- ' + opts.file, { cwd: opts.path, env: ENV}, function (error, stdout, stderr) {
     var err = null;
 
     if (error !== null) {
@@ -248,13 +252,20 @@ Git.prototype.getFileDiff = function (opts, callback) {
   });
 };
 
-Git.prototype.sync = function (path, callback) {
+Git.prototype.sync = function (opts, callback) {
 
-  exec('git pull', { cwd: path,  env: ENV}, function (error, stdout, stderr) {
+  exec('git pull', { cwd: opts.path,  env: ENV}, function (error, stdout, stderr) {
     var err = null;
 
     if (error !== null) {
       err = error;
+    } else {
+
+      try {
+        execSync('git push origin ' + opts.branch, { cwd: opts.path,  env: ENV});
+      } catch (pushError) {
+        err = pushError.message;
+      }
     }
 
     if (callback && typeof callback == 'function') {
@@ -342,6 +353,50 @@ Git.prototype.getCommitCount = function (path, callback) {
       callback.call(this, err, stdout);
     }
   });
+};
+
+Git.prototype.listRemotes = function (path, callback) {
+
+  exec('git remote -v', { cwd: path,  env: ENV}, function (error, stdout, stderr) {
+    var err = null;
+
+    if (error !== null) {
+      err = error.message;
+    }
+
+    if (callback && typeof callback == 'function') {
+      callback.call(this, err, stdout);
+    }
+  });
+};
+
+Git.prototype.discartChangesInFile = function (path, opts) {
+  var command;
+
+  opts = opts || {};
+
+  if (opts.isUnknow) {
+    command = 'git clean -df '.concat(opts.file);
+  } else {
+    command = 'git checkout -- '.concat(opts.file);
+  }
+
+  if (opts.forceSync) {
+    return execSync(command, { cwd: path,  env: ENV });
+  } else {
+
+    exec(command, { cwd: path,  env: ENV}, function (error, stdout, stderr) {
+      var err = null;
+
+      if (error !== null) {
+        err = error.message;
+      }
+
+      if (opts.callback && typeof opts.callback == 'function') {
+        opts.callback.call(this, err, stdout);
+      }
+    });
+  }
 };
 
 module.exports = new Git();

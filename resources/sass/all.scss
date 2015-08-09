@@ -17,19 +17,18 @@ $border-color: #DDD;
 
 	/* Scrollbar style */
 	&::-webkit-scrollbar-track {
-		border-radius: 10px;
 		background-color: #F5F5F5;
 	}
 
 	&::-webkit-scrollbar {
-		width: 6px;
-    height: 6px;
-		background-color: #F5F5F5;
+		width: 11px;
+    height: 11px;
 	}
 
 	&::-webkit-scrollbar-thumb {
-		border-radius: 10px;
-		background-color: rgba(0, 0, 0, 0.5);
+		background-color: rgba(0, 0, 0, 0.4);
+    border-radius: 5px;
+    border: 2px #F5F5F5 solid;
 	}
 
   // Default style for input text
@@ -83,6 +82,7 @@ $border-color: #DDD;
   // Default style for button and input button
   button, input[type="button"] {
     background-color: #DBDBDB;
+    font-weight: bold;
     border: #DDD 1px solid;
     padding: 8px 15px;
     border-radius: 3px;
@@ -91,6 +91,12 @@ $border-color: #DDD;
     &:active {
       box-shadow: 0 0px 2px rgba(51, 51, 51, 0.48);
     }
+  }
+
+  button.featured, input[type="button"].featured {
+    background-color: #3998D6;
+    color: #FFF;
+    border-color: #3998D6;
   }
 }
 
@@ -152,8 +158,13 @@ $border-color: #DDD;
       text-shadow: none;
       background-color: #FFF;
 
+      .octicon {
+        margin-right: 10px;
+      }
+
       &:hover {
         color: #000;
+        cursor: pointer;
         background-color: #FFF;
       }
     }
@@ -208,19 +219,82 @@ html {
   body {
   	@extend html;
 
+    /* Context Menu style */
+    .context-menu {
+      @include basicDialog;
+      position: fixed;
+      overflow: hidden;
+      z-index: 1000;
+      padding: 0 !important;
+
+      li {
+        padding: 15px 20px !important;
+
+        &:hover {
+          background-color: #F5F5F5 !important;
+        }
+      }
+    }
+
+    /* Dialog style */
+    .modal {
+
+      .modal-overlay {
+        position:absolute;
+        z-index:9999;
+        top:0;
+        left:0;
+        width:100%;
+        height:100%;
+        background-color:#000000;
+        opacity: 0.5;
+      }
+
+      .modal-dialog {
+        z-index:10000;
+        position: absolute;
+        border-radius: 2px;
+        width: 50%;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        -webkit-transform: translate(-50%, -50%);
+        -moz-transform: translate(-50%, -50%);
+        color: #111 !important;
+
+        background-color: #fff;
+        box-shadow: 4px 4px 40px #333;
+
+        .modal-dialog-content {
+          padding:10px;
+          text-align: left;
+        }
+
+        .modal-close {
+          position: absolute;
+          top: 3px;
+          right: 5px;
+          padding: 5px;
+          cursor: pointer;
+          font-size: 120%;
+          display: inline-block;
+          font-weight: bold;
+          font-family: 'arial', 'sans-serif';
+        }
+      }
+    }
+
   	/* Header of the application */
   	#header {
-  		$default-box-shadow: 0 1px 2px #49575d;
-  		$default-text-color: #CCCCCC;
-  		$default-background-color: #636e73;
-      $default-hover-background-color: #596368;
+      $header-font-shadow: 0 1px 2px #49575d;
+      $header-font-color: #CCCCCC;
+      $header-background-color: #636e73;
 
   		width: 100%;
   		height: 47px;
-      position: relative;
       z-index: 9;
-  		background-color: $default-background-color;
-  		color: $default-text-color;
+  		background-color: $header-background-color;
+  		color: $header-font-color;
       overflow: hidden;
   		-webkit-app-region: drag;
 
@@ -238,7 +312,7 @@ html {
             padding: 15px 20px;
             display: inline-block;
             cursor: pointer;
-            text-shadow: $default-box-shadow;
+            text-shadow: $header-font-shadow;
 
             .sync-status {
               margin-left: 10px;
@@ -251,10 +325,12 @@ html {
             margin-left: 5px;
             text-shadow: none;
             min-width: 200px;
+            z-index: 10000;
 
             // Arrow
             &::before {
               content: '';
+              position: absolute;
               width: 0;
               height: 0;
               border-left: 10px solid transparent;
@@ -335,22 +411,34 @@ html {
               list-style: none;
               margin: 0;
               padding: 0;
+              padding-bottom: 10px;
 
               li {
-                padding: 15px 20px;
       					color: #555;
       					cursor: default;
 
-      					.octicon {
+      					.octicon, .fa {
       					  margin-right: 8px;
       						font-size: 1.5em;
-      					  float: left;
       					}
 
-      					&:hover {
-      						background-color: #EEE;
-      						color: #45413A;
-      					}
+                .label {
+                  padding: 10px;
+                  color: rgba(149, 149, 149, 1);
+                  font-weight: bold;
+                }
+
+      					ul {
+
+                  li {
+                    padding: 15px 20px;
+
+                    &:hover {
+          						background-color: #EEE;
+          						color: #45413A;
+          					}
+                  }
+                }
       				}
 
       				li.selected {
@@ -406,8 +494,13 @@ html {
   				@extend .column;
   		    width: 40%;
   				z-index: 10;
+          display: flex;
+          flex-direction: column;
+          overflow: hidden;
 
           nav {
+            overflow: auto;
+            flex: 1;
 
             ul {
               list-style: none;
@@ -464,6 +557,8 @@ html {
             box-shadow: 0 4px 10px -2px rgba(1, 1, 1, 0.3);
   					overflow: hidden;
   					background-color: #FFF;
+            height: 271px;
+            transition: height 0.2s ease;
 
             h3 {
               color: #111;
@@ -498,6 +593,20 @@ html {
 
           .tabPanel {
             @include tabPanel(#999, #666, #FFF, #DDD);
+
+            display: flex;
+            flex-direction: column;
+            height: 100%;
+
+            .tab-content {
+              flex: 1 1 auto;
+              box-sizing: border-box;
+              overflow: auto;
+            }
+
+            nav.tabHeader {
+              min-height: 39px;
+            }
           }
 
           header.commit-message {
@@ -522,6 +631,13 @@ html {
               font-size: 0.85em;
               margin-right: 10px;
               margin-top: 10px;
+            }
+
+            .commit-body {
+              white-space: pre-line;
+              line-height: 1.5;
+              margin: 0;
+              color: #666;
             }
           }
 
@@ -587,7 +703,10 @@ html {
       							}
 
                     .plus-text {
-                      color: #6CC644;
+                      color: #58B231;
+                      background-color: #ccffcc;
+                      border-radius: 2px;
+                      padding: 3px 15px;
                       font-weight: bold;
                       margin: 0 3px;
                       display: inline-block;
@@ -601,11 +720,43 @@ html {
 
                     .minor-text {
                       color: #D7431B;
+                      background-color: #ffdddd;
+                      border-radius: 2px;
+                      padding: 3px 15px;
                       font-weight: bold;
                       margin: 0 3px;
                       display: inline-block;
                     }
       						}
+
+                  .label {
+                    padding: 3px 10px;
+                    border-radius: 2px;
+                    font-weight: bold;
+                    color: #FFF;
+                  }
+
+                  .label-modified {
+                    @extend .label;
+                    background-color: #ffaf00;
+                  }
+
+                  .label-new {
+                    @extend .label;
+                    background-color: #6CC644;
+                  }
+
+                  .label-deleted {
+                    @extend .label;
+                    background-color: #D7431B;
+                  }
+
+                  .label-binary {
+                    @extend .label;
+                    color: #986B45;
+                    display: inline-block;
+                    background-color: #F5E8DB;
+                  }
                 }
 
                 code {

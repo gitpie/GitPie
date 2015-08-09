@@ -6,10 +6,11 @@
       restrict: 'E',
       templateUrl: 'app/frontend/view/content/pieContent.html',
 
-      controller: function ($scope, $sce, CommomService) {
+      controller: function ($scope, $sce, $compile, CommomService) {
         var selectedRepository = {},
           selectedCommit = {},
-          selectedCommitAncestor = null;
+          selectedCommitAncestor = null,
+          MSGS = $scope.MSGS;
 
         this.loadingHistory = false;
 
@@ -33,9 +34,8 @@
 
         this.showRepositoryInfo = function (repository, forceReload) {
 
-          this.loadingHistory = true;
-
           if (forceReload || selectedRepository.name != repository.name) {
+            this.loadingHistory = true;
 
             if (selectedRepository) {
               selectedRepository.selected = false;
@@ -63,7 +63,7 @@
             GIT.getCommitCount(repository.path,function (err, size) {
 
               if (err) {
-                console.log('Error counting commits. Error: ' + err);
+                alert(MSGS['Error counting commits. Error: '] + err);
               } else {
                 this.commitNumber = size;
                 $scope.$apply();
@@ -113,7 +113,7 @@
 
                   file.changes = $sce.trustAsHtml(changesHTML.join(''));
                 } else {
-                  file.changes = $sce.trustAsHtml('BINARY');
+                  file.changes = $sce.trustAsHtml('<span class="label-binary">' + MSGS.BINARY + '</span>');
                 }
 
                 this.commitHistory.push(file);
@@ -136,6 +136,10 @@
 
         this.getCommitUser = function () {
           return selectedCommit.user;
+        };
+
+        this.getCommitBody = function () {
+          return selectedCommit.body;
         };
 
         this.showFileDiff = function (change) {
@@ -203,7 +207,7 @@
                     file: file.name
                   });
                 } catch(err) {
-                  alert('Error adding file "' + file.name + '" Error: ' + err);
+                  alert(MSGS['Error adding file \'{fileName}\' Error: '].concat(err).replace('{fileName}', file.name));
                 }
               }
             }.bind(this));
@@ -218,7 +222,7 @@
 
               this.showRepositoryInfo(selectedRepository, true);
             } catch (err) {
-              alert('Error commiting changes. Error: ' + err);
+              alert(MSGS['Error commiting changes. Error: '] + err);
             }
 
             $scope.commitMessage = null;
@@ -238,7 +242,7 @@
             }, function (err, historyList) {
 
               if (err) {
-                alert('Error getting more history. Error: ' + err.message);
+                alert(MSGS['Error getting more history. Error: '] + err.message);
               } else {
                 this.repositoryHistory = this.repositoryHistory.concat(historyList);
 
@@ -269,6 +273,108 @@
             $scope.$apply();
           }
         }.bind(this));
+
+        this.openRepositoryContextualMenu = function (event, repository, index) {
+          var body = angular.element(document.body),
+            contextMenu = $compile([
+
+              '<div class="context-menu" style="top: ' + event.y + 'px;  left: ' + event.x +  'px">',
+                '<ul>',
+                  '<li ng-click="appCtrl.removeRepository(\'' + repository.type + '\', ' + index + ')">',
+                    MSGS.Remove,
+                  '</li>',
+                  '<li ng-click="appCtrl.openItemInFolder(\'', repository.path , '\')">',
+                    MSGS['Show in folder'],
+                  '</li>',
+                '</ul>',
+              '</div>'
+
+            ].join(''))($scope);
+
+          CommomService.closeAnyContextMenu();
+
+          body.append(contextMenu);
+        };
+
+        this.openChangesContextualMenu = function (event, change, index) {
+          var body = angular.element(document.body),
+            isUnknowChange = change.type == 'NEW',
+            contextMenu = $compile([
+
+              '<div class="context-menu" style="top: ' + event.y + 'px;  left: ' + event.x +  'px">',
+                '<ul>',
+                  '<li ng-click="appCtrl.discartChanges(\'', change.path,'\', \'', index,'\', ' + isUnknowChange + ')">',
+                    MSGS.Discart,
+                  '</li>',
+                  '<li ng-click="appCtrl.openItemInFolder(\'', selectedRepository.path + '/' + change.path + '\')">',
+                    MSGS['Show file in folder'],
+                  '</li>',
+                '</ul>',
+              '</div>'
+
+            ].join(''))($scope);
+
+          CommomService.closeAnyContextMenu();
+
+          body.append(contextMenu);
+        };
+
+        this.getChangeTypeClass = function (type) {
+
+          switch (type) {
+            case 'MODIFIED':
+              return 'label-modified';
+
+            case 'DELETED':
+              return  'label-deleted';
+
+            case 'NEW':
+                return  'label-new';
+
+            default:
+              return '';
+          }
+        };
+
+        this.discartChanges = function (filePath, index, isUnknow) {
+          var me = this;
+
+          GIT.discartChangesInFile(selectedRepository.path, {
+
+            file: filePath,
+
+            isUnknow: isUnknow,
+
+            callback: function (err) {
+
+              if (err) {
+                alert(err);
+              } else {
+                me.commitChanges.splice(index, 1);
+                $scope.$apply();
+              }
+
+              CommomService.closeAnyContextMenu();
+
+            }
+          });
+        };
+
+        this.openItemInFolder = function (path) {
+          GUI.Shell.showItemInFolder(path);
+
+          CommomService.closeAnyContextMenu();
+        };
+
+        this.removeRepository = function (repositoryType, index) {
+          var repositoryWasSelected = CommomService.removeRepository(repositoryType, index);
+
+          if (repositoryWasSelected) {
+            this.repositoryHistory = [];
+          }
+
+          CommomService.closeAnyContextMenu();
+        };
       },
 
       controllerAs: 'appCtrl'

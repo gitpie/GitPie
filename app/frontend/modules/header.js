@@ -7,7 +7,8 @@
       templateUrl: 'app/frontend/view/header/pieHeader.html',
 
       controller: function ($scope, $element, CommomService) {
-        var selectedRepository = null;
+        var selectedRepository = null,
+          MSGS = $scope.MSGS;
 
         this.remoteBranchs = [];
         this.syncStatus = {};
@@ -37,6 +38,8 @@
           this.showAddMenu = false;
           this.showBranchMenu = false;
           this.showSettingsMenu = false;
+
+          CommomService.closeAnyContextMenu();
         };
 
         CommomService.hideHeaderMenu = this.hideAllMenu.bind(this);
@@ -79,7 +82,7 @@
           }, function (err) {
 
             if (err) {
-              alert('Error switching branch. Error:' + err);
+              alert(MSGS['Error switching branch. Error: '] + err);
             } else {
               this.currentBranch = branch;
 
@@ -94,34 +97,40 @@
 
         this.sync = function () {
 
-          if (selectedRepository) {
+          if (selectedRepository && !this.loading) {
             this.loading = true;
 
             GIT.fetch(selectedRepository.path, function (err) {
 
               // Ignored error for while to not block status for private repositories
 
-              GIT.sync(selectedRepository.path, function (err) {
+              GIT.sync({
+                path: selectedRepository.path,
+                branch: this.currentBranch
+              }, function (err) {
 
                 if (err) {
-                  alert('Error syncronazing repository. \n Error: ' + err.message);
-                } else {
-                  $scope.$broadcast('changedbranch', selectedRepository);
+                  alert(MSGS['Error syncronazing repository. \n Error: '] + err.message);
                 }
 
+                // Emit changedbranch event even on error case as a workaround to git push command fail
+                $scope.$broadcast('changedbranch', selectedRepository);
                 this.loading = false;
-              });
-            });
+                $scope.$apply();
+              }.bind(this));
+            }.bind(this));
           }
         };
 
         this.addRepository = function (repositoryPath) {
-          var repository = CommomService.addRepository(repositoryPath);
 
-          if (repository) {
-            $scope.$broadcast('changedbranch', repository);
-            CommomService.hideHeaderMenu();
-          }
+          CommomService.addRepository(repositoryPath, function (repository) {
+
+            if (repository) {
+              $scope.$broadcast('changedbranch', repository);
+              CommomService.hideHeaderMenu();
+            }
+          });
         };
 
         this.checkoutBranch = function ($event, newBranch) {

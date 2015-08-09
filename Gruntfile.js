@@ -23,6 +23,8 @@ module.exports = function(grunt) {
 
         './libraries/**',
 
+        './language/**',
+
         './node_modules/**',
 
         '!./node_modules/grunt*/**',

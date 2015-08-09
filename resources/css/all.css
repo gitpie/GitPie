@@ -8,15 +8,14 @@
   * .rotate {
     -webkit-animation: spin 2s linear infinite; }
   *::-webkit-scrollbar-track {
-    border-radius: 10px;
     background-color: #F5F5F5; }
   *::-webkit-scrollbar {
-    width: 6px;
-    height: 6px;
-    background-color: #F5F5F5; }
+    width: 11px;
+    height: 11px; }
   *::-webkit-scrollbar-thumb {
-    border-radius: 10px;
-    background-color: rgba(0, 0, 0, 0.5); }
+    background-color: rgba(0, 0, 0, 0.4);
+    border-radius: 5px;
+    border: 2px #F5F5F5 solid; }
   * input[type="text"], * textarea {
     padding: 8px;
     border: #DDD 1px solid;
@@ -52,12 +51,17 @@
         background-color: #DDD; }
   * button, * input[type="button"] {
     background-color: #DBDBDB;
+    font-weight: bold;
     border: #DDD 1px solid;
     padding: 8px 15px;
     border-radius: 3px;
     box-shadow: 0 1px 2px rgba(51, 51, 51, 0.48); }
     * button:active, * input[type="button"]:active {
       box-shadow: 0 0px 2px rgba(51, 51, 51, 0.48); }
+  * button.featured, * input[type="button"].featured {
+    background-color: #3998D6;
+    color: #FFF;
+    border-color: #3998D6; }
 
 /* Enable spin rotation */
 @-moz-keyframes spin {
@@ -85,12 +89,118 @@ html, html body {
   font-size: 14px;
   color: #333; }
   html body {
+    /* Context Menu style */
+    /* Dialog style */
     /* Header of the application */
     /* Wrapper of the content */ }
+    html body .context-menu {
+      background-color: #FFF;
+      padding: 10px;
+      border-radius: 3px;
+      box-shadow: 1px 1px 10px #666;
+      color: #333;
+      position: fixed;
+      overflow: hidden;
+      z-index: 1000;
+      padding: 0 !important; }
+      html body .context-menu ul {
+        list-style: none;
+        display: inline-block;
+        margin: 0;
+        padding: 0; }
+        html body .context-menu ul li {
+          padding: 15px 10px;
+          display: block;
+          cursor: default;
+          text-shadow: none;
+          background-color: #FFF; }
+          html body .context-menu ul li .octicon {
+            margin-right: 10px; }
+          html body .context-menu ul li:hover {
+            color: #000;
+            cursor: pointer;
+            background-color: #FFF; }
+      html body .context-menu .label, html body .context-menu #wrapper #content #right nav ul li header .label-modified, html body #wrapper #content #right nav ul li header .context-menu .label-modified, html body .context-menu #wrapper #content #right nav ul li header .label-new, html body #wrapper #content #right nav ul li header .context-menu .label-new, html body .context-menu #wrapper #content #right nav ul li header .label-deleted, html body #wrapper #content #right nav ul li header .context-menu .label-deleted, html body .context-menu #wrapper #content #right nav ul li header .label-binary, html body #wrapper #content #right nav ul li header .context-menu .label-binary {
+        padding: 20px 0;
+        display: block;
+        color: #666;
+        font-size: 0.9em; }
+      html body .context-menu header {
+        font-weight: bold;
+        padding-bottom: 10px;
+        overflow: hidden; }
+      html body .context-menu .tabPanel nav.tabHeader {
+        margin: 0;
+        padding: 0;
+        display: flex;
+        width: 100%;
+        box-sizing: border-box;
+        overflow: hidden;
+        box-shadow: 0 4px 5px -2px rgba(1, 1, 1, 0.3); }
+        html body .context-menu .tabPanel nav.tabHeader div {
+          flex: 1 1 auto;
+          text-align: center;
+          padding: 10px;
+          border-bottom: #FFF 3px solid;
+          color: #999;
+          cursor: default;
+          font-weight: bold; }
+          html body .context-menu .tabPanel nav.tabHeader div:hover {
+            color: #666; }
+        html body .context-menu .tabPanel nav.tabHeader div.active {
+          border-color: #DDD;
+          color: inherit; }
+      html body .context-menu .tabPanel nav.tabHeader {
+        margin-bottom: 10px; }
+      html body .context-menu footer {
+        text-align: right;
+        padding-top: 15px;
+        overflow: hidden;
+        clear: both;
+        padding-bottom: 5px;
+        padding-right: 2px; }
+      html body .context-menu li {
+        padding: 15px 20px !important; }
+        html body .context-menu li:hover {
+          background-color: #F5F5F5 !important; }
+    html body .modal .modal-overlay {
+      position: absolute;
+      z-index: 9999;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-color: #000000;
+      opacity: 0.5; }
+    html body .modal .modal-dialog {
+      z-index: 10000;
+      position: absolute;
+      border-radius: 2px;
+      width: 50%;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      -webkit-transform: translate(-50%, -50%);
+      -moz-transform: translate(-50%, -50%);
+      color: #111 !important;
+      background-color: #fff;
+      box-shadow: 4px 4px 40px #333; }
+      html body .modal .modal-dialog .modal-dialog-content {
+        padding: 10px;
+        text-align: left; }
+      html body .modal .modal-dialog .modal-close {
+        position: absolute;
+        top: 3px;
+        right: 5px;
+        padding: 5px;
+        cursor: pointer;
+        font-size: 120%;
+        display: inline-block;
+        font-weight: bold;
+        font-family: 'arial', 'sans-serif'; }
     html body #header {
       width: 100%;
       height: 47px;
-      position: relative;
       z-index: 9;
       background-color: #636e73;
       color: #CCCCCC;
@@ -120,7 +230,8 @@ html, html body {
             position: fixed;
             margin-left: 5px;
             text-shadow: none;
-            min-width: 200px; }
+            min-width: 200px;
+            z-index: 10000; }
             html body #header nav ul .menu ul {
               list-style: none;
               display: inline-block;
@@ -132,10 +243,13 @@ html, html body {
                 cursor: default;
                 text-shadow: none;
                 background-color: #FFF; }
+                html body #header nav ul .menu ul li .octicon {
+                  margin-right: 10px; }
                 html body #header nav ul .menu ul li:hover {
                   color: #000;
+                  cursor: pointer;
                   background-color: #FFF; }
-            html body #header nav ul .menu .label {
+            html body #header nav ul .menu .label, html body #header #wrapper #content #right nav ul .menu li header .label-modified, html body #wrapper #content #right #header nav ul .menu li header .label-modified, html body #header #wrapper #content #right nav ul li header .menu .label-modified, html body #wrapper #content #right #header nav ul li header .menu .label-modified, html body #header #wrapper #content #right nav ul .menu li header .label-new, html body #wrapper #content #right #header nav ul .menu li header .label-new, html body #header #wrapper #content #right nav ul li header .menu .label-new, html body #wrapper #content #right #header nav ul li header .menu .label-new, html body #header #wrapper #content #right nav ul .menu li header .label-deleted, html body #wrapper #content #right #header nav ul .menu li header .label-deleted, html body #header #wrapper #content #right nav ul li header .menu .label-deleted, html body #wrapper #content #right #header nav ul li header .menu .label-deleted, html body #header #wrapper #content #right nav ul .menu li header .label-binary, html body #wrapper #content #right #header nav ul .menu li header .label-binary, html body #header #wrapper #content #right nav ul li header .menu .label-binary, html body #wrapper #content #right #header nav ul li header .menu .label-binary {
               padding: 20px 0;
               display: block;
               color: #666;
@@ -176,6 +290,7 @@ html, html body {
               padding-right: 2px; }
             html body #header nav ul .menu::before {
               content: '';
+              position: absolute;
               width: 0;
               height: 0;
               border-left: 10px solid transparent;
@@ -223,18 +338,23 @@ html, html body {
           html body #wrapper #content #left nav ul {
             list-style: none;
             margin: 0;
-            padding: 0; }
+            padding: 0;
+            padding-bottom: 10px; }
             html body #wrapper #content #left nav ul li {
-              padding: 15px 20px;
               color: #555;
               cursor: default; }
-              html body #wrapper #content #left nav ul li .octicon {
+              html body #wrapper #content #left nav ul li .octicon, html body #wrapper #content #left nav ul li .fa {
                 margin-right: 8px;
-                font-size: 1.5em;
-                float: left; }
-              html body #wrapper #content #left nav ul li:hover {
-                background-color: #EEE;
-                color: #45413A; }
+                font-size: 1.5em; }
+              html body #wrapper #content #left nav ul li .label, html body #wrapper #content #left #right nav ul li header .label-modified, html body #wrapper #content #right #left nav ul li header .label-modified, html body #wrapper #content #left #right nav ul li header .label-new, html body #wrapper #content #right #left nav ul li header .label-new, html body #wrapper #content #left #right nav ul li header .label-deleted, html body #wrapper #content #right #left nav ul li header .label-deleted, html body #wrapper #content #left #right nav ul li header .label-binary, html body #wrapper #content #right #left nav ul li header .label-binary {
+                padding: 10px;
+                color: #959595;
+                font-weight: bold; }
+              html body #wrapper #content #left nav ul li ul li {
+                padding: 15px 20px; }
+                html body #wrapper #content #left nav ul li ul li:hover {
+                  background-color: #EEE;
+                  color: #45413A; }
             html body #wrapper #content #left nav ul li.selected {
               background-color: #DBDEE0;
               color: #444; }
@@ -270,39 +390,47 @@ html, html body {
             font-size: 3em; }
         html body #wrapper #content #center {
           width: 40%;
-          z-index: 10; }
-          html body #wrapper #content #center nav ul {
-            list-style: none;
-            margin: 0;
-            padding: 0; }
-            html body #wrapper #content #center nav ul .commit-number {
-              color: #111;
-              font-weight: 500;
-              text-align: center;
-              font-weight: bold; }
-            html body #wrapper #content #center nav ul li {
-              border-bottom: #DDD 1px solid;
-              padding: 15px;
-              cursor: default;
-              word-wrap: break-word; }
-              html body #wrapper #content #center nav ul li .commit-message {
-                font-size: 1.2em;
+          z-index: 10;
+          display: flex;
+          flex-direction: column;
+          overflow: hidden; }
+          html body #wrapper #content #center nav {
+            overflow: auto;
+            flex: 1; }
+            html body #wrapper #content #center nav ul {
+              list-style: none;
+              margin: 0;
+              padding: 0; }
+              html body #wrapper #content #center nav ul .commit-number {
                 color: #111;
-                margin-bottom: 5px; }
-              html body #wrapper #content #center nav ul li .commit-details .date {
-                color: #999;
-                display: inline-block; }
-            html body #wrapper #content #center nav ul li.selected {
-              background-color: #3998D6;
-              color: #FFF !important; }
-              html body #wrapper #content #center nav ul li.selected .commit-message {
-                color: #FFF; }
-              html body #wrapper #content #center nav ul li.selected .commit-details .date {
-                color: #C3E0EC; }
+                font-weight: 500;
+                text-align: center;
+                font-weight: bold; }
+              html body #wrapper #content #center nav ul li {
+                border-bottom: #DDD 1px solid;
+                padding: 15px;
+                cursor: default;
+                word-wrap: break-word; }
+                html body #wrapper #content #center nav ul li .commit-message {
+                  font-size: 1.2em;
+                  color: #111;
+                  margin-bottom: 5px; }
+                html body #wrapper #content #center nav ul li .commit-details .date {
+                  color: #999;
+                  display: inline-block; }
+              html body #wrapper #content #center nav ul li.selected {
+                background-color: #3998D6;
+                color: #FFF !important; }
+                html body #wrapper #content #center nav ul li.selected .commit-message {
+                  color: #FFF; }
+                html body #wrapper #content #center nav ul li.selected .commit-details .date {
+                  color: #C3E0EC; }
           html body #wrapper #content #center .commit-block {
             box-shadow: 0 4px 10px -2px rgba(1, 1, 1, 0.3);
             overflow: hidden;
-            background-color: #FFF; }
+            background-color: #FFF;
+            height: 271px;
+            transition: height 0.2s ease; }
             html body #wrapper #content #center .commit-block h3 {
               color: #111;
               margin: 0;
@@ -322,27 +450,37 @@ html, html body {
           width: 43%;
           border-left: #DDD 1px solid;
           color: #111; }
-          html body #wrapper #content #right .tabPanel nav.tabHeader {
-            margin: 0;
-            padding: 0;
+          html body #wrapper #content #right .tabPanel {
             display: flex;
-            width: 100%;
-            box-sizing: border-box;
-            overflow: hidden;
-            box-shadow: 0 4px 5px -2px rgba(1, 1, 1, 0.3); }
-            html body #wrapper #content #right .tabPanel nav.tabHeader div {
+            flex-direction: column;
+            height: 100%; }
+            html body #wrapper #content #right .tabPanel nav.tabHeader {
+              margin: 0;
+              padding: 0;
+              display: flex;
+              width: 100%;
+              box-sizing: border-box;
+              overflow: hidden;
+              box-shadow: 0 4px 5px -2px rgba(1, 1, 1, 0.3); }
+              html body #wrapper #content #right .tabPanel nav.tabHeader div {
+                flex: 1 1 auto;
+                text-align: center;
+                padding: 10px;
+                border-bottom: #FFF 3px solid;
+                color: #999;
+                cursor: default;
+                font-weight: bold; }
+                html body #wrapper #content #right .tabPanel nav.tabHeader div:hover {
+                  color: #666; }
+              html body #wrapper #content #right .tabPanel nav.tabHeader div.active {
+                border-color: #DDD;
+                color: inherit; }
+            html body #wrapper #content #right .tabPanel .tab-content {
               flex: 1 1 auto;
-              text-align: center;
-              padding: 10px;
-              border-bottom: #FFF 3px solid;
-              color: #999;
-              cursor: default;
-              font-weight: bold; }
-              html body #wrapper #content #right .tabPanel nav.tabHeader div:hover {
-                color: #666; }
-            html body #wrapper #content #right .tabPanel nav.tabHeader div.active {
-              border-color: #DDD;
-              color: inherit; }
+              box-sizing: border-box;
+              overflow: auto; }
+            html body #wrapper #content #right .tabPanel nav.tabHeader {
+              min-height: 39px; }
           html body #wrapper #content #right header.commit-message {
             padding: 15px;
             border-bottom: #DDD 1px solid;
@@ -357,6 +495,11 @@ html, html body {
               font-size: 0.85em;
               margin-right: 10px;
               margin-top: 10px; }
+            html body #wrapper #content #right header.commit-message .commit-body {
+              white-space: pre-line;
+              line-height: 1.5;
+              margin: 0;
+              color: #666; }
           html body #wrapper #content #right nav ul {
             list-style: none;
             display: inline-block;
@@ -400,7 +543,10 @@ html, html body {
                     display: inline-block;
                     background-color: #6CC644; }
                   html body #wrapper #content #right nav ul li header menuitem .plus-text {
-                    color: #6CC644;
+                    color: #58B231;
+                    background-color: #ccffcc;
+                    border-radius: 2px;
+                    padding: 3px 15px;
                     font-weight: bold;
                     margin: 0 3px;
                     display: inline-block; }
@@ -410,9 +556,27 @@ html, html body {
                     background-color: #D7431B; }
                   html body #wrapper #content #right nav ul li header menuitem .minor-text {
                     color: #D7431B;
+                    background-color: #ffdddd;
+                    border-radius: 2px;
+                    padding: 3px 15px;
                     font-weight: bold;
                     margin: 0 3px;
                     display: inline-block; }
+                html body #wrapper #content #right nav ul li header .label, html body #wrapper #content #right nav ul li header .label-modified, html body #wrapper #content #right nav ul li header .label-new, html body #wrapper #content #right nav ul li header .label-deleted, html body #wrapper #content #right nav ul li header .label-binary {
+                  padding: 3px 10px;
+                  border-radius: 2px;
+                  font-weight: bold;
+                  color: #FFF; }
+                html body #wrapper #content #right nav ul li header .label-modified {
+                  background-color: #ffaf00; }
+                html body #wrapper #content #right nav ul li header .label-new {
+                  background-color: #6CC644; }
+                html body #wrapper #content #right nav ul li header .label-deleted {
+                  background-color: #D7431B; }
+                html body #wrapper #content #right nav ul li header .label-binary {
+                  color: #986B45;
+                  display: inline-block;
+                  background-color: #F5E8DB; }
               html body #wrapper #content #right nav ul li code {
                 font-family: "Menlo", monospace, consolas, sans-serif;
                 white-space: pre;
