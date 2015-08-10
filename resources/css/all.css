@@ -102,7 +102,7 @@ html, html body {
       position: fixed;
       overflow: hidden;
       z-index: 1000;
-      padding: 0 !important; }
+      padding: 6px 0 !important; }
       html body .context-menu ul {
         list-style: none;
         display: inline-block;
@@ -160,7 +160,7 @@ html, html body {
         padding-bottom: 5px;
         padding-right: 2px; }
       html body .context-menu li {
-        padding: 15px 20px !important; }
+        padding: 15px 30px !important; }
         html body .context-menu li:hover {
           background-color: #F5F5F5 !important; }
     html body .modal .modal-overlay {
