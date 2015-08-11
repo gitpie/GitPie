@@ -74,7 +74,6 @@
   100% {
     -webkit-transform: rotate(360deg);
     transform: rotate(360deg); } }
-/* Mixins */
 /* Mask class for loadings */
 .mask {
   -webkit-filter: blur(2px);
