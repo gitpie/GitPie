@@ -424,11 +424,15 @@ html, html body {
                   color: #FFF; }
                 html body #wrapper #content #center nav ul li.selected .commit-details .date {
                   color: #C3E0EC; }
+          html body #wrapper #content #center .enable-commit-form {
+            height: 271px !important; }
+            html body #wrapper #content #center .enable-commit-form .input-wraper input {
+              margin-bottom: 5px !important; }
           html body #wrapper #content #center .commit-block {
             box-shadow: 0 4px 10px -2px rgba(1, 1, 1, 0.3);
             overflow: hidden;
             background-color: #FFF;
-            height: 271px;
+            height: 88px;
             transition: height 0.2s ease; }
             html body #wrapper #content #center .commit-block h3 {
               color: #111;
@@ -444,7 +448,8 @@ html, html body {
               padding: 10px; }
               html body #wrapper #content #center .commit-block .input-wraper input {
                 width: 100%;
-                box-sizing: border-box; }
+                box-sizing: border-box;
+                margin-bottom: 20px; }
         html body #wrapper #content #right {
           width: 43%;
           border-left: #DDD 1px solid;

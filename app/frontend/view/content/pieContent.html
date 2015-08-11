@@ -53,10 +53,10 @@
 
   <section id="center" ng-show="appCtrl.repositoryHistory.length > 0">
 
-    <form name="commitForm" class="commit-block" ng-show="appCtrl.commitChanges.length > 0">
+    <form name="commitForm" class="commit-block {{ appCtrl.enableCommitBlock ? 'enable-commit-form' : ''}}" ng-show="appCtrl.commitChanges.length > 0">
       <h3><span class="octicon octicon-diff"></span> {{ MSGS["Commit changes"] }}</h3>
       <div class="input-wraper">
-        <input type="text" ng-model="commitMessage" placeholder="{{ MSGS['Type a message for your commit'] }}" required />
+        <input type="text" ng-model="commitMessage" ng-focus="appCtrl.onFocusCommitMessageInput()" placeholder="{{ MSGS['Type a message for your commit'] }}" required />
         <textarea ng-model="commitDescription"
           placeholder="{{ MSGS['Give a description to the commit. Tell more about your changes...'] }}"></textarea>
       </div>
@@ -84,7 +84,7 @@
 
   <section id="right" ng-class="{ mask:appCtrl.loadingChanges }" ng-show="appCtrl.repositoryHistory.length > 0">
 
-    <tabs>
+    <tabs id="chagesTabPanel">
       <pane pane-title="{{ MSGS.History }}" icon="octicon octicon-history">
         <header class="commit-message" ng-show="appCtrl.getCommitMessage()">
           <h2>{{ appCtrl.getCommitMessage() }}</h2>

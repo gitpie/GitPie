@@ -450,11 +450,22 @@ html {
             }
           }
 
+          .enable-commit-form {
+            height: 271px !important;
+
+            .input-wraper {
+
+  						input {
+                margin-bottom: 5px !important;
+              }
+            }
+          }
+
           .commit-block {
             box-shadow: 0 4px 10px -2px rgba(1, 1, 1, 0.3);
   					overflow: hidden;
   					background-color: #FFF;
-            height: 271px;
+            height: 88px;
             transition: height 0.2s ease;
 
             h3 {
@@ -477,6 +488,7 @@ html {
   						input {
   						  width: 100%;
   						  box-sizing: border-box;
+                margin-bottom: 20px;
   						}
             }
           }

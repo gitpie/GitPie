@@ -32,6 +32,8 @@
           this.isRepositoryMenuEmpty = false;
         }
 
+        this.enableCommitBlock = null;
+
         this.showRepositoryInfo = function (repository, forceReload) {
 
           if (forceReload || selectedRepository.name != repository.name) {
@@ -91,6 +93,10 @@
 
           commit.selected = true;
           selectedCommit = commit;
+
+          if (this.enableCommitBlock) {
+            CommomService.changesTabPanel.select(0);
+          }
 
           GIT.getDiff(opts, function (err, files) {
             this.commitHistory = [];
@@ -195,38 +201,43 @@
         this.commitSelectedChanges = function (commitMessage, commitDescription) {
 
           if (commitMessage) {
+            var hasAddedFiles;
 
             this.commitChanges.forEach(function (file) {
 
               if (file.checked) {
-
                 try {
 
                   GIT.add(selectedRepository.path, {
                     forceSync: true,
                     file: file.name
                   });
+
+                  hasAddedFiles = true;
                 } catch(err) {
                   alert(MSGS['Error adding file \'{fileName}\' Error: '].concat(err).replace('{fileName}', file.name));
                 }
               }
             }.bind(this));
 
-            try {
+            if (hasAddedFiles) {
+              
+              try {
 
-              GIT.commit(selectedRepository.path, {
-                message: commitMessage,
-                description: commitDescription,
-                forceSync: true
-              });
+                GIT.commit(selectedRepository.path, {
+                  message: commitMessage,
+                  description: commitDescription,
+                  forceSync: true
+                });
 
-              this.showRepositoryInfo(selectedRepository, true);
-            } catch (err) {
-              alert(MSGS['Error commiting changes. Error: '] + err);
+                this.showRepositoryInfo(selectedRepository, true);
+              } catch (err) {
+                alert(MSGS['Error commiting changes. Error: '] + err);
+              }
+
+              $scope.commitMessage = null;
+              $scope.commitDescription = null;
             }
-
-            $scope.commitMessage = null;
-            $scope.commitDescription = null;
           }
         };
 
@@ -374,6 +385,13 @@
           }
 
           CommomService.closeAnyContextMenu();
+        };
+
+        this.onFocusCommitMessageInput = function () {
+
+          if (!this.enableCommitBlock) {
+            CommomService.changesTabPanel.select(1);
+          }
         };
       },
 

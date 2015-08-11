@@ -6,14 +6,31 @@
       restrict: 'E',
       transclude: true,
       scope: {},
-      controller: function($scope, $element) {
+      controller: function($scope, $element, CommomService) {
         var panes = $scope.panes = [];
 
+        if ($element.attr('id') == 'chagesTabPanel') {
+          CommomService.changesTabPanel = $scope;
+        }
+
         $scope.select = function(pane) {
+          var selectedPane;
+
           angular.forEach(panes, function(pane) {
             pane.selected = false;
           });
-          pane.selected = true;
+
+          if (typeof pane == 'number') {
+            panes[pane].selected = true;
+            selectedPane = panes[pane];
+          } else {
+            selectedPane = pane;
+            pane.selected = true;
+          }
+
+          if ($element.attr('id') == 'chagesTabPanel') {
+            $scope.$root.appCtrl.enableCommitBlock = selectedPane.paneTitle == 'Changes';
+          }
         };
 
         this.addPane = function(pane) {
