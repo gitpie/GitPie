@@ -1,4 +1,7 @@
 (function () {
+  var CodeProcessor = require('./app/core/code-processor'),
+    cp = new CodeProcessor();
+
   angular.module('content', [])
 
   .directive('pieContent', function () {
@@ -162,7 +165,8 @@
               if (err) {
                 alert(err.message);
               } else {
-                change.code = stdout;
+                // change.code = $sce.trustAsHtml( prettyPrintOne(stdout) );
+                change.code = $sce.trustAsHtml(cp.processCode( stdout ));
 
                 if (change.showCode) {
                   change.showCode = false;
@@ -184,7 +188,8 @@
               if (err) {
                 alert(err);
               } else {
-                change.code = diff;
+                // change.code = $sce.trustAsHtml( prettyPrintOne(diff) );
+                change.code = $sce.trustAsHtml(cp.processCode( diff ));
 
                 if (change.showCode) {
                   change.showCode = false;
@@ -221,7 +226,7 @@
             }.bind(this));
 
             if (hasAddedFiles) {
-              
+
               try {
 
                 GIT.commit(selectedRepository.path, {

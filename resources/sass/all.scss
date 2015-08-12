@@ -674,6 +674,46 @@ html {
                   word-wrap: normal;
                   font-size: 0.9em;
                   word-break: break-word;
+
+                  .diff-table {
+                    width: 100%;
+                    border-collapse: separate;
+                    border-spacing: 0;
+                    color: #222;
+                    box-sizing: border-box;
+
+                    tbody {
+
+                      tr.minor {
+                        background-color: #FFECEC;
+                      }
+
+                      tr.plus {
+                        background-color: #EAFFEA;
+                      }
+
+                      tr.chunk {
+                        background-color: #F4F7FB;
+                        color: rgba(0, 0, 0, 0.3);
+                        text-align: center;
+                      }
+
+                      tr {
+
+                        td {
+                          border-right: 1px solid #DDD;
+                          white-space: pre;
+                          word-wrap: normal;
+                          padding: 6px;
+                        }
+
+                        td.line-number {
+                          text-align: center;
+                          color: rgba(0, 0, 0, 0.3);
+                        }
+                      }
+                    }
+                  }
                 }
               }
             }

@@ -109,9 +109,7 @@
                 {{ history.name.length > 50 ? '...' : ''}} {{ history.name | limitTo: - 50 }}
                 <menuitem ng-bind-html="history.changes"></menuitem>
               </header>
-              <code ng-show="history.showCode">
-                {{ history.code }}
-              </code>
+              <code ng-show="history.showCode" ng-bind-html="history.code"></code>
             </li>
 
           </ul>
@@ -135,9 +133,7 @@
                 {{ change.name.length > 50 ? '...' : ''}} {{ change.name | limitTo: - 50 }}
                 <menuitem ng-class="appCtrl.getChangeTypeClass(change.type)">{{ MSGS[change.type] }}</menuitem>
               </header>
-              <code ng-show="change.showCode">
-                {{ change.code }}
-              </code>
+              <code ng-show="change.showCode" ng-bind-html="change.code"></code>
             </li>
 
           </ul>
