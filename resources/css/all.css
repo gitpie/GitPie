@@ -484,7 +484,8 @@ html, html body {
               box-sizing: border-box;
               overflow: auto; }
             html body #wrapper #content #right .tabPanel nav.tabHeader {
-              min-height: 39px; }
+              min-height: 39px;
+              z-index: 1; }
           html body #wrapper #content #right header.commit-message {
             padding: 15px;
             border-bottom: #DDD 1px solid;
