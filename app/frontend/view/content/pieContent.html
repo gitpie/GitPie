@@ -86,6 +86,12 @@
 
     <tabs id="chagesTabPanel">
       <pane pane-title="{{ MSGS.History }}" icon="octicon octicon-history">
+
+        <section class="getting-start-message" ng-show="appCtrl.commitHistory.length == 0">
+          <span class="mega-octicon octicon-hourglass"></span>
+          {{ MSGS['Click on a commit to see what happend there'] }}
+        </section>
+
         <header class="commit-message" ng-show="appCtrl.getCommitMessage()">
           <h2>{{ appCtrl.getCommitMessage() }}</h2>
           <p class="commit-body" ng-show="appCtrl.getCommitBody()">
@@ -118,7 +124,12 @@
 
       <pane pane-title="{{ MSGS.Changes }}" icon="octicon octicon-radio-tower">
 
-        <header class="commit-message">
+        <section class="getting-start-message" ng-show="appCtrl.commitChanges.length == 0">
+          <span class="mega-octicon octicon-hubot"></span>
+          {{ MSGS['All clean here Chief'] }}
+        </section>
+
+        <header class="commit-message" ng-show="appCtrl.commitChanges.length > 0">
           <h2>{{ MSGS['Unsyncronized Changes'] }}</h2>
         </header>
 

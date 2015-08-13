@@ -503,6 +503,10 @@ html {
           .tabPanel {
             @include tabPanel(#999, #666, #FFF, #DDD);
 
+            .getting-start-message {
+              width: 100% !important;
+            }
+
             display: flex;
             flex-direction: column;
             height: 100%;

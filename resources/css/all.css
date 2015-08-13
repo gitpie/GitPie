@@ -479,6 +479,8 @@ html, html body {
               html body #wrapper #content #right .tabPanel nav.tabHeader div.active {
                 border-color: #DDD;
                 color: inherit; }
+            html body #wrapper #content #right .tabPanel .getting-start-message {
+              width: 100% !important; }
             html body #wrapper #content #right .tabPanel .tab-content {
               flex: 1 1 auto;
               box-sizing: border-box;
