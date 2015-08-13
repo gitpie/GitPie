@@ -1,5 +1,5 @@
 @import url(../fonts/octicons/octicons.css);
-@import url(../fonts/Menlo/menlo.css);
+@import url(../fonts/Consolas/consolas.css);
 @import url(../fonts/Roboto/roboto.css);
 /* Global styles */
 * {
@@ -388,7 +388,7 @@ html, html body {
             margin-bottom: 30px;
             font-size: 3em; }
         html body #wrapper #content #center {
-          width: 40%;
+          width: 30%;
           z-index: 10;
           display: flex;
           flex-direction: column;
@@ -451,7 +451,7 @@ html, html body {
                 box-sizing: border-box;
                 margin-bottom: 20px; }
         html body #wrapper #content #right {
-          width: 43%;
+          width: 53%;
           border-left: #DDD 1px solid;
           color: #111; }
           html body #wrapper #content #right .tabPanel {
@@ -493,10 +493,9 @@ html, html body {
               margin: 0;
               font-weight: normal; }
             html body #wrapper #content #right header.commit-message h4 {
-              font-family: "Menlo", monospace, consolas, sans-serif;
+              font-family: "Consolas", monospace, consolas, sans-serif;
               color: #1B577E;
               display: inline-block;
-              font-size: 0.85em;
               margin-right: 10px;
               margin-top: 10px; }
             html body #wrapper #content #right header.commit-message .commit-body {
@@ -582,10 +581,10 @@ html, html body {
                   display: inline-block;
                   background-color: #F5E8DB; }
               html body #wrapper #content #right nav ul li code {
-                font-family: "Menlo", monospace, consolas, sans-serif;
+                font-family: "Consolas", monospace, consolas, sans-serif;
                 white-space: pre;
-                word-wrap: normal;
                 font-size: 0.9em;
+                word-wrap: normal;
                 word-break: break-word; }
                 html body #wrapper #content #right nav ul li code .diff-table {
                   width: 100%;
@@ -599,8 +598,9 @@ html, html body {
                     background-color: #EAFFEA; }
                   html body #wrapper #content #right nav ul li code .diff-table tbody tr.chunk {
                     background-color: #F4F7FB;
-                    color: rgba(0, 0, 0, 0.3);
-                    text-align: center; }
+                    color: rgba(0, 0, 0, 0.3); }
+                    html body #wrapper #content #right nav ul li code .diff-table tbody tr.chunk .diff-icon {
+                      text-align: center; }
                   html body #wrapper #content #right nav ul li code .diff-table tbody tr td {
                     border-right: 1px solid #DDD;
                     white-space: pre;

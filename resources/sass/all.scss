@@ -1,5 +1,5 @@
 @import "../fonts/octicons/octicons.css";
-@import "../fonts/Menlo/menlo.css";
+@import "../fonts/Consolas/consolas.css";
 @import "../fonts/Roboto/roboto.css";
 @import "variables";
 @import "mixins";
@@ -389,7 +389,7 @@ html {
 
   		  #center {
   				@extend .column;
-  		    width: 40%;
+  		    width: 30%;
   				z-index: 10;
           display: flex;
           flex-direction: column;
@@ -496,7 +496,7 @@ html {
 
   		  #right {
   				@extend .column;
-  		    width: 43%;
+  		    width: 53%;
   				border-left: $border-color 1px solid;
           color: #111;
 
@@ -537,7 +537,6 @@ html {
               font-family: $code-font;
               color: #1B577E;
               display: inline-block;
-              font-size: 0.85em;
               margin-right: 10px;
               margin-top: 10px;
             }
@@ -671,8 +670,8 @@ html {
                 code {
                   font-family: $code-font;
                   white-space: pre;
-                  word-wrap: normal;
                   font-size: 0.9em;
+                  word-wrap: normal;
                   word-break: break-word;
 
                   .diff-table {
@@ -695,7 +694,10 @@ html {
                       tr.chunk {
                         background-color: #F4F7FB;
                         color: rgba(0, 0, 0, 0.3);
-                        text-align: center;
+
+                        .diff-icon {
+                          text-align: center;
+                        }
                       }
 
                       tr {

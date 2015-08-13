@@ -37,9 +37,13 @@ var getLineType = function (firstChar) {
         }
       };
 
+      // Controller variables for line numbers
+      var leftNumberColumn = lineColumn.deletion.startLine,
+        rightNumberColumn = lineColumn.addition.startLine;
+
       table.push([
         '<tr class="chunk">',
-          '<td colspan="2"><span class="octicon octicon-diff"></span></td>',
+          '<td class="diff-icon" colspan="2"><span class="octicon octicon-diff"></span></td>',
           '<td>', block.header, '</td>',
         '</tr>'
       ].join(''));
@@ -47,11 +51,24 @@ var getLineType = function (firstChar) {
       for (var i = 0; i < block.lines.length; i++) {
         var tbLine = [
           '<tr class="' + block.lines[i].type.toLowerCase() + '">',
-            '<td class="line-number">', ( block.lines[i].type != 'PLUS' ? ( lineColumn.deletion.startLine + i ) : '' ), '</td>',
-            '<td class="line-number">', ( block.lines[i].type != 'MINOR' ? ( lineColumn.addition.startLine + i ) : '' ), '</td>',
+            '<td class="line-number">',
+              ( block.lines[i].type != 'PLUS' ? leftNumberColumn : '' ),
+            '</td>',
+            '<td class="line-number">',
+              ( block.lines[i].type != 'MINOR' ? rightNumberColumn : '' ),
+            '</td>',
             '<td>', block.lines[i].code, '</td>',
           '</tr>'
         ];
+
+        if (block.lines[i].type == 'PLUS') {
+          rightNumberColumn++;
+        } else if (block.lines[i].type == 'MINOR') {
+          leftNumberColumn++;
+        } else {
+          rightNumberColumn++;
+          leftNumberColumn++;
+        }
 
         table.push(tbLine.join(''));
       }
