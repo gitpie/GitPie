@@ -586,7 +586,10 @@ html, html body {
                 white-space: pre;
                 font-size: 0.9em;
                 word-wrap: normal;
-                word-break: break-word; }
+                word-break: break-word;
+                display: block;
+                width: 100%;
+                overflow: auto; }
                 html body #wrapper #content #right nav ul li code .diff-table {
                   width: 100%;
                   border-collapse: separate;
@@ -607,6 +610,12 @@ html, html body {
                     white-space: pre;
                     word-wrap: normal;
                     padding: 6px; }
+                    html body #wrapper #content #right nav ul li code .diff-table tbody tr td xmp {
+                      margin: 0;
+                      white-space: inherit;
+                      display: inherit;
+                      font-family: inherit;
+                      padding: 0; }
                   html body #wrapper #content #right nav ul li code .diff-table tbody tr td.line-number {
                     text-align: center;
                     color: rgba(0, 0, 0, 0.3); }

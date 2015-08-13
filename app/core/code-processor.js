@@ -57,7 +57,7 @@ var getLineType = function (firstChar) {
             '<td class="line-number">',
               ( block.lines[i].type != 'MINOR' ? rightNumberColumn : '' ),
             '</td>',
-            '<td>', block.lines[i].code, '</td>',
+            '<td><xmp>', block.lines[i].code, '</xmp></td>',
           '</tr>'
         ];
 

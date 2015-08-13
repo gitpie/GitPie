@@ -674,6 +674,9 @@ html {
                   font-size: 0.9em;
                   word-wrap: normal;
                   word-break: break-word;
+                  display: block;
+                  width: 100%;
+                  overflow: auto;
 
                   .diff-table {
                     width: 100%;
@@ -708,6 +711,14 @@ html {
                           white-space: pre;
                           word-wrap: normal;
                           padding: 6px;
+
+                          xmp {
+                            margin: 0;
+                            white-space: inherit;
+                            display: inherit;
+                            font-family: inherit;
+                            padding: 0;
+                          }
                         }
 
                         td.line-number {
