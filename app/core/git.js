@@ -399,4 +399,29 @@ Git.prototype.discartChangesInFile = function (path, opts) {
   }
 };
 
+Git.prototype.getTag = function (path, callback) {
+
+  exec('git tag', { cwd: path,  env: ENV}, function (error, stdout, stderr) {
+    var err = null,
+      tags = [];
+
+    if (error !== null) {
+      err = error.message;
+    } else {
+      var lines = stdout.split('\n');
+
+      lines.forEach(function (tag) {
+
+        if (tag !== '') {
+          tags.push(tag);
+        }
+      });
+    }
+
+    if (callback && typeof callback == 'function') {
+      callback.call(this, err, tags);
+    }
+  });
+};
+
 module.exports = new Git();
