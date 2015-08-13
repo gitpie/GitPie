@@ -410,6 +410,18 @@ html, html body {
                 padding: 15px;
                 cursor: default;
                 word-wrap: break-word; }
+                html body #wrapper #content #center nav ul li .thumb {
+                  background-color: #bd6eca;
+                  border-radius: 50%;
+                  display: inline-block;
+                  width: 40px;
+                  color: rgba(255, 255, 255, 0.72);
+                  float: left;
+                  margin-right: 10px;
+                  height: 40px;
+                  text-align: center;
+                  line-height: 40px;
+                  text-transform: uppercase; }
                 html body #wrapper #content #center nav ul li .commit-message {
                   font-size: 1.2em;
                   color: #111;

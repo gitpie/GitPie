@@ -73,7 +73,11 @@
             {{ MSGS["Counting..."] }}
           </div>
         </li>
-        <li ng-repeat="commit in appCtrl.repositoryHistory" ng-class="{ selected:commit.selected }" ng-click="appCtrl.showCommitChanges(commit, $index)">
+        <li ng-repeat="commit in appCtrl.repositoryHistory" ng-class="{ selected:commit.selected }"
+          ng-click="appCtrl.showCommitChanges(commit, $index)">
+          <div class="thumb">
+            {{ commit.user.trim()[0] }}
+          </div>
           <div class="commit-message">{{ commit.message }}</div>
           <div class="commit-details"><span class="date">{{ commit.date }} by</span> {{ commit.user }} </div>
         </li>
