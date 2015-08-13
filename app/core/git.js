@@ -148,17 +148,17 @@ Git.prototype.getStatus = function (path, callback) {
 
     for (var i = 1; i < lines.length; i++) {
 
-      if (lines[i].indexOf('M') > - 1) {
+      if (lines[i].trim()[0] == 'M') {
         files.push({
           type: 'MODIFIED',
           path: lines[i].replace('M', '').trim()
         });
-      } else if(lines[i].indexOf('??') > - 1) {
+      } else if(lines[i].trim()[0] == '?') {
         files.push({
           type: 'NEW', //UNTRACKED
           path: lines[i].replace('??', '').trim()
         });
-      } else if(lines[i].indexOf('D') > - 1) {
+      } else if(lines[i].trim()[0] == 'D') {
         files.push({
           type: 'DELETED',
           path: lines[i].replace('D', '').trim()
