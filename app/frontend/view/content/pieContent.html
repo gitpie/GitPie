@@ -91,7 +91,7 @@
     <tabs id="chagesTabPanel">
       <pane pane-title="{{ MSGS.History }}" icon="octicon octicon-history">
 
-        <section class="getting-start-message" ng-show="appCtrl.commitHistory.length == 0">
+        <section class="getting-start-message" ng-hide="appCtrl.getCommitMessage()">
           <span class="mega-octicon octicon-hourglass"></span>
           {{ MSGS['Click on a commit to see what happend there'] }}
         </section>
