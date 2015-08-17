@@ -322,6 +322,9 @@
                   '<li ng-click="appCtrl.discartChanges(\'', change.path,'\', \'', index,'\', ' + isUnknowChange + ')">',
                     MSGS.Discart,
                   '</li>',
+                  '<li ng-click="appCtrl.assumeUnchanged(\'', change.path,'\', \'', index,'\')">',
+                    MSGS['Assume file unchanged'],
+                  '</li>',
                   '<li ng-click="appCtrl.openItemInFolder(\'', selectedRepository.path + '/' + change.path + '\')">',
                     MSGS['Show file in folder'],
                   '</li>',
@@ -390,6 +393,26 @@
           }
 
           CommomService.closeAnyContextMenu();
+        };
+
+        this.assumeUnchanged = function (filePath, index) {
+          var me = this;
+
+          GIT.assumeUnchanged(selectedRepository.path, {
+            file: filePath,
+
+            callback: function (err) {
+
+              if (err) {
+                alert(err);
+              } else {
+                me.commitChanges.splice(index, 1);
+                $scope.$apply();
+              }
+
+              CommomService.closeAnyContextMenu();
+            }
+          });
         };
 
         this.onFocusCommitMessageInput = function () {

@@ -425,4 +425,19 @@ Git.prototype.getTag = function (path, callback) {
   });
 };
 
+Git.prototype.assumeUnchanged = function (path, opts) {
+
+  exec(' git update-index --assume-unchanged '.concat(opts.file), { cwd: path,  env: ENV}, function (error, stdout, stderr) {
+    var err = null;
+
+    if (error !== null) {
+      err = error.message;
+    }
+
+    if (opts.callback && typeof opts.callback == 'function') {
+      opts.callback.call(this, err);
+    }
+  });
+};
+
 module.exports = new Git();
