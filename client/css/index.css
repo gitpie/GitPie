@@ -1,0 +1,168 @@
+@import url("https://cdnjs.cloudflare.com/ajax/libs/octicons/2.2.2/octicons.css");
+@import url(http://fonts.googleapis.com/css?family=Open+Sans:400,600,800,300&subset=latin,latin-ext);
+
+button, body, html, h1, h2, h3, h4, h5, h6, label {
+    font-family: "Open Sans", sans-serif;
+}
+
+button {
+    border: 1px solid #4277E5;
+    background: -webkit-gradient(linear, left top, left bottom, color-stop(0%, rgba(114, 181, 248, 0.88)), color-stop(100%, rgba(10, 126, 254, 0.77)));
+    border-radius: 4px;
+    color: white;
+    font-size: 14px;
+    padding: 2px 17px 4px 17px;
+    text-shadow: 1px 1px 0 rgb(0, 102, 213);
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.21);
+}
+
+button:disabled {
+
+}
+
+.create-repo-message {
+    position: absolute;
+    top: 50%;
+    margin-top: -100px;
+    text-align: center;
+    width: 100%;
+    color: #99999D;
+    text-shadow: 1px 1px 1px #FFFFFF;
+}
+
+body, html {
+    margin: 0;
+    padding: 0;
+}
+
+/* top bar */
+.top-bar {
+    background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,rgba(226, 226, 226, 0.5)), color-stop(100%,rgba(208, 208, 208, 0.53)));
+    padding-top: 5px;
+    padding-bottom: 5px;
+    position: fixed;
+    top: 0;
+    right: 0;
+    left: 0;
+    border-bottom: 1px solid #D7D7D7;
+}
+
+.create-repository {
+    color: #99999D;
+    text-shadow: 1px 1px 1px #fff;
+    cursor: pointer;
+}
+
+.content-wrapper {
+    padding: 0 10px;
+}
+
+/* content */
+.main-container {
+    position: fixed;
+    top: 30px;
+    right: 0;
+    left: 0;
+    bottom: 0;
+    background: blue;
+}
+
+.main-container .section {
+    float: left;
+    height: 100%;
+    position: fixed;
+    top: 30px;
+    bottom: 0;
+}
+
+.main-container .section.left {
+    width: 300px;
+    background: #F0F0F0;
+    left: 0;
+}
+
+.main-container .section.right {
+    left: 300px;
+    right: 0;
+    background: #ECECEC;
+    border-left: 1px solid #E2E2E2;
+}
+
+.main-container .section.right .create-repo-message {
+
+}
+
+/* popup */
+.bubble {
+    position: fixed;
+    width: 500px;
+    padding: 0px;
+    background: #FFFFFF;
+    border-radius: 0 4px 4px 4px;
+    border: #C5C5C5 solid 1px;
+    top: 40px;
+    left: 11px;
+    box-shadow: 0 5px 31px rgba(0, 0, 0, 0.2);
+}
+
+.bubble:after {
+    content: '';
+    position: absolute;
+    border-style: solid;
+    border-width: 0 10px 9px;
+    border-color: #FFFFFF transparent;
+    display: block;
+    width: 0;
+    z-index: 1;
+    top: -9px;
+    left: 0px;
+}
+
+.bubble:before {
+    content: '';
+    position: absolute;
+    border-style: solid;
+    border-width: 0 10px 9px;
+    border-color: #A3A3A3 transparent;
+    display: block;
+    width: 0;
+    z-index: 0;
+    top: -10px;
+    left: 0px;
+}
+
+.bubble .popup-actions,
+.bubble .popup-bar {
+    background: #FBFBFB;
+    padding-top: 15px;
+    padding-bottom: 15px;
+}
+
+.bubble .popup-bar a {
+    text-decoration: none;
+    margin: 5px;
+    color: #7B7A76;
+}
+
+.create-repository:hover,
+.bubble .popup-bar a.selected {
+    color: #4AA8E3;
+}
+
+.bubble .popup-bar {
+    text-align: center;
+    font-weight: bold;
+    border-bottom: 1px solid #EDECED;
+    border-radius: 0 4px 0 0;
+}
+
+.bubble .popup-actions {
+    text-align: right;
+    border-radius: 0 0 4px 4px;
+    border-top: 1px solid #EDECED;
+}
+
+.bubble .popup-content {
+    padding-top: 15px;
+    padding-bottom: 15px;
+}
