@@ -323,7 +323,7 @@
                     MSGS.Discart,
                   '</li>',
                   '<li ng-click="appCtrl.assumeUnchanged(\'', change.path,'\', \'', index,'\')">',
-                    MSGS['Assume file unchanged'],
+                    MSGS['Assume unchanged'],
                   '</li>',
                   '<li ng-click="appCtrl.openItemInFolder(\'', selectedRepository.path + '/' + change.path + '\')">',
                     MSGS['Show file in folder'],
