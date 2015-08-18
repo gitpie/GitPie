@@ -73,7 +73,7 @@ Git.prototype.getCurrentBranch = function (path, callback) {
 Git.prototype.getCommitHistory = function (opts, callback) {
 
   exec(
-    "git --no-pager log -n 50 --pretty=format:%an-gtseparator-%cr-gtseparator-%h-gtseparator-%s-gtseparator-%b-pieLineBreak-" + (opts.skip ? ' --skip '.concat(opts.skip) : '' ),
+    "git --no-pager log -n 50 --pretty=format:%an-gtseparator-%cr-gtseparator-%h-gtseparator-%s-gtseparator-%b-gtseparator-%ae-pieLineBreak-" + (opts.skip ? ' --skip '.concat(opts.skip) : '' ),
 
     { cwd: opts.path, env: ENV },
 
@@ -96,7 +96,8 @@ Git.prototype.getCommitHistory = function (opts, callback) {
             date: historyItem[1],
             hash: historyItem[2],
             message: historyItem[3],
-            body: historyItem[4]
+            body: historyItem[4],
+            email: historyItem[5]
           });
         }
       }
@@ -148,17 +149,17 @@ Git.prototype.getStatus = function (path, callback) {
 
     for (var i = 1; i < lines.length; i++) {
 
-      if (lines[i].indexOf('M') > - 1) {
+      if (lines[i].trim()[0] == 'M') {
         files.push({
           type: 'MODIFIED',
           path: lines[i].replace('M', '').trim()
         });
-      } else if(lines[i].indexOf('??') > - 1) {
+      } else if(lines[i].trim()[0] == '?') {
         files.push({
           type: 'NEW', //UNTRACKED
           path: lines[i].replace('??', '').trim()
         });
-      } else if(lines[i].indexOf('D') > - 1) {
+      } else if(lines[i].trim()[0] == 'D') {
         files.push({
           type: 'DELETED',
           path: lines[i].replace('D', '').trim()
@@ -397,6 +398,46 @@ Git.prototype.discartChangesInFile = function (path, opts) {
       }
     });
   }
+};
+
+Git.prototype.getTag = function (path, callback) {
+
+  exec('git tag', { cwd: path,  env: ENV}, function (error, stdout, stderr) {
+    var err = null,
+      tags = [];
+
+    if (error !== null) {
+      err = error.message;
+    } else {
+      var lines = stdout.split('\n');
+
+      lines.forEach(function (tag) {
+
+        if (tag !== '') {
+          tags.push(tag);
+        }
+      });
+    }
+
+    if (callback && typeof callback == 'function') {
+      callback.call(this, err, tags);
+    }
+  });
+};
+
+Git.prototype.assumeUnchanged = function (path, opts) {
+
+  exec(' git update-index --assume-unchanged '.concat(opts.file), { cwd: path,  env: ENV}, function (error, stdout, stderr) {
+    var err = null;
+
+    if (error !== null) {
+      err = error.message;
+    }
+
+    if (opts.callback && typeof opts.callback == 'function') {
+      opts.callback.call(this, err);
+    }
+  });
 };
 
 module.exports = new Git();

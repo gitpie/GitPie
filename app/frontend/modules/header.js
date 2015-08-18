@@ -11,6 +11,7 @@
           MSGS = $scope.MSGS;
 
         this.remoteBranchs = [];
+        this.tags = [];
         this.syncStatus = {};
         this.loading = false;
 
@@ -52,6 +53,12 @@
           GIT.getCurrentBranch(repository.path, function (err, currentBranch, remoteBranchs) {
             this.currentBranch = currentBranch;
             this.remoteBranchs = remoteBranchs;
+
+            $scope.$apply();
+          }.bind(this));
+
+          GIT.getTag(selectedRepository.path, function (err, tags) {
+            this.tags = tags;
 
             $scope.$apply();
           }.bind(this));

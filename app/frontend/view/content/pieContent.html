@@ -26,10 +26,10 @@
             </li>
           </ul>
         </li>
-        <li ng-show="appCtrl.repositories.outhers.length > 0">
-          <div class="label">Others</div>
+        <li ng-show="appCtrl.repositories.others.length > 0">
+          <div class="label">{{ MSGS.Others }}</div>
           <ul>
-            <li ng-repeat="repository in appCtrl.repositories.outhers" ng-class="{ selected:repository.selected }"
+            <li ng-repeat="repository in appCtrl.repositories.others" ng-class="{ selected:repository.selected }"
               ng-click="appCtrl.showRepositoryInfo(repository)" ng-right-click="appCtrl.openRepositoryContextualMenu($event, repository, $index)">
               <i class="fa fa-git-square"></i> {{ repository.name }}
             </li>
@@ -53,10 +53,10 @@
 
   <section id="center" ng-show="appCtrl.repositoryHistory.length > 0">
 
-    <form name="commitForm" class="commit-block" ng-show="appCtrl.commitChanges.length > 0">
+    <form name="commitForm" class="commit-block {{ appCtrl.enableCommitBlock ? 'enable-commit-form' : ''}}" ng-show="appCtrl.commitChanges.length > 0">
       <h3><span class="octicon octicon-diff"></span> {{ MSGS["Commit changes"] }}</h3>
       <div class="input-wraper">
-        <input type="text" ng-model="commitMessage" placeholder="{{ MSGS['Type a message for your commit'] }}" required />
+        <input type="text" ng-model="commitMessage" ng-focus="appCtrl.onFocusCommitMessageInput()" placeholder="{{ MSGS['Type a message for your commit'] }}" required />
         <textarea ng-model="commitDescription"
           placeholder="{{ MSGS['Give a description to the commit. Tell more about your changes...'] }}"></textarea>
       </div>
@@ -73,7 +73,11 @@
             {{ MSGS["Counting..."] }}
           </div>
         </li>
-        <li ng-repeat="commit in appCtrl.repositoryHistory" ng-class="{ selected:commit.selected }" ng-click="appCtrl.showCommitChanges(commit, $index)">
+        <li ng-repeat="commit in appCtrl.repositoryHistory" ng-class="{ selected:commit.selected }"
+          ng-click="appCtrl.showCommitChanges(commit, $index)">
+          <div class="thumb">
+            {{ commit.user.trim()[0] }}
+          </div>
           <div class="commit-message">{{ commit.message }}</div>
           <div class="commit-details"><span class="date">{{ commit.date }} by</span> {{ commit.user }} </div>
         </li>
@@ -84,8 +88,14 @@
 
   <section id="right" ng-class="{ mask:appCtrl.loadingChanges }" ng-show="appCtrl.repositoryHistory.length > 0">
 
-    <tabs>
+    <tabs id="chagesTabPanel">
       <pane pane-title="{{ MSGS.History }}" icon="octicon octicon-history">
+
+        <section class="getting-start-message" ng-hide="appCtrl.getCommitMessage()">
+          <span class="mega-octicon octicon-hourglass"></span>
+          {{ MSGS['Click on a commit to see what happend there'] }}
+        </section>
+
         <header class="commit-message" ng-show="appCtrl.getCommitMessage()">
           <h2>{{ appCtrl.getCommitMessage() }}</h2>
           <p class="commit-body" ng-show="appCtrl.getCommitBody()">
@@ -109,9 +119,7 @@
                 {{ history.name.length > 50 ? '...' : ''}} {{ history.name | limitTo: - 50 }}
                 <menuitem ng-bind-html="history.changes"></menuitem>
               </header>
-              <code ng-show="history.showCode">
-                {{ history.code }}
-              </code>
+              <code ng-show="history.showCode" ng-bind-html="history.code"></code>
             </li>
 
           </ul>
@@ -120,7 +128,12 @@
 
       <pane pane-title="{{ MSGS.Changes }}" icon="octicon octicon-radio-tower">
 
-        <header class="commit-message">
+        <section class="getting-start-message" ng-show="appCtrl.commitChanges.length == 0">
+          <span class="mega-octicon octicon-hubot"></span>
+          {{ MSGS['All clean here Chief'] }}
+        </section>
+
+        <header class="commit-message" ng-show="appCtrl.commitChanges.length > 0">
           <h2>{{ MSGS['Unsyncronized Changes'] }}</h2>
         </header>
 
@@ -135,9 +148,7 @@
                 {{ change.name.length > 50 ? '...' : ''}} {{ change.name | limitTo: - 50 }}
                 <menuitem ng-class="appCtrl.getChangeTypeClass(change.type)">{{ MSGS[change.type] }}</menuitem>
               </header>
-              <code ng-show="change.showCode">
-                {{ change.code }}
-              </code>
+              <code ng-show="change.showCode" ng-bind-html="change.code"></code>
             </li>
 
           </ul>

@@ -1,4 +1,7 @@
 (function () {
+  var CodeProcessor = require('./app/core/code-processor'),
+    cp = new CodeProcessor();
+
   angular.module('content', [])
 
   .directive('pieContent', function () {
@@ -31,6 +34,8 @@
         if (this.repositories.length > 0) {
           this.isRepositoryMenuEmpty = false;
         }
+
+        this.enableCommitBlock = null;
 
         this.showRepositoryInfo = function (repository, forceReload) {
 
@@ -91,6 +96,10 @@
 
           commit.selected = true;
           selectedCommit = commit;
+
+          if (this.enableCommitBlock) {
+            CommomService.changesTabPanel.select(0);
+          }
 
           GIT.getDiff(opts, function (err, files) {
             this.commitHistory = [];
@@ -156,7 +165,8 @@
               if (err) {
                 alert(err.message);
               } else {
-                change.code = stdout;
+                // change.code = $sce.trustAsHtml( prettyPrintOne(stdout) );
+                change.code = $sce.trustAsHtml(cp.processCode( stdout ));
 
                 if (change.showCode) {
                   change.showCode = false;
@@ -178,7 +188,8 @@
               if (err) {
                 alert(err);
               } else {
-                change.code = diff;
+                // change.code = $sce.trustAsHtml( prettyPrintOne(diff) );
+                change.code = $sce.trustAsHtml(cp.processCode( diff ));
 
                 if (change.showCode) {
                   change.showCode = false;
@@ -195,38 +206,43 @@
         this.commitSelectedChanges = function (commitMessage, commitDescription) {
 
           if (commitMessage) {
+            var hasAddedFiles;
 
             this.commitChanges.forEach(function (file) {
 
               if (file.checked) {
-
                 try {
 
                   GIT.add(selectedRepository.path, {
                     forceSync: true,
                     file: file.name
                   });
+
+                  hasAddedFiles = true;
                 } catch(err) {
                   alert(MSGS['Error adding file \'{fileName}\' Error: '].concat(err).replace('{fileName}', file.name));
                 }
               }
             }.bind(this));
 
-            try {
+            if (hasAddedFiles) {
 
-              GIT.commit(selectedRepository.path, {
-                message: commitMessage,
-                description: commitDescription,
-                forceSync: true
-              });
+              try {
 
-              this.showRepositoryInfo(selectedRepository, true);
-            } catch (err) {
-              alert(MSGS['Error commiting changes. Error: '] + err);
+                GIT.commit(selectedRepository.path, {
+                  message: commitMessage,
+                  description: commitDescription,
+                  forceSync: true
+                });
+
+                this.showRepositoryInfo(selectedRepository, true);
+              } catch (err) {
+                alert(MSGS['Error commiting changes. Error: '] + err);
+              }
+
+              $scope.commitMessage = null;
+              $scope.commitDescription = null;
             }
-
-            $scope.commitMessage = null;
-            $scope.commitDescription = null;
           }
         };
 
@@ -306,6 +322,9 @@
                   '<li ng-click="appCtrl.discartChanges(\'', change.path,'\', \'', index,'\', ' + isUnknowChange + ')">',
                     MSGS.Discart,
                   '</li>',
+                  '<li ng-click="appCtrl.assumeUnchanged(\'', change.path,'\', \'', index,'\')">',
+                    MSGS['Assume file unchanged'],
+                  '</li>',
                   '<li ng-click="appCtrl.openItemInFolder(\'', selectedRepository.path + '/' + change.path + '\')">',
                     MSGS['Show file in folder'],
                   '</li>',
@@ -374,6 +393,33 @@
           }
 
           CommomService.closeAnyContextMenu();
+        };
+
+        this.assumeUnchanged = function (filePath, index) {
+          var me = this;
+
+          GIT.assumeUnchanged(selectedRepository.path, {
+            file: filePath,
+
+            callback: function (err) {
+
+              if (err) {
+                alert(err);
+              } else {
+                me.commitChanges.splice(index, 1);
+                $scope.$apply();
+              }
+
+              CommomService.closeAnyContextMenu();
+            }
+          });
+        };
+
+        this.onFocusCommitMessageInput = function () {
+
+          if (!this.enableCommitBlock) {
+            CommomService.changesTabPanel.select(1);
+          }
         };
       },
 

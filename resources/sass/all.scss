@@ -1,11 +1,8 @@
 @import "../fonts/octicons/octicons.css";
-@import "../fonts/Menlo/menlo.css";
+@import "../fonts/Consolas/consolas.css";
 @import "../fonts/Roboto/roboto.css";
-
-$font: 'Roboto', Helvetica, Arial;
-$code-font: 'Menlo', monospace, consolas, sans-serif;
-$font-size: 14px;
-$border-color: #DDD;
+@import "variables";
+@import "mixins";
 
 /* Global styles */
 * {
@@ -105,102 +102,6 @@ $border-color: #DDD;
 @-webkit-keyframes spin { 100% { -webkit-transform: rotate(360deg); } }
 @keyframes spin { 100% { -webkit-transform: rotate(360deg); transform:rotate(360deg); } }
 
-/* Mixins */
-@mixin tabPanel($color, $hoverColor, $borderColor, $activeBorderColor) {
-
-  nav.tabHeader {
-    margin: 0;
-    padding: 0;
-    display: flex;
-    width: 100%;
-    box-sizing: border-box;
-    overflow: hidden;
-    box-shadow: 0 4px 5px -2px rgba(1, 1, 1, 0.3);
-
-    div {
-      flex: 1 1 auto;
-      text-align: center;
-      padding: 10px;
-      border-bottom: $borderColor 3px solid;
-      color: $color;
-      cursor: default;
-      font-weight: bold;
-
-      &:hover {
-        color: $hoverColor;
-      }
-    }
-
-    div.active {
-      border-color: $activeBorderColor;
-      color: inherit;
-    }
-  }
-}
-
-@mixin basicDialog {
-	background-color: #FFF;
-	padding: 10px;
-	border-radius: 3px;
-	box-shadow: 1px 1px 10px #666;
-	color: #333;
-
-  ul {
-    list-style: none;
-    display: inline-block;
-    margin: 0;
-    padding: 0;
-
-    li {
-      padding: 15px 10px;
-      display: block;
-      cursor: default;
-      text-shadow: none;
-      background-color: #FFF;
-
-      .octicon {
-        margin-right: 10px;
-      }
-
-      &:hover {
-        color: #000;
-        cursor: pointer;
-        background-color: #FFF;
-      }
-    }
-  }
-
-  .label {
-    padding: 20px 0;
-    display: block;
-    color: #666;
-    font-size: 0.9em;
-  }
-
-	header {
-		font-weight: bold;
-    padding-bottom: 10px;
-    overflow: hidden;
-	}
-
-  .tabPanel {
-    @include tabPanel(#999, #666, #FFF, #DDD);
-
-    nav.tabHeader {
-      margin-bottom: 10px;
-    }
-  }
-
-	footer {
-		text-align: right;
-		padding-top: 15px;
-		overflow: hidden;
-		clear: both;
-		padding-bottom: 5px;
-		padding-right: 2px;
-	}
-}
-
 /* Mask class for loadings */
 .mask {
 	-webkit-filter: blur(2px);
@@ -286,10 +187,6 @@ html {
 
   	/* Header of the application */
   	#header {
-      $header-font-shadow: 0 1px 2px #49575d;
-      $header-font-color: #CCCCCC;
-      $header-background-color: #636e73;
-
   		width: 100%;
   		height: 47px;
       z-index: 9;
@@ -492,7 +389,7 @@ html {
 
   		  #center {
   				@extend .column;
-  		    width: 40%;
+  		    width: 30%;
   				z-index: 10;
           display: flex;
           flex-direction: column;
@@ -519,6 +416,20 @@ html {
                 padding: 15px;
     						cursor: default;
                 word-wrap: break-word;
+
+                .thumb {
+                  background-color: #bd6eca;
+                  border-radius: 50%;
+                  display: inline-block;
+                  width: 40px;
+                  color: rgba(255, 255, 255, 0.72);
+                  float: left;
+                  margin-right: 10px;
+                  height: 40px;
+                  text-align: center;
+                  line-height: 40px;
+                  text-transform: uppercase;
+                }
 
     						.commit-message {
     							font-size: 1.2em;
@@ -553,11 +464,22 @@ html {
             }
           }
 
+          .enable-commit-form {
+            height: 271px !important;
+
+            .input-wraper {
+
+  						input {
+                margin-bottom: 5px !important;
+              }
+            }
+          }
+
           .commit-block {
             box-shadow: 0 4px 10px -2px rgba(1, 1, 1, 0.3);
   					overflow: hidden;
   					background-color: #FFF;
-            height: 271px;
+            height: 88px;
             transition: height 0.2s ease;
 
             h3 {
@@ -580,6 +502,7 @@ html {
   						input {
   						  width: 100%;
   						  box-sizing: border-box;
+                margin-bottom: 20px;
   						}
             }
           }
@@ -587,12 +510,16 @@ html {
 
   		  #right {
   				@extend .column;
-  		    width: 43%;
+  		    width: 53%;
   				border-left: $border-color 1px solid;
           color: #111;
 
           .tabPanel {
             @include tabPanel(#999, #666, #FFF, #DDD);
+
+            .getting-start-message {
+              width: 100% !important;
+            }
 
             display: flex;
             flex-direction: column;
@@ -606,6 +533,7 @@ html {
 
             nav.tabHeader {
               min-height: 39px;
+              z-index: 1;
             }
           }
 
@@ -628,7 +556,6 @@ html {
               font-family: $code-font;
               color: #1B577E;
               display: inline-block;
-              font-size: 0.85em;
               margin-right: 10px;
               margin-top: 10px;
             }
@@ -762,9 +689,63 @@ html {
                 code {
                   font-family: $code-font;
                   white-space: pre;
-                  word-wrap: normal;
                   font-size: 0.9em;
+                  word-wrap: normal;
                   word-break: break-word;
+                  display: block;
+                  width: 100%;
+                  overflow: auto;
+
+                  .diff-table {
+                    width: 100%;
+                    border-collapse: separate;
+                    border-spacing: 0;
+                    color: #222;
+                    box-sizing: border-box;
+
+                    tbody {
+
+                      tr.minor {
+                        background-color: #FFECEC;
+                      }
+
+                      tr.plus {
+                        background-color: #EAFFEA;
+                      }
+
+                      tr.chunk {
+                        background-color: #F4F7FB;
+                        color: rgba(0, 0, 0, 0.3);
+
+                        .diff-icon {
+                          text-align: center;
+                        }
+                      }
+
+                      tr {
+
+                        td {
+                          border-right: 1px solid #DDD;
+                          white-space: pre;
+                          word-wrap: normal;
+                          padding: 6px;
+
+                          xmp {
+                            margin: 0;
+                            white-space: inherit;
+                            display: inherit;
+                            font-family: inherit;
+                            padding: 0;
+                          }
+                        }
+
+                        td.line-number {
+                          text-align: center;
+                          color: rgba(0, 0, 0, 0.3);
+                        }
+                      }
+                    }
+                  }
                 }
               }
             }

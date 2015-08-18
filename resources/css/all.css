@@ -1,5 +1,5 @@
 @import url(../fonts/octicons/octicons.css);
-@import url(../fonts/Menlo/menlo.css);
+@import url(../fonts/Consolas/consolas.css);
 @import url(../fonts/Roboto/roboto.css);
 /* Global styles */
 * {
@@ -74,7 +74,6 @@
   100% {
     -webkit-transform: rotate(360deg);
     transform: rotate(360deg); } }
-/* Mixins */
 /* Mask class for loadings */
 .mask {
   -webkit-filter: blur(2px);
@@ -389,7 +388,7 @@ html, html body {
             margin-bottom: 30px;
             font-size: 3em; }
         html body #wrapper #content #center {
-          width: 40%;
+          width: 30%;
           z-index: 10;
           display: flex;
           flex-direction: column;
@@ -411,6 +410,18 @@ html, html body {
                 padding: 15px;
                 cursor: default;
                 word-wrap: break-word; }
+                html body #wrapper #content #center nav ul li .thumb {
+                  background-color: #bd6eca;
+                  border-radius: 50%;
+                  display: inline-block;
+                  width: 40px;
+                  color: rgba(255, 255, 255, 0.72);
+                  float: left;
+                  margin-right: 10px;
+                  height: 40px;
+                  text-align: center;
+                  line-height: 40px;
+                  text-transform: uppercase; }
                 html body #wrapper #content #center nav ul li .commit-message {
                   font-size: 1.2em;
                   color: #111;
@@ -425,11 +436,15 @@ html, html body {
                   color: #FFF; }
                 html body #wrapper #content #center nav ul li.selected .commit-details .date {
                   color: #C3E0EC; }
+          html body #wrapper #content #center .enable-commit-form {
+            height: 271px !important; }
+            html body #wrapper #content #center .enable-commit-form .input-wraper input {
+              margin-bottom: 5px !important; }
           html body #wrapper #content #center .commit-block {
             box-shadow: 0 4px 10px -2px rgba(1, 1, 1, 0.3);
             overflow: hidden;
             background-color: #FFF;
-            height: 271px;
+            height: 88px;
             transition: height 0.2s ease; }
             html body #wrapper #content #center .commit-block h3 {
               color: #111;
@@ -445,9 +460,10 @@ html, html body {
               padding: 10px; }
               html body #wrapper #content #center .commit-block .input-wraper input {
                 width: 100%;
-                box-sizing: border-box; }
+                box-sizing: border-box;
+                margin-bottom: 20px; }
         html body #wrapper #content #right {
-          width: 43%;
+          width: 53%;
           border-left: #DDD 1px solid;
           color: #111; }
           html body #wrapper #content #right .tabPanel {
@@ -475,12 +491,15 @@ html, html body {
               html body #wrapper #content #right .tabPanel nav.tabHeader div.active {
                 border-color: #DDD;
                 color: inherit; }
+            html body #wrapper #content #right .tabPanel .getting-start-message {
+              width: 100% !important; }
             html body #wrapper #content #right .tabPanel .tab-content {
               flex: 1 1 auto;
               box-sizing: border-box;
               overflow: auto; }
             html body #wrapper #content #right .tabPanel nav.tabHeader {
-              min-height: 39px; }
+              min-height: 39px;
+              z-index: 1; }
           html body #wrapper #content #right header.commit-message {
             padding: 15px;
             border-bottom: #DDD 1px solid;
@@ -489,10 +508,9 @@ html, html body {
               margin: 0;
               font-weight: normal; }
             html body #wrapper #content #right header.commit-message h4 {
-              font-family: "Menlo", monospace, consolas, sans-serif;
+              font-family: "Consolas", monospace, consolas, sans-serif;
               color: #1B577E;
               display: inline-block;
-              font-size: 0.85em;
               margin-right: 10px;
               margin-top: 10px; }
             html body #wrapper #content #right header.commit-message .commit-body {
@@ -578,10 +596,42 @@ html, html body {
                   display: inline-block;
                   background-color: #F5E8DB; }
               html body #wrapper #content #right nav ul li code {
-                font-family: "Menlo", monospace, consolas, sans-serif;
+                font-family: "Consolas", monospace, consolas, sans-serif;
                 white-space: pre;
-                word-wrap: normal;
                 font-size: 0.9em;
-                word-break: break-word; }
+                word-wrap: normal;
+                word-break: break-word;
+                display: block;
+                width: 100%;
+                overflow: auto; }
+                html body #wrapper #content #right nav ul li code .diff-table {
+                  width: 100%;
+                  border-collapse: separate;
+                  border-spacing: 0;
+                  color: #222;
+                  box-sizing: border-box; }
+                  html body #wrapper #content #right nav ul li code .diff-table tbody tr.minor {
+                    background-color: #FFECEC; }
+                  html body #wrapper #content #right nav ul li code .diff-table tbody tr.plus {
+                    background-color: #EAFFEA; }
+                  html body #wrapper #content #right nav ul li code .diff-table tbody tr.chunk {
+                    background-color: #F4F7FB;
+                    color: rgba(0, 0, 0, 0.3); }
+                    html body #wrapper #content #right nav ul li code .diff-table tbody tr.chunk .diff-icon {
+                      text-align: center; }
+                  html body #wrapper #content #right nav ul li code .diff-table tbody tr td {
+                    border-right: 1px solid #DDD;
+                    white-space: pre;
+                    word-wrap: normal;
+                    padding: 6px; }
+                    html body #wrapper #content #right nav ul li code .diff-table tbody tr td xmp {
+                      margin: 0;
+                      white-space: inherit;
+                      display: inherit;
+                      font-family: inherit;
+                      padding: 0; }
+                  html body #wrapper #content #right nav ul li code .diff-table tbody tr td.line-number {
+                    text-align: center;
+                    color: rgba(0, 0, 0, 0.3); }
 
 /*# sourceMappingURL=all.css.map */

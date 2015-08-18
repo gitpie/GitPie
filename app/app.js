@@ -59,7 +59,7 @@ try {
 
         storagedRepositories.github = storagedRepositories.github || [];
         storagedRepositories.bitbucket = storagedRepositories.bitbucket || [];
-        storagedRepositories.outhers = storagedRepositories.outhers || [];
+        storagedRepositories.others = storagedRepositories.others || [];
 
         switch (repository.type) {
           case 'GITHUB':
@@ -71,7 +71,7 @@ try {
             break;
 
           default:
-            storagedRepositories.outhers.push(repository);
+            storagedRepositories.others.push(repository);
             break;
         }
 
@@ -81,9 +81,9 @@ try {
 
     repositories.github = repositories.github || [];
     repositories.bitbucket = repositories.bitbucket || [];
-    repositories.outhers = repositories.outhers || [];
+    repositories.others = repositories.others || [];
 
-    if (repositories.github.length > 0 || repositories.bitbucket.length > 0 || repositories.outhers.length > 0) {
+    if (repositories.github.length > 0 || repositories.bitbucket.length > 0 || repositories.others.length > 0) {
       repositories.isEmpty = false;
     } else {
       repositories.isEmpty = true;
@@ -122,8 +122,8 @@ try {
                   type = 'bitbucket';
 
                 } else {
-                  repositoryExists = findWhere(repositories.outhers, { path: repositoryPath});
-                  type = 'outhers';
+                  repositoryExists = findWhere(repositories.others, { path: repositoryPath});
+                  type = 'others';
                 }
 
                 if (!repositoryExists) {
@@ -163,7 +163,7 @@ try {
 
         storagedRepositories.github = storagedRepositories.github || [];
         storagedRepositories.bitbucket = storagedRepositories.bitbucket || [];
-        storagedRepositories.outhers = storagedRepositories.outhers || [];
+        storagedRepositories.others = storagedRepositories.others || [];
 
         storagedRepositories[type].splice(index, 1);
         removedRepository = repositories[type].splice(index, 1);
