@@ -12,6 +12,8 @@
   "Type a message for your commit": "Type a message for your commit",
   "Give a description to the commit. Tell more about your changes...": "Give a description to the commit. Tell more about your changes...",
   "COMMIT": "COMMIT",
+  "Clone URL": "Clone URL",
+  "Destiny Folder": "Destiny Folder",
   "History": "History",
   "Changes": "Changes",
   "Unsyncronized Changes": "Unsyncronized Changes",
@@ -41,5 +43,7 @@
   "Error getting more history. Error: ": "Error getting more history. Error: ",
 
   "Error switching branch. Error: ": "Error switching branch. Error: ",
-  "Error syncronazing repository. \n Error: ": "Error syncronazing repository. \n Error: "
+  "Error syncronazing repository. \n Error: ": "Error syncronazing repository. \n Error: ",
+  "'{cloneURL}' not appears to be a git remote URL. Let's try again!": "'{cloneURL}' not appears to be a git remote URL. Let's try again!",
+  "The path '{path}' is not a folder. Pick a valid directory to clone projects.": "The path '{path}' is not a folder. Pick a valid directory to clone projects."
 }

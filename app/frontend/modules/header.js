@@ -210,11 +210,11 @@
                   }
                 });
               } else {
-                alert('The clone URL "' + cloneURL + '" not appears to be a git remote URL. Let\'s try again!');
+                alert(MSGS['\'{cloneURL}\' not appears to be a git remote URL. Let\'s try again!'].replace('{cloneURL}', cloneURL));
               }
 
             } catch (err) {
-              alert('The path "' + destiny + '" is not a folder. Pick a valid directory to clone projects.');
+              alert(MSGS['The path \'{path}\' is not a folder. Pick a valid directory to clone projects.'].replace('{path}', destiny));
             }
 
           }
