@@ -586,6 +586,7 @@ html {
 
                 header {
                   padding: 10px;
+                  display: block;
 
                   span.octicon {
       							padding-right: 8px;
@@ -692,7 +693,7 @@ html {
                   font-size: 0.9em;
                   word-wrap: normal;
                   word-break: break-word;
-                  display: block;
+                  display: -webkit-box;
                   width: 100%;
                   overflow: auto;
 

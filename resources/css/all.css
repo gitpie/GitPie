@@ -531,7 +531,8 @@ html, html body {
               cursor: default;
               word-wrap: break-word; }
               html body #wrapper #content #right nav ul li header {
-                padding: 10px; }
+                padding: 10px;
+                display: block; }
                 html body #wrapper #content #right nav ul li header span.octicon {
                   padding-right: 8px;
                   cursor: pointer; }
@@ -601,7 +602,7 @@ html, html body {
                 font-size: 0.9em;
                 word-wrap: normal;
                 word-break: break-word;
-                display: block;
+                display: -webkit-box;
                 width: 100%;
                 overflow: auto; }
                 html body #wrapper #content #right nav ul li code .diff-table {

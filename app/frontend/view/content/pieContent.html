@@ -108,6 +108,12 @@
           <h4 ng-show="appCtrl.getCommitHash()">
             <span class="octicon octicon-git-commit"></span> {{ appCtrl.getCommitHash() }}
           </h4>
+          <h4 style="float: right; cursor: pointer" ng-click="appCtrl.expandAll(appCtrl.commitHistory)">
+            <span class="octicon octicon-unfold"></span> Expand all
+          </h4>
+          <h4 style="float: right; cursor: pointer" ng-click="appCtrl.collapseAll(appCtrl.commitHistory)">
+            <span class="octicon octicon-fold"></span> Collapse all
+          </h4>
         </header>
 
         <nav>
@@ -134,7 +140,17 @@
         </section>
 
         <header class="commit-message" ng-show="appCtrl.commitChanges.length > 0">
-          <h2>{{ MSGS['Unsyncronized Changes'] }}</h2>
+          <h2 style="margin-bottom: 20px">{{ MSGS['Unsyncronized Changes'] }}</h2>
+
+          <h4 style="cursor: pointer" ng-click="appCtrl.collapseAll(appCtrl.commitChanges)">
+            <span class="octicon octicon-fold"></span> Collapse all
+          </h4>
+          <h4 style="cursor: pointer" ng-click="appCtrl.expandAll(appCtrl.commitChanges)">
+            <span class="octicon octicon-unfold"></span> Expand all
+          </h4>
+          <h4 style="cursor: pointer; float: right" ng-click="appCtrl.discartAllSelected(appCtrl.commitChanges)">
+            <span class="octicon octicon-trashcan"></span> Discart all selected
+          </h4>
         </header>
 
         <nav>
