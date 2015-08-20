@@ -440,4 +440,20 @@ Git.prototype.assumeUnchanged = function (path, opts) {
   });
 };
 
+Git.prototype.clone = function (opts) {
+  opts = opts || {};
+
+  exec('git clone '.concat(opts.cloneURL), { cwd: opts.destinyFolder,  env: ENV}, function (error, stdout, stderr) {
+    var err = null;
+
+    if (error !== null) {
+      err = error.message;
+    }
+
+    if (opts.callback && typeof opts.callback == 'function') {
+      opts.callback.call(this, err);
+    }
+  });
+};
+
 module.exports = new Git();

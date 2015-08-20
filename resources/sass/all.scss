@@ -116,6 +116,7 @@ html {
 	font-family: $font;
 	font-size: $font-size;
 	color: #333;
+  overflow: hidden;
 
   body {
   	@extend html;
@@ -182,6 +183,80 @@ html {
           font-weight: bold;
           font-family: 'arial', 'sans-serif';
         }
+      }
+    }
+
+    .notify-dialog {
+      background-color: #404040;
+      z-index: 10;
+      color: #FFF;
+      border-radius: 3px;
+      padding: 15px;
+      position: absolute;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 20px;
+      bottom: 10px;
+      transition: all 0.2s linear;
+
+      .icon {
+
+        .loading-container {
+          display: inline-block;
+          margin-right: 10px;
+
+          .loading-content {
+            background-color: rgba(255, 255, 255, 0.15);
+            display: inline-flex;
+            border-radius: 50%;
+            padding: 6px;
+            box-shadow: 0 1px 5px rgba(51, 51, 51, 0.7);
+
+            $offset: 130;
+            $duration: 1.4s;
+
+            @-webkit-keyframes rotator {
+              0% { -webkit-transform: rotate(0deg); }
+              100% { -webkit-transform: rotate(270deg); }
+            }
+
+            .spinner {
+              -webkit-animation: rotator $duration linear infinite;
+            }
+
+            .path {
+              stroke-dasharray: $offset;
+              stroke-dashoffset: 0;
+              transform-origin: center;
+              -webkit-animation: dash $duration ease-in-out infinite, colors ($duration*4) ease-in-out infinite;
+            }
+
+            @-webkit-keyframes colors {
+                0% { stroke: #4285F4; }
+                25% { stroke: #DE3E35; }
+                50% { stroke: #F7C223; }
+                75% { stroke: #1B9A59; }
+              100% { stroke: #4285F4; }
+            }
+
+            @-webkit-keyframes dash {
+             0% { stroke-dashoffset: $offset; }
+             50% {
+               stroke-dashoffset: $offset/4;
+               -webkit-transform:rotate(135deg);
+             }
+             100% {
+               stroke-dashoffset: $offset;
+               -webkit-transform:rotate(450deg);
+             }
+            }
+          }
+        }
+      }
+
+      .content {
+
       }
     }
 

@@ -57,6 +57,16 @@
     };
   })
 
+  .directive('loadingIcon', function () {
+
+    return {
+      restrict: 'E',
+      scope: {},
+      replace: true,
+      templateUrl: 'app/frontend/view/components/loading-icon.html',
+    };
+  })
+
   .directive('pieDialog', function() {
     var template = [
       '<div class="modal" ng-show="show">',
