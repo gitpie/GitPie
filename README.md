@@ -18,15 +18,18 @@ GitPie is built on [NW.js](https://github.com/nwjs/nw.js) and [Angular](https://
 With GitPie you can:
 
 - Add any Git repository
+- Clone any Git repository
 - Visualize the commit history
 - Visualize the number of commits
 - Visualize changes per commit
-- Visualize changes in files (Not from a beauty way yet :/)
+- Visualize changes in files
 - Add files to commit
 - Commit changes
-- Pull changes (Only for public projects yet :/)
+- Pull changes *(An ssh key needs to be configured properly)*
+- Push changes *(An ssh key needs to be configured properly)*
 - Create new branchs
 - Switch between branchs
+- Visualize repository tags
 
 ## Installing
 
