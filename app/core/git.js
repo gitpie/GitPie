@@ -255,27 +255,42 @@ Git.prototype.getFileDiff = function (opts, callback) {
 
 Git.prototype.sync = function (opts, callback) {
 
-  exec('git pull', { cwd: opts.path,  env: ENV}, function (error, stdout, stderr) {
-    var err = null;
-
-    if (error !== null) {
-      err = error;
-    } else {
-
-      if (opts.push) {
-        
-        try {
-          execSync('git push' + (opts.setUpstream ? ' -u' : '') +' origin ' + opts.branch, { cwd: opts.path,  env: ENV});
-        } catch (pushError) {
-          err = pushError.message;
-        }
-      }
+  if (opts.setUpstream) {
+    var err;
+    
+    try {
+      execSync('git push -u origin ' + opts.branch, { cwd: opts.path,  env: ENV});
+    } catch (error) {
+      err = error.message;
     }
 
     if (callback && typeof callback == 'function') {
       callback.call(this, err);
     }
-  });
+  } else {
+
+    exec('git pull', { cwd: opts.path,  env: ENV}, function (error, stdout, stderr) {
+      var err = null;
+
+      if (error !== null) {
+        err = error;
+      } else {
+
+        if (opts.push) {
+
+          try {
+            execSync('git push origin ' + opts.branch, { cwd: opts.path,  env: ENV});
+          } catch (pushError) {
+            err = pushError.message;
+          }
+        }
+      }
+
+      if (callback && typeof callback == 'function') {
+        callback.call(this, err);
+      }
+    });
+  }
 };
 
 Git.prototype.add = function (path, opts) {
