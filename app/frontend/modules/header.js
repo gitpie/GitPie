@@ -12,7 +12,20 @@
 
       controller: function ($scope, $element, CommomService) {
         var selectedRepository = null,
-          MSGS = $scope.MSGS;
+          MSGS = $scope.MSGS,
+
+          // Verify if a branch is in remoteBranchs array
+          isRemoteBranch = function (branch) {
+
+            for (var i = 0; i < this.remoteBranchs.length; i++) {
+
+              if (this.remoteBranchs[i].trim() == branch.trim()) {
+                return true;
+              }
+            }
+
+            return false;
+          }.bind(this);
 
         this.remoteBranchs = [];
         this.tags = [];
@@ -123,7 +136,9 @@
 
               GIT.sync({
                 path: selectedRepository.path,
-                branch: this.currentBranch
+                branch: this.currentBranch,
+                setUpstream: !isRemoteBranch(this.currentBranch),
+                push: this.syncStatus.ahead
               }, function (err) {
 
                 if (err) {

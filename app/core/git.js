@@ -262,10 +262,13 @@ Git.prototype.sync = function (opts, callback) {
       err = error;
     } else {
 
-      try {
-        execSync('git push origin ' + opts.branch, { cwd: opts.path,  env: ENV});
-      } catch (pushError) {
-        err = pushError.message;
+      if (opts.push) {
+        
+        try {
+          execSync('git push' + (opts.setUpstream ? ' -u' : '') +' origin ' + opts.branch, { cwd: opts.path,  env: ENV});
+        } catch (pushError) {
+          err = pushError.message;
+        }
       }
     }
 
