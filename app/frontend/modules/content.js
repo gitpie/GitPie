@@ -153,53 +153,57 @@
 
         this.showFileDiff = function (change) {
 
-          if (!change.isUnsyc) {
-            GIT.getFileDiff({
+          if (!change.code) {
 
-              file: change.name,
-              hash: selectedCommit.hash,
-              path: selectedRepository.path
+            if (!change.isUnsyc) {
+              GIT.getFileDiff({
 
-            }, function (err, stdout) {
+                file: change.name,
+                hash: selectedCommit.hash,
+                path: selectedRepository.path
 
-              if (err) {
-                alert(err.message);
-              } else {
-                // change.code = $sce.trustAsHtml( prettyPrintOne(stdout) );
-                change.code = $sce.trustAsHtml(cp.processCode( stdout ));
+              }, function (err, stdout) {
 
-                if (change.showCode) {
-                  change.showCode = false;
+                if (err) {
+                  alert(err.message);
                 } else {
-                  change.showCode = true;
+                  change.code = $sce.trustAsHtml(cp.processCode( stdout ));
+
+                  if (change.showCode) {
+                    change.showCode = false;
+                  } else {
+                    change.showCode = true;
+                  }
+
+                  $scope.$apply();
+                }
+              });
+            } else {
+
+              GIT.getUnsyncFileDiff({
+                path: selectedRepository.path,
+                file: change.name
+              },
+              function (err, diff) {
+
+                if (err) {
+                  alert(err);
+                } else {
+                  change.code = $sce.trustAsHtml(cp.processCode( diff ));
+
+                  if (change.showCode) {
+                    change.showCode = false;
+                  } else {
+                    change.showCode = true;
+                  }
                 }
 
                 $scope.$apply();
-              }
-            });
+              });
+            }
+
           } else {
-
-            GIT.getUnsyncFileDiff({
-              path: selectedRepository.path,
-              file: change.name
-            },
-            function (err, diff) {
-
-              if (err) {
-                alert(err);
-              } else {
-                // change.code = $sce.trustAsHtml( prettyPrintOne(diff) );
-                change.code = $sce.trustAsHtml(cp.processCode( diff ));
-
-                if (change.showCode) {
-                  change.showCode = false;
-                } else {
-                  change.showCode = true;
-                }
-              }
-
-              $scope.$apply();
-            });
+            change.showCode = !change.showCode;
           }
         };
 
@@ -323,7 +327,7 @@
                     MSGS.Discart,
                   '</li>',
                   '<li ng-click="appCtrl.assumeUnchanged(\'', change.path,'\', \'', index,'\')">',
-                    MSGS['Assume file unchanged'],
+                    MSGS['Assume unchanged'],
                   '</li>',
                   '<li ng-click="appCtrl.openItemInFolder(\'', selectedRepository.path + '/' + change.path + '\')">',
                     MSGS['Show file in folder'],
@@ -420,6 +424,38 @@
           if (!this.enableCommitBlock) {
             CommomService.changesTabPanel.select(1);
           }
+        };
+
+        this.expandAll = function (fileList) {
+
+          fileList.forEach(function (file) {
+
+            if (!file.showCode) {
+              this.showFileDiff(file);
+            }
+
+          }.bind(this));
+        };
+
+        this.collapseAll = function (fileList) {
+
+          fileList.forEach(function (file) {
+
+            if (file.showCode) {
+              this.showFileDiff(file);
+            }
+
+          }.bind(this));
+        };
+
+        this.discartAllSelected = function (fileList) {
+
+          fileList.forEach(function (file, index) {
+
+            if (file.checked) {
+              this.discartChanges(file.path, index, (file.type == 'NEW') );
+            }
+          }.bind(this));
         };
       },
 

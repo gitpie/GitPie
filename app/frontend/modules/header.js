@@ -1,4 +1,8 @@
 (function () {
+  var GitUrlParse = require('./node_modules/git-url-parse'),
+    fs = require('fs'),
+    path = require('path');
+
   angular.module('header', [])
 
   .directive('pieHeader', function () {
@@ -19,6 +23,12 @@
         this.showAddMenu = false;
         this.showBranchMenu = false;
         this.showSettingsMenu = false;
+
+        this.cloneNotify = {
+          show: false,
+          cloneURL: null,
+          destinyFolder: null
+        };
 
         this.toggleMenu = function (menuIndex) {
 
@@ -165,6 +175,50 @@
 
         this.treatBranch = function (branchName) {
           return branchName && branchName.replace(/ /g, '-');
+        };
+
+        this.cloneRepository = function (cloneURL, destiny) {
+
+          if (cloneURL && destiny) {
+            var me = this,
+              repositoryData = GitUrlParse(cloneURL),
+              destinyFolder;
+
+            try {
+              destinyFolder = fs.lstatSync(destiny);
+
+              if (repositoryData.name) {
+                me.cloneNotify.show = true;
+                me.cloneNotify.cloneURL = cloneURL;
+                me.cloneNotify.destinyFolder = destiny;
+
+                CommomService.hideHeaderMenu();
+
+                GIT.clone({
+                  cloneURL: cloneURL,
+                  destinyFolder: destiny,
+
+                  callback: function (err) {
+
+                    if (err) {
+                      alert(err);
+                    } else {
+                      me.addRepository(path.join(destiny, repositoryData.name));
+                    }
+
+                    me.cloneNotify.show = false;
+                    $scope.$apply();
+                  }
+                });
+              } else {
+                alert(MSGS['\'{cloneURL}\' not appears to be a git remote URL. Let\'s try again!'].replace('{cloneURL}', cloneURL));
+              }
+
+            } catch (err) {
+              alert(MSGS['The path \'{path}\' is not a folder. Pick a valid directory to clone projects.'].replace('{path}', destiny));
+            }
+
+          }
         };
       },
 
