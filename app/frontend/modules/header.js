@@ -1,6 +1,7 @@
 (function () {
   var GitUrlParse = require('./node_modules/git-url-parse'),
-    fs = require('fs');
+    fs = require('fs'),
+    path = require('path');
 
   angular.module('header', [])
 
@@ -202,7 +203,7 @@
                     if (err) {
                       alert(err);
                     } else {
-                      me.addRepository(destiny + '/' + repositoryData.name);
+                      me.addRepository(path.join(destiny, repositoryData.name));
                     }
 
                     me.cloneNotify.show = false;
