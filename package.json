@@ -44,7 +44,10 @@
     "grunt-node-webkit-builder": "^1.0.2"
   },
   "dependencies": {
+    "adm-zip": "^0.4.7",
     "git-repo-name": "^0.3.1",
-    "git-url-parse": "^4.0.0"
+    "git-url-parse": "^4.0.0",
+    "request": "^2.61.0",
+    "tar.gz": "^1.0.0"
   }
 }

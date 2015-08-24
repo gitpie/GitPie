@@ -11,6 +11,12 @@ var
   // Git class that perfoms git commands
   GIT = require('./app/core/git'),
 
+  // Updater module for GitPie
+  UpdaterModule = require('./app/core/updater'),
+
+  // Updater instance
+  updater = new UpdaterModule(),
+
   // Locale language
   LANG = window.navigator.userLanguage || window.navigator.language,
 
@@ -91,6 +97,28 @@ try {
 
     // Set the application messages globally
     $rootScope.MSGS = MSGS;
+
+    /* Verify if there's a available update */
+    updater.on('availableUpdate', function (remotePackJson) {
+      console.log('There is a available update');
+      console.log(remotePackJson);
+
+      updater.update();
+    });
+
+    updater.on('downloadingfiles', function () {
+      console.log('Downloading files...');
+    });
+
+    updater.on('installing', function () {
+      console.log('Installing changes');
+    });
+
+    updater.on('updated', function () {
+      console.log('Your GitPie is up to date');
+    });
+
+    updater.checkAvailableUpdate();
 
     return {
 
