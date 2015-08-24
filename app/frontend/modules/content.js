@@ -317,6 +317,21 @@
           body.append(contextMenu);
         };
 
+        this.openCommitHistoryContextMenu = function (event, commit) {
+          var body = angular.element(document.body),
+            contextMenu = $compile([
+              '<div class="context-menu" style="top: ' + event.y + 'px;  left: ' + event.x +  'px">',
+                '<ul>',
+                  '<li ng-click="appCtrl.resetProjectToCommit(\'', commit.hash, '\')">{{ MSGS["Reset project to that commit"] }}</li>',
+                '</ul>',
+              '</div>'
+            ].join(''))($scope);
+
+          CommomService.closeAnyContextMenu();
+
+          body.append(contextMenu);
+        };
+
         this.openChangesContextualMenu = function (event, change, index) {
           var body = angular.element(document.body),
             isUnknowChange = change.type == 'NEW',
@@ -331,7 +346,7 @@
                     MSGS['Assume unchanged'],
                   '</li>',
                   '<li ng-click="appCtrl.openItemInFolder(\'', path.join(selectedRepository.path, change.path.trim()), '\')">',
-                    MSGS['Show file in folder'],
+                    MSGS['Show in folder'],
                   '</li>',
                 '</ul>',
               '</div>'
@@ -417,6 +432,24 @@
 
               CommomService.closeAnyContextMenu();
             }
+          });
+        };
+
+        this.resetProjectToCommit = function (hash) {
+
+          GIT.reset(selectedRepository.path, {
+            hash: hash,
+
+            callback: function (err) {
+
+              if (err) {
+                alert(err);
+              } else {
+                this.showRepositoryInfo(selectedRepository, true);
+              }
+
+              CommomService.closeAnyContextMenu();
+            }.bind(this)
           });
         };
 

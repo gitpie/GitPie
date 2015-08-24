@@ -474,4 +474,19 @@ Git.prototype.clone = function (opts) {
   });
 };
 
+Git.prototype.reset = function (path, opts) {
+
+  exec('git reset --soft '.concat(opts.hash), { cwd: path,  env: ENV}, function (error, stdout, stderr) {
+    var err = null;
+
+    if (error !== null) {
+      err = error.message;
+    }
+
+    if (opts.callback && typeof opts.callback == 'function') {
+      opts.callback.call(this, err);
+    }
+  });
+};
+
 module.exports = new Git();
