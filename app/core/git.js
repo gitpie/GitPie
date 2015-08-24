@@ -152,17 +152,17 @@ Git.prototype.getStatus = function (path, callback) {
       if (lines[i].trim()[0] == 'M') {
         files.push({
           type: 'MODIFIED',
-          path: lines[i].replace('M', '').trim()
+          path: lines[i].trim().replace('M', '').replace(/"/g, '')
         });
       } else if(lines[i].trim()[0] == '?') {
         files.push({
           type: 'NEW', //UNTRACKED
-          path: lines[i].replace('??', '').trim()
+          path: lines[i].trim().replace('??', '').replace(/"/g, '')
         });
       } else if(lines[i].trim()[0] == 'D') {
         files.push({
           type: 'DELETED',
-          path: lines[i].replace('D', '').trim()
+          path: lines[i].trim().replace('D', '').replace(/"/g, '')
         });
       }
     }
@@ -225,7 +225,7 @@ Git.prototype.getUnsyncFileDiff = function (opts, callback) {
   var path = opts.path,
     file = opts.file;
 
-  exec('git diff HEAD ' + file, { cwd: path,  env: ENV}, function(error, stdout, stderr) {
+  exec('git diff HEAD "'.concat(file.trim()).concat('"'), { cwd: path,  env: ENV}, function(error, stdout, stderr) {
     var err = null;
 
     if (error !== null) {
@@ -240,7 +240,7 @@ Git.prototype.getUnsyncFileDiff = function (opts, callback) {
 
 Git.prototype.getFileDiff = function (opts, callback) {
 
-  exec('git log --format=\'%N\' -p -1 ' + opts.hash + ' -- ' + opts.file, { cwd: opts.path, env: ENV}, function (error, stdout, stderr) {
+  exec('git log --format=\'%N\' -p -1 '.concat(opts.hash).concat(' -- "').concat(opts.file).concat('"'), { cwd: opts.path, env: ENV}, function (error, stdout, stderr) {
     var err = null;
 
     if (error !== null) {
@@ -257,7 +257,7 @@ Git.prototype.sync = function (opts, callback) {
 
   if (opts.setUpstream) {
     var err;
-    
+
     try {
       execSync('git push -u origin ' + opts.branch, { cwd: opts.path,  env: ENV});
     } catch (error) {
@@ -296,11 +296,11 @@ Git.prototype.sync = function (opts, callback) {
 Git.prototype.add = function (path, opts) {
 
   if (opts.forceSync) {
-    return execSync('git add '.concat(opts.file), { cwd: path});
+    return execSync('git add "'.concat(opts.file).concat('"'), { cwd: path});
   } else {
 
     exec(
-      'git add '.concat(opts.file),
+      'git add "'.concat(opts.file).concat('"'),
       { cwd: path}, function (error, stdout, stderr) {
       var err = null;
 
@@ -395,9 +395,9 @@ Git.prototype.discartChangesInFile = function (path, opts) {
   opts = opts || {};
 
   if (opts.isUnknow) {
-    command = 'git clean -df '.concat(opts.file);
+    command = 'git clean -df "'.concat(opts.file.trim()).concat('"');
   } else {
-    command = 'git checkout -- '.concat(opts.file);
+    command = 'git checkout -- "'.concat(opts.file.trim()).concat('"');
   }
 
   if (opts.forceSync) {
@@ -445,7 +445,7 @@ Git.prototype.getTag = function (path, callback) {
 
 Git.prototype.assumeUnchanged = function (path, opts) {
 
-  exec(' git update-index --assume-unchanged '.concat(opts.file), { cwd: path,  env: ENV}, function (error, stdout, stderr) {
+  exec(' git update-index --assume-unchanged "'.concat(opts.file).concat('"'), { cwd: path,  env: ENV}, function (error, stdout, stderr) {
     var err = null;
 
     if (error !== null) {
