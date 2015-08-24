@@ -322,7 +322,7 @@
             contextMenu = $compile([
               '<div class="context-menu" style="top: ' + event.y + 'px;  left: ' + event.x +  'px">',
                 '<ul>',
-                  '<li ng-click="appCtrl.resetProjectToCommit(\'', commit.hash, '\')">{{ MSGS["Reset project to that commit"] }}</li>',
+                  '<li ng-click="appCtrl.resetProjectToCommit(\'', commit.hash, '\')">{{ MSGS["Reset branch to that commit"] }}</li>',
                 '</ul>',
               '</div>'
             ].join(''))($scope);
