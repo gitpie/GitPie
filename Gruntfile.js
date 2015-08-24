@@ -2,7 +2,7 @@ module.exports = function(grunt) {
   grunt.initConfig({
     pkg: grunt.file.readJSON('package.json'),
 
-    nodewebkit: {
+    nwjs: {
 
       options: {
         version: '0.12.0',
@@ -54,10 +54,10 @@ module.exports = function(grunt) {
     }
   });
 
-  grunt.loadNpmTasks('grunt-node-webkit-builder');
+  grunt.loadNpmTasks('grunt-nw-builder');
   grunt.loadNpmTasks('grunt-contrib-sass');
   grunt.loadNpmTasks('grunt-contrib-watch');
 
-  grunt.registerTask('build', ['nodewebkit']);
+  grunt.registerTask('build', ['nwjs']);
   grunt.registerTask('dev', ['sass', 'watch']);
 };
