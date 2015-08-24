@@ -1,6 +1,7 @@
 (function () {
   var CodeProcessor = require('./app/core/code-processor'),
-    cp = new CodeProcessor();
+    cp = new CodeProcessor(),
+    path = require('path');
 
   angular.module('content', [])
 
@@ -329,7 +330,7 @@
                   '<li ng-click="appCtrl.assumeUnchanged(\'', change.path,'\', \'', index,'\')">',
                     MSGS['Assume unchanged'],
                   '</li>',
-                  '<li ng-click="appCtrl.openItemInFolder(\'', selectedRepository.path + '/' + change.path + '\')">',
+                  '<li ng-click="appCtrl.openItemInFolder(\'', path.join(selectedRepository.path, change.path.trim()), '\')">',
                     MSGS['Show file in folder'],
                   '</li>',
                 '</ul>',
