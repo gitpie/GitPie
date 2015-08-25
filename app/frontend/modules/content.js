@@ -375,28 +375,38 @@
           }
         };
 
-        this.discartChanges = function (filePath, index, isUnknow) {
-          var me = this;
+        this.discartChanges = function (filePath, index, isUnknow, forceSync) {
 
-          GIT.discartChangesInFile(selectedRepository.path, {
+          if (forceSync) {
 
-            file: filePath,
+            GIT.discartChangesInFile(selectedRepository.path, {
+              file: filePath,
+              isUnknow: isUnknow,
+              forceSync: forceSync
+            });
 
-            isUnknow: isUnknow,
+            this.commitChanges.splice(index, 1);
+          } else {
 
-            callback: function (err) {
+            GIT.discartChangesInFile(selectedRepository.path, {
 
-              if (err) {
-                alert(err);
-              } else {
-                me.commitChanges.splice(index, 1);
-                $scope.$apply();
-              }
+              file: filePath,
 
-              CommomService.closeAnyContextMenu();
+              isUnknow: isUnknow,
 
-            }
-          });
+              callback: function (err) {
+
+                if (err) {
+                  alert(err);
+                } else {
+                  this.commitChanges.splice(index, 1);
+                  $scope.$apply();
+                }
+
+                CommomService.closeAnyContextMenu();
+              }.bind(this)
+            });
+          }
         };
 
         this.openItemInFolder = function (path) {
@@ -416,7 +426,6 @@
         };
 
         this.assumeUnchanged = function (filePath, index) {
-          var me = this;
 
           GIT.assumeUnchanged(selectedRepository.path, {
             file: filePath,
@@ -426,12 +435,12 @@
               if (err) {
                 alert(err);
               } else {
-                me.commitChanges.splice(index, 1);
+                this.commitChanges.splice(index, 1);
                 $scope.$apply();
               }
 
               CommomService.closeAnyContextMenu();
-            }
+            }.bind(this)
           });
         };
 
@@ -484,12 +493,18 @@
 
         this.discartAllSelected = function (fileList) {
 
-          fileList.forEach(function (file, index) {
+          for (var i = 0; i < fileList.length; i++) {
 
-            if (file.checked) {
-              this.discartChanges(file.path, index, (file.type == 'NEW') );
+            if (fileList[i].checked) {
+              this.discartChanges(fileList[i].path, i, (fileList[i].type == 'NEW'), true);
+
+              if (this.commitChanges.length === 0) {
+                i = 0;
+              } else {
+                i--;
+              }
             }
-          }.bind(this));
+          }
         };
       },
 
