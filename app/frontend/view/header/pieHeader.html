@@ -86,7 +86,7 @@
             <span ng-show="!headerCtrl.isRemoteBranch(headerCtrl.currentBranch)">
               <span ng-class="{ rotate:headerCtrl.loading }" ng-show="headerCtrl.loading"
                 style="margin-right: 10px" class="octicon octicon-sync"></span>
-              <span class="octicon octicon-repo-push"></span> Publish branch
+              <span class="octicon octicon-repo-push"></span> {{ MSGS['Publish branch'] }}
             </span>
 
               <span ng-show="headerCtrl.syncStatus.ahead" class="sync-status"><span class="octicon octicon-arrow-up"></span> {{ headerCtrl.syncStatus.ahead }}</span>
@@ -109,7 +109,7 @@
   </section>
 
   <section class="content">
-    CLONING REPOSITORY FROM <strong>{{ headerCtrl.cloneNotify.cloneURL }}</strong> into
+    {{ MSGS['CLONING REPOSITORY FROM'] }} <strong>{{ headerCtrl.cloneNotify.cloneURL }}</strong> {{ MSGS.INTO }}
     <strong>{{ headerCtrl.cloneNotify.destinyFolder }}</strong>
   </section>
 </section>
