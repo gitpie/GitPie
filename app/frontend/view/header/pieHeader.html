@@ -77,7 +77,17 @@
         <ul>
           <li ng-click="headerCtrl.toggleMenu(3)"><span class="octicon octicon-gear"></span></li>
           <div class="menu" ng-show="headerCtrl.showSettingsMenu"></div>
-          <li ng-click="headerCtrl.sync()"><span ng-class="{ rotate:headerCtrl.loading }" class="octicon octicon-sync"></span> {{ MSGS.Sync }}
+          <li ng-click="headerCtrl.sync()" ng-show="headerCtrl.currentBranch">
+
+            <span ng-show="headerCtrl.isRemoteBranch(headerCtrl.currentBranch)">
+              <span ng-class="{ rotate:headerCtrl.loading }" class="octicon octicon-sync"></span> {{ MSGS.Sync }}
+            </span>
+
+            <span ng-show="!headerCtrl.isRemoteBranch(headerCtrl.currentBranch)">
+              <span ng-class="{ rotate:headerCtrl.loading }" ng-show="headerCtrl.loading"
+                style="margin-right: 10px" class="octicon octicon-sync"></span>
+              <span class="octicon octicon-repo-push"></span> Publish branch
+            </span>
 
               <span ng-show="headerCtrl.syncStatus.ahead" class="sync-status"><span class="octicon octicon-arrow-up"></span> {{ headerCtrl.syncStatus.ahead }}</span>
               <span ng-show="headerCtrl.syncStatus.behind" class="sync-status"><span class="octicon octicon-arrow-down"></span> {{ headerCtrl.syncStatus.behind }}</span>
