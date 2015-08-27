@@ -11,8 +11,7 @@
       templateUrl: 'app/frontend/view/header/pieHeader.html',
 
       controller: function ($scope, $element, CommomService) {
-        var selectedRepository = null,
-          MSGS = $scope.MSGS;
+        var MSGS = $scope.MSGS;
 
         // Verify if a branch is in remoteBranchs array
         this.isRemoteBranch = function (branch) {
@@ -27,6 +26,7 @@
           return false;
         };
 
+        this.selectedRepository = null;
         this.remoteBranchs = [];
         this.tags = [];
         this.syncStatus = {};
@@ -71,7 +71,7 @@
         $scope.$on('repositorychanged', function (event, repository) {
           this.loading = true;
 
-          selectedRepository = repository;
+          this.selectedRepository = repository;
 
           GIT.getCurrentBranch(repository.path, function (err, currentBranch, remoteBranchs) {
             this.currentBranch = currentBranch;
@@ -80,13 +80,13 @@
             $scope.$apply();
           }.bind(this));
 
-          GIT.getTag(selectedRepository.path, function (err, tags) {
+          GIT.getTag(this.selectedRepository.path, function (err, tags) {
             this.tags = tags;
 
             $scope.$apply();
           }.bind(this));
 
-          GIT.fetch(selectedRepository.path, function (err) {
+          GIT.fetch(this.selectedRepository.path, function (err) {
 
             // Ignored error for while to not block status for private repositories
 
@@ -106,7 +106,7 @@
         this.switchBranch = function (branch, forceCreateIfNotExists) {
 
           GIT.switchBranch({
-            path: selectedRepository.path,
+            path: this.selectedRepository.path,
             branch: branch,
             forceCreateIfNotExists: forceCreateIfNotExists
           }, function (err) {
@@ -116,7 +116,7 @@
             } else {
               this.currentBranch = branch;
 
-              $scope.$broadcast('changedbranch', selectedRepository);
+              $scope.$broadcast('changedbranch', this.selectedRepository);
 
               this.hideAllMenu();
 
@@ -127,15 +127,15 @@
 
         this.sync = function () {
 
-          if (selectedRepository && !this.loading) {
+          if (this.selectedRepository && !this.loading) {
             this.loading = true;
 
-            GIT.fetch(selectedRepository.path, function (err) {
+            GIT.fetch(this.selectedRepository.path, function (err) {
 
               // Ignored error for while to not block status for private repositories
 
               GIT.sync({
-                path: selectedRepository.path,
+                path: this.selectedRepository.path,
                 branch: this.currentBranch,
                 setUpstream: !this.isRemoteBranch(this.currentBranch),
                 push: this.syncStatus.ahead
@@ -146,7 +146,7 @@
                 }
 
                 // Emit changedbranch event even on error case as a workaround to git push command fail
-                $scope.$broadcast('changedbranch', selectedRepository);
+                $scope.$broadcast('changedbranch', this.selectedRepository);
                 this.loading = false;
                 $scope.$apply();
               }.bind(this));
@@ -234,6 +234,28 @@
             }
 
           }
+        };
+
+        this.showResetButton = function () {
+          return CommomService.selectedCommit;
+        };
+
+        this.resetBranchToCommit = function () {
+
+          GIT.reset(this.selectedRepository.path, {
+            hash: CommomService.selectedCommit.hash,
+
+            callback: function (err) {
+
+              if (err) {
+                alert(err);
+              } else {
+                $scope.$broadcast('changedbranch', this.selectedRepository);
+              }
+
+              CommomService.closeAnyContextMenu();
+            }.bind(this)
+          });
         };
       },
 

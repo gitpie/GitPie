@@ -52,6 +52,7 @@
             this.commitChanges = [];
             this.commitHistory = [];
             selectedCommit = {};
+            CommomService.selectedCommit = null;
 
             GIT.getCommitHistory({
               path: repository.path
@@ -88,6 +89,7 @@
             };
 
           selectedCommitAncestor = ancestorCommit;
+          CommomService.selectedCommit = commit;
 
           this.loadingChanges = true;
 
@@ -315,22 +317,7 @@
           CommomService.closeAnyContextMenu();
 
           body.append(contextMenu);
-        };
-
-        this.openCommitHistoryContextMenu = function (event, commit) {
-          var body = angular.element(document.body),
-            contextMenu = $compile([
-              '<div class="context-menu" style="top: ' + event.y + 'px;  left: ' + event.x +  'px">',
-                '<ul>',
-                  '<li ng-click="appCtrl.resetProjectToCommit(\'', commit.hash, '\')">{{ MSGS["Reset branch to that commit"] }}</li>',
-                '</ul>',
-              '</div>'
-            ].join(''))($scope);
-
-          CommomService.closeAnyContextMenu();
-
-          body.append(contextMenu);
-        };
+        };        
 
         this.openChangesContextualMenu = function (event, change, index) {
           var body = angular.element(document.body),
@@ -437,24 +424,6 @@
               } else {
                 this.commitChanges.splice(index, 1);
                 $scope.$apply();
-              }
-
-              CommomService.closeAnyContextMenu();
-            }.bind(this)
-          });
-        };
-
-        this.resetProjectToCommit = function (hash) {
-
-          GIT.reset(selectedRepository.path, {
-            hash: hash,
-
-            callback: function (err) {
-
-              if (err) {
-                alert(err);
-              } else {
-                this.showRepositoryInfo(selectedRepository, true);
               }
 
               CommomService.closeAnyContextMenu();

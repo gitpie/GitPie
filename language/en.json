@@ -29,7 +29,7 @@
   "INTO": "INTO",
   "Show in folder": "Show in folder",
   "Assume unchanged": "Assume unchanged",
-  "Reset branch to that commit": "Reset branch to that commit",
+  "Reset branch {branch} to selected commit": "Reset branch {branch} to selected commit",
   "Collapse all": "Collapse all",
   "Expand all": "Expand all",
   "Discart all selected": "Discart all selected",

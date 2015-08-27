@@ -74,7 +74,7 @@
           </div>
         </li>
         <li ng-repeat="commit in appCtrl.repositoryHistory" ng-class="{ selected:commit.selected }"
-          ng-click="appCtrl.showCommitChanges(commit, $index)" ng-right-click="appCtrl.openCommitHistoryContextMenu($event, commit, $index)">
+          ng-click="appCtrl.showCommitChanges(commit, $index)">
           <div class="thumb">
             {{ commit.user.trim()[0] }}
           </div>

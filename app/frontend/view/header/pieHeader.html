@@ -75,8 +75,17 @@
 
       <nav>
         <ul>
-          <li ng-click="headerCtrl.toggleMenu(3)"><span class="octicon octicon-gear"></span></li>
-          <div class="menu" ng-show="headerCtrl.showSettingsMenu"></div>
+          <li ng-show="headerCtrl.showResetButton()"
+            ng-click="headerCtrl.resetBranchToCommit()"
+            title="{{ MSGS['Reset branch {branch} to selected commit'].replace('{branch}', headerCtrl.currentBranch) }}">
+            <span class="octicon octicon-mail-reply"></span>
+          </li>
+
+          <ul>
+            <li ng-click="headerCtrl.toggleMenu(3)"><span class="octicon octicon-gear"></span></li>
+            <div class="menu" ng-show="headerCtrl.showSettingsMenu"></div>
+          </ul>
+
           <li ng-click="headerCtrl.sync()" ng-show="headerCtrl.currentBranch">
 
             <span ng-show="headerCtrl.isRemoteBranch(headerCtrl.currentBranch)">
