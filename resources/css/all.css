@@ -5,6 +5,21 @@
 * {
   outline: none;
   /* Scrollbar style */ }
+  * [tooltip]:hover:after {
+    opacity: 1;
+    content: attr(tooltip);
+    padding: 8px 15px;
+    background-color: rgba(1, 1, 1, 0.9);
+    color: #F7F7F7;
+    font-size: 0.9em;
+    position: absolute;
+    left: 1px;
+    top: 100%;
+    margin-top: 2px;
+    white-space: nowrap;
+    z-index: 200000;
+    border-radius: 2px;
+    overflow: hidden; }
   * .rotate {
     -webkit-animation: spin 2s linear infinite; }
   *::-webkit-scrollbar-track {
@@ -258,7 +273,6 @@ html, html body {
       z-index: 9;
       background-color: #636e73;
       color: #CCCCCC;
-      overflow: hidden;
       -webkit-app-region: drag; }
       html body #header nav {
         float: left; }
@@ -273,6 +287,8 @@ html, html body {
             display: inline-block;
             cursor: pointer;
             text-shadow: 0 1px 2px #49575d; }
+            html body #header nav ul li:hover {
+              position: relative; }
             html body #header nav ul li .sync-status {
               margin-left: 10px; }
           html body #header nav ul .menu {
@@ -585,6 +601,8 @@ html, html body {
               box-sizing: border-box;
               cursor: default;
               word-wrap: break-word; }
+              html body #wrapper #content #right nav ul li:hover {
+                position: relative; }
               html body #wrapper #content #right nav ul li header {
                 padding: 10px;
                 display: block; }

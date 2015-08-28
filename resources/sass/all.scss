@@ -8,6 +8,23 @@
 * {
   outline: none;
 
+  [tooltip]:hover:after{
+    opacity: 1;
+    content: attr(tooltip);
+    padding: 8px 15px;
+    background-color: rgba(1, 1, 1, 0.9);
+    color: #F7F7F7;
+    font-size: 0.9em;
+    position: absolute;
+    left: 1px;
+    top: 100%;
+    margin-top: 2px;
+    white-space: nowrap;
+    z-index: 200000;
+    border-radius: 2px;
+    overflow: hidden;
+  }
+
   .rotate {
 		-webkit-animation: spin 2s linear infinite;
 	}
@@ -267,7 +284,6 @@ html {
       z-index: 9;
   		background-color: $header-background-color;
   		color: $header-font-color;
-      overflow: hidden;
   		-webkit-app-region: drag;
 
       nav {
@@ -285,6 +301,10 @@ html {
             display: inline-block;
             cursor: pointer;
             text-shadow: $header-font-shadow;
+
+            &:hover {
+              position: relative;
+            }
 
             .sync-status {
               margin-left: 10px;
@@ -658,6 +678,10 @@ html {
                 box-sizing: border-box;
     						cursor: default;
     						word-wrap: break-word;
+
+                &:hover {
+                  position: relative;
+                }
 
                 header {
                   padding: 10px;
