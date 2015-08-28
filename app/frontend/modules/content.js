@@ -317,7 +317,26 @@
           CommomService.closeAnyContextMenu();
 
           body.append(contextMenu);
-        };        
+        };
+
+        this.openHistoryContextualMenu = function (event, history, index) {
+          var body = angular.element(document.body),
+            contextMenu = $compile([
+
+              '<div class="context-menu" style="top: ' + event.y + 'px;  left: ' + event.x +  'px">',
+                '<ul>',
+                  '<li ng-click="appCtrl.openItemInFolder(\'', path.join(selectedRepository.path, history.name.trim()), '\')">',
+                    MSGS['Show in folder'],
+                  '</li>',
+                '</ul>',
+              '</div>'
+
+            ].join(''))($scope);
+
+          CommomService.closeAnyContextMenu();
+
+          body.append(contextMenu);
+        };
 
         this.openChangesContextualMenu = function (event, change, index) {
           var body = angular.element(document.body),

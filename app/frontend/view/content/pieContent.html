@@ -119,9 +119,10 @@
         <nav>
           <ul>
 
-            <li ng-repeat="history in appCtrl.commitHistory">
+            <li ng-repeat="history in appCtrl.commitHistory" ng-right-click="appCtrl.openHistoryContextualMenu($event, history, $index)">
               <header>
-                <span ng-click="appCtrl.showFileDiff(history)" ng-class="{ 'octicon-triangle-right': !history.showCode, 'octicon-triangle-down': history.showCode}" class="octicon octicon-triangle-right"></span>
+                <span ng-click="appCtrl.showFileDiff(history)"
+                  ng-class="{ 'octicon-triangle-right': !history.showCode, 'octicon-triangle-down': history.showCode}" class="octicon octicon-triangle-right"></span>
                 {{ history.name.length > 50 ? '...' : ''}} {{ history.name | limitTo: - 50 }}
                 <menuitem ng-bind-html="history.changes"></menuitem>
               </header>
