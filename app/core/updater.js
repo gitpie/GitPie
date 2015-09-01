@@ -24,7 +24,7 @@ var request = require('request'),
 
   downloadedPath,
 
-  EXEC_PATH = process.execPath,
+  EXEC_PATH,
 
   // Output stream instance
   write,
@@ -50,10 +50,23 @@ var request = require('request'),
   	}
 
   	fs.rmdirSync(dir);
+  },
+
+  getExecPath = function () {
+    var reverse = process.execPath.split('').reverse().join(''),
+      reversedPath,
+      path;
+
+    reversedPath = reverse.substr(reverse.indexOf('/'));
+    path = reversedPath.split('').reverse().join('');
+
+    return path;
   };
 
 function Updater () {
   this.updating = false;
+
+  EXEC_PATH = getExecPath();
 }
 
 util.inherits(Updater, events.EventEmitter);
@@ -94,9 +107,22 @@ Updater.prototype.update = function () {
         }
 
         callbackDownloadFn = function () {
+          
+          try {
+            rmdir(EXEC_PATH);
+          } catch (err) {
+            // IGNORE ERROR
+          }
 
-          fs.rename( path.join(os.tmpdir(), downloadedPath), EXEC_PATH, function () {
-            this.emit('updated');
+          fs.rename( path.join(os.tmpdir(), downloadedPath), EXEC_PATH, function (err) {
+
+            if (err) {
+              console.error(err);
+              alert(err);
+              this.emit('updateerror');
+            } else {
+              this.emit('updated');
+            }
           }.bind(this));
 
         }.bind(this);
