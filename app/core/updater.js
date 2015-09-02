@@ -55,12 +55,14 @@ var request = require('request'),
   getExecPath = function () {
     var reverse = process.execPath.split('').reverse().join(''),
       reversedPath,
-      path;
+      execPath;
 
-    reversedPath = reverse.substr(reverse.indexOf('/'));
-    path = reversedPath.split('').reverse().join('');
+    console.log(path.sep);
 
-    return path;
+    reversedPath = reverse.substr(reverse.indexOf(path.sep));
+    execPath = reversedPath.split('').reverse().join('');
+
+    return execPath;
   };
 
 function Updater () {
@@ -90,9 +92,9 @@ Updater.prototype.update = function () {
 
     releaseURL = releaseURL.concat('v').concat(remotePackJson.version).concat('/');
 
-    console.log(os.platform());
-    console.log(os.arch());
-    console.log(os.tmpdir());
+    console.log('os', os.platform());
+    console.log('arch', os.arch());
+    console.log('EXEC_PATH', EXEC_PATH);
 
     switch (os.platform()) {
       case 'linux':
@@ -107,12 +109,7 @@ Updater.prototype.update = function () {
         }
 
         callbackDownloadFn = function () {
-          
-          try {
-            rmdir(EXEC_PATH);
-          } catch (err) {
-            // IGNORE ERROR
-          }
+          rmdir(EXEC_PATH);
 
           fs.rename( path.join(os.tmpdir(), downloadedPath), EXEC_PATH, function (err) {
 
@@ -129,7 +126,7 @@ Updater.prototype.update = function () {
 
         break;
 
-      case 'win':
+      case 'win32':
 
         if (os.arch() == 'x64') {
           releaseURL = releaseURL.concat(UPDATE_CONFIG.fileName.win64);
@@ -145,9 +142,12 @@ Updater.prototype.update = function () {
           var zip = new AdmZip( path.join(os.tmpdir(), downloadedPath.concat('.zip')) ),
             zipEntries = zip.getEntries();
 
+          fs.mkdirSync(path.join(os.tmpdir(), 'pie'));
+
           zip.extractAllTo( path.join(os.tmpdir(), 'pie') , true);
 
-          fs.rename( path.join(os.tmpdir(), 'pie', downloadedPath), EXEC_PATH, function () {
+          fs.rename( path.join(os.tmpdir(), 'pie', downloadedPath), EXEC_PATH, function (err) {
+            console.log(err);
             fs.unlinkSync( path.join(os.tmpdir(), downloadedPath.concat('.zip')) );
             rmdir( path.join(os.tmpdir(), 'pie') );
 
@@ -174,9 +174,11 @@ Updater.prototype.update = function () {
             var zip = new AdmZip( path.join(os.tmpdir(), downloadedPath.concat('.zip')) ),
               zipEntries = zip.getEntries();
 
+            fs.mkdirSync(path.join(os.tmpdir(), 'pie'));
+
             zip.extractAllTo( path.join(os.tmpdir(), 'pie') , true);
 
-            fs.rename( path.join(os.tmpdir(), 'pie', downloadedPath) , '/home/matheus/Documentos/Projetos/teste-updater-module/GitPie' , function () {
+            fs.rename( path.join(os.tmpdir(), 'pie', downloadedPath), EXEC_PATH, function () {
               fs.unlinkSync( path.join(os.tmpdir(), downloadedPath.concat('.zip')) );
               rmdir( path.join(os.tmpdir(), 'pie') );
 
