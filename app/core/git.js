@@ -149,19 +149,28 @@ Git.prototype.getStatus = function (path, callback) {
 
     for (var i = 1; i < lines.length; i++) {
 
-      if (lines[i].trim()[0] == 'M') {
+      if (lines[i].trim()[0] == 'R') {
+        files.push({
+          type: 'RENAMED',
+          displayPath: lines[i].replace('RM', '').replace(/"/g, '').trim(),
+          path: lines[i].replace('RM', '').replace(/"/g, '').split('->')[1].trim()
+        });
+      } else if (lines[i].trim()[0] == 'M') {
         files.push({
           type: 'MODIFIED',
+          displayPath: lines[i].replace('M', '').replace(/"/g, '').trim(),
           path: lines[i].replace('M', '').replace(/"/g, '').trim()
         });
       } else if(lines[i].trim()[0] == '?') {
         files.push({
           type: 'NEW', //UNTRACKED
+          displayPath: lines[i].replace('??', '').replace(/"/g, '').trim(),
           path: lines[i].replace('??', '').replace(/"/g, '').trim()
         });
       } else if(lines[i].trim()[0] == 'D') {
         files.push({
           type: 'DELETED',
+          displayPath: lines[i].replace('D', '').replace(/"/g, '').trim(),
           path: lines[i].replace('D', '').replace(/"/g, '').trim()
         });
       }

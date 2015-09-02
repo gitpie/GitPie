@@ -159,7 +159,7 @@
             if (!change.isUnsyc) {
               GIT.getFileDiff({
 
-                file: change.name,
+                file: change.path,
                 hash: selectedCommit.hash,
                 path: selectedRepository.path
 
@@ -183,7 +183,7 @@
 
               GIT.getUnsyncFileDiff({
                 path: selectedRepository.path,
-                file: change.name
+                file: change.path
               },
               function (err, diff) {
 
@@ -283,8 +283,10 @@
           if (files.length > 0) {
             this.commitChanges = [];
 
+            console.log(files);
+
             files.forEach(function (item) {
-              item.name = item.path;
+              item.name = item.displayPath;
               item.isUnsyc = true;
               item.checked = true;
 
@@ -355,8 +357,8 @@
             case 'NEW':
                 return  'label-new';
 
-            default:
-              return '';
+            case 'RENAMED':
+              return 'label-renamed';
           }
         };
 

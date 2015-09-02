@@ -754,6 +754,11 @@ html {
                     background-color: #D7431B;
                   }
 
+                  .label-renamed {
+                    @extend .label;
+                    background-color: #773F22;
+                  }
+
                   .label-binary {
                     @extend .label;
                     color: #986B45;
