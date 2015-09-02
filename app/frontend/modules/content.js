@@ -159,7 +159,7 @@
             if (!change.isUnsyc) {
               GIT.getFileDiff({
 
-                file: change.path,
+                file: change.name,
                 hash: selectedCommit.hash,
                 path: selectedRepository.path
 
@@ -282,8 +282,6 @@
 
           if (files.length > 0) {
             this.commitChanges = [];
-
-            console.log(files);
 
             files.forEach(function (item) {
               item.name = item.displayPath;
