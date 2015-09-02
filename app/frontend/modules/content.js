@@ -179,7 +179,7 @@
                   $scope.$apply();
                 }
               });
-            } else {
+            } else if (change.type != 'DELETED') {
 
               GIT.getUnsyncFileDiff({
                 path: selectedRepository.path,
