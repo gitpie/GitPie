@@ -63,6 +63,33 @@ var request = require('request'),
     execPath = reversedPath.split('').reverse().join('');
 
     return execPath;
+  },
+
+  getHardwareInfo = function () {
+    var info = {};
+
+    if (/64/.test(process.arch)) {
+      info.arch = 'x64';
+    } else {
+      info.arch = 'x86';
+    }
+
+    switch (process.platform) {
+      case 'darwin':
+        info.os = 'mac';
+          break;
+      case 'win32':
+        info.os = 'windows';
+          break;
+      case 'linux':
+        info.os = 'linux';
+          break;
+      default:
+        info.os = 'unknown';
+          break;
+    }
+
+    return info;
   };
 
 function Updater () {
@@ -86,21 +113,22 @@ Updater.prototype.checkAvailableUpdate = function () {
 };
 
 Updater.prototype.update = function () {
+  var hInfo = getHardwareInfo();
 
   if (!this.updating) {
     this.updating = true;
 
     releaseURL = releaseURL.concat('v').concat(remotePackJson.version).concat('/');
 
-    console.log('os', os.platform());
-    console.log('arch', os.arch());
+    console.log('os', hInfo.os);
+    console.log('arch', hInfo.arch);
     console.log('EXEC_PATH', EXEC_PATH);
 
-    switch (os.platform()) {
+    switch (hInfo.os) {
       case 'linux':
         write = targz().createWriteStream(os.tmpdir());
 
-        if (os.arch() == 'x64') {
+        if (hInfo.arch == 'x64') {
           releaseURL = releaseURL.concat(UPDATE_CONFIG.fileName.linux64);
           downloadedPath = 'linux64';
         } else {
@@ -126,9 +154,9 @@ Updater.prototype.update = function () {
 
         break;
 
-      case 'win32':
+      case 'windows':
 
-        if (os.arch() == 'x64') {
+        if (hInfo.arch == 'x64') {
           releaseURL = releaseURL.concat(UPDATE_CONFIG.fileName.win64);
           downloadedPath = 'win64';
         } else {
@@ -158,9 +186,9 @@ Updater.prototype.update = function () {
 
         break;
 
-        case 'osx':
+        case 'mac':
 
-          if (os.arch() == 'x64') {
+          if (hInfo.arch == 'x64') {
             releaseURL = releaseURL.concat(UPDATE_CONFIG.fileName.osx64);
             downloadedPath = 'osx64';
           } else {
