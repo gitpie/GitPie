@@ -101,7 +101,6 @@ try {
     /* Verify if there's a available update */
     updater.on('availableUpdate', function (remotePackJson) {
       console.log('There is a available update');
-      console.log(remotePackJson);
 
       updater.update();
     });
@@ -116,6 +115,26 @@ try {
 
     updater.on('updated', function () {
       console.log('Your GitPie is up to date');
+
+      var restart = function() {
+        var child,
+
+        child_process = require("child_process"),
+        gui = require('nw.gui'),
+        win = gui.Window.get();
+
+        if (process.platform == "darwin")  {
+          child = child_process.spawn("open", ["-n", "-a", process.execPath.match(/^([^\0]+?\.app)\//)[1]], {detached:true});
+        } else {
+          child = child_process.spawn(process.execPath, [], {detached: true});
+        }
+
+        child.unref();
+        win.hide();
+        gui.App.quit();
+      };
+
+      restart();
     });
 
     updater.checkAvailableUpdate();

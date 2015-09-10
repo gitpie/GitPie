@@ -144,7 +144,7 @@ Updater.prototype.update = function () {
             if (err) {
               console.error(err);
               alert(err);
-              this.emit('updateerror');
+              this.emit('updateerror', err);
             } else {
               this.emit('updated');
             }
