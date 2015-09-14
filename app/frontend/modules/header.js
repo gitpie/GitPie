@@ -105,6 +105,8 @@
         }.bind(this));
 
         this.switchBranch = function (branch, forceCreateIfNotExists) {
+          this.hideAllMenu();
+          this.loading = true;
 
           GIT.switchBranch({
             path: this.selectedRepository.path,
@@ -118,11 +120,10 @@
               this.currentBranch = branch;
 
               $scope.$broadcast('changedbranch', this.selectedRepository);
-
-              this.hideAllMenu();
-
-              $scope.$apply();
             }
+
+            this.loading = false;
+            $scope.$apply();
           }.bind(this));
         };
 

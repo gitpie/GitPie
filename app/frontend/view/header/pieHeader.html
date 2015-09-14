@@ -81,11 +81,6 @@
             <span class="octicon octicon-mail-reply"></span>
           </li>
 
-          <ul>
-            <li ng-click="headerCtrl.toggleMenu(3)" tooltip="{{ MSGS['Settings'] }}"><span class="octicon octicon-gear"></span></li>
-            <div class="menu" ng-show="headerCtrl.showSettingsMenu"></div>
-          </ul>
-
           <li ng-click="headerCtrl.sync()" ng-show="headerCtrl.currentBranch">
 
             <span ng-show="headerCtrl.isRemoteBranch(headerCtrl.currentBranch)">
@@ -102,7 +97,11 @@
               <span ng-show="headerCtrl.syncStatus.behind" class="sync-status"><span class="octicon octicon-arrow-down"></span> {{ headerCtrl.syncStatus.behind }}</span>
 
           </li>
-          <li><span class="octicon octicon-three-bars"></span></li>
+
+          <ul>
+            <li ng-click="headerCtrl.toggleMenu(3)" tooltip="{{ MSGS['Settings'] }}"><span class="octicon octicon-gear"></span></li>
+            <div class="menu" ng-show="headerCtrl.showSettingsMenu"></div>
+          </ul>
         </ul>
       </nav>
 
