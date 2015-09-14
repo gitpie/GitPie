@@ -9,12 +9,11 @@
   outline: none;
 
   [tooltip]:hover:after{
-    opacity: 1;
     content: attr(tooltip);
-    padding: 8px 15px;
-    background-color: rgba(1, 1, 1, 0.9);
+    padding: 7px;
+    background-color: #333;
     color: #F7F7F7;
-    font-size: 0.9em;
+    font-size: 0.85em;
     position: absolute;
     left: 1px;
     top: 100%;
@@ -23,6 +22,7 @@
     z-index: 200000;
     border-radius: 2px;
     overflow: hidden;
+    -webkit-animation: showTooltip 1s linear;
   }
 
   .rotate {
@@ -118,6 +118,21 @@
 @-moz-keyframes spin { 100% { -moz-transform: rotate(360deg); } }
 @-webkit-keyframes spin { 100% { -webkit-transform: rotate(360deg); } }
 @keyframes spin { 100% { -webkit-transform: rotate(360deg); transform:rotate(360deg); } }
+
+/* Tooltip animation */
+@-webkit-keyframes showTooltip {
+  0% {
+    opacity: 0;
+  }
+
+  90% {
+    opacity: 0;
+  }
+
+  100% {
+    opacity: 1;
+  }
+};
 
 /* Mask class for loadings */
 .mask {
@@ -434,7 +449,7 @@ html {
       				}
 
       				li.selected {
-      					background-color: #DBDEE0;
+      					background-color: #DBDEE0 !important;
       					color: #444;
       				}
             }

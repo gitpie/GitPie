@@ -3,7 +3,7 @@
 
     <nav>
       <ul>
-        <li ng-click="headerCtrl.toggleMenu(1)"><span class="octicon octicon-plus"></span></li>
+        <li ng-click="headerCtrl.toggleMenu(1)" tooltip="{{ MSGS['Add, Clone or Create a repository'] }}"><span class="octicon octicon-plus"></span></li>
         <div class="menu" style="width: 300px" ng-show="headerCtrl.showAddMenu">
 
             <tabs>
@@ -77,12 +77,12 @@
         <ul>
           <li ng-show="headerCtrl.showResetButton()"
             ng-click="headerCtrl.resetBranchToCommit()"
-            title="{{ MSGS['Reset branch {branch} to selected commit'].replace('{branch}', headerCtrl.currentBranch) }}">
+            tooltip="{{ MSGS['Reset branch {branch} to selected commit'].replace('{branch}', headerCtrl.currentBranch) }}">
             <span class="octicon octicon-mail-reply"></span>
           </li>
 
           <ul>
-            <li ng-click="headerCtrl.toggleMenu(3)"><span class="octicon octicon-gear"></span></li>
+            <li ng-click="headerCtrl.toggleMenu(3)" tooltip="{{ MSGS['Settings'] }}"><span class="octicon octicon-gear"></span></li>
             <div class="menu" ng-show="headerCtrl.showSettingsMenu"></div>
           </ul>
 
