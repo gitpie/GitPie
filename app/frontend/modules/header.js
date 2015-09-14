@@ -87,18 +87,19 @@
           }.bind(this));
 
           GIT.fetch(this.selectedRepository.path, function (err) {
-
             // Ignored error for while to not block status for private repositories
 
             GIT.getStatus(repository.path, function (err, syncStatus, files) {
               this.syncStatus = syncStatus;
               this.loading = false;
 
-              $scope.$broadcast('unsynChanges', files);
-
               $scope.$apply();
             }.bind(this));
 
+          }.bind(this));
+
+          GIT.getStatus(repository.path, function (err, syncStatus, files) {
+            $scope.$broadcast('unsynChanges', files);
           }.bind(this));
 
         }.bind(this));
