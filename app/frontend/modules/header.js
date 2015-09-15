@@ -43,6 +43,11 @@
           destinyFolder: null
         };
 
+        this.createNotify = {
+          show: false,
+          repositoryHome: null
+        };
+
         this.toggleMenu = function (menuIndex) {
 
           switch (menuIndex) {
@@ -258,6 +263,49 @@
               CommomService.closeAnyContextMenu();
             }.bind(this)
           });
+        };
+
+        this.createRepository = function (remoteOrigin, repositoryHome) {
+
+          if (remoteOrigin && repositoryHome) {
+            var me = this,
+              repositoryData = GitUrlParse(remoteOrigin),
+              destinyFolder;
+
+            try {
+              destinyFolder = fs.lstatSync(repositoryHome);
+
+              if (repositoryData.name) {
+                me.createNotify.repositoryHome = repositoryHome;
+                me.createNotify.show = true;
+
+                CommomService.hideHeaderMenu();
+
+                GIT.createRepository({
+                  remoteOrigin: remoteOrigin,
+                  repositoryHome: repositoryHome,
+
+                  callback: function (err) {
+
+                    if (err) {
+                      alert(err);
+                    } else {
+                      me.addRepository(repositoryHome);
+                    }
+
+                    me.createNotify.show = false;
+                    $scope.$apply();
+                  }
+                });
+
+              } else {
+                alert(MSGS['\'{cloneURL}\' not appears to be a git remote URL. Let\'s try again!'].replace('{cloneURL}', remoteOrigin));
+              }
+
+            } catch (err) {
+              alert(MSGS['The path \'{path}\' is not a folder. Pick a valid directory to create projects.'].replace('{path}', repositoryHome));
+            }
+          }
         };
       },
 

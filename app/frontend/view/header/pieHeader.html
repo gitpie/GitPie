@@ -30,6 +30,23 @@
                   ><span class="octicon octicon-repo-clone"></span> {{ MSGS.CLONE }}</button>
                 </footer>
               </pane>
+              <pane pane-title="{{ MSGS.CREATE }}">
+
+                <section class="content">
+
+                  <input type="text" style="width: 100%; box-sizing: border-box" ng-model="remoteOrigin"
+                    placeholder="Remote origin" />
+                  <input type="text" style="width: 200px" ng-model="repositoryHome"
+                    placeholder="Folder" />
+                  <input type="file" ng-model="repositoryHome" ng-input-change nwdirectory />
+
+                </section>
+                <footer><button class="featured"
+                  ng-click="headerCtrl.createRepository(remoteOrigin, repositoryHome)"
+                  ><span class="octicon octicon-repo"></span> {{ MSGS.CREATE }}</button>
+                </footer>
+
+              </pane>
             </tabs>
 
         </div>
@@ -119,5 +136,15 @@
   <section class="content">
     {{ MSGS['CLONING REPOSITORY FROM'] }} <strong>{{ headerCtrl.cloneNotify.cloneURL }}</strong> {{ MSGS.INTO }}
     <strong>{{ headerCtrl.cloneNotify.destinyFolder }}</strong>
+  </section>
+</section>
+
+<section class="notify-dialog" style="margin-bottom: {{ headerCtrl.createNotify.show ? '' : '-100px' }}">
+  <section class="icon">
+    <loading-icon></loading-icon>
+  </section>
+
+  <section class="content">
+    {{ MSGS['CREATING REPOSITORY IN'] }} <strong>{{ headerCtrl.createNotify.repositoryHome }}</strong>
   </section>
 </section>
