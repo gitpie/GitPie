@@ -4,7 +4,7 @@ var request = require('request'),
 
   path = require('path'),
 
-  fs = require('fs'),
+  fs = require('fs-extra'),
 
   events = require('events'),
 
@@ -31,38 +31,15 @@ var request = require('request'),
 
   callbackDownloadFn,
 
-  rmdir = function (dir) {
-    var list = fs.readdirSync(dir);
-
-  	for(var i = 0; i < list.length; i++) {
-  		var filename = path.join(dir, list[i]);
-  		var stat = fs.statSync(filename);
-
-  		if(filename == "." || filename == "..") {
-  			// pass these files
-  		} else if(stat.isDirectory()) {
-  			// rmdir recursively
-  			rmdir(filename);
-  		} else {
-  			// rm fiilename
-  			fs.unlinkSync(filename);
-  		}
-  	}
-
-  	fs.rmdirSync(dir);
-  },
-
   getExecPath = function () {
     var reverse = process.execPath.split('').reverse().join(''),
       reversedPath,
       execPath;
 
-    console.log(path.sep);
-
     reversedPath = reverse.substr(reverse.indexOf(path.sep));
     execPath = reversedPath.split('').reverse().join('');
 
-    return execPath;
+    return execPath.substr( 0, (execPath.length - 1) );
   },
 
   getHardwareInfo = function () {
@@ -103,10 +80,15 @@ util.inherits(Updater, events.EventEmitter);
 Updater.prototype.checkAvailableUpdate = function () {
 
   request(UPDATE_CONFIG.remotePackJsonURL, function (error, response, body) {
-    remotePackJson = JSON.parse(body);
 
-    if (localPackJson.version != remotePackJson.version) {
-      this.emit('availableUpdate', remotePackJson);
+    if (error) {
+      this.emit('error', error);
+    } else {
+      remotePackJson = JSON.parse(body);
+
+      if (localPackJson.version != remotePackJson.version) {
+        this.emit('availableUpdate', remotePackJson);
+      }
     }
 
   }.bind(this));
@@ -120,9 +102,9 @@ Updater.prototype.update = function () {
 
     releaseURL = releaseURL.concat('v').concat(remotePackJson.version).concat('/');
 
-    console.log('os', hInfo.os);
-    console.log('arch', hInfo.arch);
-    console.log('EXEC_PATH', EXEC_PATH);
+    console.log('[DEBUG] OS: ', hInfo.os);
+    console.log('[DEBUG] Arch: ', hInfo.arch);
+    console.log('[DEBUG] EXEC_PATH: ', EXEC_PATH);
 
     switch (hInfo.os) {
       case 'linux':
@@ -137,17 +119,18 @@ Updater.prototype.update = function () {
         }
 
         callbackDownloadFn = function () {
-          rmdir(EXEC_PATH);
+          fs.renameSync(EXEC_PATH, EXEC_PATH.concat('.old'));
 
-          fs.rename( path.join(os.tmpdir(), downloadedPath), EXEC_PATH, function (err) {
+          fs.move( path.join(os.tmpdir(), downloadedPath), EXEC_PATH, function (err) {
 
             if (err) {
-              console.error(err);
-              alert(err);
-              this.emit('updateerror', err);
+              this.emit('error', err);
             } else {
               this.emit('updated');
             }
+
+            fs.removeSync(path.join(os.tmpdir(), downloadedPath));
+            fs.removeSync(EXEC_PATH.concat('.old'));
           }.bind(this));
 
         }.bind(this);
@@ -174,12 +157,15 @@ Updater.prototype.update = function () {
 
           zip.extractAllTo( path.join(os.tmpdir(), 'pie') , true);
 
-          fs.rename( path.join(os.tmpdir(), 'pie', downloadedPath), EXEC_PATH, function (err) {
-            console.log(err);
-            fs.unlinkSync( path.join(os.tmpdir(), downloadedPath.concat('.zip')) );
-            rmdir( path.join(os.tmpdir(), 'pie') );
+          fs.move( path.join(os.tmpdir(), 'pie', downloadedPath), EXEC_PATH, function (err) {
+            fs.removeSync( path.join(os.tmpdir(), downloadedPath.concat('.zip')) );
+            fs.removeSync( path.join(os.tmpdir(), 'pie') );
 
-            this.emit('updated');
+            if (err) {
+              this.emit('error', err);
+            } else {
+              this.emit('updated');
+            }
 
           }.bind(this));
         }.bind(this);
@@ -206,11 +192,15 @@ Updater.prototype.update = function () {
 
             zip.extractAllTo( path.join(os.tmpdir(), 'pie') , true);
 
-            fs.rename( path.join(os.tmpdir(), 'pie', downloadedPath), EXEC_PATH, function () {
-              fs.unlinkSync( path.join(os.tmpdir(), downloadedPath.concat('.zip')) );
-              rmdir( path.join(os.tmpdir(), 'pie') );
+            fs.move( path.join(os.tmpdir(), 'pie', downloadedPath), EXEC_PATH, function (err) {
+              fs.removeSync( path.join(os.tmpdir(), downloadedPath.concat('.zip')) );
+              fs.removeSync( path.join(os.tmpdir(), 'pie') );
 
-              this.emit('updated');
+              if (err) {
+                this.emit('error', err);
+              } else {
+                this.emit('updated');
+              }
 
             }.bind(this));
           }.bind(this);

@@ -39,6 +39,19 @@ try {
   MSGS = require('./language/en.json');
 }
 
+// Open devTools for debug
+window.addEventListener('keydown', function (e) {
+
+  if (e.shiftKey && e.ctrlKey && e.keyCode == 68) {
+
+      if (WIN.isDevToolsOpen()) {
+        WIN.closeDevTools();
+      } else {
+        WIN.showDevTools();
+      }
+  }
+});
+
 /* AngularJS app init */
 (function () {
   var app = angular.module('gitpie', ['components', 'attributes', 'header', 'content']);
@@ -100,21 +113,21 @@ try {
 
     /* Verify if there's a available update */
     updater.on('availableUpdate', function (remotePackJson) {
-      console.log('There is a available update');
+      console.log('[INFO] There is a available update. New version '.concat(remotePackJson.version));
 
       updater.update();
     });
 
     updater.on('downloadingfiles', function () {
-      console.log('Downloading files...');
+      console.log('[INFO] Downloading files...');
     });
 
     updater.on('installing', function () {
-      console.log('Installing changes');
+      console.log('[INFO] Installing changes');
     });
 
     updater.on('updated', function () {
-      console.log('Your GitPie is up to date');
+      console.log('[SUCCES] Your GitPie is up to date');
 
       var restart = function() {
         var child,
@@ -135,6 +148,12 @@ try {
       };
 
       restart();
+    });
+
+    updater.on('error', function (err) {
+      console.error('[ERROR] Error updating GitPie. Error: ', err);
+
+      alert('Error updating GitPie. Error: ' + err.message);
     });
 
     updater.checkAvailableUpdate();
