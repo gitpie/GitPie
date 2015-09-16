@@ -115,39 +115,11 @@ window.addEventListener('keydown', function (e) {
     updater.on('availableUpdate', function (remotePackJson) {
       console.log('[INFO] There is a available update. New version '.concat(remotePackJson.version));
 
-      updater.update();
+      updater.downloadFiles();
     });
 
     updater.on('downloadingfiles', function () {
       console.log('[INFO] Downloading files...');
-    });
-
-    updater.on('installing', function () {
-      console.log('[INFO] Installing changes');
-    });
-
-    updater.on('updated', function () {
-      console.log('[SUCCES] Your GitPie is up to date');
-
-      var restart = function() {
-        var child,
-
-        child_process = require("child_process"),
-        gui = require('nw.gui'),
-        win = gui.Window.get();
-
-        if (process.platform == "darwin")  {
-          child = child_process.spawn("open", ["-n", "-a", process.execPath.match(/^([^\0]+?\.app)\//)[1]], {detached:true});
-        } else {
-          child = child_process.spawn(process.execPath, [], {detached: true});
-        }
-
-        child.unref();
-        win.hide();
-        gui.App.quit();
-      };
-
-      restart();
     });
 
     updater.on('error', function (err) {

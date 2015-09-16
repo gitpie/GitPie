@@ -29,7 +29,7 @@ var request = require('request'),
   // Output stream instance
   write,
 
-  callbackDownloadFn,
+  installFunction,
 
   getExecPath = function () {
     var reverse = process.execPath.split('').reverse().join(''),
@@ -94,7 +94,7 @@ Updater.prototype.checkAvailableUpdate = function () {
   }.bind(this));
 };
 
-Updater.prototype.update = function () {
+Updater.prototype.downloadFiles = function () {
   var hInfo = getHardwareInfo();
 
   if (!this.updating) {
@@ -118,19 +118,18 @@ Updater.prototype.update = function () {
           downloadedPath = 'linux32';
         }
 
-        callbackDownloadFn = function () {
-          fs.renameSync(EXEC_PATH, EXEC_PATH.concat('.old'));
+        installFunction = function (callbackFunction) {
+          fs.removeSync(EXEC_PATH);
 
           fs.move( path.join(os.tmpdir(), downloadedPath), EXEC_PATH, function (err) {
+            fs.removeSync(path.join(os.tmpdir(), downloadedPath));
 
             if (err) {
               this.emit('error', err);
             } else {
-              this.emit('updated');
+              callbackFunction();
             }
-
-            fs.removeSync(path.join(os.tmpdir(), downloadedPath));
-            fs.removeSync(EXEC_PATH.concat('.old'));
+            
           }.bind(this));
 
         }.bind(this);
@@ -149,7 +148,7 @@ Updater.prototype.update = function () {
 
         write = fs.createWriteStream( path.join(os.tmpdir(), downloadedPath.concat('.zip')) );
 
-        callbackDownloadFn = function () {
+        installFunction = function (callbackFunction) {
           var zip = new AdmZip( path.join(os.tmpdir(), downloadedPath.concat('.zip')) ),
             zipEntries = zip.getEntries();
 
@@ -164,7 +163,7 @@ Updater.prototype.update = function () {
             if (err) {
               this.emit('error', err);
             } else {
-              this.emit('updated');
+              callbackFunction();
             }
 
           }.bind(this));
@@ -184,7 +183,7 @@ Updater.prototype.update = function () {
 
           write = fs.createWriteStream( path.join(os.tmpdir(), downloadedPath.concat('.zip')) );
 
-          callbackDownloadFn = function () {
+          installFunction = function (callbackFunction) {
             var zip = new AdmZip( path.join(os.tmpdir(), downloadedPath.concat('.zip')) ),
               zipEntries = zip.getEntries();
 
@@ -199,7 +198,7 @@ Updater.prototype.update = function () {
               if (err) {
                 this.emit('error', err);
               } else {
-                this.emit('updated');
+                callbackFunction();
               }
 
             }.bind(this));
@@ -219,10 +218,15 @@ Updater.prototype.update = function () {
     read
       .pipe(write)
       .on('close', function () {
-        this.emit('installing');
-
-        callbackDownloadFn.call(this);
+        this.emit('readytoinstall');
       }.bind(this));
+  }
+};
+
+Updater.prototype.performUpdate = function (callbackFunction) {
+
+  if (this.updating) {
+    installFunction(callbackFunction);
   }
 };
 

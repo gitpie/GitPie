@@ -16,6 +16,10 @@
           selectedCommitAncestor = null,
           MSGS = $scope.MSGS;
 
+        this.updateNotify = {
+          show: false
+        };
+
         this.loadingHistory = false;
 
         this.loadingChanges = false;
@@ -457,6 +461,36 @@
               this.discartChanges(file.path, index, (file.type == 'NEW') );
             }
           }.bind(this));
+        };
+
+        /* Show notification if a update was installed */
+
+        updater.on('readytoinstall', function () {
+          console.log('[INFO] A update is ready to be installed');
+
+          this.updateNotify.show = true;
+          $scope.$apply();
+        }.bind(this));
+
+        this.performUpdate = function () {
+          var restartApp = function() {
+            var child,
+              child_process = require("child_process"),
+              gui = require('nw.gui'),
+              win = gui.Window.get();
+
+            if (process.platform == "darwin")  {
+              child = child_process.spawn("open", ["-n", "-a", process.execPath.match(/^([^\0]+?\.app)\//)[1]], {detached:true});
+            } else {
+              child = child_process.spawn(process.execPath, [], {detached: true});
+            }
+
+            child.unref();
+            win.hide();
+            gui.App.quit();
+          };
+
+          updater.performUpdate(restartApp);
         };
       },
 
