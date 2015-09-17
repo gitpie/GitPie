@@ -473,24 +473,7 @@
         }.bind(this));
 
         this.performUpdate = function () {
-          var restartApp = function() {
-            var child,
-              child_process = require("child_process"),
-              gui = require('nw.gui'),
-              win = gui.Window.get();
-
-            if (process.platform == "darwin")  {
-              child = child_process.spawn("open", ["-n", "-a", process.execPath.match(/^([^\0]+?\.app)\//)[1]], {detached:true});
-            } else {
-              child = child_process.spawn(process.execPath, [], {detached: true});
-            }
-
-            child.unref();
-            win.hide();
-            gui.App.quit();
-          };
-
-          updater.performUpdate(restartApp);
+          updater.performUpdate(GUI, WIN);
         };
       },
 

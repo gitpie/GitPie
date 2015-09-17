@@ -14,6 +14,8 @@ var request = require('request'),
 
   AdmZip = require('adm-zip'),
 
+  child_process = require("child_process"),
+
   localPackJson = require('../../package.json'),
 
   UPDATE_CONFIG = require('./updateConfig'),
@@ -118,7 +120,7 @@ Updater.prototype.downloadFiles = function () {
           downloadedPath = 'linux32';
         }
 
-        installFunction = function (callbackFunction) {
+        installFunction = function (GUI, WIN) {
           fs.removeSync(EXEC_PATH);
 
           fs.move( path.join(os.tmpdir(), downloadedPath), EXEC_PATH, function (err) {
@@ -127,9 +129,13 @@ Updater.prototype.downloadFiles = function () {
             if (err) {
               this.emit('error', err);
             } else {
-              callbackFunction();
+              var child = child_process.spawn(process.execPath, [], {detached: true});
+
+              child.unref();
+              WIN.hide();
+              GUI.App.quit();
             }
-            
+
           }.bind(this));
 
         }.bind(this);
@@ -148,7 +154,7 @@ Updater.prototype.downloadFiles = function () {
 
         write = fs.createWriteStream( path.join(os.tmpdir(), downloadedPath.concat('.zip')) );
 
-        installFunction = function (callbackFunction) {
+        installFunction = function (GUI, WIN) {
           var zip = new AdmZip( path.join(os.tmpdir(), downloadedPath.concat('.zip')) ),
             zipEntries = zip.getEntries();
 
@@ -163,7 +169,11 @@ Updater.prototype.downloadFiles = function () {
             if (err) {
               this.emit('error', err);
             } else {
-              callbackFunction();
+              var child = child_process.spawn(process.execPath, [], {detached: true});
+
+              child.unref();
+              WIN.hide();
+              GUI.App.quit();
             }
 
           }.bind(this));
@@ -183,7 +193,7 @@ Updater.prototype.downloadFiles = function () {
 
           write = fs.createWriteStream( path.join(os.tmpdir(), downloadedPath.concat('.zip')) );
 
-          installFunction = function (callbackFunction) {
+          installFunction = function (GUI, WIN) {
             var zip = new AdmZip( path.join(os.tmpdir(), downloadedPath.concat('.zip')) ),
               zipEntries = zip.getEntries();
 
@@ -198,7 +208,11 @@ Updater.prototype.downloadFiles = function () {
               if (err) {
                 this.emit('error', err);
               } else {
-                callbackFunction();
+                var child = child_process.spawn("open", ["-n", "-a", process.execPath.match(/^([^\0]+?\.app)\//)[1]], {detached:true});
+
+                child.unref();
+                WIN.hide();
+                GUI.App.quit();
               }
 
             }.bind(this));
@@ -223,10 +237,10 @@ Updater.prototype.downloadFiles = function () {
   }
 };
 
-Updater.prototype.performUpdate = function (callbackFunction) {
+Updater.prototype.performUpdate = function (GUI, WIN) {
 
   if (this.updating) {
-    installFunction(callbackFunction);
+    installFunction(GUI, WIN);
   }
 };
 
