@@ -158,6 +158,8 @@ Updater.prototype.downloadFiles = function () {
           var zip = new AdmZip( path.join(os.tmpdir(), downloadedPath.concat('.zip')) ),
             zipEntries = zip.getEntries();
 
+          WIN.hide();
+
           fs.mkdirSync(path.join(os.tmpdir(), 'pie'));
 
           zip.extractAllTo( path.join(os.tmpdir(), 'pie') , true);
@@ -172,7 +174,6 @@ Updater.prototype.downloadFiles = function () {
               var child = child_process.spawn(process.execPath, [], {detached: true});
 
               child.unref();
-              WIN.hide();
               GUI.App.quit();
             }
 
