@@ -34,15 +34,19 @@
 
                 <section class="content">
 
-                  <input type="text" style="width: 100%; box-sizing: border-box" ng-model="remoteOrigin"
-                    placeholder="Remote origin" />
+                  <input type="text" style="width: 100%; box-sizing: border-box" ng-model="repositoryName"
+                    placeholder="{{ MSGS['Repository name'] }}" />
+
+                  <span class="label" ng-show="repositoryName.length">
+                    {{ MSGS['Your repository will be created as'] }} <strong>"{{ headerCtrl.treatBranch(repositoryName) }}"</strong></span>
+
                   <input type="text" style="width: 200px" ng-model="repositoryHome"
-                    placeholder="Folder" />
+                    placeholder="{{ MSGS['Folder'] }}" />
                   <input type="file" ng-model="repositoryHome" ng-input-change nwdirectory />
 
                 </section>
                 <footer><button class="featured"
-                  ng-click="headerCtrl.createRepository(remoteOrigin, repositoryHome)"
+                  ng-click="headerCtrl.createRepository(headerCtrl.treatBranch(repositoryName), repositoryHome)"
                   ><span class="octicon octicon-repo"></span> {{ MSGS.CREATE }}</button>
                 </footer>
 

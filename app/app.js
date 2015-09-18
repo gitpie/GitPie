@@ -155,6 +155,37 @@ try {
         }
       },
 
+      addNewGitRepository: function (opts) {
+        opts = opts || {};
+
+        if (opts.repositoryName && opts.path) {
+          var index,
+            repositoryExists,
+            repository;
+
+          repositoryExists = findWhere(repositories.others, { path: opts.path});
+
+          if (!repositoryExists) {
+
+            index = repositories.others.push({
+              name: opts.repositoryName,
+              path: opts.path,
+              type : 'OTHERS'
+            });
+
+            repository = repositories.others[index - 1];
+
+            saveRepository(repository);
+          } else {
+            repository = repositoryExists;
+          }
+
+          repositories.isEmpty = false;
+
+          return repository;
+        }
+      },
+
       // Return true if the repository was selected and false case not
       removeRepository: function (repositoryType, index) {
         var storagedRepositories = JSON.parse(repositoriesStr) || {},

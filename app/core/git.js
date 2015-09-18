@@ -490,18 +490,34 @@ Git.prototype.reset = function (path, opts) {
 };
 
 Git.prototype.createRepository = function (opts) {
+  var fs = require('fs'),
+    path = require('path'),
+    err = null;
+
   opts = opts || {};
 
-  exec('git init && git remote add origin '.concat(opts.remoteOrigin).concat(' && git pull origin master --prune'), { cwd: opts.repositoryHome,  env: ENV}, function (error, stdout, stderr) {
-    var err = null;
+  fs.writeFile( path.join(opts.repositoryHome, 'README.md'), '#'.concat(opts.repositoryName), 'utf8', function (errFile) {
 
-    if (error !== null) {
-      err = error.message;
+    if (errFile) {
+      err = errFile.message;
+
+      if (opts.callback && typeof opts.callback == 'function') {
+        opts.callback.call(this, err);
+      }
+    } else {
+
+      exec('git init && git checkout -b master && git add -A && git commit -m "Initial commit"', { cwd: opts.repositoryHome,  env: ENV}, function (error, stdout, stderr) {
+
+        if (error !== null) {
+          err = error.message;
+        }
+
+        if (opts.callback && typeof opts.callback == 'function') {
+          opts.callback.call(this, err);
+        }
+      });
     }
 
-    if (opts.callback && typeof opts.callback == 'function') {
-      opts.callback.call(this, err);
-    }
   });
 };
 

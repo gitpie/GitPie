@@ -265,42 +265,43 @@
           });
         };
 
-        this.createRepository = function (remoteOrigin, repositoryHome) {
+        this.createRepository = function (repositoryName, repositoryHome) {
 
-          if (remoteOrigin && repositoryHome) {
+          if (repositoryName && repositoryHome) {
             var me = this,
-              repositoryData = GitUrlParse(remoteOrigin),
               destinyFolder;
 
             try {
               destinyFolder = fs.lstatSync(repositoryHome);
+              me.createNotify.repositoryHome = repositoryHome;
+              me.createNotify.show = true;
 
-              if (repositoryData.name) {
-                me.createNotify.repositoryHome = repositoryHome;
-                me.createNotify.show = true;
+              CommomService.hideHeaderMenu();
 
-                CommomService.hideHeaderMenu();
+              GIT.createRepository({
+                repositoryName: repositoryName,
+                repositoryHome: repositoryHome,
 
-                GIT.createRepository({
-                  remoteOrigin: remoteOrigin,
-                  repositoryHome: repositoryHome,
+                callback: function (err) {
 
-                  callback: function (err) {
+                  if (err) {
+                    alert(err);
+                  } else {
+                    var repository = CommomService.addNewGitRepository({
+                      path: repositoryHome,
+                      repositoryName: repositoryName
+                    });
 
-                    if (err) {
-                      alert(err);
-                    } else {
-                      me.addRepository(repositoryHome);
+                    if (repository) {
+                      $scope.$broadcast('changedbranch', repository);
+                      CommomService.hideHeaderMenu();
                     }
-
-                    me.createNotify.show = false;
-                    $scope.$apply();
                   }
-                });
 
-              } else {
-                alert(MSGS['\'{cloneURL}\' not appears to be a git remote URL. Let\'s try again!'].replace('{cloneURL}', remoteOrigin));
-              }
+                  me.createNotify.show = false;
+                  $scope.$apply();
+                }
+              });
 
             } catch (err) {
               alert(MSGS['The path \'{path}\' is not a folder. Pick a valid directory to create projects.'].replace('{path}', repositoryHome));
