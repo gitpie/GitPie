@@ -346,17 +346,22 @@ Git.prototype.switchBranch = function (opts, callback) {
     branch = opts.branch,
     forceCreateIfNotExists = opts.forceCreateIfNotExists;
 
-  exec('git checkout ' + (forceCreateIfNotExists ? ' -b ': '') + branch, { cwd: path,  env: ENV}, function(error, stdout, stderr) {
-    var err = null;
+  if (opts.forceSync) {
+    execSync('git checkout ' + (forceCreateIfNotExists ? ' -b ': '') + branch, { cwd: path,  env: ENV});
+  } else {
 
-    if (error !== null) {
-      err = error.message;
-    }
+    exec('git checkout ' + (forceCreateIfNotExists ? ' -b ': '') + branch, { cwd: path,  env: ENV}, function(error, stdout, stderr) {
+      var err = null;
 
-    if (callback && typeof callback == 'function') {
-      callback.call(this, err);
-    }
-  });
+      if (error !== null) {
+        err = error.message;
+      }
+
+      if (callback && typeof callback == 'function') {
+        callback.call(this, err);
+      }
+    });
+  }
 };
 
 Git.prototype.getCommitCount = function (path, callback) {
@@ -496,7 +501,7 @@ Git.prototype.createRepository = function (opts) {
 
   opts = opts || {};
 
-  fs.writeFile( path.join(opts.repositoryHome, 'README.md'), '#'.concat(opts.repositoryName), 'utf8', function (errFile) {
+  fs.writeFile( path.join(opts.repositoryHome, '.gitignore'), '// # Logs and databases # \n ####################### \n *.log \n *.sql \n .sqlite', 'utf8', function (errFile) {
 
     if (errFile) {
       err = errFile.message;
@@ -506,19 +511,32 @@ Git.prototype.createRepository = function (opts) {
       }
     } else {
 
-      exec('git init && git checkout -b master && git add -A && git commit -m "Initial commit"', { cwd: opts.repositoryHome,  env: ENV}, function (error, stdout, stderr) {
+      execSync('git init', { cwd: opts.repositoryHome,  env: ENV});
 
-        if (error !== null) {
-          err = error.message;
-        }
-
-        if (opts.callback && typeof opts.callback == 'function') {
-          opts.callback.call(this, err);
-        }
+      this.switchBranch({
+        path: opts.repositoryHome,
+        branch: 'master',
+        forceCreateIfNotExists: true,
+        forceSync: true
       });
+
+      this.add(opts.repositoryHome, {
+        forceSync: true,
+        file: '.gitignore'
+      });
+
+      this.commit(opts.repositoryHome, {
+        forceSync: true,
+        file: '.gitignore',
+        message: '.gitignore'
+      });
+
+      if (opts.callback && typeof opts.callback == 'function') {
+        opts.callback.call(this, err);
+      }
     }
 
-  });
+  }.bind(this));
 };
 
 module.exports = new Git();
