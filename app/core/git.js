@@ -511,25 +511,29 @@ Git.prototype.createRepository = function (opts) {
       }
     } else {
 
-      execSync('git init', { cwd: opts.repositoryHome,  env: ENV});
+      try {
+        execSync('git init', { cwd: opts.repositoryHome,  env: ENV});
 
-      this.switchBranch({
-        path: opts.repositoryHome,
-        branch: 'master',
-        forceCreateIfNotExists: true,
-        forceSync: true
-      });
+        this.switchBranch({
+          path: opts.repositoryHome,
+          branch: 'master',
+          forceCreateIfNotExists: true,
+          forceSync: true
+        });
 
-      this.add(opts.repositoryHome, {
-        forceSync: true,
-        file: '.gitignore'
-      });
+        this.add(opts.repositoryHome, {
+          forceSync: true,
+          file: '.gitignore'
+        });
 
-      this.commit(opts.repositoryHome, {
-        forceSync: true,
-        file: '.gitignore',
-        message: '.gitignore'
-      });
+        this.commit(opts.repositoryHome, {
+          forceSync: true,
+          file: '.gitignore',
+          message: '.gitignore'
+        });
+      } catch (error) {
+        err = error.message;
+      }
 
       if (opts.callback && typeof opts.callback == 'function') {
         opts.callback.call(this, err);
