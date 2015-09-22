@@ -92,6 +92,8 @@ try {
     // Set the application messages globally
     $rootScope.MSGS = MSGS;
 
+    $rootScope.showRepositoryMenu = true;
+
     return {
 
       addRepository: function (repositoryPath, callback) {

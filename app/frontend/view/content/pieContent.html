@@ -1,6 +1,6 @@
 <section id="content" ng-click="appCtrl.hideHeaderMenus()">
 
-  <section id="left">
+  <section id="left" style="width: {{ showRepositoryMenu ? '17%' : '0%' }}">
     <div class="empty-msg" ng-show="appCtrl.repositories.isEmpty">
       <span class="mega-octicon octicon-rocket"></span>
       {{ MSGS["Start adding or clonning some awesome things"] }}! <3

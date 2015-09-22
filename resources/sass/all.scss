@@ -392,6 +392,8 @@ html {
 
   		#content {
   	    width:100%;
+        display: flex;
+        flex-direction: row;
   	    overflow: auto;
   	    background-color: #FFF;
   	    color: #666;
@@ -408,6 +410,7 @@ html {
   			#left {
   				@extend .column;
   		    width: 17%;
+          transition: width 0.2s ease;
   		    background-color: #F7F7F7;
   				border-right: $border-color 1px solid;
           box-shadow: inset 0 1px 10px rgba(0, 0, 0, 0.14);
@@ -620,7 +623,7 @@ html {
 
   		  #right {
   				@extend .column;
-  		    width: 53%;
+  		    flex: 1;
   				border-left: $border-color 1px solid;
           color: #111;
 
