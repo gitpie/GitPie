@@ -300,6 +300,8 @@ html {
   		background-color: $header-background-color;
   		color: $header-font-color;
   		-webkit-app-region: drag;
+      display: flex;
+      flex-direction: row;
 
       nav {
         float: left;
@@ -352,6 +354,7 @@ html {
 
   		#left {
   			width: 17%;
+        min-width: 110px;
   			float: left;
   		}
 
