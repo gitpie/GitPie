@@ -223,7 +223,7 @@ html, html body {
         font-family: 'arial', 'sans-serif'; }
     html body .notify-dialog {
       background-color: #404040;
-      z-index: 10;
+      z-index: 1000;
       color: #FFF;
       border-radius: 3px;
       padding: 15px;
