@@ -11,6 +11,12 @@ var
   // Git class that perfoms git commands
   GIT = require('./app/core/git'),
 
+  // Updater module for GitPie
+  UpdaterModule = require('./app/core/updater'),
+
+  // Updater instance
+  updater = new UpdaterModule(),
+
   // Locale language
   LANG = window.navigator.userLanguage || window.navigator.language,
 
@@ -32,6 +38,19 @@ try {
 } catch (err){
   MSGS = require('./language/en.json');
 }
+
+// Open devTools for debug
+window.addEventListener('keydown', function (e) {
+
+  if (e.shiftKey && e.ctrlKey && e.keyCode == 68) {
+
+      if (WIN.isDevToolsOpen()) {
+        WIN.closeDevTools();
+      } else {
+        WIN.showDevTools();
+      }
+  }
+});
 
 /* AngularJS app init */
 (function () {
@@ -91,6 +110,25 @@ try {
 
     // Set the application messages globally
     $rootScope.MSGS = MSGS;
+
+    /* Verify if there's a available update */
+    updater.on('availableUpdate', function (remotePackJson) {
+      console.log('[INFO] There is a available update. New version '.concat(remotePackJson.version));
+
+      updater.downloadFiles();
+    });
+
+    updater.on('downloadingfiles', function () {
+      console.log('[INFO] Downloading files...');
+    });
+
+    updater.on('error', function (err) {
+      console.error('[ERROR] Error updating GitPie. Error: ', err);
+
+      alert('Error updating GitPie. Error: ' + err.message);
+    });
+
+    updater.checkAvailableUpdate();
 
     return {
 

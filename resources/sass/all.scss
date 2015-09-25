@@ -200,11 +200,21 @@ html {
       bottom: 10px;
       transition: all 0.2s linear;
 
+      .link {
+        font-weight: bold;
+        cursor: pointer;
+
+        &:hover {
+          text-decoration: underline;
+        }
+      }
+
       .icon {
+        flex: 1 1 auto;
+        margin-right: 10px;
 
         .loading-container {
           display: inline-block;
-          margin-right: 10px;
 
           .loading-content {
             background-color: rgba(255, 255, 255, 0.15);
@@ -256,7 +266,7 @@ html {
       }
 
       .content {
-
+        flex: 1 1 auto;
       }
     }
 
@@ -752,6 +762,11 @@ html {
                   .label-deleted {
                     @extend .label;
                     background-color: #D7431B;
+                  }
+
+                  .label-renamed {
+                    @extend .label;
+                    background-color: #773F22;
                   }
 
                   .label-binary {

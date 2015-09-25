@@ -175,4 +175,14 @@
 
   </section>
 
+  <section class="notify-dialog" style="bottom: inherit; right: 10px; top: 10px; margin-top: {{ appCtrl.updateNotify.show ? '' : '-100px' }}">
+    <section class="icon">
+      <span class="mega-octicon octicon-cloud-download"></span>
+    </section>
+
+    <section class="content">
+      UPDATE INSTALLED. CLICK <span class="link" ng-click="appCtrl.performUpdate()">HERE</span> TO APPLY THE CHANGES
+    </section>
+  </section>
+
 </section>

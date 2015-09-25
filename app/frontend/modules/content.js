@@ -1,6 +1,7 @@
 (function () {
   var CodeProcessor = require('./app/core/code-processor'),
-    cp = new CodeProcessor();
+    cp = new CodeProcessor(),
+    path = require('path');
 
   angular.module('content', [])
 
@@ -14,6 +15,10 @@
           selectedCommit = {},
           selectedCommitAncestor = null,
           MSGS = $scope.MSGS;
+
+        this.updateNotify = {
+          show: false
+        };
 
         this.loadingHistory = false;
 
@@ -178,11 +183,11 @@
                   $scope.$apply();
                 }
               });
-            } else {
+            } else if (change.type != 'DELETED') {
 
               GIT.getUnsyncFileDiff({
                 path: selectedRepository.path,
-                file: change.name
+                file: change.path
               },
               function (err, diff) {
 
@@ -219,7 +224,7 @@
 
                   GIT.add(selectedRepository.path, {
                     forceSync: true,
-                    file: file.name
+                    file: file.path
                   });
 
                   hasAddedFiles = true;
@@ -283,7 +288,7 @@
             this.commitChanges = [];
 
             files.forEach(function (item) {
-              item.name = item.path;
+              item.name = item.displayPath;
               item.isUnsyc = true;
               item.checked = true;
 
@@ -329,7 +334,7 @@
                   '<li ng-click="appCtrl.assumeUnchanged(\'', change.path,'\', \'', index,'\')">',
                     MSGS['Assume unchanged'],
                   '</li>',
-                  '<li ng-click="appCtrl.openItemInFolder(\'', selectedRepository.path + '/' + change.path + '\')">',
+                  '<li ng-click="appCtrl.openItemInFolder(\'', path.join(selectedRepository.path, change.path.trim()), '\')">',
                     MSGS['Show file in folder'],
                   '</li>',
                 '</ul>',
@@ -354,8 +359,8 @@
             case 'NEW':
                 return  'label-new';
 
-            default:
-              return '';
+            case 'RENAMED':
+              return 'label-renamed';
           }
         };
 
@@ -456,6 +461,19 @@
               this.discartChanges(file.path, index, (file.type == 'NEW') );
             }
           }.bind(this));
+        };
+
+        /* Show notification if a update was installed */
+
+        updater.on('readytoinstall', function () {
+          console.log('[INFO] A update is ready to be installed');
+
+          this.updateNotify.show = true;
+          $scope.$apply();
+        }.bind(this));
+
+        this.performUpdate = function () {
+          updater.performUpdate(GUI, WIN);
         };
       },
 

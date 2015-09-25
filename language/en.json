@@ -21,6 +21,7 @@
   "NEW": "NEW",
   "DELETED": "DELETED",
   "BINARY": "BINARY",
+  "RENAMED": "RENAMED",
   "Discart": "Discart",
   "Counting...": "Counting...",
   "Show file in folder": "Show file in folder",

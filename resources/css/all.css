@@ -120,7 +120,7 @@ html, html body {
             color: #000;
             cursor: pointer;
             background-color: #FFF; }
-      html body .context-menu .label, html body .context-menu #wrapper #content #right nav ul li header .label-modified, html body #wrapper #content #right nav ul li header .context-menu .label-modified, html body .context-menu #wrapper #content #right nav ul li header .label-new, html body #wrapper #content #right nav ul li header .context-menu .label-new, html body .context-menu #wrapper #content #right nav ul li header .label-deleted, html body #wrapper #content #right nav ul li header .context-menu .label-deleted, html body .context-menu #wrapper #content #right nav ul li header .label-binary, html body #wrapper #content #right nav ul li header .context-menu .label-binary {
+      html body .context-menu .label, html body .context-menu #wrapper #content #right nav ul li header .label-modified, html body #wrapper #content #right nav ul li header .context-menu .label-modified, html body .context-menu #wrapper #content #right nav ul li header .label-new, html body #wrapper #content #right nav ul li header .context-menu .label-new, html body .context-menu #wrapper #content #right nav ul li header .label-deleted, html body #wrapper #content #right nav ul li header .context-menu .label-deleted, html body .context-menu #wrapper #content #right nav ul li header .label-renamed, html body #wrapper #content #right nav ul li header .context-menu .label-renamed, html body .context-menu #wrapper #content #right nav ul li header .label-binary, html body #wrapper #content #right nav ul li header .context-menu .label-binary {
         padding: 20px 0;
         display: block;
         color: #666;
@@ -211,27 +211,34 @@ html, html body {
       margin: 20px;
       bottom: 10px;
       transition: all 0.2s linear; }
-      html body .notify-dialog .icon .loading-container {
-        display: inline-block;
+      html body .notify-dialog .link {
+        font-weight: bold;
+        cursor: pointer; }
+        html body .notify-dialog .link:hover {
+          text-decoration: underline; }
+      html body .notify-dialog .icon {
+        flex: 1 1 auto;
         margin-right: 10px; }
-        html body .notify-dialog .icon .loading-container .loading-content {
-          background-color: rgba(255, 255, 255, 0.15);
-          display: inline-flex;
-          border-radius: 50%;
-          padding: 6px;
-          box-shadow: 0 1px 5px rgba(51, 51, 51, 0.7); }
+        html body .notify-dialog .icon .loading-container {
+          display: inline-block; }
+          html body .notify-dialog .icon .loading-container .loading-content {
+            background-color: rgba(255, 255, 255, 0.15);
+            display: inline-flex;
+            border-radius: 50%;
+            padding: 6px;
+            box-shadow: 0 1px 5px rgba(51, 51, 51, 0.7); }
 @-webkit-keyframes rotator {
   0% {
     -webkit-transform: rotate(0deg); }
   100% {
     -webkit-transform: rotate(270deg); } }
-          html body .notify-dialog .icon .loading-container .loading-content .spinner {
-            -webkit-animation: rotator 1.4s linear infinite; }
-          html body .notify-dialog .icon .loading-container .loading-content .path {
-            stroke-dasharray: 130;
-            stroke-dashoffset: 0;
-            transform-origin: center;
-            -webkit-animation: dash 1.4s ease-in-out infinite, colors 5.6s ease-in-out infinite; }
+            html body .notify-dialog .icon .loading-container .loading-content .spinner {
+              -webkit-animation: rotator 1.4s linear infinite; }
+            html body .notify-dialog .icon .loading-container .loading-content .path {
+              stroke-dasharray: 130;
+              stroke-dashoffset: 0;
+              transform-origin: center;
+              -webkit-animation: dash 1.4s ease-in-out infinite, colors 5.6s ease-in-out infinite; }
 @-webkit-keyframes colors {
   0% {
     stroke: #4285F4; }
@@ -252,6 +259,8 @@ html, html body {
   100% {
     stroke-dashoffset: 130;
     -webkit-transform: rotate(450deg); } }
+      html body .notify-dialog .content {
+        flex: 1 1 auto; }
     html body #header {
       width: 100%;
       height: 47px;
@@ -303,7 +312,7 @@ html, html body {
                   color: #000;
                   cursor: pointer;
                   background-color: #FFF; }
-            html body #header nav ul .menu .label, html body #header #wrapper #content #right nav ul .menu li header .label-modified, html body #wrapper #content #right #header nav ul .menu li header .label-modified, html body #header #wrapper #content #right nav ul li header .menu .label-modified, html body #wrapper #content #right #header nav ul li header .menu .label-modified, html body #header #wrapper #content #right nav ul .menu li header .label-new, html body #wrapper #content #right #header nav ul .menu li header .label-new, html body #header #wrapper #content #right nav ul li header .menu .label-new, html body #wrapper #content #right #header nav ul li header .menu .label-new, html body #header #wrapper #content #right nav ul .menu li header .label-deleted, html body #wrapper #content #right #header nav ul .menu li header .label-deleted, html body #header #wrapper #content #right nav ul li header .menu .label-deleted, html body #wrapper #content #right #header nav ul li header .menu .label-deleted, html body #header #wrapper #content #right nav ul .menu li header .label-binary, html body #wrapper #content #right #header nav ul .menu li header .label-binary, html body #header #wrapper #content #right nav ul li header .menu .label-binary, html body #wrapper #content #right #header nav ul li header .menu .label-binary {
+            html body #header nav ul .menu .label, html body #header #wrapper #content #right nav ul .menu li header .label-modified, html body #wrapper #content #right #header nav ul .menu li header .label-modified, html body #header #wrapper #content #right nav ul li header .menu .label-modified, html body #wrapper #content #right #header nav ul li header .menu .label-modified, html body #header #wrapper #content #right nav ul .menu li header .label-new, html body #wrapper #content #right #header nav ul .menu li header .label-new, html body #header #wrapper #content #right nav ul li header .menu .label-new, html body #wrapper #content #right #header nav ul li header .menu .label-new, html body #header #wrapper #content #right nav ul .menu li header .label-deleted, html body #wrapper #content #right #header nav ul .menu li header .label-deleted, html body #header #wrapper #content #right nav ul li header .menu .label-deleted, html body #wrapper #content #right #header nav ul li header .menu .label-deleted, html body #header #wrapper #content #right nav ul .menu li header .label-renamed, html body #wrapper #content #right #header nav ul .menu li header .label-renamed, html body #header #wrapper #content #right nav ul li header .menu .label-renamed, html body #wrapper #content #right #header nav ul li header .menu .label-renamed, html body #header #wrapper #content #right nav ul .menu li header .label-binary, html body #wrapper #content #right #header nav ul .menu li header .label-binary, html body #header #wrapper #content #right nav ul li header .menu .label-binary, html body #wrapper #content #right #header nav ul li header .menu .label-binary {
               padding: 20px 0;
               display: block;
               color: #666;
@@ -400,7 +409,7 @@ html, html body {
               html body #wrapper #content #left nav ul li .octicon, html body #wrapper #content #left nav ul li .fa {
                 margin-right: 8px;
                 font-size: 1.5em; }
-              html body #wrapper #content #left nav ul li .label, html body #wrapper #content #left #right nav ul li header .label-modified, html body #wrapper #content #right #left nav ul li header .label-modified, html body #wrapper #content #left #right nav ul li header .label-new, html body #wrapper #content #right #left nav ul li header .label-new, html body #wrapper #content #left #right nav ul li header .label-deleted, html body #wrapper #content #right #left nav ul li header .label-deleted, html body #wrapper #content #left #right nav ul li header .label-binary, html body #wrapper #content #right #left nav ul li header .label-binary {
+              html body #wrapper #content #left nav ul li .label, html body #wrapper #content #left #right nav ul li header .label-modified, html body #wrapper #content #right #left nav ul li header .label-modified, html body #wrapper #content #left #right nav ul li header .label-new, html body #wrapper #content #right #left nav ul li header .label-new, html body #wrapper #content #left #right nav ul li header .label-deleted, html body #wrapper #content #right #left nav ul li header .label-deleted, html body #wrapper #content #left #right nav ul li header .label-renamed, html body #wrapper #content #right #left nav ul li header .label-renamed, html body #wrapper #content #left #right nav ul li header .label-binary, html body #wrapper #content #right #left nav ul li header .label-binary {
                 padding: 10px;
                 color: #959595;
                 font-weight: bold; }
@@ -636,7 +645,7 @@ html, html body {
                     font-weight: bold;
                     margin: 0 3px;
                     display: inline-block; }
-                html body #wrapper #content #right nav ul li header .label, html body #wrapper #content #right nav ul li header .label-modified, html body #wrapper #content #right nav ul li header .label-new, html body #wrapper #content #right nav ul li header .label-deleted, html body #wrapper #content #right nav ul li header .label-binary {
+                html body #wrapper #content #right nav ul li header .label, html body #wrapper #content #right nav ul li header .label-modified, html body #wrapper #content #right nav ul li header .label-new, html body #wrapper #content #right nav ul li header .label-deleted, html body #wrapper #content #right nav ul li header .label-renamed, html body #wrapper #content #right nav ul li header .label-binary {
                   padding: 3px 10px;
                   border-radius: 2px;
                   font-weight: bold;
@@ -647,6 +656,8 @@ html, html body {
                   background-color: #6CC644; }
                 html body #wrapper #content #right nav ul li header .label-deleted {
                   background-color: #D7431B; }
+                html body #wrapper #content #right nav ul li header .label-renamed {
+                  background-color: #773F22; }
                 html body #wrapper #content #right nav ul li header .label-binary {
                   color: #986B45;
                   display: inline-block;
