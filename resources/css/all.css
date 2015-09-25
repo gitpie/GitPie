@@ -1,6 +1,7 @@
 @import url(../fonts/octicons/octicons.css);
 @import url(../fonts/Consolas/consolas.css);
 @import url(../fonts/Roboto/roboto.css);
+@import url(../fonts/FontAwesome/css/font-awesome.min.css);
 /* Global styles */
 * {
   outline: none;
