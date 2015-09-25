@@ -16,7 +16,7 @@ var request = require('request'),
 
   child_process = require("child_process"),
 
-  localPackJson = require('../../package.json'),
+  localPackJson = require('../../../package.json'),
 
   UPDATE_CONFIG = require('./updateConfig'),
 
