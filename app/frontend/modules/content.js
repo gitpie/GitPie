@@ -224,7 +224,7 @@
 
                   GIT.add(selectedRepository.path, {
                     forceSync: true,
-                    file: file.name
+                    file: file.path
                   });
 
                   hasAddedFiles = true;
