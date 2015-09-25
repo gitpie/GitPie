@@ -56,6 +56,7 @@
             this.commitChanges = [];
             this.commitHistory = [];
             selectedCommit = {};
+            CommomService.selectedCommit = null;
 
             GIT.getCommitHistory({
               path: repository.path
@@ -92,6 +93,7 @@
             };
 
           selectedCommitAncestor = ancestorCommit;
+          CommomService.selectedCommit = commit;
 
           this.loadingChanges = true;
 
@@ -321,6 +323,25 @@
           body.append(contextMenu);
         };
 
+        this.openHistoryContextualMenu = function (event, history, index) {
+          var body = angular.element(document.body),
+            contextMenu = $compile([
+
+              '<div class="context-menu" style="top: ' + event.y + 'px;  left: ' + event.x +  'px">',
+                '<ul>',
+                  '<li ng-click="appCtrl.openItemInFolder(\'', path.join(selectedRepository.path, history.name.trim()), '\')">',
+                    MSGS['Show in folder'],
+                  '</li>',
+                '</ul>',
+              '</div>'
+
+            ].join(''))($scope);
+
+          CommomService.closeAnyContextMenu();
+
+          body.append(contextMenu);
+        };
+
         this.openChangesContextualMenu = function (event, change, index) {
           var body = angular.element(document.body),
             isUnknowChange = change.type == 'NEW',
@@ -335,7 +356,7 @@
                     MSGS['Assume unchanged'],
                   '</li>',
                   '<li ng-click="appCtrl.openItemInFolder(\'', path.join(selectedRepository.path, change.path.trim()), '\')">',
-                    MSGS['Show file in folder'],
+                    MSGS['Show in folder'],
                   '</li>',
                 '</ul>',
               '</div>'
@@ -364,28 +385,38 @@
           }
         };
 
-        this.discartChanges = function (filePath, index, isUnknow) {
-          var me = this;
+        this.discartChanges = function (filePath, index, isUnknow, forceSync) {
 
-          GIT.discartChangesInFile(selectedRepository.path, {
+          if (forceSync) {
 
-            file: filePath,
+            GIT.discartChangesInFile(selectedRepository.path, {
+              file: filePath,
+              isUnknow: isUnknow,
+              forceSync: forceSync
+            });
 
-            isUnknow: isUnknow,
+            this.commitChanges.splice(index, 1);
+          } else {
 
-            callback: function (err) {
+            GIT.discartChangesInFile(selectedRepository.path, {
 
-              if (err) {
-                alert(err);
-              } else {
-                me.commitChanges.splice(index, 1);
-                $scope.$apply();
-              }
+              file: filePath,
 
-              CommomService.closeAnyContextMenu();
+              isUnknow: isUnknow,
 
-            }
-          });
+              callback: function (err) {
+
+                if (err) {
+                  alert(err);
+                } else {
+                  this.commitChanges.splice(index, 1);
+                  $scope.$apply();
+                }
+
+                CommomService.closeAnyContextMenu();
+              }.bind(this)
+            });
+          }
         };
 
         this.openItemInFolder = function (path) {
@@ -405,7 +436,6 @@
         };
 
         this.assumeUnchanged = function (filePath, index) {
-          var me = this;
 
           GIT.assumeUnchanged(selectedRepository.path, {
             file: filePath,
@@ -415,12 +445,12 @@
               if (err) {
                 alert(err);
               } else {
-                me.commitChanges.splice(index, 1);
+                this.commitChanges.splice(index, 1);
                 $scope.$apply();
               }
 
               CommomService.closeAnyContextMenu();
-            }
+            }.bind(this)
           });
         };
 
@@ -455,12 +485,18 @@
 
         this.discartAllSelected = function (fileList) {
 
-          fileList.forEach(function (file, index) {
+          for (var i = 0; i < fileList.length; i++) {
 
-            if (file.checked) {
-              this.discartChanges(file.path, index, (file.type == 'NEW') );
+            if (fileList[i].checked) {
+              this.discartChanges(fileList[i].path, i, (fileList[i].type == 'NEW'), true);
+
+              if (this.commitChanges.length === 0) {
+                i = 0;
+              } else {
+                i--;
+              }
             }
-          }.bind(this));
+          }
         };
 
         /* Show notification if a update was installed */

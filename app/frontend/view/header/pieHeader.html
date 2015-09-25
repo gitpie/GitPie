@@ -1,9 +1,9 @@
 <header id="header">
-  <section id="left">
+  <section id="left" style="width: {{ showRepositoryMenu ? '17%' : '36%' }}">
 
     <nav>
       <ul>
-        <li ng-click="headerCtrl.toggleMenu(1)"><span class="octicon octicon-plus"></span></li>
+        <li ng-click="headerCtrl.toggleMenu(1)" tooltip="{{ MSGS['Add, Clone or Create a repository'] }}"><span class="octicon octicon-plus"></span></li>
         <div class="menu" style="width: 300px" ng-show="headerCtrl.showAddMenu">
 
             <tabs>
@@ -30,9 +30,32 @@
                   ><span class="octicon octicon-repo-clone"></span> {{ MSGS.CLONE }}</button>
                 </footer>
               </pane>
+              <pane pane-title="{{ MSGS.CREATE }}">
+
+                <section class="content">
+
+                  <input type="text" style="width: 100%; box-sizing: border-box" ng-model="repositoryName"
+                    placeholder="{{ MSGS['Repository name'] }}" />
+
+                  <span class="label" ng-show="repositoryName.length">
+                    {{ MSGS['Your repository will be created as'] }} <strong>"{{ headerCtrl.treatBranch(repositoryName) }}"</strong></span>
+
+                  <input type="text" style="width: 200px" ng-model="repositoryHome"
+                    placeholder="{{ MSGS['Folder'] }}" />
+                  <input type="file" ng-model="repositoryHome" ng-input-change nwdirectory />
+
+                </section>
+                <footer><button class="featured"
+                  ng-click="headerCtrl.createRepository(headerCtrl.treatBranch(repositoryName), repositoryHome)"
+                  ><span class="octicon octicon-repo"></span> {{ MSGS.CREATE }}</button>
+                </footer>
+
+              </pane>
             </tabs>
 
         </div>
+        <li tooltip="{{ MSGS['Hide menu'] }}" ng-show="showRepositoryMenu" ng-click="showRepositoryMenu = false"><i class="fa fa-toggle-on"></i></li>
+        <li tooltip="{{ MSGS['Show menu'] }}" ng-hide="showRepositoryMenu" ng-click="showRepositoryMenu = true"><i class="fa fa-toggle-off"></i></li>
       </ul>
     </nav>
 
@@ -75,15 +98,34 @@
 
       <nav>
         <ul>
-          <li ng-click="headerCtrl.toggleMenu(3)"><span class="octicon octicon-gear"></span></li>
-          <div class="menu" ng-show="headerCtrl.showSettingsMenu"></div>
-          <li ng-click="headerCtrl.sync()"><span ng-class="{ rotate:headerCtrl.loading }" class="octicon octicon-sync"></span> {{ MSGS.Sync }}
+          <li ng-show="headerCtrl.showResetButton()"
+            ng-click="headerCtrl.resetBranchToCommit()"
+            tooltip="{{ MSGS['Reset branch {branch} to selected commit'].replace('{branch}', headerCtrl.currentBranch) }}">
+            <span class="octicon octicon-mail-reply"></span>
+          </li>
+
+          <li ng-click="headerCtrl.sync()" ng-show="headerCtrl.currentBranch">
+
+            <span ng-show="headerCtrl.isRemoteBranch(headerCtrl.currentBranch)">
+              <span ng-class="{ rotate:headerCtrl.loading }" class="octicon octicon-sync"></span> {{ MSGS.Sync }}
+            </span>
+
+            <span ng-show="!headerCtrl.isRemoteBranch(headerCtrl.currentBranch)">
+              <span ng-class="{ rotate:headerCtrl.loading }" ng-show="headerCtrl.loading"
+                style="margin-right: 10px" class="octicon octicon-sync"></span>
+              <span class="octicon octicon-repo-push"></span> {{ MSGS['Publish branch'] }}
+            </span>
 
               <span ng-show="headerCtrl.syncStatus.ahead" class="sync-status"><span class="octicon octicon-arrow-up"></span> {{ headerCtrl.syncStatus.ahead }}</span>
               <span ng-show="headerCtrl.syncStatus.behind" class="sync-status"><span class="octicon octicon-arrow-down"></span> {{ headerCtrl.syncStatus.behind }}</span>
 
           </li>
-          <li><span class="octicon octicon-three-bars"></span></li>
+
+          <ul>
+            <li ng-click="headerCtrl.toggleMenu(3)" tooltip="{{ MSGS['Settings'] }}"><span class="octicon octicon-gear"></span></li>
+            <div class="menu" ng-show="headerCtrl.showSettingsMenu"></div>
+          </ul>
+          <li ng-hide="showRepositoryMenu"><strong>{{ headerCtrl.selectedRepository.name }}</strong></li>
         </ul>
       </nav>
 
@@ -99,7 +141,17 @@
   </section>
 
   <section class="content">
-    CLONING REPOSITORY FROM <strong>{{ headerCtrl.cloneNotify.cloneURL }}</strong> into
+    {{ MSGS['CLONING REPOSITORY FROM'] }} <strong>{{ headerCtrl.cloneNotify.cloneURL }}</strong> {{ MSGS.INTO }}
     <strong>{{ headerCtrl.cloneNotify.destinyFolder }}</strong>
+  </section>
+</section>
+
+<section class="notify-dialog" style="margin-bottom: {{ headerCtrl.createNotify.show ? '' : '-100px' }}">
+  <section class="icon">
+    <loading-icon></loading-icon>
+  </section>
+
+  <section class="content">
+    {{ MSGS['CREATING REPOSITORY IN'] }} <strong>{{ headerCtrl.createNotify.repositoryHome }}</strong>
   </section>
 </section>

@@ -11,22 +11,22 @@
       templateUrl: 'app/frontend/view/header/pieHeader.html',
 
       controller: function ($scope, $element, CommomService) {
-        var selectedRepository = null,
-          MSGS = $scope.MSGS,
+        var MSGS = $scope.MSGS;
 
-          // Verify if a branch is in remoteBranchs array
-          isRemoteBranch = function (branch) {
+        // Verify if a branch is in remoteBranchs array
+        this.isRemoteBranch = function (branch) {
 
-            for (var i = 0; i < this.remoteBranchs.length; i++) {
+          for (var i = 0; i < this.remoteBranchs.length; i++) {
 
-              if (this.remoteBranchs[i].trim() == branch.trim()) {
-                return true;
-              }
+            if (this.remoteBranchs[i].trim() == branch.trim()) {
+              return true;
             }
+          }
 
-            return false;
-          }.bind(this);
+          return false;
+        };
 
+        this.selectedRepository = null;
         this.remoteBranchs = [];
         this.tags = [];
         this.syncStatus = {};
@@ -41,6 +41,11 @@
           show: false,
           cloneURL: null,
           destinyFolder: null
+        };
+
+        this.createNotify = {
+          show: false,
+          repositoryHome: null
         };
 
         this.toggleMenu = function (menuIndex) {
@@ -71,7 +76,7 @@
         $scope.$on('repositorychanged', function (event, repository) {
           this.loading = true;
 
-          selectedRepository = repository;
+          this.selectedRepository = repository;
 
           GIT.getCurrentBranch(repository.path, function (err, currentBranch, remoteBranchs) {
             this.currentBranch = currentBranch;
@@ -80,33 +85,36 @@
             $scope.$apply();
           }.bind(this));
 
-          GIT.getTag(selectedRepository.path, function (err, tags) {
+          GIT.getTag(this.selectedRepository.path, function (err, tags) {
             this.tags = tags;
 
             $scope.$apply();
           }.bind(this));
 
-          GIT.fetch(selectedRepository.path, function (err) {
-
+          GIT.fetch(this.selectedRepository.path, function (err) {
             // Ignored error for while to not block status for private repositories
 
             GIT.getStatus(repository.path, function (err, syncStatus, files) {
               this.syncStatus = syncStatus;
               this.loading = false;
 
-              $scope.$broadcast('unsynChanges', files);
-
               $scope.$apply();
             }.bind(this));
 
           }.bind(this));
 
+          GIT.getStatus(repository.path, function (err, syncStatus, files) {
+            $scope.$broadcast('unsynChanges', files);
+          }.bind(this));
+
         }.bind(this));
 
         this.switchBranch = function (branch, forceCreateIfNotExists) {
+          this.hideAllMenu();
+          this.loading = true;
 
           GIT.switchBranch({
-            path: selectedRepository.path,
+            path: this.selectedRepository.path,
             branch: branch,
             forceCreateIfNotExists: forceCreateIfNotExists
           }, function (err) {
@@ -116,28 +124,27 @@
             } else {
               this.currentBranch = branch;
 
-              $scope.$broadcast('changedbranch', selectedRepository);
-
-              this.hideAllMenu();
-
-              $scope.$apply();
+              $scope.$broadcast('changedbranch', this.selectedRepository);
             }
+
+            this.loading = false;
+            $scope.$apply();
           }.bind(this));
         };
 
         this.sync = function () {
 
-          if (selectedRepository && !this.loading) {
+          if (this.selectedRepository && !this.loading) {
             this.loading = true;
 
-            GIT.fetch(selectedRepository.path, function (err) {
+            GIT.fetch(this.selectedRepository.path, function (err) {
 
               // Ignored error for while to not block status for private repositories
 
               GIT.sync({
-                path: selectedRepository.path,
+                path: this.selectedRepository.path,
                 branch: this.currentBranch,
-                setUpstream: !isRemoteBranch(this.currentBranch),
+                setUpstream: !this.isRemoteBranch(this.currentBranch),
                 push: this.syncStatus.ahead
               }, function (err) {
 
@@ -146,7 +153,7 @@
                 }
 
                 // Emit changedbranch event even on error case as a workaround to git push command fail
-                $scope.$broadcast('changedbranch', selectedRepository);
+                $scope.$broadcast('changedbranch', this.selectedRepository);
                 this.loading = false;
                 $scope.$apply();
               }.bind(this));
@@ -233,6 +240,72 @@
               alert(MSGS['The path \'{path}\' is not a folder. Pick a valid directory to clone projects.'].replace('{path}', destiny));
             }
 
+          }
+        };
+
+        this.showResetButton = function () {
+          return CommomService.selectedCommit;
+        };
+
+        this.resetBranchToCommit = function () {
+
+          GIT.reset(this.selectedRepository.path, {
+            hash: CommomService.selectedCommit.hash,
+
+            callback: function (err) {
+
+              if (err) {
+                alert(err);
+              } else {
+                $scope.$broadcast('changedbranch', this.selectedRepository);
+              }
+
+              CommomService.closeAnyContextMenu();
+            }.bind(this)
+          });
+        };
+
+        this.createRepository = function (repositoryName, repositoryHome) {
+
+          if (repositoryName && repositoryHome) {
+            var me = this,
+              destinyFolder;
+
+            try {
+              destinyFolder = fs.lstatSync(repositoryHome);
+              me.createNotify.repositoryHome = repositoryHome;
+              me.createNotify.show = true;
+
+              CommomService.hideHeaderMenu();
+
+              GIT.createRepository({
+                repositoryName: repositoryName,
+                repositoryHome: repositoryHome,
+
+                callback: function (err) {
+
+                  if (err) {
+                    alert(err);
+                  } else {
+                    var repository = CommomService.addNewGitRepository({
+                      path: repositoryHome,
+                      repositoryName: repositoryName
+                    });
+
+                    if (repository) {
+                      $scope.$broadcast('changedbranch', repository);
+                      CommomService.hideHeaderMenu();
+                    }
+                  }
+
+                  me.createNotify.show = false;
+                  $scope.$apply();
+                }
+              });
+
+            } catch (err) {
+              alert(MSGS['The path \'{path}\' is not a folder. Pick a valid directory to create projects.'].replace('{path}', repositoryHome));
+            }
           }
         };
       },

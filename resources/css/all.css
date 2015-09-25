@@ -5,6 +5,21 @@
 * {
   outline: none;
   /* Scrollbar style */ }
+  * [tooltip]:hover:after {
+    content: attr(tooltip);
+    padding: 7px;
+    background-color: #333;
+    color: #F7F7F7;
+    font-size: 0.85em;
+    position: absolute;
+    left: 1px;
+    top: 100%;
+    margin-top: 2px;
+    white-space: nowrap;
+    z-index: 200000;
+    border-radius: 2px;
+    overflow: hidden;
+    -webkit-animation: showTooltip 1s linear; }
   * .rotate {
     -webkit-animation: spin 2s linear infinite; }
   *::-webkit-scrollbar-track {
@@ -74,6 +89,14 @@
   100% {
     -webkit-transform: rotate(360deg);
     transform: rotate(360deg); } }
+/* Tooltip animation */
+@-webkit-keyframes showTooltip {
+  0% {
+    opacity: 0; }
+  90% {
+    opacity: 0; }
+  100% {
+    opacity: 1; } }
 /* Mask class for loadings */
 .mask {
   -webkit-filter: blur(2px);
@@ -267,8 +290,9 @@ html, html body {
       z-index: 9;
       background-color: #636e73;
       color: #CCCCCC;
-      overflow: hidden;
-      -webkit-app-region: drag; }
+      -webkit-app-region: drag;
+      display: flex;
+      flex-direction: row; }
       html body #header nav {
         float: left; }
         html body #header nav ul {
@@ -282,6 +306,8 @@ html, html body {
             display: inline-block;
             cursor: pointer;
             text-shadow: 0 1px 2px #49575d; }
+            html body #header nav ul li:hover {
+              position: relative; }
             html body #header nav ul li .sync-status {
               margin-left: 10px; }
           html body #header nav ul .menu {
@@ -363,6 +389,7 @@ html, html body {
               top: -5px; }
       html body #header #left {
         width: 17%;
+        min-width: 110px;
         float: left; }
       html body #header #right {
         width: 83%;
@@ -384,6 +411,8 @@ html, html body {
       margin-top: -47px; }
       html body #wrapper #content {
         width: 100%;
+        display: flex;
+        flex-direction: row;
         overflow: auto;
         background-color: #FFF;
         color: #666;
@@ -395,6 +424,7 @@ html, html body {
           box-sizing: border-box; }
         html body #wrapper #content #left {
           width: 17%;
+          transition: width 0.2s ease;
           background-color: #F7F7F7;
           border-right: #DDD 1px solid;
           box-shadow: inset 0 1px 10px rgba(0, 0, 0, 0.14); }
@@ -419,7 +449,7 @@ html, html body {
                   background-color: #EEE;
                   color: #45413A; }
             html body #wrapper #content #left nav ul li.selected {
-              background-color: #DBDEE0;
+              background-color: #DBDEE0 !important;
               color: #444; }
           html body #wrapper #content #left .empty-msg {
             margin: auto;
@@ -527,7 +557,7 @@ html, html body {
                 box-sizing: border-box;
                 margin-bottom: 20px; }
         html body #wrapper #content #right {
-          width: 53%;
+          flex: 1;
           border-left: #DDD 1px solid;
           color: #111; }
           html body #wrapper #content #right .tabPanel {
@@ -594,6 +624,8 @@ html, html body {
               box-sizing: border-box;
               cursor: default;
               word-wrap: break-word; }
+              html body #wrapper #content #right nav ul li:hover {
+                position: relative; }
               html body #wrapper #content #right nav ul li header {
                 padding: 10px;
                 display: block; }

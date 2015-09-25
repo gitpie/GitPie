@@ -8,6 +8,23 @@
 * {
   outline: none;
 
+  [tooltip]:hover:after{
+    content: attr(tooltip);
+    padding: 7px;
+    background-color: #333;
+    color: #F7F7F7;
+    font-size: 0.85em;
+    position: absolute;
+    left: 1px;
+    top: 100%;
+    margin-top: 2px;
+    white-space: nowrap;
+    z-index: 200000;
+    border-radius: 2px;
+    overflow: hidden;
+    -webkit-animation: showTooltip 1s linear;
+  }
+
   .rotate {
 		-webkit-animation: spin 2s linear infinite;
 	}
@@ -101,6 +118,21 @@
 @-moz-keyframes spin { 100% { -moz-transform: rotate(360deg); } }
 @-webkit-keyframes spin { 100% { -webkit-transform: rotate(360deg); } }
 @keyframes spin { 100% { -webkit-transform: rotate(360deg); transform:rotate(360deg); } }
+
+/* Tooltip animation */
+@-webkit-keyframes showTooltip {
+  0% {
+    opacity: 0;
+  }
+
+  90% {
+    opacity: 0;
+  }
+
+  100% {
+    opacity: 1;
+  }
+};
 
 /* Mask class for loadings */
 .mask {
@@ -277,8 +309,9 @@ html {
       z-index: 9;
   		background-color: $header-background-color;
   		color: $header-font-color;
-      overflow: hidden;
   		-webkit-app-region: drag;
+      display: flex;
+      flex-direction: row;
 
       nav {
         float: left;
@@ -295,6 +328,10 @@ html {
             display: inline-block;
             cursor: pointer;
             text-shadow: $header-font-shadow;
+
+            &:hover {
+              position: relative;
+            }
 
             .sync-status {
               margin-left: 10px;
@@ -327,6 +364,7 @@ html {
 
   		#left {
   			width: 17%;
+        min-width: 110px;
   			float: left;
   		}
 
@@ -367,6 +405,8 @@ html {
 
   		#content {
   	    width:100%;
+        display: flex;
+        flex-direction: row;
   	    overflow: auto;
   	    background-color: #FFF;
   	    color: #666;
@@ -383,6 +423,7 @@ html {
   			#left {
   				@extend .column;
   		    width: 17%;
+          transition: width 0.2s ease;
   		    background-color: #F7F7F7;
   				border-right: $border-color 1px solid;
           box-shadow: inset 0 1px 10px rgba(0, 0, 0, 0.14);
@@ -424,7 +465,7 @@ html {
       				}
 
       				li.selected {
-      					background-color: #DBDEE0;
+      					background-color: #DBDEE0 !important;
       					color: #444;
       				}
             }
@@ -595,7 +636,7 @@ html {
 
   		  #right {
   				@extend .column;
-  		    width: 53%;
+  		    flex: 1;
   				border-left: $border-color 1px solid;
           color: #111;
 
@@ -668,6 +709,10 @@ html {
                 box-sizing: border-box;
     						cursor: default;
     						word-wrap: break-word;
+
+                &:hover {
+                  position: relative;
+                }
 
                 header {
                   padding: 10px;

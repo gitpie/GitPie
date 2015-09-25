@@ -130,6 +130,8 @@ window.addEventListener('keydown', function (e) {
 
     updater.checkAvailableUpdate();
 
+    $rootScope.showRepositoryMenu = true;
+
     return {
 
       addRepository: function (repositoryPath, callback) {
@@ -190,6 +192,37 @@ window.addEventListener('keydown', function (e) {
               alert($rootScope.MSGS['Nothing for me here.\n The folder {folder} is not a git project'].replace('{folder}', repositoryPath));
             }
           }
+        }
+      },
+
+      addNewGitRepository: function (opts) {
+        opts = opts || {};
+
+        if (opts.repositoryName && opts.path) {
+          var index,
+            repositoryExists,
+            repository;
+
+          repositoryExists = findWhere(repositories.others, { path: opts.path});
+
+          if (!repositoryExists) {
+
+            index = repositories.others.push({
+              name: opts.repositoryName,
+              path: opts.path,
+              type : 'OTHERS'
+            });
+
+            repository = repositories.others[index - 1];
+
+            saveRepository(repository);
+          } else {
+            repository = repositoryExists;
+          }
+
+          repositories.isEmpty = false;
+
+          return repository;
         }
       },
 
