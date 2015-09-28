@@ -123,19 +123,19 @@ Git.prototype.getStatus = function (path, callback) {
         ahead: null,
         behind: null
       },
-      files = [];
+      files = [],
+      lines = stdout.split('\n'),
+      unsynChanges,
+      unsyncParts;
 
     if (error !== null) {
       err = error;
     }
 
-    var lines = stdout.split('\n'),
-      unsynChanges;
-
     // First line ever the sync numbers status
     unsynChanges = lines[0].substring(lines[0].lastIndexOf("[") + 1, lines[0].lastIndexOf("]"));
 
-    var unsyncParts = unsynChanges.split(',');
+    unsyncParts = unsynChanges.split(',');
 
     unsyncParts.forEach(function (i) {
       var item = i.trim();
@@ -149,30 +149,46 @@ Git.prototype.getStatus = function (path, callback) {
 
     for (var i = 1; i < lines.length; i++) {
 
-      if (lines[i].trim()[0] == 'R') {
-        files.push({
-          type: 'RENAMED',
-          displayPath: lines[i].replace('RM', '').replace(/"/g, '').trim(),
-          path: lines[i].replace('RM', '').replace(/"/g, '').split('->')[1].trim()
-        });
-      } else if (lines[i].trim()[0] == 'M') {
-        files.push({
-          type: 'MODIFIED',
-          displayPath: lines[i].replace('M', '').replace(/"/g, '').trim(),
-          path: lines[i].replace('M', '').replace(/"/g, '').trim()
-        });
-      } else if(lines[i].trim()[0] == '?') {
-        files.push({
-          type: 'NEW', //UNTRACKED
-          displayPath: lines[i].replace('??', '').replace(/"/g, '').trim(),
-          path: lines[i].replace('??', '').replace(/"/g, '').trim()
-        });
-      } else if(lines[i].trim()[0] == 'D') {
-        files.push({
-          type: 'DELETED',
-          displayPath: lines[i].replace('D', '').replace(/"/g, '').trim(),
-          path: lines[i].replace('D', '').replace(/"/g, '').trim()
-        });
+      switch (lines[i].trim()[0]) {
+        case 'R':
+          files.push({
+            type: 'RENAMED',
+            displayPath: lines[i].replace('RM', '').replace(/"/g, '').trim(),
+            path: lines[i].replace('RM', '').replace(/"/g, '').split('->')[1].trim()
+          });
+          break;
+
+        case 'M':
+          files.push({
+            type: 'MODIFIED',
+            displayPath: lines[i].replace('M', '').replace(/"/g, '').trim(),
+            path: lines[i].replace('M', '').replace(/"/g, '').trim()
+          });
+          break;
+
+          case '?':
+            files.push({
+              type: 'NEW', //UNTRACKED
+              displayPath: lines[i].replace('??', '').replace(/"/g, '').trim(),
+              path: lines[i].replace('??', '').replace(/"/g, '').trim()
+            });
+            break;
+
+          case 'A':
+            files.push({
+              type: 'NEW',
+              displayPath: lines[i].replace('A', '').replace(/"/g, '').trim(),
+              path: lines[i].replace('A', '').replace(/"/g, '').trim()
+            });
+            break;
+
+          case 'D':
+            files.push({
+              type: 'DELETED',
+              displayPath: lines[i].replace('D', '').replace(/"/g, '').trim(),
+              path: lines[i].replace('D', '').replace(/"/g, '').trim()
+            });
+            break;
       }
     }
 
