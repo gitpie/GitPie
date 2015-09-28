@@ -491,7 +491,7 @@ Git.prototype.assumeUnchanged = function (path, opts) {
 Git.prototype.clone = function (opts) {
   opts = opts || {};
 
-  exec('git clone '.concat(opts.cloneURL), { cwd: opts.destinyFolder,  env: ENV}, function (error, stdout, stderr) {
+  exec('git clone --recursive '.concat(opts.cloneURL), { cwd: opts.destinyFolder,  env: ENV}, function (error, stdout, stderr) {
     var err = null;
 
     if (error !== null) {
