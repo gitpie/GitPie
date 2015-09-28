@@ -21,6 +21,8 @@ module.exports = function(grunt) {
 
         './app/**',
 
+        '!./app/core/updater/windows/**',
+
         './libraries/**',
 
         './language/**',
