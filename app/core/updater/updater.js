@@ -156,7 +156,9 @@ Updater.prototype.downloadFiles = function () {
 
         installFunction = function (GUI, WIN) {
           var zip = new AdmZip( path.join(os.tmpdir(), downloadedPath.concat('.zip')) ),
-            zipEntries = zip.getEntries();
+            zipEntries = zip.getEntries(),
+            child,
+            command;
 
           WIN.hide();
 
@@ -164,20 +166,16 @@ Updater.prototype.downloadFiles = function () {
 
           zip.extractAllTo( path.join(os.tmpdir(), 'pie') , true);
 
-          fs.move( path.join(os.tmpdir(), 'pie', downloadedPath), EXEC_PATH, function (err) {
-            fs.removeSync( path.join(os.tmpdir(), downloadedPath.concat('.zip')) );
-            fs.removeSync( path.join(os.tmpdir(), 'pie') );
+          fs.removeSync( path.join(os.tmpdir(), downloadedPath.concat('.zip')) );
 
-            if (err) {
-              this.emit('error', err);
-            } else {
-              var child = child_process.spawn(process.execPath, [], {detached: true});
+          command = path.join(os.tmpdir(), 'pie', downloadedPath, 'updatePie.exe') + ' ' + EXEC_PATH;
 
-              child.unref();
-              GUI.App.quit();
-            }
+          console.log(command);
 
-          }.bind(this));
+          child = child_process.spawn(command, [], {detached: true});
+
+          child.unref();
+          GUI.App.quit();
         }.bind(this);
 
         break;
