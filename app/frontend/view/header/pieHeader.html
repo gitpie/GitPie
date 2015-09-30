@@ -3,7 +3,7 @@
 
     <nav>
       <ul>
-        <li ng-click="headerCtrl.toggleMenu(1)" tooltip="{{ MSGS['Add, Clone or Create a repository'] }}"><span class="octicon octicon-plus"></span></li>
+        <li ng-click="headerCtrl.toggleMenu(1)" title="{{ MSGS['Add, Clone or Create a repository'] }}"><span class="octicon octicon-plus"></span></li>
         <div class="menu" style="width: 300px" ng-show="headerCtrl.showAddMenu">
 
             <tabs>
@@ -54,8 +54,8 @@
             </tabs>
 
         </div>
-        <li tooltip="{{ MSGS['Hide menu'] }}" ng-show="showRepositoryMenu" ng-click="showRepositoryMenu = false"><i class="fa fa-toggle-on"></i></li>
-        <li tooltip="{{ MSGS['Show menu'] }}" ng-hide="showRepositoryMenu" ng-click="showRepositoryMenu = true"><i class="fa fa-toggle-off"></i></li>
+        <li title="{{ MSGS['Hide menu'] }}" ng-show="showRepositoryMenu" ng-click="showRepositoryMenu = false"><i class="fa fa-toggle-on"></i></li>
+        <li title="{{ MSGS['Show menu'] }}" ng-hide="showRepositoryMenu" ng-click="showRepositoryMenu = true"><i class="fa fa-toggle-off"></i></li>
       </ul>
     </nav>
 
@@ -100,7 +100,7 @@
         <ul>
           <li ng-show="headerCtrl.showResetButton()"
             ng-click="headerCtrl.resetBranchToCommit()"
-            tooltip="{{ MSGS['Reset branch {branch} to selected commit'].replace('{branch}', headerCtrl.currentBranch) }}">
+            title="{{ MSGS['Reset branch {branch} to selected commit'].replace('{branch}', headerCtrl.currentBranch) }}">
             <span class="octicon octicon-mail-reply"></span>
           </li>
 
@@ -122,7 +122,7 @@
           </li>
 
           <ul>
-            <li ng-click="headerCtrl.toggleMenu(3)" tooltip="{{ MSGS['Settings'] }}"><span class="octicon octicon-gear"></span></li>
+            <li ng-click="headerCtrl.toggleMenu(3)" title="{{ MSGS['Settings'] }}"><span class="octicon octicon-gear"></span></li>
             <div class="menu" ng-show="headerCtrl.showSettingsMenu"></div>
           </ul>
           <li ng-hide="showRepositoryMenu"><strong>{{ headerCtrl.selectedRepository.name }}</strong></li>
