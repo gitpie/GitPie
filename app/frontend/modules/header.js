@@ -308,6 +308,15 @@
             }
           }
         };
+
+        this.isRepositoryNameVisible = function () {
+
+          if (!$scope.$root.showRepositoryMenu && this.selectedRepository) {
+            return true;
+          } else {
+            return false;
+          }
+        };
       },
 
       controllerAs: 'headerCtrl'

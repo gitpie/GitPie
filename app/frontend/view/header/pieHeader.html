@@ -125,7 +125,7 @@
             <li ng-click="headerCtrl.toggleMenu(3)" title="{{ MSGS['Settings'] }}"><span class="octicon octicon-gear"></span></li>
             <div class="menu" ng-show="headerCtrl.showSettingsMenu"></div>
           </ul>
-          <li ng-hide="showRepositoryMenu"><strong>{{ headerCtrl.selectedRepository.name }}</strong></li>
+          <li ng-show="headerCtrl.isRepositoryNameVisible()"><strong>{{ headerCtrl.selectedRepository.name }}</strong></li>
         </ul>
       </nav>
 
