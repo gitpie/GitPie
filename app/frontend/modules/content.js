@@ -433,6 +433,7 @@
           }
 
           CommomService.closeAnyContextMenu();
+          $scope.$broadcast('removedRepository');
         };
 
         this.assumeUnchanged = function (filePath, index) {

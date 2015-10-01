@@ -73,6 +73,12 @@
 
         CommomService.hideHeaderMenu = this.hideAllMenu.bind(this);
 
+        $scope.$on('removedRepository', function () {
+          this.selectedRepository = null;
+          this.currentBranch = null;
+          this.remoteBranchs = [];
+        }.bind(this));
+
         $scope.$on('repositorychanged', function (event, repository) {
           this.loading = true;
 
