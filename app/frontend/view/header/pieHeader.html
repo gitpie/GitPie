@@ -10,23 +10,23 @@
               <pane pane-title="{{ MSGS.ADD }}">
 
                 <section class="content">
-                  <input type="text" style="width: 200px" name="repository" ng-model="repositoryPath"
+                  <input type="text" style="width: 200px" name="repository" ng-model="headerCtrl.repositoryPath"
                     placeholder="{{ MSGS['Where are your stuffs'] }}?" />
-                  <input type="file" ng-model="repositoryPath" ng-input-change nwdirectory />
+                  <input type="file" ng-model="headerCtrl.repositoryPath" ng-input-change nwdirectory />
                 </section>
-                <footer><button class="featured" ng-click="headerCtrl.addRepository(repositoryPath)"><span class="octicon octicon-file-directory"></span> {{ MSGS["ADD REPOSITORY"] }}</button> </footer>
+                <footer><button class="featured" ng-click="headerCtrl.addRepository(headerCtrl.repositoryPath)"><span class="octicon octicon-file-directory"></span> {{ MSGS["ADD REPOSITORY"] }}</button> </footer>
 
               </pane>
               <pane pane-title="{{ MSGS.CLONE }}">
                 <section class="content">
-                  <input type="text" style="width: 100%; box-sizing: border-box" ng-model="cloneURL"
+                  <input type="text" style="width: 100%; box-sizing: border-box" ng-model="headerCtrl.cloneURL"
                     placeholder="{{ MSGS['Clone URL'] }}" />
-                  <input type="text" style="width: 200px" ng-model="repositoryDestiny"
+                  <input type="text" style="width: 200px" ng-model="headerCtrl.repositoryDestiny"
                     placeholder="{{ MSGS['Destination Folder'] }}" />
-                  <input type="file" ng-model="repositoryDestiny" ng-input-change nwdirectory />
+                  <input type="file" ng-model="headerCtrl.repositoryDestiny" ng-input-change nwdirectory />
                 </section>
                 <footer><button class="featured"
-                  ng-click="headerCtrl.cloneRepository(cloneURL, repositoryDestiny)"
+                  ng-click="headerCtrl.cloneRepository()"
                   ><span class="octicon octicon-repo-clone"></span> {{ MSGS.CLONE }}</button>
                 </footer>
               </pane>
@@ -34,20 +34,19 @@
 
                 <section class="content">
 
-                  <input type="text" style="width: 100%; box-sizing: border-box" ng-model="repositoryName"
+                  <input type="text" style="width: 100%; box-sizing: border-box" ng-model="headerCtrl.repositoryName"
                     placeholder="{{ MSGS['Repository name'] }}" />
 
-                  <span class="label" ng-show="repositoryName.length">
-                    {{ MSGS['Your repository will be created as'] }} <strong>"{{ headerCtrl.treatBranch(repositoryName) }}"</strong></span>
+                  <span class="label" ng-show="headerCtrl.repositoryName.length">
+                    {{ MSGS['Your repository will be created as'] }} <strong>"{{ headerCtrl.treatBranch(headerCtrl.repositoryName) }}"</strong></span>
 
-                  <input type="text" style="width: 200px" ng-model="repositoryHome"
+                  <input type="text" style="width: 200px" ng-model="headerCtrl.repositoryHome"
                     placeholder="{{ MSGS['Folder'] }}" />
-                  <input type="file" ng-model="repositoryHome" ng-input-change nwdirectory />
+                  <input type="file" ng-model="headerCtrl.repositoryHome" ng-input-change nwdirectory />
 
                 </section>
                 <footer><button class="featured"
-                  ng-click="headerCtrl.createRepository(headerCtrl.treatBranch(repositoryName), repositoryHome)"
-                  ><span class="octicon octicon-repo"></span> {{ MSGS.CREATE }}</button>
+                  ng-click="headerCtrl.createRepository()"><span class="octicon octicon-repo"></span> {{ MSGS.CREATE }}</button>
                 </footer>
 
               </pane>

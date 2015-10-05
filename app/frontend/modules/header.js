@@ -48,6 +48,12 @@
           repositoryHome: null
         };
 
+        // Scope variables to bind te "add repository" fields
+        this.repositoryPath = null;
+        this.cloneURL = null;
+        this.repositoryDestiny = null;
+        this.repositoryName = null;
+
         this.toggleMenu = function (menuIndex) {
 
           switch (menuIndex) {
@@ -174,8 +180,9 @@
             if (repository) {
               $scope.$broadcast('changedbranch', repository);
               CommomService.hideHeaderMenu();
+              this.repositoryPath = null;
             }
-          });
+          }.bind(this));
         };
 
         this.checkoutBranch = function ($event, newBranch) {
@@ -205,45 +212,46 @@
           return branchName && branchName.replace(/ /g, '-');
         };
 
-        this.cloneRepository = function (cloneURL, destiny) {
+        this.cloneRepository = function () {
 
-          if (cloneURL && destiny) {
-            var me = this,
-              repositoryData = GitUrlParse(cloneURL),
+          if (this.cloneURL && this.repositoryDestiny) {
+            var repositoryData = GitUrlParse(this.cloneURL),
               destinyFolder;
 
             try {
-              destinyFolder = fs.lstatSync(destiny);
+              destinyFolder = fs.lstatSync(this.repositoryDestiny);
 
               if (repositoryData.name) {
-                me.cloneNotify.show = true;
-                me.cloneNotify.cloneURL = cloneURL;
-                me.cloneNotify.destinyFolder = destiny;
+                this.cloneNotify.show = true;
+                this.cloneNotify.cloneURL = this.cloneURL;
+                this.cloneNotify.destinyFolder = this.repositoryDestiny;
 
                 CommomService.hideHeaderMenu();
 
                 GIT.clone({
-                  cloneURL: cloneURL,
-                  destinyFolder: destiny,
+                  cloneURL: this.cloneURL,
+                  destinyFolder: this.repositoryDestiny,
 
                   callback: function (err) {
 
                     if (err) {
                       alert(err);
                     } else {
-                      me.addRepository(path.join(destiny, repositoryData.name));
+                      this.addRepository(path.join(this.repositoryDestiny, repositoryData.name));
                     }
 
-                    me.cloneNotify.show = false;
+                    this.cloneNotify.show = false;
+                    this.cloneURL = null;
+                    this.repositoryDestiny = null;
                     $scope.$apply();
-                  }
+                  }.bind(this)
                 });
               } else {
-                alert(MSGS['\'{cloneURL}\' not appears to be a git remote URL. Let\'s try again!'].replace('{cloneURL}', cloneURL));
+                alert(MSGS['\'{cloneURL}\' not appears to be a git remote URL. Let\'s try again!'].replace('{cloneURL}', this.cloneURL));
               }
 
             } catch (err) {
-              alert(MSGS['The path \'{path}\' is not a folder. Pick a valid directory to clone projects.'].replace('{path}', destiny));
+              alert(MSGS['The path \'{path}\' is not a folder. Pick a valid directory to clone projects.'].replace('{path}', this.repositoryDestiny));
             }
 
           }
@@ -271,16 +279,17 @@
           });
         };
 
-        this.createRepository = function (repositoryName, repositoryHome) {
+        this.createRepository = function () {
+          var repositoryName = this.treatBranch(this.repositoryName),
+            repositoryHome = this.repositoryHome;
 
           if (repositoryName && repositoryHome) {
-            var me = this,
-              destinyFolder;
+            var destinyFolder;
 
             try {
               destinyFolder = fs.lstatSync(repositoryHome);
-              me.createNotify.repositoryHome = repositoryHome;
-              me.createNotify.show = true;
+              this.createNotify.repositoryHome = repositoryHome;
+              this.createNotify.show = true;
 
               CommomService.hideHeaderMenu();
 
@@ -301,12 +310,14 @@
                     if (repository) {
                       $scope.$broadcast('changedbranch', repository);
                       CommomService.hideHeaderMenu();
+                      this.repositoryName = null;
+                      this.repositoryHome = null;
                     }
                   }
 
-                  me.createNotify.show = false;
+                  this.createNotify.show = false;
                   $scope.$apply();
-                }
+                }.bind(this)
               });
 
             } catch (err) {
