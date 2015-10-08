@@ -325,10 +325,10 @@ Git.prototype.add = function (path, opts) {
 };
 
 Git.prototype.commit = function (path, opts) {
-  var commad = 'git commit -m "'.concat(opts.message).concat('"');
+  var commad = 'git commit -m "'.concat( (opts.message.replace(/"/g, '\\"')) ).concat('"');
 
   if (opts.description) {
-    commad = commad.concat(' -m "').concat(opts.description).concat('"');
+    commad = commad.concat(' -m "').concat( (opts.description.replace(/"/g, '\\"')) ).concat('"');
   }
 
   if (opts.forceSync) {
