@@ -162,7 +162,7 @@
                 <span ng-hide="change.type == 'DELETED'" ng-click="appCtrl.showFileDiff(change)" ng-class="{ 'octicon-triangle-right': !change.showCode, 'octicon-triangle-down': change.showCode}" class="octicon octicon-triangle-right"></span>
                 <input id="change{{$index}}" type="checkbox" ng-model="change.checked" checked="true" />
                 <label ng-hide="change.type == 'ADDED'" for="change{{$index}}"></label>
-                {{ change.name.length > 50 ? '...' : ''}} {{ change.name | limitTo: - 50 }}
+                {{ change.displayPath.length > 50 ? '...' : ''}} {{ change.displayPath | limitTo: - 50 }}
                 <menuitem ng-class="appCtrl.getChangeTypeClass(change.type)">{{ MSGS[change.type] }}</menuitem>
               </header>
               <code ng-show="change.showCode" ng-bind-html="change.code"></code>

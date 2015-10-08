@@ -290,7 +290,6 @@
             this.commitChanges = [];
 
             files.forEach(function (item) {
-              item.name = item.displayPath;
               item.isUnsyc = true;
               item.checked = true;
 
@@ -304,7 +303,6 @@
         this.openRepositoryContextualMenu = function (event, repository, index) {
           var body = angular.element(document.body),
             contextMenu = $compile([
-
               '<div class="context-menu" style="top: ', event.y, 'px;  left: ', event.x, 'px">',
                 '<ul>',
                   '<li ng-click="appCtrl.removeRepository(\'' + repository.type + '\', ' + index + ')">',
@@ -315,7 +313,6 @@
                   '</li>',
                 '</ul>',
               '</div>'
-
             ].join(''))($scope);
 
           CommomService.closeAnyContextMenu();
@@ -326,7 +323,6 @@
         this.openHistoryContextualMenu = function (event, history, index) {
           var body = angular.element(document.body),
             contextMenu = $compile([
-
               '<div class="context-menu" style="top: ', event.y, 'px;  left: ', event.x, 'px">',
                 '<ul>',
                   '<li ng-click="appCtrl.openItemInFolder(\'', this.treatPath( path.join(selectedRepository.path, history.name.trim()) ), '\')">',
@@ -334,7 +330,6 @@
                   '</li>',
                 '</ul>',
               '</div>'
-
             ].join(''))($scope);
 
           CommomService.closeAnyContextMenu();
@@ -346,7 +341,6 @@
           var body = angular.element(document.body),
             isUnknowChange = change.type == 'NEW',
             contextMenu = $compile([
-
               '<div class="context-menu" style="top: ' + event.y + 'px;  left: ' + event.x +  'px">',
                 '<ul>',
                   '<li ng-hide="', (change.type == 'ADDED'), '" ng-click="appCtrl.discartChanges(\'', this.treatPath(change.path),'\', \'', index,'\', ' + isUnknowChange + ')">',
@@ -355,12 +349,14 @@
                   '<li ng-hide="', (change.type == 'ADDED'), '" ng-click="appCtrl.assumeUnchanged(\'', this.treatPath(change.path),'\', \'', index,'\')">',
                     MSGS['Assume unchanged'],
                   '</li>',
+                  '<li ng-show="', (change.type == 'ADDED'), '" ng-click="appCtrl.unstageFile(\'', this.treatPath(change.path),'\', \'', index,'\')">',
+                    MSGS['Unstage file'],
+                  '</li>',
                   '<li ng-click="appCtrl.openItemInFolder(\'', this.treatPath( path.join(selectedRepository.path, change.path.trim()) ), '\')">',
                     MSGS['Show in folder'],
                   '</li>',
                 '</ul>',
               '</div>'
-
             ].join(''))($scope);
 
           CommomService.closeAnyContextMenu();
@@ -420,6 +416,25 @@
               }.bind(this)
             });
           }
+        };
+
+        this.unstageFile = function (filePath, index) {
+
+          GIT.unstageFile(selectedRepository.path, {
+
+            file: filePath,
+
+            callback: function (err) {
+
+              if (err) {
+                alert(err);
+              } else {
+                this.refreshRepositoryChanges();
+              }
+
+              CommomService.closeAnyContextMenu();
+            }.bind(this)
+          });
         };
 
         this.openItemInFolder = function (path) {
@@ -510,6 +525,25 @@
               }
             }
           }
+        };
+
+        this.refreshRepositoryChanges = function () {
+
+          GIT.getStatus(selectedRepository.path, function (err, syncStatus, files) {
+            console.log(files);
+            console.log(this.commitChanges);
+
+            this.commitChanges = [];
+
+            files.forEach(function (item) {
+              item.isUnsyc = true;
+              item.checked = true;
+
+              this.commitChanges.push(item);
+            }.bind(this));
+
+            $scope.$apply();
+          }.bind(this));
         };
 
         /* Show notification if a update was installed */

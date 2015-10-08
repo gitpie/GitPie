@@ -448,6 +448,24 @@ Git.prototype.discartChangesInFile = function (path, opts) {
   }
 };
 
+Git.prototype.unstageFile = function (path, opts) {
+  opts = opts || {};
+
+  var command = 'git reset "'.concat(opts.file.trim()).concat('"');
+
+  exec(command, { cwd: path,  env: ENV}, function (error, stdout, stderr) {
+    var err = null;
+
+    if (error !== null) {
+      err = error.message;
+    }
+
+    if (opts.callback && typeof opts.callback == 'function') {
+      opts.callback.call(this, err, stdout);
+    }
+  });
+};
+
 Git.prototype.getTag = function (path, callback) {
 
   exec('git tag', { cwd: path,  env: ENV}, function (error, stdout, stderr) {
