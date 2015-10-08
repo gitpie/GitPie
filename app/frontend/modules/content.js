@@ -305,12 +305,12 @@
           var body = angular.element(document.body),
             contextMenu = $compile([
 
-              '<div class="context-menu" style="top: ' + event.y + 'px;  left: ' + event.x +  'px">',
+              '<div class="context-menu" style="top: ', event.y, 'px;  left: ', event.x, 'px">',
                 '<ul>',
                   '<li ng-click="appCtrl.removeRepository(\'' + repository.type + '\', ' + index + ')">',
                     MSGS.Remove,
                   '</li>',
-                  '<li ng-click="appCtrl.openItemInFolder(\'', repository.path , '\')">',
+                  '<li ng-click="appCtrl.openItemInFolder(\'', this.treatPath(repository.path) , '\')">',
                     MSGS['Show in folder'],
                   '</li>',
                 '</ul>',
@@ -327,9 +327,9 @@
           var body = angular.element(document.body),
             contextMenu = $compile([
 
-              '<div class="context-menu" style="top: ' + event.y + 'px;  left: ' + event.x +  'px">',
+              '<div class="context-menu" style="top: ', event.y, 'px;  left: ', event.x, 'px">',
                 '<ul>',
-                  '<li ng-click="appCtrl.openItemInFolder(\'', path.join(selectedRepository.path, history.name.trim()), '\')">',
+                  '<li ng-click="appCtrl.openItemInFolder(\'', this.treatPath( path.join(selectedRepository.path, history.name.trim()) ), '\')">',
                     MSGS['Show in folder'],
                   '</li>',
                 '</ul>',
@@ -349,13 +349,13 @@
 
               '<div class="context-menu" style="top: ' + event.y + 'px;  left: ' + event.x +  'px">',
                 '<ul>',
-                  '<li ng-click="appCtrl.discartChanges(\'', change.path,'\', \'', index,'\', ' + isUnknowChange + ')">',
+                  '<li ng-click="appCtrl.discartChanges(\'', this.treatPath(change.path),'\', \'', index,'\', ' + isUnknowChange + ')">',
                     MSGS.Discart,
                   '</li>',
-                  '<li ng-click="appCtrl.assumeUnchanged(\'', change.path,'\', \'', index,'\')">',
+                  '<li ng-click="appCtrl.assumeUnchanged(\'', this.treatPath(change.path),'\', \'', index,'\')">',
                     MSGS['Assume unchanged'],
                   '</li>',
-                  '<li ng-click="appCtrl.openItemInFolder(\'', path.join(selectedRepository.path, change.path.trim()), '\')">',
+                  '<li ng-click="appCtrl.openItemInFolder(\'', this.treatPath( path.join(selectedRepository.path, change.path.trim()) ), '\')">',
                     MSGS['Show in folder'],
                   '</li>',
                 '</ul>',
@@ -423,6 +423,15 @@
           GUI.Shell.showItemInFolder(path);
 
           CommomService.closeAnyContextMenu();
+        };
+
+        this.treatPath = function (path) {
+
+          if (process.platform == 'win32') {
+            return path.replace(/\\/g, '\\\\');
+          }
+
+          return path;
         };
 
         this.removeRepository = function (repositoryType, index) {
