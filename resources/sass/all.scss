@@ -805,6 +805,10 @@ html {
                     background-color: #6CC644;
                   }
 
+                  .label-added {
+                    @extend .label-new;
+                  }
+
                   .label-deleted {
                     @extend .label;
                     background-color: #D7431B;
@@ -821,6 +825,10 @@ html {
                     display: inline-block;
                     background-color: #F5E8DB;
                   }
+                }
+
+                header.read-only {
+                  color: #6CC644;
                 }
 
                 code {

@@ -349,10 +349,10 @@
 
               '<div class="context-menu" style="top: ' + event.y + 'px;  left: ' + event.x +  'px">',
                 '<ul>',
-                  '<li ng-click="appCtrl.discartChanges(\'', this.treatPath(change.path),'\', \'', index,'\', ' + isUnknowChange + ')">',
+                  '<li ng-hide="', (change.type == 'ADDED'), '" ng-click="appCtrl.discartChanges(\'', this.treatPath(change.path),'\', \'', index,'\', ' + isUnknowChange + ')">',
                     MSGS.Discart,
                   '</li>',
-                  '<li ng-click="appCtrl.assumeUnchanged(\'', this.treatPath(change.path),'\', \'', index,'\')">',
+                  '<li ng-hide="', (change.type == 'ADDED'), '" ng-click="appCtrl.assumeUnchanged(\'', this.treatPath(change.path),'\', \'', index,'\')">',
                     MSGS['Assume unchanged'],
                   '</li>',
                   '<li ng-click="appCtrl.openItemInFolder(\'', this.treatPath( path.join(selectedRepository.path, change.path.trim()) ), '\')">',
@@ -382,6 +382,9 @@
 
             case 'RENAMED':
               return 'label-renamed';
+
+            case 'ADDED':
+              return 'label-added';
           }
         };
 
