@@ -530,9 +530,6 @@
         this.refreshRepositoryChanges = function () {
 
           GIT.getStatus(selectedRepository.path, function (err, syncStatus, files) {
-            console.log(files);
-            console.log(this.commitChanges);
-
             this.commitChanges = [];
 
             files.forEach(function (item) {
@@ -558,6 +555,16 @@
         this.performUpdate = function () {
           updater.performUpdate(GUI, WIN);
         };
+
+        var me = this;
+
+        /* Update the changed files ever time the application is focused */
+        WIN.on('focus', function () {
+
+          if (selectedRepository) {
+            me.refreshRepositoryChanges();
+          }
+        });
       },
 
       controllerAs: 'appCtrl'
