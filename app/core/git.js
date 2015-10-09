@@ -586,4 +586,29 @@ Git.prototype.createRepository = function (opts) {
   }.bind(this));
 };
 
+Git.prototype.getStashList = function (path, callback) {
+
+  exec('git stash list', { cwd: path,  env: ENV}, function (error, stdout, stderr) {
+    var err = null,
+      stashs = [];
+
+    if (error !== null) {
+      err = error.message;
+    } else {
+      var lines = stdout.split('\n');
+
+      lines.forEach(function (stash) {
+
+        if (stash !== '') {
+          stashs.push(stash);
+        }
+      });
+    }
+
+    if (callback && typeof callback == 'function') {
+      callback.call(this, err, stashs);
+    }
+  });
+};
+
 module.exports = new Git();

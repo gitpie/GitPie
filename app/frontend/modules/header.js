@@ -55,6 +55,7 @@
         this.repositoryName = null;
 
         this.toggleMenu = function (menuIndex) {
+          this.hideAllMenu();
 
           switch (menuIndex) {
             case 1:
@@ -90,6 +91,10 @@
 
           this.selectedRepository = repository;
 
+          GIT.getStatus(repository.path, function (err, syncStatus, files) {
+            $scope.$broadcast('unsynChanges', files);
+          }.bind(this));
+
           GIT.getCurrentBranch(repository.path, function (err, currentBranch, remoteBranchs) {
             this.currentBranch = currentBranch;
             this.remoteBranchs = remoteBranchs;
@@ -115,8 +120,10 @@
 
           }.bind(this));
 
-          GIT.getStatus(repository.path, function (err, syncStatus, files) {
-            $scope.$broadcast('unsynChanges', files);
+          GIT.getStashList(this.selectedRepository.path, function (err, stashs) {
+            this.stashList = stashs;
+
+            $scope.$apply();
           }.bind(this));
 
         }.bind(this));
