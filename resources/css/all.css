@@ -224,7 +224,7 @@ html, html body {
         font-family: 'arial', 'sans-serif'; }
     html body .notify-dialog {
       background-color: #404040;
-      z-index: 10;
+      z-index: 1000;
       color: #FFF;
       border-radius: 3px;
       padding: 15px;
@@ -246,11 +246,8 @@ html, html body {
         html body .notify-dialog .icon .loading-container {
           display: inline-block; }
           html body .notify-dialog .icon .loading-container .loading-content {
-            background-color: rgba(255, 255, 255, 0.15);
             display: inline-flex;
-            border-radius: 50%;
-            padding: 6px;
-            box-shadow: 0 1px 5px rgba(51, 51, 51, 0.7); }
+            padding: 6px; }
 @-webkit-keyframes rotator {
   0% {
     -webkit-transform: rotate(0deg); }
@@ -259,29 +256,23 @@ html, html body {
             html body .notify-dialog .icon .loading-container .loading-content .spinner {
               -webkit-animation: rotator 1.4s linear infinite; }
             html body .notify-dialog .icon .loading-container .loading-content .path {
-              stroke-dasharray: 130;
+              stroke-dasharray: 187;
               stroke-dashoffset: 0;
               transform-origin: center;
               -webkit-animation: dash 1.4s ease-in-out infinite, colors 5.6s ease-in-out infinite; }
 @-webkit-keyframes colors {
   0% {
-    stroke: #4285F4; }
-  25% {
-    stroke: #DE3E35; }
-  50% {
-    stroke: #F7C223; }
-  75% {
-    stroke: #1B9A59; }
+    stroke: #FFF; }
   100% {
-    stroke: #4285F4; } }
+    stroke: #FFF; } }
 @-webkit-keyframes dash {
   0% {
-    stroke-dashoffset: 130; }
+    stroke-dashoffset: 187; }
   50% {
-    stroke-dashoffset: 32.5;
+    stroke-dashoffset: 46.75;
     -webkit-transform: rotate(135deg); }
   100% {
-    stroke-dashoffset: 130;
+    stroke-dashoffset: 187;
     -webkit-transform: rotate(450deg); } }
       html body .notify-dialog .content {
         flex: 1 1 auto; }
