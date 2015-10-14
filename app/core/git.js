@@ -298,16 +298,19 @@ Git.prototype.sync = function (opts, callback) {
         if (callback && typeof callback == 'function') {
           callback.call(this, error);
         }
+      } else if (opts.push) {
+
+        exec('git push origin '.concat(opts.branch), { cwd: opts.path,  env: ENV}, function (error) {
+
+          if (callback && typeof callback == 'function') {
+            callback.call(this, error);
+          }
+        });
+
       } else {
 
-        if (opts.push) {
-
-          exec('git push origin '.concat(opts.branch), { cwd: opts.path,  env: ENV}, function (error) {
-
-            if (callback && typeof callback == 'function') {
-              callback.call(this, error);
-            }
-          });
+        if (callback && typeof callback == 'function') {
+          callback.call(this, error);
         }
       }
     });
