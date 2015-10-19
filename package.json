@@ -48,6 +48,7 @@
     "fs-extra": "^0.24.0",
     "git-repo-name": "^0.3.1",
     "git-url-parse": "^4.0.0",
+    "node-wos": "0.0.1",
     "request": "^2.61.0",
     "tar.gz": "^1.0.0"
   }
