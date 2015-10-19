@@ -20,20 +20,36 @@ ENV.LANG = 'en_US';
 
 /**
  * @class Git
+ * Minimal wrapper to perform git operations
  */
 function Git() {
-  this.whoiam = 'Git class that perform git operations';
+  this.whoami = 'Git class that perform git operations';
+}
+
+/**
+ * @private
+ * @method invokeCallback
+ * Verify if the callback param is a function an try to invoke it
+ * @param {function} callback
+ * @param {Array} args - Array of arguments
+*/
+function invokeCallback(callback, args) {
+
+  if (callback && typeof callback == 'function') {
+    callback.apply(this, args);
+  }
 }
 
 util.inherits(Git, events.EventEmitter);
 
 /**
- * @function getCurrentBranch - Return current branch of a git repository
+ * @method getCurrentBranch - Return current branch of a git repository
  *
  * @param  {string} path - Path of the git repository
  * @param  {function} callback - Callback to be execute in error or success case
  */
 Git.prototype.getCurrentBranch = function (path, callback) {
+
   exec('git branch -r && git symbolic-ref --short HEAD', { cwd: path, env: ENV }, function (error, stdout, stderr) {
     var err = null,
       localBranchs = stdout.split('\n'),
@@ -58,16 +74,16 @@ Git.prototype.getCurrentBranch = function (path, callback) {
       currentBranch = localBranchs[localBranchs.length - 2];
     }
 
-    if (callback && typeof callback == 'function') {
-      callback.call(this, err, currentBranch, remoteBranchs);
-    }
+    invokeCallback(callback, [ err, currentBranch, remoteBranchs ]);
   }.bind(this));
 };
 
 /**
- * @function getCommitHistory - Return a array with the commit history
+ * @method getCommitHistory - Return a array with the commit history
  *
- * @param  {string} path - Path of the git repository
+ * @param  {object} opts - Path of the git repository
+ * - {string} path - Path of the git repository
+ * - {Number} skip - Number of commits to skip
  * @param  {function} callback - Callback to be execute in error or success case
  */
 Git.prototype.getCommitHistory = function (opts, callback) {
@@ -103,14 +119,12 @@ Git.prototype.getCommitHistory = function (opts, callback) {
       }
     }
 
-    if (callback && typeof callback == 'function') {
-      callback.call(this, err, historyList);
-    }
-  });
+    invokeCallback(callback, [err, historyList] );
+  }.bind(this));
 };
 
 /**
- * @function getStatus - Return the status of the repository
+ * @method getStatus - Return the status of the repository
  *
  * @param  {string} path - Path of the git repository
  * @param  {function} callback - Callback to be execute in error or success case
@@ -192,12 +206,16 @@ Git.prototype.getStatus = function (path, callback) {
       }
     }
 
-    if (callback && typeof callback == 'function') {
-      callback.call(this, err, syncStatus, files);
-    }
+    invokeCallback(callback, [ err, syncStatus, files ]);
   });
 };
 
+/**
+ * @method fetch - Fetch with --prune flag the repository
+ *
+ * @param  {string} path - Path of the git repository
+ * @param  {function} callback - Callback to be execute in error or success case
+ */
 Git.prototype.fetch = function (path, callback) {
 
   exec('git fetch --prune', {cwd: path, env: ENV}, function (error, stdout, stderr) {
@@ -207,9 +225,7 @@ Git.prototype.fetch = function (path, callback) {
       err = error.message;
     }
 
-    if (callback && typeof callback == 'function') {
-      callback.call(this, err);
-    }
+    invokeCallback(callback, [ err ]);
   });
 };
 
@@ -239,9 +255,7 @@ Git.prototype.getDiff = function (opts, callback) {
       });
     }
 
-    if (callback && typeof callback == 'function') {
-      callback.call(this, err, files);
-    }
+    invokeCallback(callback, [ err, files ]);
   });
 };
 
@@ -257,9 +271,7 @@ Git.prototype.getUnsyncFileDiff = function (opts, callback) {
       err = error;
     }
 
-    if (callback && typeof callback == 'function') {
-      callback.call(this, err, stdout);
-    }
+    invokeCallback(callback, [ err, stdout ]);
   });
 };
 
@@ -273,7 +285,7 @@ Git.prototype.getFileDiff = function (opts, callback) {
     }
 
     if (callback && typeof callback == 'function') {
-      callback.call(this, err, stdout);
+      invokeCallback(callback, [ err, stdout ]);
     }
   });
 };
@@ -284,9 +296,7 @@ Git.prototype.sync = function (opts, callback) {
 
     exec('git push -u origin '.concat(opts.branch), { cwd: opts.path,  env: ENV}, function (error) {
 
-      if (callback && typeof callback == 'function') {
-        callback.call(this, error);
-      }
+      invokeCallback(callback, [ error ]);
     });
 
   } else {
@@ -295,23 +305,17 @@ Git.prototype.sync = function (opts, callback) {
 
       if (error) {
 
-        if (callback && typeof callback == 'function') {
-          callback.call(this, error);
-        }
+        invokeCallback(callback, [ error ]);
       } else if (opts.push) {
 
         exec('git push origin '.concat(opts.branch), { cwd: opts.path,  env: ENV}, function (error) {
 
-          if (callback && typeof callback == 'function') {
-            callback.call(this, error);
-          }
+          invokeCallback(callback, [ error ]);
         });
 
       } else {
 
-        if (callback && typeof callback == 'function') {
-          callback.call(this, error);
-        }
+        invokeCallback(callback, [ error ]);
       }
     });
   }
@@ -332,9 +336,7 @@ Git.prototype.add = function (path, opts) {
         err = error;
       }
 
-      if (opts.callback && typeof opts.callback == 'function') {
-        opts.callback.call(this, err);
-      }
+      invokeCallback(opts.callback, [ err ]);
     });
   }
 };
@@ -357,9 +359,7 @@ Git.prototype.commit = function (path, opts) {
         err = error;
       }
 
-      if (opts.callback && typeof opts.callback == 'function') {
-        opts.callback.call(this, err);
-      }
+      invokeCallback(opts.callback, [ err ]);
     });
   }
 };
@@ -381,9 +381,7 @@ Git.prototype.switchBranch = function (opts, callback) {
         err = error.message;
       }
 
-      if (callback && typeof callback == 'function') {
-        callback.call(this, err);
-      }
+      invokeCallback(callback, [ err ]);
     });
   }
 };
@@ -397,9 +395,7 @@ Git.prototype.getCommitCount = function (path, callback) {
       err = error.message;
     }
 
-    if (callback && typeof callback == 'function') {
-      callback.call(this, err, stdout);
-    }
+    invokeCallback(callback, [ err, stdout ]);
   });
 };
 
@@ -412,9 +408,7 @@ Git.prototype.listRemotes = function (path, callback) {
       err = error.message;
     }
 
-    if (callback && typeof callback == 'function') {
-      callback.call(this, err, stdout);
-    }
+    invokeCallback(callback, [ err, stdout ]);
   });
 };
 
@@ -440,9 +434,7 @@ Git.prototype.discartChangesInFile = function (path, opts) {
         err = error.message;
       }
 
-      if (opts.callback && typeof opts.callback == 'function') {
-        opts.callback.call(this, err, stdout);
-      }
+      invokeCallback(opts.callback, [ err, stdout ]);
     });
   }
 };
@@ -459,9 +451,7 @@ Git.prototype.unstageFile = function (path, opts) {
       err = error.message;
     }
 
-    if (opts.callback && typeof opts.callback == 'function') {
-      opts.callback.call(this, err, stdout);
-    }
+    invokeCallback(opts.callback, [ err, stdout ]);
   });
 };
 
@@ -484,9 +474,7 @@ Git.prototype.getTag = function (path, callback) {
       });
     }
 
-    if (callback && typeof callback == 'function') {
-      callback.call(this, err, tags);
-    }
+    invokeCallback(callback, [ err, tags ]);
   });
 };
 
@@ -499,9 +487,7 @@ Git.prototype.assumeUnchanged = function (path, opts) {
       err = error.message;
     }
 
-    if (opts.callback && typeof opts.callback == 'function') {
-      opts.callback.call(this, err);
-    }
+    invokeCallback(opts.callback, [ err ]);
   });
 };
 
@@ -515,9 +501,7 @@ Git.prototype.clone = function (opts) {
       err = error.message;
     }
 
-    if (opts.callback && typeof opts.callback == 'function') {
-      opts.callback.call(this, err);
-    }
+    invokeCallback(opts.callback, [ err ]);
   });
 };
 
@@ -530,9 +514,7 @@ Git.prototype.reset = function (path, opts) {
       err = error.message;
     }
 
-    if (opts.callback && typeof opts.callback == 'function') {
-      opts.callback.call(this, err);
-    }
+    invokeCallback(opts.callback, [ err ]);
   });
 };
 
@@ -577,9 +559,7 @@ Git.prototype.createRepository = function (opts) {
         err = error.message;
       }
 
-      if (opts.callback && typeof opts.callback == 'function') {
-        opts.callback.call(this, err);
-      }
+      invokeCallback(opts.callback, [ err ]);
     }
 
   }.bind(this));
@@ -604,9 +584,7 @@ Git.prototype.getStashList = function (path, callback) {
       });
     }
 
-    if (callback && typeof callback == 'function') {
-      callback.call(this, err, stashs);
-    }
+    invokeCallback(callback, [ err, stashs ]);
   });
 };
 
