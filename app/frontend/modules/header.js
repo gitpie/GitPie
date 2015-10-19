@@ -265,7 +265,12 @@
         };
 
         this.showResetButton = function () {
-          return CommomService.selectedCommit;
+
+          if (this.selectedRepository && CommomService.selectedCommit) {
+            return true;
+          }
+
+          return false;
         };
 
         this.resetBranchToCommit = function () {
