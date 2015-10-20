@@ -44,6 +44,20 @@ var request = require('request'),
     execPath = reversedPath.split('').reverse().join('');
 
     return execPath.substr( 0, (execPath.length - 1) );
+  },
+
+  restartApp = function (WIN, GUI) {
+    var child = child_process.spawn(process.execPath, [], {detached: true});
+
+    if (wos.platform == 'mac') {
+      child = child_process.spawn("open", ["-n", "-a", process.execPath.match(/^([^\0]+?\.app)\//)[1]], {detached:true});
+    } else {
+      child = child_process.spawn(process.execPath, [], {detached: true});
+    }
+
+    child.unref();
+    WIN.hide();
+    GUI.App.quit();
   };
 
 function Updater () {
@@ -107,11 +121,7 @@ Updater.prototype.downloadFiles = function () {
             if (err) {
               this.emit('error', err);
             } else {
-              var child = child_process.spawn(process.execPath, [], {detached: true});
-
-              child.unref();
-              WIN.hide();
-              GUI.App.quit();
+              restartApp(WIN, GUI);
             }
 
           }.bind(this));
@@ -185,11 +195,7 @@ Updater.prototype.downloadFiles = function () {
               if (err) {
                 this.emit('error', err);
               } else {
-                var child = child_process.spawn("open", ["-n", "-a", process.execPath.match(/^([^\0]+?\.app)\//)[1]], {detached:true});
-
-                child.unref();
-                WIN.hide();
-                GUI.App.quit();
+                restartApp(WIN, GUI);
               }
 
             }.bind(this));
