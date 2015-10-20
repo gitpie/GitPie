@@ -70,14 +70,13 @@ Just execute the follow commands to build the project from source:
 git clone https://github.com/mapaiva/GitPie.git
 cd GitPie
 npm install
-npm install -g grunt-cli
-grunt build
+npm start
 ```
 
 If you want to make changes in the style of the application, you need to run the dev grunt task that will convert your sass changes into css. For this execute:
 
 ```bash
-grunt dev
+npm run dev
 ```
 
 ## License
