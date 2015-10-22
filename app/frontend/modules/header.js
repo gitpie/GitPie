@@ -36,6 +36,7 @@
         this.showAddMenu = false;
         this.showBranchMenu = false;
         this.showSettingsMenu = false;
+        this.showStashMenu = false;
 
         this.cloneNotify = {
           show: false,
@@ -53,6 +54,7 @@
         this.cloneURL = null;
         this.repositoryDestiny = null;
         this.repositoryName = null;
+        this.unsynChanges = [];
 
         this.toggleMenu = function (menuIndex) {
           this.hideAllMenu();
@@ -67,6 +69,9 @@
             case 3:
               this.showSettingsMenu = !this.showSettingsMenu;
              break;
+            case 4:
+              this.showStashMenu = !this.showStashMenu;
+            break;
           }
         };
 
@@ -74,6 +79,7 @@
           this.showAddMenu = false;
           this.showBranchMenu = false;
           this.showSettingsMenu = false;
+          this.showStashMenu = false;
 
           CommomService.closeAnyContextMenu();
         };
@@ -93,6 +99,7 @@
 
           GIT.getStatus(repository.path, function (err, syncStatus, files) {
             $scope.$broadcast('unsynChanges', files);
+            this.unsynChanges = files;
           }.bind(this));
 
           GIT.getCurrentBranch(repository.path, function (err, currentBranch, remoteBranchs) {
@@ -345,6 +352,19 @@
           } else {
             return false;
           }
+        };
+
+        this.stashChanges = function () {
+          console.log('Tamo no stash');
+
+          GIT.stashChanges(this.selectedRepository.path, function (err) {
+
+            if (err) {
+              alert(err);
+            } else {
+              $scope.$broadcast('changedbranch', this.selectedRepository);
+            }
+          }.bind(this));
         };
       },
 

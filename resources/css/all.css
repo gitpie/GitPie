@@ -388,10 +388,117 @@ html, html body {
         float: left; }
         html body #header #right #corner {
           float: right; }
-          html body #header #right #corner nav .menu {
-            margin-left: -174px !important; }
-            html body #header #right #corner nav .menu::before {
-              right: 10px; }
+          html body #header #right #corner nav .num-indicator {
+            color: #636e73;
+            background-color: #CCCCCC;
+            text-shadow: none;
+            border-radius: 50%;
+            text-align: center;
+            height: 15px;
+            width: 15px;
+            line-height: 15px;
+            font-size: 0.7em;
+            float: right;
+            margin-top: -6px; }
+          html body #header #right #corner nav .stash-menu {
+            background-color: #FFF;
+            padding: 10px;
+            border-radius: 3px;
+            box-shadow: 1px 1px 10px #666;
+            color: #333;
+            position: fixed;
+            margin-left: 5px;
+            text-shadow: none;
+            min-width: 200px;
+            z-index: 10000;
+            max-width: 300px;
+            margin-left: -200px; }
+            html body #header #right #corner nav .stash-menu ul {
+              list-style: none;
+              display: inline-block;
+              margin: 0;
+              padding: 0; }
+              html body #header #right #corner nav .stash-menu ul li {
+                padding: 15px 10px;
+                display: block;
+                cursor: default;
+                text-shadow: none;
+                background-color: #FFF; }
+                html body #header #right #corner nav .stash-menu ul li .octicon {
+                  margin-right: 10px; }
+                html body #header #right #corner nav .stash-menu ul li:hover {
+                  color: #000;
+                  cursor: pointer;
+                  background-color: #FFF; }
+            html body #header #right #corner nav .stash-menu .label, html body #header #wrapper #content #right #corner nav .stash-menu ul li header .label-modified, html body #wrapper #content #header #right #corner nav .stash-menu ul li header .label-modified, html body #header #wrapper #content #right #corner nav ul li header .stash-menu .label-modified, html body #wrapper #content #header #right #corner nav ul li header .stash-menu .label-modified, html body #header #wrapper #content #right #corner nav .stash-menu ul li header .label-new, html body #wrapper #content #header #right #corner nav .stash-menu ul li header .label-new, html body #header #wrapper #content #right #corner nav ul li header .stash-menu .label-new, html body #wrapper #content #header #right #corner nav ul li header .stash-menu .label-new, html body #header #wrapper #content #right #corner nav .stash-menu ul li header .label-added, html body #wrapper #content #header #right #corner nav .stash-menu ul li header .label-added, html body #header #wrapper #content #right #corner nav ul li header .stash-menu .label-added, html body #wrapper #content #header #right #corner nav ul li header .stash-menu .label-added, html body #header #wrapper #content #right #corner nav .stash-menu ul li header .label-deleted, html body #wrapper #content #header #right #corner nav .stash-menu ul li header .label-deleted, html body #header #wrapper #content #right #corner nav ul li header .stash-menu .label-deleted, html body #wrapper #content #header #right #corner nav ul li header .stash-menu .label-deleted, html body #header #wrapper #content #right #corner nav .stash-menu ul li header .label-renamed, html body #wrapper #content #header #right #corner nav .stash-menu ul li header .label-renamed, html body #header #wrapper #content #right #corner nav ul li header .stash-menu .label-renamed, html body #wrapper #content #header #right #corner nav ul li header .stash-menu .label-renamed, html body #header #wrapper #content #right #corner nav .stash-menu ul li header .label-binary, html body #wrapper #content #header #right #corner nav .stash-menu ul li header .label-binary, html body #header #wrapper #content #right #corner nav ul li header .stash-menu .label-binary, html body #wrapper #content #header #right #corner nav ul li header .stash-menu .label-binary {
+              padding: 20px 0;
+              display: block;
+              color: #666;
+              font-size: 0.9em; }
+            html body #header #right #corner nav .stash-menu header {
+              font-weight: bold;
+              padding-bottom: 10px;
+              overflow: hidden; }
+            html body #header #right #corner nav .stash-menu .tabPanel nav.tabHeader {
+              margin: 0;
+              padding: 0;
+              display: flex;
+              width: 100%;
+              box-sizing: border-box;
+              overflow: hidden;
+              box-shadow: 0 4px 5px -2px rgba(1, 1, 1, 0.3); }
+              html body #header #right #corner nav .stash-menu .tabPanel nav.tabHeader div {
+                flex: 1 1 auto;
+                text-align: center;
+                padding: 10px;
+                border-bottom: #FFF 3px solid;
+                color: #999;
+                cursor: default;
+                font-weight: bold; }
+                html body #header #right #corner nav .stash-menu .tabPanel nav.tabHeader div:hover {
+                  color: #666; }
+              html body #header #right #corner nav .stash-menu .tabPanel nav.tabHeader div.active {
+                border-color: #DDD;
+                color: inherit; }
+            html body #header #right #corner nav .stash-menu .tabPanel nav.tabHeader {
+              margin-bottom: 10px; }
+            html body #header #right #corner nav .stash-menu footer {
+              text-align: right;
+              padding-top: 15px;
+              overflow: hidden;
+              clear: both;
+              padding-bottom: 5px;
+              padding-right: 2px; }
+            html body #header #right #corner nav .stash-menu::before {
+              content: '';
+              position: absolute;
+              width: 0;
+              height: 0;
+              border-left: 10px solid transparent;
+              border-right: 10px solid transparent;
+              border-bottom: 10px solid #FFF;
+              position: absolute;
+              top: -5px; }
+            html body #header #right #corner nav .stash-menu::before {
+              right: 85px; }
+            html body #header #right #corner nav .stash-menu .sub-label {
+              color: #3998D6;
+              font-family: "Consolas", monospace, consolas, sans-serif;
+              font-size: 0.9em;
+              padding-top: 5px; }
+              html body #header #right #corner nav .stash-menu .sub-label .octicon {
+                margin-right: 0; }
+            html body #header #right #corner nav .stash-menu .button-container {
+              padding-top: 10px; }
+              html body #header #right #corner nav .stash-menu .button-container button {
+                text-align: center;
+                border-radius: 50%;
+                width: 40px;
+                height: 40px;
+                padding: 0;
+                margin-right: 10px; }
+                html body #header #right #corner nav .stash-menu .button-container button .octicon {
+                  margin: 0; }
           html body #header #right #corner .pending-sync-container {
             display: inline-block;
             margin-left: 5px; }
