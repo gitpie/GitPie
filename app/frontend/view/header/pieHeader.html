@@ -103,8 +103,8 @@
             <span class="octicon octicon-mail-reply"></span>
           </li>
 
-          <li title="Stash {{ headerCtrl.unsynChanges.length }} changes"
-              ng-show="headerCtrl.unsynChanges.length > 0" ng-click="headerCtrl.stashChanges()">
+          <li title="Stash {{ headerCtrl.stashableFiles.length }} changes"
+              ng-show="headerCtrl.stashableFiles.length > 0" ng-click="headerCtrl.stashChanges()">
             <span class="octicon octicon-package"></span>
           </li>
 

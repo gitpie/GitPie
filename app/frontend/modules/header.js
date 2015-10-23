@@ -54,7 +54,7 @@
         this.cloneURL = null;
         this.repositoryDestiny = null;
         this.repositoryName = null;
-        this.unsynChanges = [];
+        this.stashableFiles = [];
 
         this.toggleMenu = function (menuIndex) {
           this.hideAllMenu();
@@ -99,7 +99,8 @@
 
           GIT.getStatus(repository.path, function (err, syncStatus, files) {
             $scope.$broadcast('unsynChanges', files);
-            this.unsynChanges = files;
+
+            this.setStashableFiles(files);
           }.bind(this));
 
           GIT.getCurrentBranch(repository.path, function (err, currentBranch, remoteBranchs) {
@@ -396,6 +397,32 @@
               }
             }.bind(this)
           });
+        };
+
+        //Catch event "apprefreshed" and update stash info
+        $scope.$on('apprefreshed', function (event, unsyncChanges) {
+
+          if (this.selectedRepository) {
+            this.setStashableFiles(unsyncChanges);
+
+            GIT.getStashList(this.selectedRepository.path, function (err, stashs) {
+              this.stashList = stashs;
+
+              $scope.$apply();
+            }.bind(this));
+          }
+        }.bind(this));
+
+        this.setStashableFiles = function (unsyncChanges) {
+          this.stashableFiles = [];
+
+          unsyncChanges.forEach(function (file) {
+
+            if (file.type != 'NEW') {
+              this.stashableFiles.push(file);
+            }
+
+          }.bind(this));
         };
       },
 
