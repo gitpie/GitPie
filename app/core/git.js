@@ -601,4 +601,18 @@ Git.prototype.stashChanges = function (path, callback) {
   });
 };
 
+Git.prototype.dropStash = function (path, opts) {
+
+  exec('git stash drop '.concat(opts.reflogSelector), {cwd: path, env: ENV}, function (error) {
+    invokeCallback(opts.callback, [ error ]);
+  });
+};
+
+Git.prototype.popStash = function (path, opts) {
+
+  exec('git stash pop '.concat(opts.reflogSelector), {cwd: path, env: ENV}, function (error) {
+    invokeCallback(opts.callback, [ error ]);
+  });
+};
+
 module.exports = new Git();

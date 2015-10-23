@@ -355,7 +355,6 @@
         };
 
         this.stashChanges = function () {
-          console.log('Tamo no stash');
 
           GIT.stashChanges(this.selectedRepository.path, function (err) {
 
@@ -365,6 +364,38 @@
               $scope.$broadcast('changedbranch', this.selectedRepository);
             }
           }.bind(this));
+        };
+
+        this.removeStash = function (reflogSelector) {
+          CommomService.hideHeaderMenu();
+
+          GIT.dropStash(this.selectedRepository.path, {
+            reflogSelector: reflogSelector,
+            callback: function (err) {
+
+              if (err) {
+                alert(err);
+              } else {
+                $scope.$broadcast('changedbranch', this.selectedRepository);
+              }
+            }.bind(this)
+          });
+        };
+
+        this.popStash = function (reflogSelector) {
+          CommomService.hideHeaderMenu();
+
+          GIT.popStash(this.selectedRepository.path, {
+            reflogSelector: reflogSelector,
+            callback: function (err) {
+
+              if (err) {
+                alert(err);
+              } else {
+                $scope.$broadcast('changedbranch', this.selectedRepository);
+              }
+            }.bind(this)
+          });
         };
       },
 

@@ -124,8 +124,10 @@
                     <span class="octicon octicon-person"></span> {{ stash.author }}
                   </div>
                   <div class="button-container">
-                    <button type="button" title="Pop"><span class="octicon octicon-unfold"></span></button>
-                    <button type="button" title="Remove"><span class="octicon octicon-trashcan"></span></button>
+                    <button type="button" title="Pop"
+                      ng-click="headerCtrl.popStash(stash.reflogSelector)"><span class="octicon octicon-unfold"></span></button>
+                    <button type="button" title="Remove"
+                      ng-click="headerCtrl.removeStash(stash.reflogSelector)"><span class="octicon octicon-trashcan"></span></button>
                   </div>
                 </li>
               </ul>
