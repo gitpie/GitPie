@@ -567,7 +567,7 @@ Git.prototype.createRepository = function (opts) {
 
 Git.prototype.getStashList = function (path, callback) {
 
-  exec('git stash list --pretty=format:\'%gd-gtseparator-%gn-gtseparator-%gs\'', { cwd: path,  env: ENV}, function (error, stdout, stderr) {
+  exec('git stash list --pretty=format:%gd-gtseparator-%gn-gtseparator-%gs', { cwd: path,  env: ENV}, function (error, stdout, stderr) {
     var err = null,
       stashs = [];
 
