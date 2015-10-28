@@ -103,13 +103,13 @@
             <span class="octicon octicon-mail-reply"></span>
           </li>
 
-          <li title="Stash {{ headerCtrl.stashableFiles.length }} changes"
+          <li title="{{ MSGS['Stash {number} changes'].replace('{number}', headerCtrl.stashableFiles.length) }}"
               ng-show="headerCtrl.stashableFiles.length > 0" ng-click="headerCtrl.stashChanges()">
             <span class="octicon octicon-package"></span>
           </li>
 
           <ul ng-show="headerCtrl.selectedRepository && headerCtrl.stashList.length > 0" style="  margin-right: -10px">
-            <li title="Stash list ({{ headerCtrl.stashList.length }})" ng-click="headerCtrl.toggleMenu(4)">
+            <li title="{{ MSGS['Stash list ({number})'].replace('{number}', headerCtrl.stashList.length) }}" ng-click="headerCtrl.toggleMenu(4)">
               <span class="octicon octicon-clippy"></span>
               <div class="num-indicator">
                 {{ headerCtrl.stashList.length }}
@@ -124,9 +124,9 @@
                     <span class="octicon octicon-person"></span> {{ stash.author }}
                   </div>
                   <div class="button-container">
-                    <button type="button" title="Pop"
+                    <button type="button" title="{{ MSGS['Pop'] }}"
                       ng-click="headerCtrl.popStash(stash.reflogSelector)"><span class="octicon octicon-unfold"></span></button>
-                    <button type="button" title="Remove"
+                    <button type="button" title="{{ MSGS['Remove'] }}"
                       ng-click="headerCtrl.removeStash(stash.reflogSelector)"><span class="octicon octicon-trashcan"></span></button>
                   </div>
                 </li>
