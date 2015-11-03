@@ -70,7 +70,18 @@ Just execute the follow commands to build the project from source:
 git clone https://github.com/mapaiva/GitPie.git
 cd GitPie
 npm install
-npm start
+npm start # This is aliased with `npm run linux64`
+```
+
+If you're not using `linux64`, choose the right command for you, depending on the platform:
+
+```sh
+npm run linux32
+npm run linux64
+npm run osx32
+npm run osx64
+npm run win32
+npm run win64
 ```
 
 If you want to make changes in the style of the application, you need to run the dev grunt task that will convert your sass changes into css. For this execute:
