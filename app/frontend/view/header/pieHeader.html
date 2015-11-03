@@ -103,6 +103,37 @@
             <span class="octicon octicon-mail-reply"></span>
           </li>
 
+          <li title="{{ MSGS['Stash {number} changes'].replace('{number}', headerCtrl.stashableFiles.length) }}"
+              ng-show="headerCtrl.stashableFiles.length > 0" ng-click="headerCtrl.stashChanges()">
+            <span class="octicon octicon-package"></span>
+          </li>
+
+          <ul ng-show="headerCtrl.selectedRepository && headerCtrl.stashList.length > 0" style="  margin-right: -10px">
+            <li title="{{ MSGS['Stash list ({number})'].replace('{number}', headerCtrl.stashList.length) }}" ng-click="headerCtrl.toggleMenu(4)">
+              <span class="octicon octicon-clippy"></span>
+              <div class="num-indicator">
+                {{ headerCtrl.stashList.length }}
+              </div>
+            </li>
+            <div class="stash-menu"ng-show="headerCtrl.showStashMenu">
+              <ul>
+                <li ng-repeat="stash in headerCtrl.stashList">
+                  <span class="octicon octicon-package"></span> {{ stash.subject }}
+                  <div class="sub-label">
+                    <span class="octicon octicon-pin"></span> {{ stash.reflogSelector }}
+                    <span class="octicon octicon-person"></span> {{ stash.author }}
+                  </div>
+                  <div class="button-container">
+                    <button type="button" title="{{ MSGS['Pop'] }}"
+                      ng-click="headerCtrl.popStash(stash.reflogSelector)"><span class="octicon octicon-unfold"></span></button>
+                    <button type="button" title="{{ MSGS['Remove'] }}"
+                      ng-click="headerCtrl.removeStash(stash.reflogSelector)"><span class="octicon octicon-trashcan"></span></button>
+                  </div>
+                </li>
+              </ul>
+            </div>
+          </ul>
+
           <li ng-click="headerCtrl.sync()" ng-show="headerCtrl.currentBranch">
 
             <span ng-show="headerCtrl.isRemoteBranch(headerCtrl.currentBranch)">
@@ -122,7 +153,6 @@
 
           <ul>
             <li ng-click="headerCtrl.toggleMenu(3)" title="{{ MSGS['Settings'] }}"><span class="octicon octicon-gear"></span></li>
-            <div class="menu" ng-show="headerCtrl.showSettingsMenu"></div>
           </ul>
           <li ng-show="headerCtrl.isRepositoryNameVisible()"><strong>{{ headerCtrl.selectedRepository.name }}</strong></li>
         </ul>

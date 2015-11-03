@@ -413,6 +413,7 @@
                 }
 
                 CommomService.closeAnyContextMenu();
+                $scope.$broadcast('apprefreshed', this.commitChanges);
               }.bind(this)
             });
           }
@@ -525,6 +526,8 @@
               }
             }
           }
+
+          $scope.$broadcast('apprefreshed', this.commitChanges);
         };
 
         this.refreshRepositoryChanges = function () {
@@ -538,6 +541,8 @@
 
               this.commitChanges.push(item);
             }.bind(this));
+
+            $scope.$broadcast('apprefreshed', this.commitChanges);
 
             $scope.$apply();
           }.bind(this));

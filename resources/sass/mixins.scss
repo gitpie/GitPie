@@ -92,3 +92,25 @@
 		padding-right: 2px;
 	}
 }
+
+@mixin navMenu {
+  @include basicDialog;
+  position: fixed;
+  margin-left: 5px;
+  text-shadow: none;
+  min-width: 200px;
+  z-index: 10000;
+
+  // Arrow
+  &::before {
+    content: '';
+    position: absolute;
+    width: 0;
+    height: 0;
+    border-left: 10px solid transparent;
+    border-right: 10px solid transparent;
+    border-bottom: 10px solid #FFF;
+    position: absolute;
+    top: -5px;
+  }
+}

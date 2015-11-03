@@ -36,6 +36,7 @@
         this.showAddMenu = false;
         this.showBranchMenu = false;
         this.showSettingsMenu = false;
+        this.showStashMenu = false;
 
         this.cloneNotify = {
           show: false,
@@ -53,6 +54,7 @@
         this.cloneURL = null;
         this.repositoryDestiny = null;
         this.repositoryName = null;
+        this.stashableFiles = [];
 
         this.toggleMenu = function (menuIndex) {
           this.hideAllMenu();
@@ -67,6 +69,9 @@
             case 3:
               this.showSettingsMenu = !this.showSettingsMenu;
              break;
+            case 4:
+              this.showStashMenu = !this.showStashMenu;
+            break;
           }
         };
 
@@ -74,6 +79,7 @@
           this.showAddMenu = false;
           this.showBranchMenu = false;
           this.showSettingsMenu = false;
+          this.showStashMenu = false;
 
           CommomService.closeAnyContextMenu();
         };
@@ -93,6 +99,8 @@
 
           GIT.getStatus(repository.path, function (err, syncStatus, files) {
             $scope.$broadcast('unsynChanges', files);
+
+            this.setStashableFiles(files);
           }.bind(this));
 
           GIT.getCurrentBranch(repository.path, function (err, currentBranch, remoteBranchs) {
@@ -345,6 +353,76 @@
           } else {
             return false;
           }
+        };
+
+        this.stashChanges = function () {
+
+          GIT.stashChanges(this.selectedRepository.path, function (err) {
+
+            if (err) {
+              alert(err);
+            } else {
+              $scope.$broadcast('changedbranch', this.selectedRepository);
+            }
+          }.bind(this));
+        };
+
+        this.removeStash = function (reflogSelector) {
+          CommomService.hideHeaderMenu();
+
+          GIT.dropStash(this.selectedRepository.path, {
+            reflogSelector: reflogSelector,
+            callback: function (err) {
+
+              if (err) {
+                alert(err);
+              } else {
+                $scope.$broadcast('changedbranch', this.selectedRepository);
+              }
+            }.bind(this)
+          });
+        };
+
+        this.popStash = function (reflogSelector) {
+          CommomService.hideHeaderMenu();
+
+          GIT.popStash(this.selectedRepository.path, {
+            reflogSelector: reflogSelector,
+            callback: function (err) {
+
+              if (err) {
+                alert(err);
+              } else {
+                $scope.$broadcast('changedbranch', this.selectedRepository);
+              }
+            }.bind(this)
+          });
+        };
+
+        //Catch event "apprefreshed" and update stash info
+        $scope.$on('apprefreshed', function (event, unsyncChanges) {
+
+          if (this.selectedRepository) {
+            this.setStashableFiles(unsyncChanges);
+
+            GIT.getStashList(this.selectedRepository.path, function (err, stashs) {
+              this.stashList = stashs;
+
+              $scope.$apply();
+            }.bind(this));
+          }
+        }.bind(this));
+
+        this.setStashableFiles = function (unsyncChanges) {
+          this.stashableFiles = [];
+
+          unsyncChanges.forEach(function (file) {
+
+            if (file.type != 'NEW') {
+              this.stashableFiles.push(file);
+            }
+
+          }.bind(this));
         };
       },
 

@@ -567,7 +567,7 @@ Git.prototype.createRepository = function (opts) {
 
 Git.prototype.getStashList = function (path, callback) {
 
-  exec('git stash list', { cwd: path,  env: ENV}, function (error, stdout, stderr) {
+  exec('git stash list --pretty=format:%gd-gtseparator-%gn-gtseparator-%gs', { cwd: path,  env: ENV}, function (error, stdout, stderr) {
     var err = null,
       stashs = [];
 
@@ -579,12 +579,39 @@ Git.prototype.getStashList = function (path, callback) {
       lines.forEach(function (stash) {
 
         if (stash !== '') {
-          stashs.push(stash);
+          var stashInfo = stash.split('-gtseparator-');
+
+          stashs.push({
+            reflogSelector: stashInfo[0],
+            author: stashInfo[1],
+            subject: stashInfo[2]
+          });
         }
       });
     }
 
     invokeCallback(callback, [ err, stashs ]);
+  });
+};
+
+Git.prototype.stashChanges = function (path, callback) {
+
+  exec('git stash', {cwd: path, env: ENV}, function (error) {
+    invokeCallback(callback, [ error ]);
+  });
+};
+
+Git.prototype.dropStash = function (path, opts) {
+
+  exec('git stash drop '.concat(opts.reflogSelector), {cwd: path, env: ENV}, function (error) {
+    invokeCallback(opts.callback, [ error ]);
+  });
+};
+
+Git.prototype.popStash = function (path, opts) {
+
+  exec('git stash pop '.concat(opts.reflogSelector), {cwd: path, env: ENV}, function (error) {
+    invokeCallback(opts.callback, [ error ]);
   });
 };
 
