@@ -16,7 +16,13 @@
   },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "grunt build",
+    "start": "npm run linux64",
+    "linux32": "grunt build && ./build/GitPie/linux32/GitPie",
+    "linux64": "grunt build && ./build/GitPie/linux64/GitPie",
+    "osx32": "grunt build && ./build/GitPie/osx32/GitPie",
+    "osx64": "grunt build && ./build/GitPie/osx64/GitPie",
+    "win32": "grunt build && ./build/GitPie/win32/GitPie",
+    "win64": "grunt build && ./build/GitPie/win64/GitPie",
     "dev": "grunt dev"
   },
   "repository": {
