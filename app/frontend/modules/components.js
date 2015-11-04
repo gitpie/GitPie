@@ -35,8 +35,25 @@
 
         this.addPane = function(pane) {
           if (panes.length === 0) $scope.select(pane);
+
+          pane.showTab = (pane.showPane == 'false' ? false : true);
+
           panes.push(pane);
         };
+
+        $scope.hidePanel = function (paneIndex) {
+          panes[paneIndex].selected = false;
+          panes[paneIndex].showTab = false;
+          panes[ (paneIndex-1) ].selected = true;
+
+          $scope.select( (paneIndex-1) );
+        };
+
+        $scope.showPanel = function (paneIndex) {
+          panes[paneIndex].showTab = true;
+
+          $scope.select(paneIndex);
+        }.bind(this);
       },
       templateUrl: 'app/frontend/view/components/tabs.html',
       replace: true
@@ -48,7 +65,7 @@
       require: '^tabs',
       restrict: 'E',
       transclude: true,
-      scope: { paneTitle: '@', icon: '@'},
+      scope: { paneTitle: '@', icon: '@', showPane: '@'},
       link: function(scope, element, attrs, tabsController) {
         tabsController.addPane(scope);
       },

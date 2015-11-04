@@ -34,6 +34,9 @@
         // List of files of the History tab
         this.commitHistory = [];
 
+        // Stash reference
+        this.stash = {};
+
         this.hideHeaderMenus = CommomService.hideHeaderMenu;
 
         if (this.repositories.length > 0) {
@@ -85,7 +88,6 @@
 
         this.showCommitChanges = function (commit, commitIndex) {
           var ancestorCommit = this.repositoryHistory[commitIndex+1] || {},
-
             opts = {
               hash: commit.hash,
               ancestorHash: ancestorCommit.hash || '',
@@ -104,9 +106,7 @@
           commit.selected = true;
           selectedCommit = commit;
 
-          if (this.enableCommitBlock) {
-            CommomService.changesTabPanel.select(0);
-          }
+          CommomService.changesTabPanel.select(0);
 
           GIT.getDiff(opts, function (err, files) {
             this.commitHistory = [];
@@ -547,6 +547,49 @@
             $scope.$apply();
           }.bind(this));
         };
+
+        this.hideStashTab = function () {
+          CommomService.changesTabPanel.hidePanel(2);
+        };
+
+        this.showStashTab = function () {
+          CommomService.changesTabPanel.showPanel(2);
+        };
+
+        // Listener to "showStashDiff" event fired on click View file on a Stash
+        $scope.$on('showStashDiff', function (event, stash, files) {
+          this.stash.info = stash;
+          this.stash.files = [];
+
+          files.forEach(function (file) {
+
+            if (file.name) {
+
+              if (!file.isBinary) {
+                var changesHTML = [];
+
+                if (file.additions > 0) {
+                  changesHTML.push('<span class="plus-text">+', file.additions, '</span>');
+                }
+
+
+                if (file.deletions > 0) {
+                  changesHTML.push('<span class="minor-text">-', file.deletions, '</span>');
+                }
+
+                file.changes = $sce.trustAsHtml(changesHTML.join(''));
+              } else {
+                file.changes = $sce.trustAsHtml('<span class="label-binary">' + MSGS.BINARY + '</span>');
+              }
+
+              this.stash.files.push(file);
+            }
+          }.bind(this));
+
+          this.showStashTab();
+
+          $scope.$apply();
+        }.bind(this));
 
         /* Show notification if a update was installed */
 

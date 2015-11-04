@@ -615,4 +615,28 @@ Git.prototype.popStash = function (path, opts) {
   });
 };
 
+Git.prototype.showStash = function (path, opts) {
+
+  exec('git stash show '.concat(opts.reflogSelector).concat(' --numstat'), {cwd: path, env: ENV}, function (error, stdout) {
+    var lines = stdout.split('\n'),
+      files = [];
+
+    lines.forEach(function (line) {
+
+      if (line) {
+        var props = line.split('\t');
+
+        files.push({
+          name: props[2],
+          additions: parseInt(props[0]),
+          deletions: parseInt(props[1]),
+          isBinary: (props[0] == '-' || props[1] == '-') ? true : false
+        });
+      }
+    });
+
+    invokeCallback(opts.callback, [ error, files ]);
+  });
+};
+
 module.exports = new Git();

@@ -128,6 +128,8 @@
                       ng-click="headerCtrl.popStash(stash.reflogSelector)"><span class="octicon octicon-unfold"></span></button>
                     <button type="button" title="{{ MSGS['Remove'] }}"
                       ng-click="headerCtrl.removeStash(stash.reflogSelector)"><span class="octicon octicon-trashcan"></span></button>
+                    <button type="button" title="View files"
+                      ng-click="headerCtrl.showStash(stash)"><span class="octicon octicon-diff"></span></button>
                   </div>
                 </li>
               </ul>

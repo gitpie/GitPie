@@ -399,6 +399,22 @@
           });
         };
 
+        this.showStash = function (stash) {
+          CommomService.hideHeaderMenu();
+
+          GIT.showStash(this.selectedRepository.path, {
+            reflogSelector: stash.reflogSelector,
+            callback: function (err, files) {
+
+              if (err) {
+                alert(err);
+              } else {
+                $scope.$broadcast('showStashDiff', stash, files);
+              }
+            }
+          });
+        };
+
         //Catch event "apprefreshed" and update stash info
         $scope.$on('apprefreshed', function (event, unsyncChanges) {
 
