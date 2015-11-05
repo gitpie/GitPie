@@ -101,6 +101,12 @@
   min-width: 200px;
   z-index: 10000;
 
+  ul.container-list {
+    width: 100%;
+    overflow: auto;
+    max-height: 400px;
+  }
+
   // Arrow
   &::before {
     content: '';

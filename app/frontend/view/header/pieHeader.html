@@ -82,7 +82,7 @@
               <input type="text" placeholder="Search for a tag" ng-model="findTag"
                 style="display:block; width:100%; box-sizing: border-box;"/>
 
-              <ul style="width: 100%; overflow: auto; max-height: 400px;">
+              <ul class="container-list">
                 <li ng-repeat="tag in headerCtrl.tags | filter:findTag">
                   <span class="octicon octicon-tag"></span> {{ tag }}
                 </li>
@@ -116,7 +116,7 @@
               </div>
             </li>
             <div class="stash-menu"ng-show="headerCtrl.showStashMenu">
-              <ul>
+              <ul class="container-list">
                 <li ng-repeat="stash in headerCtrl.stashList">
                   <span class="octicon octicon-package"></span> {{ stash.subject }}
                   <div class="sub-label">
@@ -128,7 +128,7 @@
                       ng-click="headerCtrl.popStash(stash.reflogSelector)"><span class="octicon octicon-unfold"></span></button>
                     <button type="button" title="{{ MSGS['Remove'] }}"
                       ng-click="headerCtrl.removeStash(stash.reflogSelector)"><span class="octicon octicon-trashcan"></span></button>
-                    <button type="button" title="View files"
+                    <button type="button" title="{{ MSGS['View files'] }}"
                       ng-click="headerCtrl.showStash(stash)"><span class="octicon octicon-diff"></span></button>
                   </div>
                 </li>

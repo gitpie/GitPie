@@ -369,6 +369,10 @@ html, html body {
               clear: both;
               padding-bottom: 5px;
               padding-right: 2px; }
+            html body #header nav ul .menu ul.container-list {
+              width: 100%;
+              overflow: auto;
+              max-height: 400px; }
             html body #header nav ul .menu::before {
               content: '';
               position: absolute;
@@ -469,6 +473,10 @@ html, html body {
               clear: both;
               padding-bottom: 5px;
               padding-right: 2px; }
+            html body #header #right #corner nav .stash-menu ul.container-list {
+              width: 100%;
+              overflow: auto;
+              max-height: 400px; }
             html body #header #right #corner nav .stash-menu::before {
               content: '';
               position: absolute;
