@@ -149,6 +149,8 @@ html, html body {
         display: block;
         color: #666;
         font-size: 0.9em; }
+      html body .context-menu .center {
+        text-align: center; }
       html body .context-menu header {
         font-weight: bold;
         padding-bottom: 10px;
@@ -335,6 +337,8 @@ html, html body {
               display: block;
               color: #666;
               font-size: 0.9em; }
+            html body #header nav ul .menu .center {
+              text-align: center; }
             html body #header nav ul .menu header {
               font-weight: bold;
               padding-bottom: 10px;
@@ -439,6 +443,8 @@ html, html body {
               display: block;
               color: #666;
               font-size: 0.9em; }
+            html body #header #right #corner nav .stash-menu .center {
+              text-align: center; }
             html body #header #right #corner nav .stash-menu header {
               font-weight: bold;
               padding-bottom: 10px;
