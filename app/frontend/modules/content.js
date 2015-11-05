@@ -1,7 +1,8 @@
 (function () {
   var CodeProcessor = require('./app/core/code-processor'),
     cp = new CodeProcessor(),
-    path = require('path');
+    path = require('path'),
+    wos = require('node-wos');
 
   angular.module('content', [])
 
@@ -477,7 +478,7 @@
 
         this.treatPath = function (path) {
 
-          if (process.platform == 'win32') {
+          if (wos.isWindows()) {
             return path.replace(/\\/g, '\\\\');
           }
 
@@ -489,10 +490,10 @@
 
           if (repositoryWasSelected) {
             this.repositoryHistory = [];
+            $scope.$broadcast('removedRepository');
           }
 
           CommomService.closeAnyContextMenu();
-          $scope.$broadcast('removedRepository');
         };
 
         this.assumeUnchanged = function (filePath, index) {
