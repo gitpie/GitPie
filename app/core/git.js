@@ -639,4 +639,11 @@ Git.prototype.showStash = function (path, opts) {
   });
 };
 
+Git.prototype.diffStashFile = function (path, opts) {
+
+  exec('git diff '.concat(opts.reflogSelector).concat(' -- "').concat(opts.fileName.trim()).concat('"'), {cwd: path, env: ENV}, function (error, stdout) {
+    invokeCallback(opts.callback, [ error, stdout ]);
+  });
+};
+
 module.exports = new Git();

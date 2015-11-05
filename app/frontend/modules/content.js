@@ -60,6 +60,7 @@
             this.commitHistory = [];
             selectedCommit = {};
             CommomService.selectedCommit = null;
+            this.hideStashTab();
 
             GIT.getCommitHistory({
               path: repository.path
@@ -211,6 +212,36 @@
 
           } else {
             change.showCode = !change.showCode;
+          }
+        };
+
+        this.showStashFileDiff = function (stashFile) {
+
+          if (!stashFile.code) {
+
+            GIT.diffStashFile(selectedRepository.path, {
+              fileName: stashFile.name,
+              reflogSelector: this.stash.info.reflogSelector,
+              callback: function (err, diff) {
+
+                if (err) {
+                  alert(err);
+                } else {
+                  stashFile.code = $sce.trustAsHtml(cp.processCode( diff ));
+
+                  if (stashFile.showCode) {
+                    stashFile.showCode = false;
+                  } else {
+                    stashFile.showCode = true;
+                  }
+                }
+
+                $scope.$apply();
+              }
+            });
+
+          } else {
+            stashFile.showCode = !stashFile.showCode;
           }
         };
 

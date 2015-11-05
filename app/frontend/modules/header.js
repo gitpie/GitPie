@@ -422,6 +422,11 @@
             this.setStashableFiles(unsyncChanges);
 
             GIT.getStashList(this.selectedRepository.path, function (err, stashs) {
+
+              if (this.stashList.length != stashs.length) {
+                $scope.appCtrl.hideStashTab();
+              }
+
               this.stashList = stashs;
 
               $scope.$apply();
