@@ -49,7 +49,7 @@ var request = require('request'),
   restartApp = function (WIN, GUI) {
     var child = child_process.spawn(process.execPath, [], {detached: true});
 
-    if (wos.platform == 'mac') {
+    if (wos.isMac()) {
       child = child_process.spawn("open", ["-n", "-a", process.execPath.match(/^([^\0]+?\.app)\//)[1]], {detached:true});
     } else {
       child = child_process.spawn(process.execPath, [], {detached: true});
@@ -156,14 +156,19 @@ Updater.prototype.downloadFiles = function () {
 
           fs.removeSync( path.join(os.tmpdir(), downloadedPath.concat('.zip')) );
 
-          command = path.join(os.tmpdir(), 'pie', downloadedPath, 'updatePie.exe') + ' ' + EXEC_PATH;
+          command = path.join(EXEC_PATH, 'updateGitPie.exe');
 
-          console.log(command);
-
-          child = child_process.spawn(command, [], {detached: true});
+          child = child_process.spawn(command, [], {
+            cwd: EXEC_PATH,
+            detached: true,
+            stdio: ['ignore'],
+            env: {
+              UPDATE_FILES_PATH: path.join(os.tmpdir(), 'pie', downloadedPath)
+            }
+          });
 
           child.unref();
-          GUI.App.quit();
+          // GUI.App.quit();
         }.bind(this);
 
         break;
