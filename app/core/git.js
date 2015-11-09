@@ -167,8 +167,8 @@ Git.prototype.getStatus = function (path, callback) {
         case 'R':
           files.push({
             type: 'RENAMED',
-            displayPath: lines[i].replace('RM', '').replace(/"/g, '').trim(),
-            path: lines[i].replace('RM', '').replace(/"/g, '').split('->')[1].trim()
+            displayPath: lines[i].replace('R', '').replace(/"/g, '').trim(),
+            path: lines[i].replace('R', '').replace(/"/g, '').split('->')[1].trim()
           });
           break;
 
@@ -201,6 +201,14 @@ Git.prototype.getStatus = function (path, callback) {
               type: 'DELETED',
               displayPath: lines[i].replace('D', '').replace(/"/g, '').trim(),
               path: lines[i].replace('D', '').replace(/"/g, '').trim()
+            });
+            break;
+
+          case 'U':
+            files.push({
+              type: 'UNMERGED',
+              displayPath: lines[i].replace('UU', '').replace(/"/g, '').trim(),
+              path: lines[i].replace('UU', '').replace(/"/g, '').trim()
             });
             break;
       }

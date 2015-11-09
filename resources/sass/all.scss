@@ -835,6 +835,11 @@ html {
                     background-color: #D7431B;
                   }
 
+                  .label-unmerged {
+                    @extend.label;
+                    background-color: #BD4F32;
+                  }
+
                   .label-renamed {
                     @extend .label;
                     background-color: #773F22;

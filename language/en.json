@@ -29,6 +29,7 @@
   "DELETED": "DELETED",
   "BINARY": "BINARY",
   "RENAMED": "RENAMED",
+  "UNMERGED": "UNMERGED",
   "Discart": "Discart",
   "Counting...": "Counting...",
   "Remove": "Remove",

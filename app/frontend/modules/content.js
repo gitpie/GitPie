@@ -413,6 +413,9 @@
 
             case 'ADDED':
               return 'label-added';
+
+            case 'UNMERGED':
+              return 'label-unmerged';
           }
         };
 
