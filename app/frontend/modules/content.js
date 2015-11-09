@@ -577,7 +577,7 @@
               this.commitChanges.push(item);
             }.bind(this));
 
-            $scope.$broadcast('apprefreshed', this.commitChanges);
+            $scope.$broadcast('apprefreshed', this.commitChanges, syncStatus);
 
             $scope.$apply();
           }.bind(this));

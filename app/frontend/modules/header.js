@@ -416,10 +416,24 @@
         };
 
         //Catch event "apprefreshed" and update stash info
-        $scope.$on('apprefreshed', function (event, unsyncChanges) {
+        $scope.$on('apprefreshed', function (event, unsyncChanges, syncStatus) {
 
           if (this.selectedRepository) {
             this.setStashableFiles(unsyncChanges);
+
+            if (this.syncStatus.ahead != syncStatus.ahead) {
+
+              GIT.getCommitHistory({
+                path: this.selectedRepository.path
+              }, function (err, historyList) {
+                $scope.appCtrl.repositoryHistory = historyList;
+                $scope.appCtrl.commitHistory = [];
+
+                $scope.$apply();
+              }.bind(this));
+            }
+
+            this.syncStatus = syncStatus;
 
             GIT.getStashList(this.selectedRepository.path, function (err, stashs) {
 
