@@ -19,6 +19,7 @@ With GitPie you can:
 
 - Add any Git repository
 - Clone any Git repository
+- Create a git repository from zero
 - Visualize the commit history
 - Visualize the number of commits
 - Visualize changes per commit
@@ -30,6 +31,11 @@ With GitPie you can:
 - Create new branchs
 - Switch between branchs
 - Visualize repository tags
+- Stash changes
+- Pop a Stash
+- Remove a Stash
+- Visualize files in a Stash
+- Revert a repository to a specific commit
 
 ## Installing
 
