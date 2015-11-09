@@ -20,20 +20,36 @@ ENV.LANG = 'en_US';
 
 /**
  * @class Git
+ * Minimal wrapper to perform git operations
  */
 function Git() {
-  this.whoiam = 'Git class that perform git operations';
+  this.whoami = 'Git class that perform git operations';
+}
+
+/**
+ * @private
+ * @method invokeCallback
+ * Verify if the callback param is a function an try to invoke it
+ * @param {function} callback
+ * @param {Array} args - Array of arguments
+*/
+function invokeCallback(callback, args) {
+
+  if (callback && typeof callback == 'function') {
+    callback.apply(this, args);
+  }
 }
 
 util.inherits(Git, events.EventEmitter);
 
 /**
- * @function getCurrentBranch - Return current branch of a git repository
+ * @method getCurrentBranch - Return current branch of a git repository
  *
  * @param  {string} path - Path of the git repository
  * @param  {function} callback - Callback to be execute in error or success case
  */
 Git.prototype.getCurrentBranch = function (path, callback) {
+
   exec('git branch -r && git symbolic-ref --short HEAD', { cwd: path, env: ENV }, function (error, stdout, stderr) {
     var err = null,
       localBranchs = stdout.split('\n'),
@@ -58,16 +74,16 @@ Git.prototype.getCurrentBranch = function (path, callback) {
       currentBranch = localBranchs[localBranchs.length - 2];
     }
 
-    if (callback && typeof callback == 'function') {
-      callback.call(this, err, currentBranch, remoteBranchs);
-    }
+    invokeCallback(callback, [ err, currentBranch, remoteBranchs ]);
   }.bind(this));
 };
 
 /**
- * @function getCommitHistory - Return a array with the commit history
+ * @method getCommitHistory - Return a array with the commit history
  *
- * @param  {string} path - Path of the git repository
+ * @param  {object} opts - Path of the git repository
+ * - {string} path - Path of the git repository
+ * - {Number} skip - Number of commits to skip
  * @param  {function} callback - Callback to be execute in error or success case
  */
 Git.prototype.getCommitHistory = function (opts, callback) {
@@ -103,14 +119,12 @@ Git.prototype.getCommitHistory = function (opts, callback) {
       }
     }
 
-    if (callback && typeof callback == 'function') {
-      callback.call(this, err, historyList);
-    }
-  });
+    invokeCallback(callback, [err, historyList] );
+  }.bind(this));
 };
 
 /**
- * @function getStatus - Return the status of the repository
+ * @method getStatus - Return the status of the repository
  *
  * @param  {string} path - Path of the git repository
  * @param  {function} callback - Callback to be execute in error or success case
@@ -123,19 +137,19 @@ Git.prototype.getStatus = function (path, callback) {
         ahead: null,
         behind: null
       },
-      files = [];
+      files = [],
+      lines = stdout.split('\n'),
+      unsynChanges,
+      unsyncParts;
 
     if (error !== null) {
       err = error;
     }
 
-    var lines = stdout.split('\n'),
-      unsynChanges;
-
-    // First line ever the sync numbers status
+    // First line ever is the sync numbers status
     unsynChanges = lines[0].substring(lines[0].lastIndexOf("[") + 1, lines[0].lastIndexOf("]"));
 
-    var unsyncParts = unsynChanges.split(',');
+    unsyncParts = unsynChanges.split(',');
 
     unsyncParts.forEach(function (i) {
       var item = i.trim();
@@ -149,39 +163,67 @@ Git.prototype.getStatus = function (path, callback) {
 
     for (var i = 1; i < lines.length; i++) {
 
-      if (lines[i].trim()[0] == 'R') {
-        files.push({
-          type: 'RENAMED',
-          displayPath: lines[i].replace('RM', '').replace(/"/g, '').trim(),
-          path: lines[i].replace('RM', '').replace(/"/g, '').split('->')[1].trim()
-        });
-      } else if (lines[i].trim()[0] == 'M') {
-        files.push({
-          type: 'MODIFIED',
-          displayPath: lines[i].replace('M', '').replace(/"/g, '').trim(),
-          path: lines[i].replace('M', '').replace(/"/g, '').trim()
-        });
-      } else if(lines[i].trim()[0] == '?') {
-        files.push({
-          type: 'NEW', //UNTRACKED
-          displayPath: lines[i].replace('??', '').replace(/"/g, '').trim(),
-          path: lines[i].replace('??', '').replace(/"/g, '').trim()
-        });
-      } else if(lines[i].trim()[0] == 'D') {
-        files.push({
-          type: 'DELETED',
-          displayPath: lines[i].replace('D', '').replace(/"/g, '').trim(),
-          path: lines[i].replace('D', '').replace(/"/g, '').trim()
-        });
+      switch (lines[i].trim()[0]) {
+        case 'R':
+          files.push({
+            type: 'RENAMED',
+            displayPath: lines[i].replace('R', '').replace(/"/g, '').trim(),
+            path: lines[i].replace('R', '').replace(/"/g, '').split('->')[1].trim()
+          });
+          break;
+
+        case 'M':
+          files.push({
+            type: 'MODIFIED',
+            displayPath: lines[i].replace('M', '').replace(/"/g, '').trim(),
+            path: lines[i].replace('M', '').replace(/"/g, '').trim()
+          });
+          break;
+
+          case '?':
+            files.push({
+              type: 'NEW', //UNTRACKED
+              displayPath: lines[i].replace('??', '').replace(/"/g, '').trim(),
+              path: lines[i].replace('??', '').replace(/"/g, '').trim()
+            });
+            break;
+
+          case 'A':
+            files.push({
+              type: 'ADDED',
+              displayPath: lines[i].replace('A', '').replace(/"/g, '').trim(),
+              path: lines[i].replace('A', '').replace(/"/g, '').trim()
+            });
+            break;
+
+          case 'D':
+            files.push({
+              type: 'DELETED',
+              displayPath: lines[i].replace('D', '').replace(/"/g, '').trim(),
+              path: lines[i].replace('D', '').replace(/"/g, '').trim()
+            });
+            break;
+
+          case 'U':
+            files.push({
+              type: 'UNMERGED',
+              displayPath: lines[i].replace('UU', '').replace(/"/g, '').trim(),
+              path: lines[i].replace('UU', '').replace(/"/g, '').trim()
+            });
+            break;
       }
     }
 
-    if (callback && typeof callback == 'function') {
-      callback.call(this, err, syncStatus, files);
-    }
+    invokeCallback(callback, [ err, syncStatus, files ]);
   });
 };
 
+/**
+ * @method fetch - Fetch with --prune flag the repository
+ *
+ * @param  {string} path - Path of the git repository
+ * @param  {function} callback - Callback to be execute in error or success case
+ */
 Git.prototype.fetch = function (path, callback) {
 
   exec('git fetch --prune', {cwd: path, env: ENV}, function (error, stdout, stderr) {
@@ -191,9 +233,7 @@ Git.prototype.fetch = function (path, callback) {
       err = error.message;
     }
 
-    if (callback && typeof callback == 'function') {
-      callback.call(this, err);
-    }
+    invokeCallback(callback, [ err ]);
   });
 };
 
@@ -223,9 +263,7 @@ Git.prototype.getDiff = function (opts, callback) {
       });
     }
 
-    if (callback && typeof callback == 'function') {
-      callback.call(this, err, files);
-    }
+    invokeCallback(callback, [ err, files ]);
   });
 };
 
@@ -241,9 +279,7 @@ Git.prototype.getUnsyncFileDiff = function (opts, callback) {
       err = error;
     }
 
-    if (callback && typeof callback == 'function') {
-      callback.call(this, err, stdout);
-    }
+    invokeCallback(callback, [ err, stdout ]);
   });
 };
 
@@ -257,7 +293,7 @@ Git.prototype.getFileDiff = function (opts, callback) {
     }
 
     if (callback && typeof callback == 'function') {
-      callback.call(this, err, stdout);
+      invokeCallback(callback, [ err, stdout ]);
     }
   });
 };
@@ -265,38 +301,29 @@ Git.prototype.getFileDiff = function (opts, callback) {
 Git.prototype.sync = function (opts, callback) {
 
   if (opts.setUpstream) {
-    var err;
 
-    try {
-      execSync('git push -u origin ' + opts.branch, { cwd: opts.path,  env: ENV});
-    } catch (error) {
-      err = error.message;
-    }
+    exec('git push -u origin '.concat(opts.branch), { cwd: opts.path,  env: ENV}, function (error) {
 
-    if (callback && typeof callback == 'function') {
-      callback.call(this, err);
-    }
+      invokeCallback(callback, [ error ]);
+    });
+
   } else {
 
     exec('git pull', { cwd: opts.path,  env: ENV}, function (error, stdout, stderr) {
-      var err = null;
 
-      if (error !== null) {
-        err = error;
+      if (error) {
+
+        invokeCallback(callback, [ error ]);
+      } else if (opts.push) {
+
+        exec('git push origin '.concat(opts.branch), { cwd: opts.path,  env: ENV}, function (error) {
+
+          invokeCallback(callback, [ error ]);
+        });
+
       } else {
 
-        if (opts.push) {
-
-          try {
-            execSync('git push origin ' + opts.branch, { cwd: opts.path,  env: ENV});
-          } catch (pushError) {
-            err = pushError.message;
-          }
-        }
-      }
-
-      if (callback && typeof callback == 'function') {
-        callback.call(this, err);
+        invokeCallback(callback, [ error ]);
       }
     });
   }
@@ -317,18 +344,16 @@ Git.prototype.add = function (path, opts) {
         err = error;
       }
 
-      if (opts.callback && typeof opts.callback == 'function') {
-        opts.callback.call(this, err);
-      }
+      invokeCallback(opts.callback, [ err ]);
     });
   }
 };
 
 Git.prototype.commit = function (path, opts) {
-  var commad = 'git commit -m "'.concat(opts.message).concat('"');
+  var commad = 'git commit -m "'.concat( (opts.message.replace(/"/g, '\\"')) ).concat('"');
 
   if (opts.description) {
-    commad = commad.concat(' -m "').concat(opts.description).concat('"');
+    commad = commad.concat(' -m "').concat( (opts.description.replace(/"/g, '\\"')) ).concat('"');
   }
 
   if (opts.forceSync) {
@@ -342,9 +367,7 @@ Git.prototype.commit = function (path, opts) {
         err = error;
       }
 
-      if (opts.callback && typeof opts.callback == 'function') {
-        opts.callback.call(this, err);
-      }
+      invokeCallback(opts.callback, [ err ]);
     });
   }
 };
@@ -366,9 +389,7 @@ Git.prototype.switchBranch = function (opts, callback) {
         err = error.message;
       }
 
-      if (callback && typeof callback == 'function') {
-        callback.call(this, err);
-      }
+      invokeCallback(callback, [ err ]);
     });
   }
 };
@@ -382,9 +403,7 @@ Git.prototype.getCommitCount = function (path, callback) {
       err = error.message;
     }
 
-    if (callback && typeof callback == 'function') {
-      callback.call(this, err, stdout);
-    }
+    invokeCallback(callback, [ err, stdout ]);
   });
 };
 
@@ -397,9 +416,7 @@ Git.prototype.listRemotes = function (path, callback) {
       err = error.message;
     }
 
-    if (callback && typeof callback == 'function') {
-      callback.call(this, err, stdout);
-    }
+    invokeCallback(callback, [ err, stdout ]);
   });
 };
 
@@ -425,11 +442,25 @@ Git.prototype.discartChangesInFile = function (path, opts) {
         err = error.message;
       }
 
-      if (opts.callback && typeof opts.callback == 'function') {
-        opts.callback.call(this, err, stdout);
-      }
+      invokeCallback(opts.callback, [ err, stdout ]);
     });
   }
+};
+
+Git.prototype.unstageFile = function (path, opts) {
+  opts = opts || {};
+
+  var command = 'git reset "'.concat(opts.file.trim()).concat('"');
+
+  exec(command, { cwd: path,  env: ENV}, function (error, stdout, stderr) {
+    var err = null;
+
+    if (error !== null) {
+      err = error.message;
+    }
+
+    invokeCallback(opts.callback, [ err, stdout ]);
+  });
 };
 
 Git.prototype.getTag = function (path, callback) {
@@ -451,9 +482,7 @@ Git.prototype.getTag = function (path, callback) {
       });
     }
 
-    if (callback && typeof callback == 'function') {
-      callback.call(this, err, tags);
-    }
+    invokeCallback(callback, [ err, tags ]);
   });
 };
 
@@ -466,25 +495,21 @@ Git.prototype.assumeUnchanged = function (path, opts) {
       err = error.message;
     }
 
-    if (opts.callback && typeof opts.callback == 'function') {
-      opts.callback.call(this, err);
-    }
+    invokeCallback(opts.callback, [ err ]);
   });
 };
 
 Git.prototype.clone = function (opts) {
   opts = opts || {};
 
-  exec('git clone '.concat(opts.cloneURL), { cwd: opts.destinyFolder,  env: ENV}, function (error, stdout, stderr) {
+  exec('git clone --recursive '.concat(opts.cloneURL), { cwd: opts.destinyFolder,  env: ENV}, function (error, stdout, stderr) {
     var err = null;
 
     if (error !== null) {
       err = error.message;
     }
 
-    if (opts.callback && typeof opts.callback == 'function') {
-      opts.callback.call(this, err);
-    }
+    invokeCallback(opts.callback, [ err ]);
   });
 };
 
@@ -497,9 +522,7 @@ Git.prototype.reset = function (path, opts) {
       err = error.message;
     }
 
-    if (opts.callback && typeof opts.callback == 'function') {
-      opts.callback.call(this, err);
-    }
+    invokeCallback(opts.callback, [ err ]);
   });
 };
 
@@ -544,12 +567,91 @@ Git.prototype.createRepository = function (opts) {
         err = error.message;
       }
 
-      if (opts.callback && typeof opts.callback == 'function') {
-        opts.callback.call(this, err);
-      }
+      invokeCallback(opts.callback, [ err ]);
     }
 
   }.bind(this));
+};
+
+Git.prototype.getStashList = function (path, callback) {
+
+  exec('git stash list --pretty=format:%gd-gtseparator-%gn-gtseparator-%gs', { cwd: path,  env: ENV}, function (error, stdout, stderr) {
+    var err = null,
+      stashs = [];
+
+    if (error !== null) {
+      err = error.message;
+    } else {
+      var lines = stdout.split('\n');
+
+      lines.forEach(function (stash) {
+
+        if (stash !== '') {
+          var stashInfo = stash.split('-gtseparator-');
+
+          stashs.push({
+            reflogSelector: stashInfo[0],
+            author: stashInfo[1],
+            subject: stashInfo[2]
+          });
+        }
+      });
+    }
+
+    invokeCallback(callback, [ err, stashs ]);
+  });
+};
+
+Git.prototype.stashChanges = function (path, callback) {
+
+  exec('git stash', {cwd: path, env: ENV}, function (error) {
+    invokeCallback(callback, [ error ]);
+  });
+};
+
+Git.prototype.dropStash = function (path, opts) {
+
+  exec('git stash drop '.concat(opts.reflogSelector), {cwd: path, env: ENV}, function (error) {
+    invokeCallback(opts.callback, [ error ]);
+  });
+};
+
+Git.prototype.popStash = function (path, opts) {
+
+  exec('git stash pop '.concat(opts.reflogSelector), {cwd: path, env: ENV}, function (error) {
+    invokeCallback(opts.callback, [ error ]);
+  });
+};
+
+Git.prototype.showStash = function (path, opts) {
+
+  exec('git stash show '.concat(opts.reflogSelector).concat(' --numstat'), {cwd: path, env: ENV}, function (error, stdout) {
+    var lines = stdout.split('\n'),
+      files = [];
+
+    lines.forEach(function (line) {
+
+      if (line) {
+        var props = line.split('\t');
+
+        files.push({
+          name: props[2],
+          additions: parseInt(props[0]),
+          deletions: parseInt(props[1]),
+          isBinary: (props[0] == '-' || props[1] == '-') ? true : false
+        });
+      }
+    });
+
+    invokeCallback(opts.callback, [ error, files ]);
+  });
+};
+
+Git.prototype.diffStashFile = function (path, opts) {
+
+  exec('git diff '.concat(opts.reflogSelector).concat(' -- "').concat(opts.fileName.trim()).concat('"'), {cwd: path, env: ENV}, function (error, stdout) {
+    invokeCallback(opts.callback, [ error, stdout ]);
+  });
 };
 
 module.exports = new Git();

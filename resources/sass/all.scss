@@ -1,6 +1,7 @@
 @import "../fonts/octicons/octicons.css";
 @import "../fonts/Consolas/consolas.css";
 @import "../fonts/Roboto/roboto.css";
+@import "../fonts/FontAwesome/css/font-awesome.min.css";
 @import "variables";
 @import "mixins";
 
@@ -249,13 +250,10 @@ html {
           display: inline-block;
 
           .loading-content {
-            background-color: rgba(255, 255, 255, 0.15);
             display: inline-flex;
-            border-radius: 50%;
             padding: 6px;
-            box-shadow: 0 1px 5px rgba(51, 51, 51, 0.7);
 
-            $offset: 130;
+            $offset: 187;
             $duration: 1.4s;
 
             @-webkit-keyframes rotator {
@@ -275,11 +273,8 @@ html {
             }
 
             @-webkit-keyframes colors {
-                0% { stroke: #4285F4; }
-                25% { stroke: #DE3E35; }
-                50% { stroke: #F7C223; }
-                75% { stroke: #1B9A59; }
-              100% { stroke: #4285F4; }
+                0% { stroke: #FFF;}
+                100% { stroke: #FFF;}
             }
 
             @-webkit-keyframes dash {
@@ -339,25 +334,7 @@ html {
           }
 
           .menu {
-            @include basicDialog;
-            position: fixed;
-            margin-left: 5px;
-            text-shadow: none;
-            min-width: 200px;
-            z-index: 10000;
-
-            // Arrow
-            &::before {
-              content: '';
-              position: absolute;
-              width: 0;
-              height: 0;
-              border-left: 10px solid transparent;
-              border-right: 10px solid transparent;
-              border-bottom: 10px solid #FFF;
-              position: absolute;
-              top: -5px;
-            }
+            @include navMenu;
           }
         }
       }
@@ -377,12 +354,57 @@ html {
 
           nav {
 
-            .menu {
-              margin-left: -174px !important;
+            .num-indicator {
+              color: $header-background-color;
+              background-color: $header-font-color;
+              text-shadow: none;
+              border-radius: 50%;
+              text-align: center;
+              height: 15px;
+              width: 15px;
+              line-height: 15px;
+              font-size: 0.7em;
+              float: right;
+              margin-top: -6px;
+            }
+
+            .stash-menu {
+              @include navMenu;
+
+              max-width: 300px;
+              margin-left: -200px;
 
               // Arrow
               &::before {
-                right: 10px;
+                right: 85px;
+              }
+
+              .sub-label {
+                color: #3998D6;
+                font-family: $code-font;
+                font-size: 0.9em;
+                padding-top: 5px;
+
+                .octicon {
+                  margin-right: 0;
+                }
+              }
+
+              .button-container {
+                padding-top: 10px;
+
+                button {
+                  text-align: center;
+                  border-radius: 50%;
+                  width: 40px;
+                  height: 40px;
+                  padding: 0;
+                  margin-right: 10px;
+
+                  .octicon {
+                    margin: 0;
+                  }
+                }
               }
             }
           }
@@ -804,9 +826,18 @@ html {
                     background-color: #6CC644;
                   }
 
+                  .label-added {
+                    @extend .label-new;
+                  }
+
                   .label-deleted {
                     @extend .label;
                     background-color: #D7431B;
+                  }
+
+                  .label-unmerged {
+                    @extend.label;
+                    background-color: #BD4F32;
                   }
 
                   .label-renamed {
@@ -820,6 +851,10 @@ html {
                     display: inline-block;
                     background-color: #F5E8DB;
                   }
+                }
+
+                header.read-only {
+                  color: #6CC644;
                 }
 
                 code {

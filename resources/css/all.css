@@ -1,6 +1,7 @@
 @import url(../fonts/octicons/octicons.css);
 @import url(../fonts/Consolas/consolas.css);
 @import url(../fonts/Roboto/roboto.css);
+@import url(../fonts/FontAwesome/css/font-awesome.min.css);
 /* Global styles */
 * {
   outline: none;
@@ -143,11 +144,13 @@ html, html body {
             color: #000;
             cursor: pointer;
             background-color: #FFF; }
-      html body .context-menu .label, html body .context-menu #wrapper #content #right nav ul li header .label-modified, html body #wrapper #content #right nav ul li header .context-menu .label-modified, html body .context-menu #wrapper #content #right nav ul li header .label-new, html body #wrapper #content #right nav ul li header .context-menu .label-new, html body .context-menu #wrapper #content #right nav ul li header .label-deleted, html body #wrapper #content #right nav ul li header .context-menu .label-deleted, html body .context-menu #wrapper #content #right nav ul li header .label-renamed, html body #wrapper #content #right nav ul li header .context-menu .label-renamed, html body .context-menu #wrapper #content #right nav ul li header .label-binary, html body #wrapper #content #right nav ul li header .context-menu .label-binary {
+      html body .context-menu .label, html body .context-menu #wrapper #content #right nav ul li header .label-modified, html body #wrapper #content #right nav ul li header .context-menu .label-modified, html body .context-menu #wrapper #content #right nav ul li header .label-new, html body #wrapper #content #right nav ul li header .context-menu .label-new, html body .context-menu #wrapper #content #right nav ul li header .label-added, html body #wrapper #content #right nav ul li header .context-menu .label-added, html body .context-menu #wrapper #content #right nav ul li header .label-deleted, html body #wrapper #content #right nav ul li header .context-menu .label-deleted, html body .context-menu #wrapper #content #right nav ul li header .label-unmerged, html body #wrapper #content #right nav ul li header .context-menu .label-unmerged, html body .context-menu #wrapper #content #right nav ul li header .label-renamed, html body #wrapper #content #right nav ul li header .context-menu .label-renamed, html body .context-menu #wrapper #content #right nav ul li header .label-binary, html body #wrapper #content #right nav ul li header .context-menu .label-binary {
         padding: 20px 0;
         display: block;
         color: #666;
         font-size: 0.9em; }
+      html body .context-menu .center {
+        text-align: center; }
       html body .context-menu header {
         font-weight: bold;
         padding-bottom: 10px;
@@ -245,11 +248,8 @@ html, html body {
         html body .notify-dialog .icon .loading-container {
           display: inline-block; }
           html body .notify-dialog .icon .loading-container .loading-content {
-            background-color: rgba(255, 255, 255, 0.15);
             display: inline-flex;
-            border-radius: 50%;
-            padding: 6px;
-            box-shadow: 0 1px 5px rgba(51, 51, 51, 0.7); }
+            padding: 6px; }
 @-webkit-keyframes rotator {
   0% {
     -webkit-transform: rotate(0deg); }
@@ -258,29 +258,23 @@ html, html body {
             html body .notify-dialog .icon .loading-container .loading-content .spinner {
               -webkit-animation: rotator 1.4s linear infinite; }
             html body .notify-dialog .icon .loading-container .loading-content .path {
-              stroke-dasharray: 130;
+              stroke-dasharray: 187;
               stroke-dashoffset: 0;
               transform-origin: center;
               -webkit-animation: dash 1.4s ease-in-out infinite, colors 5.6s ease-in-out infinite; }
 @-webkit-keyframes colors {
   0% {
-    stroke: #4285F4; }
-  25% {
-    stroke: #DE3E35; }
-  50% {
-    stroke: #F7C223; }
-  75% {
-    stroke: #1B9A59; }
+    stroke: #FFF; }
   100% {
-    stroke: #4285F4; } }
+    stroke: #FFF; } }
 @-webkit-keyframes dash {
   0% {
-    stroke-dashoffset: 130; }
+    stroke-dashoffset: 187; }
   50% {
-    stroke-dashoffset: 32.5;
+    stroke-dashoffset: 46.75;
     -webkit-transform: rotate(135deg); }
   100% {
-    stroke-dashoffset: 130;
+    stroke-dashoffset: 187;
     -webkit-transform: rotate(450deg); } }
       html body .notify-dialog .content {
         flex: 1 1 auto; }
@@ -338,11 +332,13 @@ html, html body {
                   color: #000;
                   cursor: pointer;
                   background-color: #FFF; }
-            html body #header nav ul .menu .label, html body #header #wrapper #content #right nav ul .menu li header .label-modified, html body #wrapper #content #right #header nav ul .menu li header .label-modified, html body #header #wrapper #content #right nav ul li header .menu .label-modified, html body #wrapper #content #right #header nav ul li header .menu .label-modified, html body #header #wrapper #content #right nav ul .menu li header .label-new, html body #wrapper #content #right #header nav ul .menu li header .label-new, html body #header #wrapper #content #right nav ul li header .menu .label-new, html body #wrapper #content #right #header nav ul li header .menu .label-new, html body #header #wrapper #content #right nav ul .menu li header .label-deleted, html body #wrapper #content #right #header nav ul .menu li header .label-deleted, html body #header #wrapper #content #right nav ul li header .menu .label-deleted, html body #wrapper #content #right #header nav ul li header .menu .label-deleted, html body #header #wrapper #content #right nav ul .menu li header .label-renamed, html body #wrapper #content #right #header nav ul .menu li header .label-renamed, html body #header #wrapper #content #right nav ul li header .menu .label-renamed, html body #wrapper #content #right #header nav ul li header .menu .label-renamed, html body #header #wrapper #content #right nav ul .menu li header .label-binary, html body #wrapper #content #right #header nav ul .menu li header .label-binary, html body #header #wrapper #content #right nav ul li header .menu .label-binary, html body #wrapper #content #right #header nav ul li header .menu .label-binary {
+            html body #header nav ul .menu .label, html body #header #wrapper #content #right nav ul .menu li header .label-modified, html body #wrapper #content #right #header nav ul .menu li header .label-modified, html body #header #wrapper #content #right nav ul li header .menu .label-modified, html body #wrapper #content #right #header nav ul li header .menu .label-modified, html body #header #wrapper #content #right nav ul .menu li header .label-new, html body #wrapper #content #right #header nav ul .menu li header .label-new, html body #header #wrapper #content #right nav ul li header .menu .label-new, html body #wrapper #content #right #header nav ul li header .menu .label-new, html body #header #wrapper #content #right nav ul .menu li header .label-added, html body #wrapper #content #right #header nav ul .menu li header .label-added, html body #header #wrapper #content #right nav ul li header .menu .label-added, html body #wrapper #content #right #header nav ul li header .menu .label-added, html body #header #wrapper #content #right nav ul .menu li header .label-deleted, html body #wrapper #content #right #header nav ul .menu li header .label-deleted, html body #header #wrapper #content #right nav ul li header .menu .label-deleted, html body #wrapper #content #right #header nav ul li header .menu .label-deleted, html body #header #wrapper #content #right nav ul .menu li header .label-unmerged, html body #wrapper #content #right #header nav ul .menu li header .label-unmerged, html body #header #wrapper #content #right nav ul li header .menu .label-unmerged, html body #wrapper #content #right #header nav ul li header .menu .label-unmerged, html body #header #wrapper #content #right nav ul .menu li header .label-renamed, html body #wrapper #content #right #header nav ul .menu li header .label-renamed, html body #header #wrapper #content #right nav ul li header .menu .label-renamed, html body #wrapper #content #right #header nav ul li header .menu .label-renamed, html body #header #wrapper #content #right nav ul .menu li header .label-binary, html body #wrapper #content #right #header nav ul .menu li header .label-binary, html body #header #wrapper #content #right nav ul li header .menu .label-binary, html body #wrapper #content #right #header nav ul li header .menu .label-binary {
               padding: 20px 0;
               display: block;
               color: #666;
               font-size: 0.9em; }
+            html body #header nav ul .menu .center {
+              text-align: center; }
             html body #header nav ul .menu header {
               font-weight: bold;
               padding-bottom: 10px;
@@ -377,6 +373,10 @@ html, html body {
               clear: both;
               padding-bottom: 5px;
               padding-right: 2px; }
+            html body #header nav ul .menu ul.container-list {
+              width: 100%;
+              overflow: auto;
+              max-height: 400px; }
             html body #header nav ul .menu::before {
               content: '';
               position: absolute;
@@ -396,10 +396,123 @@ html, html body {
         float: left; }
         html body #header #right #corner {
           float: right; }
-          html body #header #right #corner nav .menu {
-            margin-left: -174px !important; }
-            html body #header #right #corner nav .menu::before {
-              right: 10px; }
+          html body #header #right #corner nav .num-indicator {
+            color: #636e73;
+            background-color: #CCCCCC;
+            text-shadow: none;
+            border-radius: 50%;
+            text-align: center;
+            height: 15px;
+            width: 15px;
+            line-height: 15px;
+            font-size: 0.7em;
+            float: right;
+            margin-top: -6px; }
+          html body #header #right #corner nav .stash-menu {
+            background-color: #FFF;
+            padding: 10px;
+            border-radius: 3px;
+            box-shadow: 1px 1px 10px #666;
+            color: #333;
+            position: fixed;
+            margin-left: 5px;
+            text-shadow: none;
+            min-width: 200px;
+            z-index: 10000;
+            max-width: 300px;
+            margin-left: -200px; }
+            html body #header #right #corner nav .stash-menu ul {
+              list-style: none;
+              display: inline-block;
+              margin: 0;
+              padding: 0; }
+              html body #header #right #corner nav .stash-menu ul li {
+                padding: 15px 10px;
+                display: block;
+                cursor: default;
+                text-shadow: none;
+                background-color: #FFF; }
+                html body #header #right #corner nav .stash-menu ul li .octicon {
+                  margin-right: 10px; }
+                html body #header #right #corner nav .stash-menu ul li:hover {
+                  color: #000;
+                  cursor: pointer;
+                  background-color: #FFF; }
+            html body #header #right #corner nav .stash-menu .label, html body #header #wrapper #content #right #corner nav .stash-menu ul li header .label-modified, html body #wrapper #content #header #right #corner nav .stash-menu ul li header .label-modified, html body #header #wrapper #content #right #corner nav ul li header .stash-menu .label-modified, html body #wrapper #content #header #right #corner nav ul li header .stash-menu .label-modified, html body #header #wrapper #content #right #corner nav .stash-menu ul li header .label-new, html body #wrapper #content #header #right #corner nav .stash-menu ul li header .label-new, html body #header #wrapper #content #right #corner nav ul li header .stash-menu .label-new, html body #wrapper #content #header #right #corner nav ul li header .stash-menu .label-new, html body #header #wrapper #content #right #corner nav .stash-menu ul li header .label-added, html body #wrapper #content #header #right #corner nav .stash-menu ul li header .label-added, html body #header #wrapper #content #right #corner nav ul li header .stash-menu .label-added, html body #wrapper #content #header #right #corner nav ul li header .stash-menu .label-added, html body #header #wrapper #content #right #corner nav .stash-menu ul li header .label-deleted, html body #wrapper #content #header #right #corner nav .stash-menu ul li header .label-deleted, html body #header #wrapper #content #right #corner nav ul li header .stash-menu .label-deleted, html body #wrapper #content #header #right #corner nav ul li header .stash-menu .label-deleted, html body #header #wrapper #content #right #corner nav .stash-menu ul li header .label-unmerged, html body #wrapper #content #header #right #corner nav .stash-menu ul li header .label-unmerged, html body #header #wrapper #content #right #corner nav ul li header .stash-menu .label-unmerged, html body #wrapper #content #header #right #corner nav ul li header .stash-menu .label-unmerged, html body #header #wrapper #content #right #corner nav .stash-menu ul li header .label-renamed, html body #wrapper #content #header #right #corner nav .stash-menu ul li header .label-renamed, html body #header #wrapper #content #right #corner nav ul li header .stash-menu .label-renamed, html body #wrapper #content #header #right #corner nav ul li header .stash-menu .label-renamed, html body #header #wrapper #content #right #corner nav .stash-menu ul li header .label-binary, html body #wrapper #content #header #right #corner nav .stash-menu ul li header .label-binary, html body #header #wrapper #content #right #corner nav ul li header .stash-menu .label-binary, html body #wrapper #content #header #right #corner nav ul li header .stash-menu .label-binary {
+              padding: 20px 0;
+              display: block;
+              color: #666;
+              font-size: 0.9em; }
+            html body #header #right #corner nav .stash-menu .center {
+              text-align: center; }
+            html body #header #right #corner nav .stash-menu header {
+              font-weight: bold;
+              padding-bottom: 10px;
+              overflow: hidden; }
+            html body #header #right #corner nav .stash-menu .tabPanel nav.tabHeader {
+              margin: 0;
+              padding: 0;
+              display: flex;
+              width: 100%;
+              box-sizing: border-box;
+              overflow: hidden;
+              box-shadow: 0 4px 5px -2px rgba(1, 1, 1, 0.3); }
+              html body #header #right #corner nav .stash-menu .tabPanel nav.tabHeader div {
+                flex: 1 1 auto;
+                text-align: center;
+                padding: 10px;
+                border-bottom: #FFF 3px solid;
+                color: #999;
+                cursor: default;
+                font-weight: bold; }
+                html body #header #right #corner nav .stash-menu .tabPanel nav.tabHeader div:hover {
+                  color: #666; }
+              html body #header #right #corner nav .stash-menu .tabPanel nav.tabHeader div.active {
+                border-color: #DDD;
+                color: inherit; }
+            html body #header #right #corner nav .stash-menu .tabPanel nav.tabHeader {
+              margin-bottom: 10px; }
+            html body #header #right #corner nav .stash-menu footer {
+              text-align: right;
+              padding-top: 15px;
+              overflow: hidden;
+              clear: both;
+              padding-bottom: 5px;
+              padding-right: 2px; }
+            html body #header #right #corner nav .stash-menu ul.container-list {
+              width: 100%;
+              overflow: auto;
+              max-height: 400px; }
+            html body #header #right #corner nav .stash-menu::before {
+              content: '';
+              position: absolute;
+              width: 0;
+              height: 0;
+              border-left: 10px solid transparent;
+              border-right: 10px solid transparent;
+              border-bottom: 10px solid #FFF;
+              position: absolute;
+              top: -5px; }
+            html body #header #right #corner nav .stash-menu::before {
+              right: 85px; }
+            html body #header #right #corner nav .stash-menu .sub-label {
+              color: #3998D6;
+              font-family: "Consolas", monospace, consolas, sans-serif;
+              font-size: 0.9em;
+              padding-top: 5px; }
+              html body #header #right #corner nav .stash-menu .sub-label .octicon {
+                margin-right: 0; }
+            html body #header #right #corner nav .stash-menu .button-container {
+              padding-top: 10px; }
+              html body #header #right #corner nav .stash-menu .button-container button {
+                text-align: center;
+                border-radius: 50%;
+                width: 40px;
+                height: 40px;
+                padding: 0;
+                margin-right: 10px; }
+                html body #header #right #corner nav .stash-menu .button-container button .octicon {
+                  margin: 0; }
           html body #header #right #corner .pending-sync-container {
             display: inline-block;
             margin-left: 5px; }
@@ -439,7 +552,7 @@ html, html body {
               html body #wrapper #content #left nav ul li .octicon, html body #wrapper #content #left nav ul li .fa {
                 margin-right: 8px;
                 font-size: 1.5em; }
-              html body #wrapper #content #left nav ul li .label, html body #wrapper #content #left #right nav ul li header .label-modified, html body #wrapper #content #right #left nav ul li header .label-modified, html body #wrapper #content #left #right nav ul li header .label-new, html body #wrapper #content #right #left nav ul li header .label-new, html body #wrapper #content #left #right nav ul li header .label-deleted, html body #wrapper #content #right #left nav ul li header .label-deleted, html body #wrapper #content #left #right nav ul li header .label-renamed, html body #wrapper #content #right #left nav ul li header .label-renamed, html body #wrapper #content #left #right nav ul li header .label-binary, html body #wrapper #content #right #left nav ul li header .label-binary {
+              html body #wrapper #content #left nav ul li .label, html body #wrapper #content #left #right nav ul li header .label-modified, html body #wrapper #content #right #left nav ul li header .label-modified, html body #wrapper #content #left #right nav ul li header .label-new, html body #wrapper #content #right #left nav ul li header .label-new, html body #wrapper #content #left #right nav ul li header .label-added, html body #wrapper #content #right #left nav ul li header .label-added, html body #wrapper #content #left #right nav ul li header .label-deleted, html body #wrapper #content #right #left nav ul li header .label-deleted, html body #wrapper #content #left #right nav ul li header .label-unmerged, html body #wrapper #content #right #left nav ul li header .label-unmerged, html body #wrapper #content #left #right nav ul li header .label-renamed, html body #wrapper #content #right #left nav ul li header .label-renamed, html body #wrapper #content #left #right nav ul li header .label-binary, html body #wrapper #content #right #left nav ul li header .label-binary {
                 padding: 10px;
                 color: #959595;
                 font-weight: bold; }
@@ -677,23 +790,27 @@ html, html body {
                     font-weight: bold;
                     margin: 0 3px;
                     display: inline-block; }
-                html body #wrapper #content #right nav ul li header .label, html body #wrapper #content #right nav ul li header .label-modified, html body #wrapper #content #right nav ul li header .label-new, html body #wrapper #content #right nav ul li header .label-deleted, html body #wrapper #content #right nav ul li header .label-renamed, html body #wrapper #content #right nav ul li header .label-binary {
+                html body #wrapper #content #right nav ul li header .label, html body #wrapper #content #right nav ul li header .label-modified, html body #wrapper #content #right nav ul li header .label-new, html body #wrapper #content #right nav ul li header .label-added, html body #wrapper #content #right nav ul li header .label-deleted, html body #wrapper #content #right nav ul li header .label-unmerged, html body #wrapper #content #right nav ul li header .label-renamed, html body #wrapper #content #right nav ul li header .label-binary {
                   padding: 3px 10px;
                   border-radius: 2px;
                   font-weight: bold;
                   color: #FFF; }
                 html body #wrapper #content #right nav ul li header .label-modified {
                   background-color: #ffaf00; }
-                html body #wrapper #content #right nav ul li header .label-new {
+                html body #wrapper #content #right nav ul li header .label-new, html body #wrapper #content #right nav ul li header .label-added {
                   background-color: #6CC644; }
                 html body #wrapper #content #right nav ul li header .label-deleted {
                   background-color: #D7431B; }
+                html body #wrapper #content #right nav ul li header .label-unmerged {
+                  background-color: #BD4F32; }
                 html body #wrapper #content #right nav ul li header .label-renamed {
                   background-color: #773F22; }
                 html body #wrapper #content #right nav ul li header .label-binary {
                   color: #986B45;
                   display: inline-block;
                   background-color: #F5E8DB; }
+              html body #wrapper #content #right nav ul li header.read-only {
+                color: #6CC644; }
               html body #wrapper #content #right nav ul li code {
                 font-family: "Consolas", monospace, consolas, sans-serif;
                 white-space: pre;

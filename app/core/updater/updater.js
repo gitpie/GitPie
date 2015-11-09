@@ -14,9 +14,11 @@ var request = require('request'),
 
   AdmZip = require('adm-zip'),
 
+  wos = require('node-wos'),
+
   child_process = require("child_process"),
 
-  localPackJson = require('../../package.json'),
+  localPackJson = require('../../../package.json'),
 
   UPDATE_CONFIG = require('./updateConfig'),
 
@@ -44,31 +46,18 @@ var request = require('request'),
     return execPath.substr( 0, (execPath.length - 1) );
   },
 
-  getHardwareInfo = function () {
-    var info = {};
+  restartApp = function (WIN, GUI) {
+    var child = child_process.spawn(process.execPath, [], {detached: true});
 
-    if (/64/.test(process.arch)) {
-      info.arch = 'x64';
+    if (wos.isMac()) {
+      child = child_process.spawn("open", ["-n", "-a", process.execPath.match(/^([^\0]+?\.app)\//)[1]], {detached:true});
     } else {
-      info.arch = 'x86';
+      child = child_process.spawn(process.execPath, [], {detached: true});
     }
 
-    switch (process.platform) {
-      case 'darwin':
-        info.os = 'mac';
-          break;
-      case 'win32':
-        info.os = 'windows';
-          break;
-      case 'linux':
-        info.os = 'linux';
-          break;
-      default:
-        info.os = 'unknown';
-          break;
-    }
-
-    return info;
+    child.unref();
+    WIN.hide();
+    GUI.App.quit();
   };
 
 function Updater () {
@@ -97,7 +86,10 @@ Updater.prototype.checkAvailableUpdate = function () {
 };
 
 Updater.prototype.downloadFiles = function () {
-  var hInfo = getHardwareInfo();
+  var hInfo = {
+    os: wos.platform,
+    arch: wos.arch
+  };
 
   if (!this.updating) {
     this.updating = true;
@@ -112,7 +104,7 @@ Updater.prototype.downloadFiles = function () {
       case 'linux':
         write = targz().createWriteStream(os.tmpdir());
 
-        if (hInfo.arch == 'x64') {
+        if (hInfo.arch == '64bit') {
           releaseURL = releaseURL.concat(UPDATE_CONFIG.fileName.linux64);
           downloadedPath = 'linux64';
         } else {
@@ -129,11 +121,7 @@ Updater.prototype.downloadFiles = function () {
             if (err) {
               this.emit('error', err);
             } else {
-              var child = child_process.spawn(process.execPath, [], {detached: true});
-
-              child.unref();
-              WIN.hide();
-              GUI.App.quit();
+              restartApp(WIN, GUI);
             }
 
           }.bind(this));
@@ -144,7 +132,7 @@ Updater.prototype.downloadFiles = function () {
 
       case 'windows':
 
-        if (hInfo.arch == 'x64') {
+        if (hInfo.arch == '64bit') {
           releaseURL = releaseURL.concat(UPDATE_CONFIG.fileName.win64);
           downloadedPath = 'win64';
         } else {
@@ -156,7 +144,9 @@ Updater.prototype.downloadFiles = function () {
 
         installFunction = function (GUI, WIN) {
           var zip = new AdmZip( path.join(os.tmpdir(), downloadedPath.concat('.zip')) ),
-            zipEntries = zip.getEntries();
+            zipEntries = zip.getEntries(),
+            child,
+            command;
 
           WIN.hide();
 
@@ -164,27 +154,28 @@ Updater.prototype.downloadFiles = function () {
 
           zip.extractAllTo( path.join(os.tmpdir(), 'pie') , true);
 
-          fs.move( path.join(os.tmpdir(), 'pie', downloadedPath), EXEC_PATH, function (err) {
-            fs.removeSync( path.join(os.tmpdir(), downloadedPath.concat('.zip')) );
-            fs.removeSync( path.join(os.tmpdir(), 'pie') );
+          fs.removeSync( path.join(os.tmpdir(), downloadedPath.concat('.zip')) );
 
-            if (err) {
-              this.emit('error', err);
-            } else {
-              var child = child_process.spawn(process.execPath, [], {detached: true});
+          command = path.join(EXEC_PATH, 'updateGitPie.exe');
 
-              child.unref();
-              GUI.App.quit();
+          child = child_process.spawn(command, [], {
+            cwd: EXEC_PATH,
+            detached: true,
+            stdio: ['ignore'],
+            env: {
+              UPDATE_FILES_PATH: path.join(os.tmpdir(), 'pie', downloadedPath)
             }
+          });
 
-          }.bind(this));
+          child.unref();
+          // GUI.App.quit();
         }.bind(this);
 
         break;
 
         case 'mac':
 
-          if (hInfo.arch == 'x64') {
+          if (hInfo.arch == '64bit') {
             releaseURL = releaseURL.concat(UPDATE_CONFIG.fileName.osx64);
             downloadedPath = 'osx64';
           } else {
@@ -209,11 +200,7 @@ Updater.prototype.downloadFiles = function () {
               if (err) {
                 this.emit('error', err);
               } else {
-                var child = child_process.spawn("open", ["-n", "-a", process.execPath.match(/^([^\0]+?\.app)\//)[1]], {detached:true});
-
-                child.unref();
-                WIN.hide();
-                GUI.App.quit();
+                restartApp(WIN, GUI);
               }
 
             }.bind(this));

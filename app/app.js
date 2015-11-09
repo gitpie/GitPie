@@ -12,7 +12,7 @@ var
   GIT = require('./app/core/git'),
 
   // Updater module for GitPie
-  UpdaterModule = require('./app/core/updater'),
+  UpdaterModule = require('./app/core/updater/updater'),
 
   // Updater instance
   updater = new UpdaterModule(),

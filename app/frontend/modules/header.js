@@ -36,6 +36,7 @@
         this.showAddMenu = false;
         this.showBranchMenu = false;
         this.showSettingsMenu = false;
+        this.showStashMenu = false;
 
         this.cloneNotify = {
           show: false,
@@ -48,7 +49,15 @@
           repositoryHome: null
         };
 
+        // Scope variables to bind te "add repository" fields
+        this.repositoryPath = null;
+        this.cloneURL = null;
+        this.repositoryDestiny = null;
+        this.repositoryName = null;
+        this.stashableFiles = [];
+
         this.toggleMenu = function (menuIndex) {
+          this.hideAllMenu();
 
           switch (menuIndex) {
             case 1:
@@ -60,6 +69,9 @@
             case 3:
               this.showSettingsMenu = !this.showSettingsMenu;
              break;
+            case 4:
+              this.showStashMenu = !this.showStashMenu;
+            break;
           }
         };
 
@@ -67,16 +79,29 @@
           this.showAddMenu = false;
           this.showBranchMenu = false;
           this.showSettingsMenu = false;
+          this.showStashMenu = false;
 
           CommomService.closeAnyContextMenu();
         };
 
         CommomService.hideHeaderMenu = this.hideAllMenu.bind(this);
 
+        $scope.$on('removedRepository', function () {
+          this.selectedRepository = null;
+          this.currentBranch = null;
+          this.remoteBranchs = [];
+        }.bind(this));
+
         $scope.$on('repositorychanged', function (event, repository) {
           this.loading = true;
 
           this.selectedRepository = repository;
+
+          GIT.getStatus(repository.path, function (err, syncStatus, files) {
+            $scope.$broadcast('unsynChanges', files);
+
+            this.setStashableFiles(files);
+          }.bind(this));
 
           GIT.getCurrentBranch(repository.path, function (err, currentBranch, remoteBranchs) {
             this.currentBranch = currentBranch;
@@ -103,8 +128,10 @@
 
           }.bind(this));
 
-          GIT.getStatus(repository.path, function (err, syncStatus, files) {
-            $scope.$broadcast('unsynChanges', files);
+          GIT.getStashList(this.selectedRepository.path, function (err, stashs) {
+            this.stashList = stashs;
+
+            $scope.$apply();
           }.bind(this));
 
         }.bind(this));
@@ -168,8 +195,9 @@
             if (repository) {
               $scope.$broadcast('changedbranch', repository);
               CommomService.hideHeaderMenu();
+              this.repositoryPath = null;
             }
-          });
+          }.bind(this));
         };
 
         this.checkoutBranch = function ($event, newBranch) {
@@ -199,52 +227,58 @@
           return branchName && branchName.replace(/ /g, '-');
         };
 
-        this.cloneRepository = function (cloneURL, destiny) {
+        this.cloneRepository = function () {
 
-          if (cloneURL && destiny) {
-            var me = this,
-              repositoryData = GitUrlParse(cloneURL),
+          if (this.cloneURL && this.repositoryDestiny) {
+            var repositoryData = GitUrlParse(this.cloneURL),
               destinyFolder;
 
             try {
-              destinyFolder = fs.lstatSync(destiny);
+              destinyFolder = fs.lstatSync(this.repositoryDestiny);
 
               if (repositoryData.name) {
-                me.cloneNotify.show = true;
-                me.cloneNotify.cloneURL = cloneURL;
-                me.cloneNotify.destinyFolder = destiny;
+                this.cloneNotify.show = true;
+                this.cloneNotify.cloneURL = this.cloneURL;
+                this.cloneNotify.destinyFolder = this.repositoryDestiny;
 
                 CommomService.hideHeaderMenu();
 
                 GIT.clone({
-                  cloneURL: cloneURL,
-                  destinyFolder: destiny,
+                  cloneURL: this.cloneURL,
+                  destinyFolder: this.repositoryDestiny,
 
                   callback: function (err) {
 
                     if (err) {
                       alert(err);
                     } else {
-                      me.addRepository(path.join(destiny, repositoryData.name));
+                      this.addRepository(path.join(this.repositoryDestiny, repositoryData.name));
                     }
 
-                    me.cloneNotify.show = false;
+                    this.cloneNotify.show = false;
+                    this.cloneURL = null;
+                    this.repositoryDestiny = null;
                     $scope.$apply();
-                  }
+                  }.bind(this)
                 });
               } else {
-                alert(MSGS['\'{cloneURL}\' not appears to be a git remote URL. Let\'s try again!'].replace('{cloneURL}', cloneURL));
+                alert(MSGS['\'{cloneURL}\' not appears to be a git remote URL. Let\'s try again!'].replace('{cloneURL}', this.cloneURL));
               }
 
             } catch (err) {
-              alert(MSGS['The path \'{path}\' is not a folder. Pick a valid directory to clone projects.'].replace('{path}', destiny));
+              alert(MSGS['The path \'{path}\' is not a folder. Pick a valid directory to clone projects.'].replace('{path}', this.repositoryDestiny));
             }
 
           }
         };
 
         this.showResetButton = function () {
-          return CommomService.selectedCommit;
+
+          if (this.selectedRepository && CommomService.selectedCommit) {
+            return true;
+          }
+
+          return false;
         };
 
         this.resetBranchToCommit = function () {
@@ -265,16 +299,17 @@
           });
         };
 
-        this.createRepository = function (repositoryName, repositoryHome) {
+        this.createRepository = function () {
+          var repositoryName = this.treatBranch(this.repositoryName),
+            repositoryHome = this.repositoryHome;
 
           if (repositoryName && repositoryHome) {
-            var me = this,
-              destinyFolder;
+            var destinyFolder;
 
             try {
               destinyFolder = fs.lstatSync(repositoryHome);
-              me.createNotify.repositoryHome = repositoryHome;
-              me.createNotify.show = true;
+              this.createNotify.repositoryHome = repositoryHome;
+              this.createNotify.show = true;
 
               CommomService.hideHeaderMenu();
 
@@ -295,18 +330,134 @@
                     if (repository) {
                       $scope.$broadcast('changedbranch', repository);
                       CommomService.hideHeaderMenu();
+                      this.repositoryName = null;
+                      this.repositoryHome = null;
                     }
                   }
 
-                  me.createNotify.show = false;
+                  this.createNotify.show = false;
                   $scope.$apply();
-                }
+                }.bind(this)
               });
 
             } catch (err) {
               alert(MSGS['The path \'{path}\' is not a folder. Pick a valid directory to create projects.'].replace('{path}', repositoryHome));
             }
           }
+        };
+
+        this.isRepositoryNameVisible = function () {
+
+          if (!$scope.$root.showRepositoryMenu && this.selectedRepository) {
+            return true;
+          } else {
+            return false;
+          }
+        };
+
+        this.stashChanges = function () {
+
+          GIT.stashChanges(this.selectedRepository.path, function (err) {
+
+            if (err) {
+              alert(err);
+            } else {
+              $scope.$broadcast('changedbranch', this.selectedRepository);
+            }
+          }.bind(this));
+        };
+
+        this.removeStash = function (reflogSelector) {
+          CommomService.hideHeaderMenu();
+
+          GIT.dropStash(this.selectedRepository.path, {
+            reflogSelector: reflogSelector,
+            callback: function (err) {
+
+              if (err) {
+                alert(err);
+              } else {
+                $scope.$broadcast('changedbranch', this.selectedRepository);
+              }
+            }.bind(this)
+          });
+        };
+
+        this.popStash = function (reflogSelector) {
+          CommomService.hideHeaderMenu();
+
+          GIT.popStash(this.selectedRepository.path, {
+            reflogSelector: reflogSelector,
+            callback: function (err) {
+
+              if (err) {
+                alert(err);
+              } else {
+                $scope.$broadcast('changedbranch', this.selectedRepository);
+              }
+            }.bind(this)
+          });
+        };
+
+        this.showStash = function (stash) {
+          CommomService.hideHeaderMenu();
+
+          GIT.showStash(this.selectedRepository.path, {
+            reflogSelector: stash.reflogSelector,
+            callback: function (err, files) {
+
+              if (err) {
+                alert(err);
+              } else {
+                $scope.$broadcast('showStashDiff', stash, files);
+              }
+            }
+          });
+        };
+
+        //Catch event "apprefreshed" and update stash info
+        $scope.$on('apprefreshed', function (event, unsyncChanges, syncStatus) {
+
+          if (this.selectedRepository) {
+            this.setStashableFiles(unsyncChanges);
+
+            if (this.syncStatus.ahead != syncStatus.ahead) {
+
+              GIT.getCommitHistory({
+                path: this.selectedRepository.path
+              }, function (err, historyList) {
+                $scope.appCtrl.repositoryHistory = historyList;
+                $scope.appCtrl.commitHistory = [];
+
+                $scope.$apply();
+              }.bind(this));
+            }
+
+            this.syncStatus = syncStatus;
+
+            GIT.getStashList(this.selectedRepository.path, function (err, stashs) {
+
+              if (this.stashList.length != stashs.length) {
+                $scope.appCtrl.hideStashTab();
+              }
+
+              this.stashList = stashs;
+
+              $scope.$apply();
+            }.bind(this));
+          }
+        }.bind(this));
+
+        this.setStashableFiles = function (unsyncChanges) {
+          this.stashableFiles = [];
+
+          unsyncChanges.forEach(function (file) {
+
+            if (file.type != 'NEW') {
+              this.stashableFiles.push(file);
+            }
+
+          }.bind(this));
         };
       },
 

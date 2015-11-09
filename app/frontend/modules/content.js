@@ -1,7 +1,8 @@
 (function () {
   var CodeProcessor = require('./app/core/code-processor'),
     cp = new CodeProcessor(),
-    path = require('path');
+    path = require('path'),
+    wos = require('node-wos');
 
   angular.module('content', [])
 
@@ -34,6 +35,9 @@
         // List of files of the History tab
         this.commitHistory = [];
 
+        // Stash reference
+        this.stash = {};
+
         this.hideHeaderMenus = CommomService.hideHeaderMenu;
 
         if (this.repositories.length > 0) {
@@ -57,6 +61,7 @@
             this.commitHistory = [];
             selectedCommit = {};
             CommomService.selectedCommit = null;
+            this.hideStashTab();
 
             GIT.getCommitHistory({
               path: repository.path
@@ -85,7 +90,6 @@
 
         this.showCommitChanges = function (commit, commitIndex) {
           var ancestorCommit = this.repositoryHistory[commitIndex+1] || {},
-
             opts = {
               hash: commit.hash,
               ancestorHash: ancestorCommit.hash || '',
@@ -104,9 +108,7 @@
           commit.selected = true;
           selectedCommit = commit;
 
-          if (this.enableCommitBlock) {
-            CommomService.changesTabPanel.select(0);
-          }
+          CommomService.changesTabPanel.select(0);
 
           GIT.getDiff(opts, function (err, files) {
             this.commitHistory = [];
@@ -214,6 +216,36 @@
           }
         };
 
+        this.showStashFileDiff = function (stashFile) {
+
+          if (!stashFile.code) {
+
+            GIT.diffStashFile(selectedRepository.path, {
+              fileName: stashFile.name,
+              reflogSelector: this.stash.info.reflogSelector,
+              callback: function (err, diff) {
+
+                if (err) {
+                  alert(err);
+                } else {
+                  stashFile.code = $sce.trustAsHtml(cp.processCode( diff ));
+
+                  if (stashFile.showCode) {
+                    stashFile.showCode = false;
+                  } else {
+                    stashFile.showCode = true;
+                  }
+                }
+
+                $scope.$apply();
+              }
+            });
+
+          } else {
+            stashFile.showCode = !stashFile.showCode;
+          }
+        };
+
         this.commitSelectedChanges = function (commitMessage, commitDescription) {
 
           if (commitMessage) {
@@ -290,7 +322,6 @@
             this.commitChanges = [];
 
             files.forEach(function (item) {
-              item.name = item.displayPath;
               item.isUnsyc = true;
               item.checked = true;
 
@@ -304,18 +335,16 @@
         this.openRepositoryContextualMenu = function (event, repository, index) {
           var body = angular.element(document.body),
             contextMenu = $compile([
-
-              '<div class="context-menu" style="top: ' + event.y + 'px;  left: ' + event.x +  'px">',
+              '<div class="context-menu" style="top: ', event.y, 'px;  left: ', event.x, 'px">',
                 '<ul>',
                   '<li ng-click="appCtrl.removeRepository(\'' + repository.type + '\', ' + index + ')">',
                     MSGS.Remove,
                   '</li>',
-                  '<li ng-click="appCtrl.openItemInFolder(\'', repository.path , '\')">',
+                  '<li ng-click="appCtrl.openItemInFolder(\'', this.treatPath(repository.path) , '\')">',
                     MSGS['Show in folder'],
                   '</li>',
                 '</ul>',
               '</div>'
-
             ].join(''))($scope);
 
           CommomService.closeAnyContextMenu();
@@ -326,15 +355,13 @@
         this.openHistoryContextualMenu = function (event, history, index) {
           var body = angular.element(document.body),
             contextMenu = $compile([
-
-              '<div class="context-menu" style="top: ' + event.y + 'px;  left: ' + event.x +  'px">',
+              '<div class="context-menu" style="top: ', event.y, 'px;  left: ', event.x, 'px">',
                 '<ul>',
-                  '<li ng-click="appCtrl.openItemInFolder(\'', path.join(selectedRepository.path, history.name.trim()), '\')">',
+                  '<li ng-click="appCtrl.openItemInFolder(\'', this.treatPath( path.join(selectedRepository.path, history.name.trim()) ), '\')">',
                     MSGS['Show in folder'],
                   '</li>',
                 '</ul>',
               '</div>'
-
             ].join(''))($scope);
 
           CommomService.closeAnyContextMenu();
@@ -346,21 +373,22 @@
           var body = angular.element(document.body),
             isUnknowChange = change.type == 'NEW',
             contextMenu = $compile([
-
               '<div class="context-menu" style="top: ' + event.y + 'px;  left: ' + event.x +  'px">',
                 '<ul>',
-                  '<li ng-click="appCtrl.discartChanges(\'', change.path,'\', \'', index,'\', ' + isUnknowChange + ')">',
+                  '<li ng-hide="', (change.type == 'ADDED'), '" ng-click="appCtrl.discartChanges(\'', this.treatPath(change.path),'\', \'', index,'\', ' + isUnknowChange + ')">',
                     MSGS.Discart,
                   '</li>',
-                  '<li ng-click="appCtrl.assumeUnchanged(\'', change.path,'\', \'', index,'\')">',
+                  '<li ng-hide="', (change.type == 'ADDED'), '" ng-click="appCtrl.assumeUnchanged(\'', this.treatPath(change.path),'\', \'', index,'\')">',
                     MSGS['Assume unchanged'],
                   '</li>',
-                  '<li ng-click="appCtrl.openItemInFolder(\'', path.join(selectedRepository.path, change.path.trim()), '\')">',
+                  '<li ng-show="', (change.type == 'ADDED'), '" ng-click="appCtrl.unstageFile(\'', this.treatPath(change.path),'\', \'', index,'\')">',
+                    MSGS['Unstage file'],
+                  '</li>',
+                  '<li ng-click="appCtrl.openItemInFolder(\'', this.treatPath( path.join(selectedRepository.path, change.path.trim()) ), '\')">',
                     MSGS['Show in folder'],
                   '</li>',
                 '</ul>',
               '</div>'
-
             ].join(''))($scope);
 
           CommomService.closeAnyContextMenu();
@@ -382,6 +410,12 @@
 
             case 'RENAMED':
               return 'label-renamed';
+
+            case 'ADDED':
+              return 'label-added';
+
+            case 'UNMERGED':
+              return 'label-unmerged';
           }
         };
 
@@ -414,9 +448,29 @@
                 }
 
                 CommomService.closeAnyContextMenu();
+                $scope.$broadcast('apprefreshed', this.commitChanges);
               }.bind(this)
             });
           }
+        };
+
+        this.unstageFile = function (filePath, index) {
+
+          GIT.unstageFile(selectedRepository.path, {
+
+            file: filePath,
+
+            callback: function (err) {
+
+              if (err) {
+                alert(err);
+              } else {
+                this.refreshRepositoryChanges();
+              }
+
+              CommomService.closeAnyContextMenu();
+            }.bind(this)
+          });
         };
 
         this.openItemInFolder = function (path) {
@@ -425,11 +479,21 @@
           CommomService.closeAnyContextMenu();
         };
 
+        this.treatPath = function (path) {
+
+          if (wos.isWindows()) {
+            return path.replace(/\\/g, '\\\\');
+          }
+
+          return path;
+        };
+
         this.removeRepository = function (repositoryType, index) {
           var repositoryWasSelected = CommomService.removeRepository(repositoryType, index);
 
           if (repositoryWasSelected) {
             this.repositoryHistory = [];
+            $scope.$broadcast('removedRepository');
           }
 
           CommomService.closeAnyContextMenu();
@@ -497,7 +561,70 @@
               }
             }
           }
+
+          $scope.$broadcast('apprefreshed', this.commitChanges);
         };
+
+        this.refreshRepositoryChanges = function () {
+
+          GIT.getStatus(selectedRepository.path, function (err, syncStatus, files) {
+            this.commitChanges = [];
+
+            files.forEach(function (item) {
+              item.isUnsyc = true;
+              item.checked = true;
+
+              this.commitChanges.push(item);
+            }.bind(this));
+
+            $scope.$broadcast('apprefreshed', this.commitChanges, syncStatus);
+
+            $scope.$apply();
+          }.bind(this));
+        };
+
+        this.hideStashTab = function () {
+          CommomService.changesTabPanel.hidePanel(2);
+        };
+
+        this.showStashTab = function () {
+          CommomService.changesTabPanel.showPanel(2);
+        };
+
+        // Listener to "showStashDiff" event fired on click View file on a Stash
+        $scope.$on('showStashDiff', function (event, stash, files) {
+          this.stash.info = stash;
+          this.stash.files = [];
+
+          files.forEach(function (file) {
+
+            if (file.name) {
+
+              if (!file.isBinary) {
+                var changesHTML = [];
+
+                if (file.additions > 0) {
+                  changesHTML.push('<span class="plus-text">+', file.additions, '</span>');
+                }
+
+
+                if (file.deletions > 0) {
+                  changesHTML.push('<span class="minor-text">-', file.deletions, '</span>');
+                }
+
+                file.changes = $sce.trustAsHtml(changesHTML.join(''));
+              } else {
+                file.changes = $sce.trustAsHtml('<span class="label-binary">' + MSGS.BINARY + '</span>');
+              }
+
+              this.stash.files.push(file);
+            }
+          }.bind(this));
+
+          this.showStashTab();
+
+          $scope.$apply();
+        }.bind(this));
 
         /* Show notification if a update was installed */
 
@@ -511,6 +638,16 @@
         this.performUpdate = function () {
           updater.performUpdate(GUI, WIN);
         };
+
+        var me = this;
+
+        /* Update the changed files ever time the application is focused */
+        WIN.on('focus', function () {
+
+          if (selectedRepository) {
+            me.refreshRepositoryChanges();
+          }
+        });
       },
 
       controllerAs: 'appCtrl'
