@@ -143,32 +143,34 @@ Updater.prototype.downloadFiles = function () {
         write = fs.createWriteStream( path.join(os.tmpdir(), downloadedPath.concat('.zip')) );
 
         installFunction = function (GUI, WIN) {
-          var zip = new AdmZip( path.join(os.tmpdir(), downloadedPath.concat('.zip')) ),
-            zipEntries = zip.getEntries(),
-            child,
-            command;
 
-          WIN.hide();
+          try {
+            var zip = new AdmZip( path.join(os.tmpdir(), downloadedPath.concat('.zip')) ),
+              zipEntries = zip.getEntries(),
+              child,
+              command;
 
-          fs.mkdirSync(path.join(os.tmpdir(), 'pie'));
+            // WIN.hide();
 
-          zip.extractAllTo( path.join(os.tmpdir(), 'pie') , true);
+            fs.mkdirSync(path.join(os.tmpdir(), 'pie'));
 
-          fs.removeSync( path.join(os.tmpdir(), downloadedPath.concat('.zip')) );
+            zip.extractAllTo( path.join(os.tmpdir(), 'pie') , true);
 
-          command = path.join(EXEC_PATH, 'updateGitPie.exe');
+            fs.removeSync( path.join(os.tmpdir(), downloadedPath.concat('.zip')) );
 
-          child = child_process.spawn(command, [], {
-            cwd: EXEC_PATH,
-            detached: true,
-            stdio: ['ignore'],
-            env: {
-              UPDATE_FILES_PATH: path.join(os.tmpdir(), 'pie', downloadedPath)
-            }
-          });
+            fs.move(path.join(os.tmpdir(), 'pie', downloadedPath), EXEC_PATH, { clobber: true }, function (err) {
+              fs.removeSync( path.join(os.tmpdir(), 'pie') );
 
-          child.unref();
-          // GUI.App.quit();
+              if (err) {
+                this.emit('error', err);
+              } else {
+                restartApp(WIN, GUI);
+              }
+
+            }.bind(this));
+          } catch (err) {
+            this.emit('error', err);
+          }
         }.bind(this);
 
         break;
@@ -186,24 +188,37 @@ Updater.prototype.downloadFiles = function () {
           write = fs.createWriteStream( path.join(os.tmpdir(), downloadedPath.concat('.zip')) );
 
           installFunction = function (GUI, WIN) {
-            var zip = new AdmZip( path.join(os.tmpdir(), downloadedPath.concat('.zip')) ),
-              zipEntries = zip.getEntries();
 
-            fs.mkdirSync(path.join(os.tmpdir(), 'pie'));
+            try {
+              var zip = new AdmZip( path.join(os.tmpdir(), downloadedPath.concat('.zip')) ),
+                zipEntries = zip.getEntries(),
+                installDir = EXEC_PATH.split('Contents')[0];
 
-            zip.extractAllTo( path.join(os.tmpdir(), 'pie') , true);
+              fs.ensureDirSync(path.join(os.tmpdir(), 'pie'));
 
-            fs.move( path.join(os.tmpdir(), 'pie', downloadedPath), EXEC_PATH, function (err) {
-              fs.removeSync( path.join(os.tmpdir(), downloadedPath.concat('.zip')) );
-              fs.removeSync( path.join(os.tmpdir(), 'pie') );
+              zip.extractAllTo( path.join(os.tmpdir(), 'pie') , true);
 
-              if (err) {
-                this.emit('error', err);
-              } else {
-                restartApp(WIN, GUI);
-              }
+              fs.removeSync(path.join(installDir, 'Contents'));
 
-            }.bind(this));
+              fs.mkdirSync(path.join(installDir, 'Contents'));
+
+              fs.move(path.join(os.tmpdir(), 'pie', downloadedPath, 'GitPie.app', 'Contents'),
+                path.join(installDir, 'Contents'),
+                { clobber: true },
+                function (err) {
+                  fs.removeSync( path.join(os.tmpdir(), downloadedPath.concat('.zip')) );
+                  fs.removeSync( path.join(os.tmpdir(), 'pie') );
+
+                  if (err) {
+                    this.emit('error', err);
+                  } else {
+                    restartApp(WIN, GUI);
+                  }
+
+              }.bind(this));
+            } catch (err) {
+              this.emit('error', err);
+            }
           }.bind(this);
 
           break;
