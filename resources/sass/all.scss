@@ -446,7 +446,7 @@ html {
   				@extend .column;
   		    width: 17%;
           transition: width 0.2s ease;
-  		    background-color: #F7F7F7;
+  		    background-color: #F6F6F6;
   				border-right: $border-color 1px solid;
           box-shadow: inset 0 1px 10px rgba(0, 0, 0, 0.14);
 
@@ -510,6 +510,17 @@ html {
             .mega-octicon {
               display: block;
             }
+          }
+
+          input[type="text"] {
+            display: block;
+            margin: 10px auto;
+            padding-left: 11px;
+            padding-right: 11px;
+            width: 90%;
+            border-radius: 3em;
+            box-sizing: border-box;
+            background-color: #FFF;
           }
   		  }
 

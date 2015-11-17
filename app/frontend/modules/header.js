@@ -421,7 +421,8 @@
           if (this.selectedRepository) {
             this.setStashableFiles(unsyncChanges);
 
-            if (this.syncStatus.ahead != syncStatus.ahead) {
+            if (syncStatus && this.syncStatus.ahead != syncStatus.ahead) {
+              this.syncStatus = syncStatus;
 
               GIT.getCommitHistory({
                 path: this.selectedRepository.path
@@ -432,8 +433,6 @@
                 $scope.$apply();
               }.bind(this));
             }
-
-            this.syncStatus = syncStatus;
 
             GIT.getStashList(this.selectedRepository.path, function (err, stashs) {
 

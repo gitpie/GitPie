@@ -538,7 +538,7 @@ html, html body {
         html body #wrapper #content #left {
           width: 17%;
           transition: width 0.2s ease;
-          background-color: #F7F7F7;
+          background-color: #F6F6F6;
           border-right: #DDD 1px solid;
           box-shadow: inset 0 1px 10px rgba(0, 0, 0, 0.14); }
           html body #wrapper #content #left nav ul {
@@ -578,6 +578,15 @@ html, html body {
             cursor: default; }
             html body #wrapper #content #left .empty-msg .mega-octicon {
               display: block; }
+          html body #wrapper #content #left input[type="text"], html body #wrapper #content #left * textarea, * html body #wrapper #content #left textarea, html body body #wrapper #content #left * textarea, * html body body #wrapper #content #left textarea {
+            display: block;
+            margin: 10px auto;
+            padding-left: 11px;
+            padding-right: 11px;
+            width: 90%;
+            border-radius: 3em;
+            box-sizing: border-box;
+            background-color: #FFF; }
         html body #wrapper #content .getting-start-message {
           width: 83%;
           box-sizing: border-box;
