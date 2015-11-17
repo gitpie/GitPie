@@ -143,7 +143,7 @@ window.addEventListener('keydown', function (e) {
             alert($rootScope.MSGS['It happends with me all the time too. But lets\'s try find your project again!']);
 
           } else {
-            var name = GIT_REPO_NAME(repositoryPath),
+            var name = GIT_REPO_NAME.sync(repositoryPath),
               type,
               index,
               repositoryExists,
