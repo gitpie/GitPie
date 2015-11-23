@@ -3,10 +3,10 @@
   <section id="left" style="width: {{ showRepositoryMenu ? '17%' : '0%' }}">
     <div class="empty-msg" ng-show="appCtrl.repositories.isEmpty">
       <span class="mega-octicon octicon-rocket"></span>
-      {{ MSGS["Start adding or clonning some awesome things"] }}! <3
+      {{ MSGS["Start adding or clonning some awesome things"] }}!
     </div>
 
-    <input type="text" placeholder="{{MSGS['Search repositories']}}" ng-model="searchRepoFilter" />
+    <input ng-hide="appCtrl.repositories.isEmpty" type="text" placeholder="{{MSGS['Search repositories']}}" ng-model="searchRepoFilter" />
 
     <nav>
       <ul>
@@ -77,7 +77,7 @@
         </li>
         <li ng-repeat="commit in appCtrl.repositoryHistory" ng-class="{ selected:commit.selected }"
           ng-click="appCtrl.showCommitChanges(commit, $index)">
-          <div class="thumb">
+          <div class="{{ commit.user.trim().toLowerCase()[0] }}">
             {{ commit.user.trim()[0] }}
           </div>
           <div class="commit-message">{{ commit.message }}</div>

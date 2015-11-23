@@ -581,13 +581,132 @@ html {
                   border-radius: 50%;
                   display: inline-block;
                   width: 40px;
-                  color: rgba(255, 255, 255, 0.72);
+                  color: rgba(255, 255, 255, 0.75);
                   float: left;
                   margin-right: 10px;
                   height: 40px;
                   text-align: center;
                   line-height: 40px;
                   text-transform: uppercase;
+                  font-weight: bold;
+                }
+
+                .a {
+                  @extend .thumb;
+                  background-color: #e06055;
+                }
+
+                .b {
+                  @extend .thumb;
+                  background-color: #f06e9a;
+                }
+
+                .c {
+                  @extend .thumb;
+                }
+
+                .d {
+                  @extend .thumb;
+                  background-color: #9575cd;
+                }
+
+                .e {
+                  @extend .thumb;
+                  background-color: #7986cb;
+                }
+
+                .f {
+                  @extend .thumb;
+                  background-color: #5e97f6;
+                }
+
+                .g {
+                  @extend .thumb;
+                  background-color: #4fc3f7;
+                }
+
+                .h {
+                  @extend .thumb;
+                  background-color: #4dd0e1;
+                }
+
+                .i {
+                  @extend .thumb;
+                  background-color: #fdd835;
+                }
+
+                .j {
+                  @extend .thumb;
+                }
+
+                .k {
+                  @extend .thumb;
+                }
+
+                .l {
+                  @extend .thumb;
+                  background-color: #d4e157;
+                }
+
+                .m {
+                  @extend .thumb;
+                  background-color: #4db6ac;
+                }
+
+                .o {
+                  @extend .thumb;
+                  background-color: #ffa726;
+                }
+
+                .p {
+                  @extend .thumb;
+                  background-color: #ff8a65;
+                }
+
+                .q {
+                  @extend .thumb;
+                }
+
+                .r {
+                  @extend .thumb;
+                  background-color: #90a4ae;
+                }
+
+                .s {
+                  @extend .thumb;
+                  background-color: #a1887f;
+                }
+
+                .t {
+                  @extend .thumb;
+                  background-color: #a3a3a3;
+                }
+
+                .u {
+                  @extend .thumb;
+                  background-color: #afb6e0;
+                }
+
+                .v {
+                  @extend .thumb;
+                  background-color: #b39ddb;
+                }
+
+                .x {
+                  @extend .thumb;
+                }
+
+                .y {
+                  @extend .thumb;
+                  background-color: #bcaaa4;
+                }
+
+                .w {
+                  @extend .thumb;
+                }
+
+                .z {
+                  @extend .thumb;
                 }
 
     						.commit-message {
