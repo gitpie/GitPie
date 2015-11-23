@@ -593,46 +593,47 @@ html {
 
                 .a {
                   @extend .thumb;
-                  background-color: #e06055;
+                  background-color: #e06055 !important;
                 }
 
                 .b {
                   @extend .thumb;
-                  background-color: #f06e9a;
+                  background-color: #f06e9a !important;
                 }
 
                 .c {
                   @extend .thumb;
+                  background-color: #bd6eca !important;
                 }
 
                 .d {
                   @extend .thumb;
-                  background-color: #9575cd;
+                  background-color: #9575cd !important;
                 }
 
                 .e {
                   @extend .thumb;
-                  background-color: #7986cb;
+                  background-color: #7986cb !important;
                 }
 
                 .f {
                   @extend .thumb;
-                  background-color: #5e97f6;
+                  background-color: #5e97f6 !important;
                 }
 
                 .g {
                   @extend .thumb;
-                  background-color: #4fc3f7;
+                  background-color: #4fc3f7 !important;
                 }
 
                 .h {
                   @extend .thumb;
-                  background-color: #4dd0e1;
+                  background-color: #4dd0e1 !important;
                 }
 
                 .i {
                   @extend .thumb;
-                  background-color: #fdd835;
+                  background-color: #fdd835 !important;
                 }
 
                 .j {
@@ -645,22 +646,27 @@ html {
 
                 .l {
                   @extend .thumb;
-                  background-color: #d4e157;
+                  background-color: #d4e157 !important;
                 }
 
                 .m {
                   @extend .thumb;
-                  background-color: #4db6ac;
+                  background-color: #4db6ac !important;
+                }
+
+                .n {
+                  @extend .thumb;
+                  background-color: #fdd835 !important;
                 }
 
                 .o {
                   @extend .thumb;
-                  background-color: #ffa726;
+                  background-color: #ffa726 !important;
                 }
 
                 .p {
                   @extend .thumb;
-                  background-color: #ff8a65;
+                  background-color: #ff8a65 !important;
                 }
 
                 .q {
@@ -669,27 +675,27 @@ html {
 
                 .r {
                   @extend .thumb;
-                  background-color: #90a4ae;
+                  background-color: #90a4ae !important;
                 }
 
                 .s {
                   @extend .thumb;
-                  background-color: #a1887f;
+                  background-color: #a1887f !important;
                 }
 
                 .t {
                   @extend .thumb;
-                  background-color: #a3a3a3;
+                  background-color: #a3a3a3 !important;
                 }
 
                 .u {
                   @extend .thumb;
-                  background-color: #afb6e0;
+                  background-color: #afb6e0 !important;
                 }
 
                 .v {
                   @extend .thumb;
-                  background-color: #b39ddb;
+                  background-color: #b39ddb !important;
                 }
 
                 .x {
@@ -698,7 +704,7 @@ html {
 
                 .y {
                   @extend .thumb;
-                  background-color: #bcaaa4;
+                  background-color: #bcaaa4 !important;
                 }
 
                 .w {

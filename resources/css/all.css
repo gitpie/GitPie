@@ -626,7 +626,7 @@ html, html body {
                 padding: 15px;
                 cursor: default;
                 word-wrap: break-word; }
-                html body #wrapper #content #center nav ul li .thumb, html body #wrapper #content #center nav ul li .a, html body #wrapper #content #center nav ul li .b, html body #wrapper #content #center nav ul li .c, html body #wrapper #content #center nav ul li .d, html body #wrapper #content #center nav ul li .e, html body #wrapper #content #center nav ul li .f, html body #wrapper #content #center nav ul li .g, html body #wrapper #content #center nav ul li .h, html body #wrapper #content #center nav ul li #right header.commit-message h2, html body #wrapper #content #right header.commit-message #center nav ul li h2, html body #wrapper #content #center nav ul li #right header.commit-message h4, html body #wrapper #content #right header.commit-message #center nav ul li h4, html body #wrapper #content #center nav ul li .i, html body #wrapper #content #center nav ul li .j, html body #wrapper #content #center nav ul li .k, html body #wrapper #content #center nav ul li .l, html body #wrapper #content #center nav ul li .m, html body #wrapper #content #center nav ul li .o, html body #wrapper #content #center nav ul li .p, html body #wrapper #content #center nav ul li .q, html body #wrapper #content #center nav ul li .r, html body #wrapper #content #center nav ul li .s, html body #wrapper #content #center nav ul li .t, html body #wrapper #content #center nav ul li .u, html body #wrapper #content #center nav ul li .v, html body #wrapper #content #center nav ul li .x, html body #wrapper #content #center nav ul li .y, html body #wrapper #content #center nav ul li .w, html body #wrapper #content #center nav ul li .z {
+                html body #wrapper #content #center nav ul li .thumb, html body #wrapper #content #center nav ul li .a, html body #wrapper #content #center nav ul li .b, html body #wrapper #content #center nav ul li .c, html body #wrapper #content #center nav ul li .d, html body #wrapper #content #center nav ul li .e, html body #wrapper #content #center nav ul li .f, html body #wrapper #content #center nav ul li .g, html body #wrapper #content #center nav ul li .h, html body #wrapper #content #center nav ul li #right header.commit-message h2, html body #wrapper #content #right header.commit-message #center nav ul li h2, html body #wrapper #content #center nav ul li #right header.commit-message h4, html body #wrapper #content #right header.commit-message #center nav ul li h4, html body #wrapper #content #center nav ul li .i, html body #wrapper #content #center nav ul li .j, html body #wrapper #content #center nav ul li .k, html body #wrapper #content #center nav ul li .l, html body #wrapper #content #center nav ul li .m, html body #wrapper #content #center nav ul li .n, html body #wrapper #content #center nav ul li .o, html body #wrapper #content #center nav ul li .p, html body #wrapper #content #center nav ul li .q, html body #wrapper #content #center nav ul li .r, html body #wrapper #content #center nav ul li .s, html body #wrapper #content #center nav ul li .t, html body #wrapper #content #center nav ul li .u, html body #wrapper #content #center nav ul li .v, html body #wrapper #content #center nav ul li .x, html body #wrapper #content #center nav ul li .y, html body #wrapper #content #center nav ul li .w, html body #wrapper #content #center nav ul li .z {
                   background-color: #bd6eca;
                   border-radius: 50%;
                   display: inline-block;
@@ -640,41 +640,45 @@ html, html body {
                   text-transform: uppercase;
                   font-weight: bold; }
                 html body #wrapper #content #center nav ul li .a {
-                  background-color: #e06055; }
+                  background-color: #e06055 !important; }
                 html body #wrapper #content #center nav ul li .b {
-                  background-color: #f06e9a; }
+                  background-color: #f06e9a !important; }
+                html body #wrapper #content #center nav ul li .c {
+                  background-color: #bd6eca !important; }
                 html body #wrapper #content #center nav ul li .d {
-                  background-color: #9575cd; }
+                  background-color: #9575cd !important; }
                 html body #wrapper #content #center nav ul li .e {
-                  background-color: #7986cb; }
+                  background-color: #7986cb !important; }
                 html body #wrapper #content #center nav ul li .f {
-                  background-color: #5e97f6; }
+                  background-color: #5e97f6 !important; }
                 html body #wrapper #content #center nav ul li .g {
-                  background-color: #4fc3f7; }
+                  background-color: #4fc3f7 !important; }
                 html body #wrapper #content #center nav ul li .h, html body #wrapper #content #center nav ul li #right header.commit-message h2, html body #wrapper #content #right header.commit-message #center nav ul li h2, html body #wrapper #content #center nav ul li #right header.commit-message h4, html body #wrapper #content #right header.commit-message #center nav ul li h4 {
-                  background-color: #4dd0e1; }
+                  background-color: #4dd0e1 !important; }
                 html body #wrapper #content #center nav ul li .i {
-                  background-color: #fdd835; }
+                  background-color: #fdd835 !important; }
                 html body #wrapper #content #center nav ul li .l {
-                  background-color: #d4e157; }
+                  background-color: #d4e157 !important; }
                 html body #wrapper #content #center nav ul li .m {
-                  background-color: #4db6ac; }
+                  background-color: #4db6ac !important; }
+                html body #wrapper #content #center nav ul li .n {
+                  background-color: #fdd835 !important; }
                 html body #wrapper #content #center nav ul li .o {
-                  background-color: #ffa726; }
+                  background-color: #ffa726 !important; }
                 html body #wrapper #content #center nav ul li .p {
-                  background-color: #ff8a65; }
+                  background-color: #ff8a65 !important; }
                 html body #wrapper #content #center nav ul li .r {
-                  background-color: #90a4ae; }
+                  background-color: #90a4ae !important; }
                 html body #wrapper #content #center nav ul li .s {
-                  background-color: #a1887f; }
+                  background-color: #a1887f !important; }
                 html body #wrapper #content #center nav ul li .t {
-                  background-color: #a3a3a3; }
+                  background-color: #a3a3a3 !important; }
                 html body #wrapper #content #center nav ul li .u {
-                  background-color: #afb6e0; }
+                  background-color: #afb6e0 !important; }
                 html body #wrapper #content #center nav ul li .v {
-                  background-color: #b39ddb; }
+                  background-color: #b39ddb !important; }
                 html body #wrapper #content #center nav ul li .y {
-                  background-color: #bcaaa4; }
+                  background-color: #bcaaa4 !important; }
                 html body #wrapper #content #center nav ul li .commit-message {
                   font-size: 1.2em;
                   color: #111;
