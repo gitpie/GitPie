@@ -333,67 +333,101 @@
         }.bind(this));
 
         this.openRepositoryContextualMenu = function (event, repository, index) {
-          var body = angular.element(document.body),
-            contextMenu = $compile([
-              '<div class="context-menu" style="top: ', event.y, 'px;  left: ', event.x, 'px">',
-                '<ul>',
-                  '<li ng-click="appCtrl.removeRepository(\'' + repository.type + '\', ' + index + ')">',
-                    MSGS.Remove,
-                  '</li>',
-                  '<li ng-click="appCtrl.openItemInFolder(\'', this.treatPath(repository.path) , '\')">',
-                    MSGS['Show in folder'],
-                  '</li>',
-                '</ul>',
-              '</div>'
-            ].join(''))($scope);
+          var menu = new GUI.Menu();
 
-          CommomService.closeAnyContextMenu();
+          menu.append(new GUI.MenuItem({
+            label: MSGS.Remove,
+            click : function () {
+              this.removeRepository(repository.type, index);
+            }.bind(this)
+          }));
+          menu.append(new GUI.MenuItem({ type: 'separator' }));
+          menu.append(new GUI.MenuItem({
+            label: MSGS['Show in folder'],
+            click: function () {
+              this.openItemInFolder(this.treatPath(repository.path));
+            }.bind(this)
+          }));
 
-          body.append(contextMenu);
+          menu.popup(event.x, event.y);
         };
 
         this.openHistoryContextualMenu = function (event, history, index) {
-          var body = angular.element(document.body),
-            contextMenu = $compile([
-              '<div class="context-menu" style="top: ', event.y, 'px;  left: ', event.x, 'px">',
-                '<ul>',
-                  '<li ng-click="appCtrl.openItemInFolder(\'', this.treatPath( path.join(selectedRepository.path, history.name.trim()) ), '\')">',
-                    MSGS['Show in folder'],
-                  '</li>',
-                '</ul>',
-              '</div>'
-            ].join(''))($scope);
+          var menu = new GUI.Menu();
 
-          CommomService.closeAnyContextMenu();
+          menu.append(new GUI.MenuItem({
+            label: MSGS['Show in folder'],
+            click: function () {
+              this.openItemInFolder(this.treatPath( path.join(selectedRepository.path, history.name.trim()) ));
+            }.bind(this)
+          }));
 
-          body.append(contextMenu);
+          menu.popup(event.x, event.y);
         };
 
         this.openChangesContextualMenu = function (event, change, index) {
-          var body = angular.element(document.body),
-            isUnknowChange = change.type == 'NEW',
-            contextMenu = $compile([
-              '<div class="context-menu" style="top: ' + event.y + 'px;  left: ' + event.x +  'px">',
-                '<ul>',
-                  '<li ng-hide="', (change.type == 'ADDED'), '" ng-click="appCtrl.discartChanges(\'', this.treatPath(change.path),'\', \'', index,'\', ' + isUnknowChange + ')">',
-                    MSGS.Discart,
-                  '</li>',
-                  '<li ng-hide="', (change.type == 'ADDED'), '" ng-click="appCtrl.assumeUnchanged(\'', this.treatPath(change.path),'\', \'', index,'\')">',
-                    MSGS['Assume unchanged'],
-                  '</li>',
-                  '<li ng-show="', (change.type == 'ADDED'), '" ng-click="appCtrl.unstageFile(\'', this.treatPath(change.path),'\', \'', index,'\')">',
-                    MSGS['Unstage file'],
-                  '</li>',
-                  '<li ng-click="appCtrl.openItemInFolder(\'', this.treatPath( path.join(selectedRepository.path, change.path.trim()) ), '\')">',
-                    MSGS['Show in folder'],
-                  '</li>',
-                '</ul>',
-              '</div>'
-            ].join(''))($scope);
+          var isUnknowChange = change.type == 'NEW',
+            dir = this.treatPath(change.path.trim());
 
-          CommomService.closeAnyContextMenu();
+          //   contextMenu = $compile([
+          //     '<div class="context-menu" style="top: ' + event.y + 'px;  left: ' + event.x +  'px">',
+          //       '<ul>',
+          //         '<li ng-hide="', (change.type == 'ADDED'), '" ng-click="appCtrl.discartChanges(\'', this.treatPath(change.path),'\', \'', index,'\', ' + isUnknowChange + ')">',
+          //           MSGS.Discart,
+          //         '</li>',
+          //         '<li ng-hide="', (change.type == 'ADDED'), '" ng-click="appCtrl.assumeUnchanged(\'', this.treatPath(change.path),'\', \'', index,'\')">',
+          //           MSGS['Assume unchanged'],
+          //         '</li>',
+          //         '<li ng-show="', (change.type == 'ADDED'), '" ng-click="appCtrl.unstageFile(\'', this.treatPath(change.path),'\', \'', index,'\')">',
+          //           MSGS['Unstage file'],
+          //         '</li>',
+          //         '<li ng-click="appCtrl.openItemInFolder(\'', this.treatPath( path.join(selectedRepository.path, change.path.trim()) ), '\')">',
+          //           MSGS['Show in folder'],
+          //         '</li>',
+          //       '</ul>',
+          //     '</div>'
+          //   ].join(''))($scope);
+          //
+          // CommomService.closeAnyContextMenu();
+          //
+          // body.append(contextMenu);
 
-          body.append(contextMenu);
+          var menu = new GUI.Menu();
+
+          if (change.type == 'ADDED') {
+
+            menu.append(new GUI.MenuItem({
+              label: MSGS['Unstage file'],
+              click : function () {
+                this.unstageFile(dir, index);
+              }.bind(this)
+            }));
+          } else {
+
+            menu.append(new GUI.MenuItem({
+              label: MSGS.Discart,
+              click : function () {
+                this.discartChanges(dir, index, isUnknowChange);
+              }.bind(this)
+            }));
+
+            menu.append(new GUI.MenuItem({
+              label: MSGS['Assume unchanged'],
+              click : function () {
+                this.assumeUnchanged(dir, index);
+              }.bind(this)
+            }));
+          }
+
+          menu.append(new GUI.MenuItem({ type: 'separator' }));
+          menu.append(new GUI.MenuItem({
+            label: MSGS['Show in folder'],
+            click: function () {
+              this.openItemInFolder( this.treatPath( path.join(selectedRepository.path, dir) ) );
+            }.bind(this)
+          }));
+
+          menu.popup(event.x, event.y);
         };
 
         this.getChangeTypeClass = function (type) {
@@ -494,6 +528,8 @@
           if (repositoryWasSelected) {
             this.repositoryHistory = [];
             $scope.$broadcast('removedRepository');
+          } else {
+            $scope.$apply();
           }
 
           CommomService.closeAnyContextMenu();
