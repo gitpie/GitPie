@@ -158,7 +158,8 @@
           </li>
 
           <ul>
-            <li ng-click="headerCtrl.toggleMenu(3)" title="{{ MSGS['Settings'] }}"><span class="octicon octicon-gear"></span></li>
+            <li title="{{ MSGS['Settings'] }}" ng-click="headerCtrl.showSettingsPage()">
+              <span class="octicon octicon-gear"></span></li>
           </ul>
           <li ng-show="headerCtrl.isRepositoryNameVisible()"><strong>{{ headerCtrl.selectedRepository.name }}</strong></li>
         </ul>

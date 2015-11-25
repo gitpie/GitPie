@@ -1,0 +1,77 @@
+<div class="page" ng-hide="settingsCtrl.hidePage">
+  <div class="page-overlay" ng-click="settingsCtrl.hideSettingsPage()" style="opacity : {{ settingsCtrl.showSettingsPage ? '0.5' : '0' }}"></div>
+  <div class="page-dialog" style="margin-left : {{ settingsCtrl.showSettingsPage ? '15%' : '120%' }}">
+    <header>
+      <div class="title"><span class="octicon octicon-arrow-left" ng-click="settingsCtrl.hideSettingsPage()"></span> {{ MSGS.Settings }}</div>
+    </header>
+
+    <nav>
+      <ul>
+        <li>
+          <div class="label">Preferences</div>
+          <ul>
+            <li>
+              <section class="label-field">Font</section>
+              <select name="font">
+                <option value="Comic Sans MS">Comic Sans MS</option>
+                <option value="Ubuntu" style="font-family: Ubuntu !impotant">Ubuntu</option>
+                <option value="Roboto"><strong>Roboto (default)</strong></option>
+                <option value="Droid Sans">Droid Sans</option>
+              </select>
+            </li>
+          </ul>
+        </li>
+
+        <li>
+          <div class="label">Git</div>
+          <ul>
+            <li class="column">
+              <section class="label-field">Username</section>
+              <input type="text" name="gitUsername">
+            </li>
+
+            <li class="column">
+              <section class="label-field">Email</section>
+              <input type="text" name="gitEmail">
+            </li>
+          </ul>
+        </li>
+
+        <li>
+          <div class="label">Repository</div>
+
+          <ul>
+            <li>
+              <section class="label-field">Username</section>
+              <input type="text" name="username">
+            </li>
+            <li>
+              <section class="label-field">Password</section>
+              <input type="password" name="username">
+            </li>
+            <li>
+              <section class="label-field">Ignored files</section>
+            </li>
+            <li>
+              <section class="label-field">Using ssh key</section>
+            </li>
+          </ul>
+        </li>
+
+        <li>
+          <div class="label">About</div>
+          <ul>
+            <li>GitPie is a open source git client that have the goal to be the most simple and nice client for any project and for any people</li>
+          </ul>
+        </li>
+
+        <li>
+          <div class="label">License</div>
+          <ul>
+            <li>GitPie is under the MIT License</li>
+          </ul>
+        </li>
+      </ul>
+    </nav>
+  </div>
+</div>

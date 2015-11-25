@@ -32,7 +32,7 @@
     background-color: rgba(0, 0, 0, 0.4);
     border-radius: 5px;
     border: 2px #F5F5F5 solid; }
-  * input[type="text"], * textarea {
+  * input[type="text"], * textarea, * input[type="password"], * select {
     padding: 8px;
     border: #DDD 1px solid;
     background-color: #FAFAFA;
@@ -41,10 +41,12 @@
     transition: all 0.3s linear;
     margin-bottom: 6px;
     font-family: "Roboto", Helvetica, Arial; }
-    * input[type="text"]:focus, * textarea:focus {
+    * input[type="text"]:focus, * textarea:focus, * input[type="password"]:focus, * select:focus {
       background-color: #FFF;
       border-color: #51a7e8;
       box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.075), 0 0 5px rgba(81, 167, 232, 0.5); }
+  * select {
+    min-width: 300px; }
   * textarea {
     height: 130px;
     width: 100%;
@@ -189,7 +191,7 @@ html, html body {
         padding: 15px 30px !important; }
         html body .context-menu li:hover {
           background-color: #F5F5F5 !important; }
-    html body .modal .modal-overlay {
+    html body .page .page-overlay {
       position: absolute;
       z-index: 9999;
       top: 0;
@@ -197,33 +199,57 @@ html, html body {
       width: 100%;
       height: 100%;
       background-color: #000000;
-      opacity: 0.5; }
-    html body .modal .modal-dialog {
+      opacity: 0.5;
+      transition: opacity 0.2s ease; }
+    html body .page .page-dialog {
       z-index: 10000;
       position: absolute;
-      border-radius: 2px;
-      width: 50%;
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%, -50%);
-      -webkit-transform: translate(-50%, -50%);
-      -moz-transform: translate(-50%, -50%);
-      color: #111 !important;
+      width: 85%;
+      top: 0;
+      margin-left: 15%;
+      height: 100%;
+      color: #222 !important;
+      display: flex;
+      flex-direction: column;
+      transition: all 0.2s ease;
       background-color: #fff;
-      box-shadow: 4px 4px 40px #333; }
-      html body .modal .modal-dialog .modal-dialog-content {
-        padding: 10px;
-        text-align: left; }
-      html body .modal .modal-dialog .modal-close {
-        position: absolute;
-        top: 3px;
-        right: 5px;
-        padding: 5px;
-        cursor: pointer;
-        font-size: 120%;
-        display: inline-block;
-        font-weight: bold;
-        font-family: 'arial', 'sans-serif'; }
+      box-shadow: 4px 4px 40px #333;
+      box-sizing: border-box; }
+      html body .page .page-dialog header {
+        position: fixed; }
+        html body .page .page-dialog header .title {
+          font-size: 1.4em;
+          font-weight: bold;
+          padding: 12px 20px;
+          color: #FFF !important; }
+          html body .page .page-dialog header .title .octicon {
+            font-size: 24px;
+            margin-right: 15px;
+            cursor: pointer; }
+      html body .page .page-dialog nav {
+        margin-top: 47px;
+        padding-top: 15px;
+        flex-grow: 1;
+        overflow: auto; }
+        html body .page .page-dialog nav ul {
+          list-style: none;
+          margin: 0;
+          padding: 0;
+          padding-bottom: 10px; }
+          html body .page .page-dialog nav ul li {
+            cursor: default; }
+            html body .page .page-dialog nav ul li .label, html body .page .page-dialog #wrapper #content #right nav ul li header .label-modified, html body #wrapper #content #right .page .page-dialog nav ul li header .label-modified, html body .page .page-dialog #wrapper #content #right nav ul li header .label-new, html body #wrapper #content #right .page .page-dialog nav ul li header .label-new, html body .page .page-dialog #wrapper #content #right nav ul li header .label-added, html body #wrapper #content #right .page .page-dialog nav ul li header .label-added, html body .page .page-dialog #wrapper #content #right nav ul li header .label-deleted, html body #wrapper #content #right .page .page-dialog nav ul li header .label-deleted, html body .page .page-dialog #wrapper #content #right nav ul li header .label-unmerged, html body #wrapper #content #right .page .page-dialog nav ul li header .label-unmerged, html body .page .page-dialog #wrapper #content #right nav ul li header .label-renamed, html body #wrapper #content #right .page .page-dialog nav ul li header .label-renamed, html body .page .page-dialog #wrapper #content #right nav ul li header .label-binary, html body #wrapper #content #right .page .page-dialog nav ul li header .label-binary {
+              padding: 10px 20px;
+              font-weight: bold;
+              color: #5cb6ad; }
+            html body .page .page-dialog nav ul li ul {
+              margin-left: 10px; }
+              html body .page .page-dialog nav ul li ul li {
+                padding: 15px 20px; }
+                html body .page .page-dialog nav ul li ul li .label-field {
+                  color: #666;
+                  font-weight: bold;
+                  margin-bottom: 5px; }
     html body .notify-dialog {
       background-color: #404040;
       z-index: 1000;
@@ -278,7 +304,7 @@ html, html body {
     -webkit-transform: rotate(450deg); } }
       html body .notify-dialog .content {
         flex: 1 1 auto; }
-    html body #header {
+    html body #header, html body .page .page-dialog header, html body body .page .page-dialog header, html body .page .page-dialog body header {
       width: 100%;
       height: 47px;
       z-index: 9;
@@ -287,24 +313,24 @@ html, html body {
       -webkit-app-region: drag;
       display: flex;
       flex-direction: row; }
-      html body #header nav {
+      html body #header nav, html body .page .page-dialog header nav, html body body .page .page-dialog header nav, html body .page .page-dialog body header nav {
         float: left; }
-        html body #header nav ul {
+        html body #header nav ul, html body .page .page-dialog header nav ul, html body body .page .page-dialog header nav ul, html body .page .page-dialog body header nav ul {
           list-style: none;
           display: inline-block;
           margin: 0;
           padding: 0; }
-          html body #header nav ul li {
+          html body #header nav ul li, html body .page .page-dialog header nav ul li, html body body .page .page-dialog header nav ul li, html body .page .page-dialog body header nav ul li {
             -webkit-app-region: no-drag;
             padding: 15px 20px;
             display: inline-block;
             cursor: pointer;
             text-shadow: 0 1px 2px #49575d; }
-            html body #header nav ul li:hover {
+            html body #header nav ul li:hover, html body .page .page-dialog header nav ul li:hover, html body body .page .page-dialog header nav ul li:hover, html body .page .page-dialog body header nav ul li:hover {
               position: relative; }
-            html body #header nav ul li .sync-status {
+            html body #header nav ul li .sync-status, html body .page .page-dialog header nav ul li .sync-status, html body body .page .page-dialog header nav ul li .sync-status, html body .page .page-dialog body header nav ul li .sync-status {
               margin-left: 10px; }
-          html body #header nav ul .menu {
+          html body #header nav ul .menu, html body .page .page-dialog header nav ul .menu, html body body .page .page-dialog header nav ul .menu, html body .page .page-dialog body header nav ul .menu {
             background-color: #FFF;
             padding: 10px;
             border-radius: 3px;
@@ -315,35 +341,35 @@ html, html body {
             text-shadow: none;
             min-width: 200px;
             z-index: 10000; }
-            html body #header nav ul .menu ul {
+            html body #header nav ul .menu ul, html body .page .page-dialog header nav ul .menu ul, html body body .page .page-dialog header nav ul .menu ul, html body .page .page-dialog body header nav ul .menu ul {
               list-style: none;
               display: inline-block;
               margin: 0;
               padding: 0; }
-              html body #header nav ul .menu ul li {
+              html body #header nav ul .menu ul li, html body .page .page-dialog header nav ul .menu ul li, html body body .page .page-dialog header nav ul .menu ul li, html body .page .page-dialog body header nav ul .menu ul li {
                 padding: 15px 10px;
                 display: block;
                 cursor: default;
                 text-shadow: none;
                 background-color: #FFF; }
-                html body #header nav ul .menu ul li .octicon {
+                html body #header nav ul .menu ul li .octicon, html body .page .page-dialog header nav ul .menu ul li .octicon, html body body .page .page-dialog header nav ul .menu ul li .octicon, html body .page .page-dialog body header nav ul .menu ul li .octicon {
                   margin-right: 10px; }
-                html body #header nav ul .menu ul li:hover {
+                html body #header nav ul .menu ul li:hover, html body .page .page-dialog header nav ul .menu ul li:hover, html body body .page .page-dialog header nav ul .menu ul li:hover, html body .page .page-dialog body header nav ul .menu ul li:hover {
                   color: #000;
                   cursor: pointer;
                   background-color: #FFF; }
-            html body #header nav ul .menu .label, html body #header #wrapper #content #right nav ul .menu li header .label-modified, html body #wrapper #content #right #header nav ul .menu li header .label-modified, html body #header #wrapper #content #right nav ul li header .menu .label-modified, html body #wrapper #content #right #header nav ul li header .menu .label-modified, html body #header #wrapper #content #right nav ul .menu li header .label-new, html body #wrapper #content #right #header nav ul .menu li header .label-new, html body #header #wrapper #content #right nav ul li header .menu .label-new, html body #wrapper #content #right #header nav ul li header .menu .label-new, html body #header #wrapper #content #right nav ul .menu li header .label-added, html body #wrapper #content #right #header nav ul .menu li header .label-added, html body #header #wrapper #content #right nav ul li header .menu .label-added, html body #wrapper #content #right #header nav ul li header .menu .label-added, html body #header #wrapper #content #right nav ul .menu li header .label-deleted, html body #wrapper #content #right #header nav ul .menu li header .label-deleted, html body #header #wrapper #content #right nav ul li header .menu .label-deleted, html body #wrapper #content #right #header nav ul li header .menu .label-deleted, html body #header #wrapper #content #right nav ul .menu li header .label-unmerged, html body #wrapper #content #right #header nav ul .menu li header .label-unmerged, html body #header #wrapper #content #right nav ul li header .menu .label-unmerged, html body #wrapper #content #right #header nav ul li header .menu .label-unmerged, html body #header #wrapper #content #right nav ul .menu li header .label-renamed, html body #wrapper #content #right #header nav ul .menu li header .label-renamed, html body #header #wrapper #content #right nav ul li header .menu .label-renamed, html body #wrapper #content #right #header nav ul li header .menu .label-renamed, html body #header #wrapper #content #right nav ul .menu li header .label-binary, html body #wrapper #content #right #header nav ul .menu li header .label-binary, html body #header #wrapper #content #right nav ul li header .menu .label-binary, html body #wrapper #content #right #header nav ul li header .menu .label-binary {
+            html body #header nav ul .menu .label, html body .page .page-dialog header nav ul .menu .label, html body body .page .page-dialog header nav ul .menu .label, html body .page .page-dialog body header nav ul .menu .label, html body #header #wrapper #content #right nav ul .menu li header .label-modified, html body #wrapper #content #right #header nav ul .menu li header .label-modified, html body #header #wrapper #content #right nav ul li header .menu .label-modified, html body #wrapper #content #right #header nav ul li header .menu .label-modified, html body .page .page-dialog header #wrapper #content #right nav ul .menu li header .label-modified, html body #wrapper #content #right .page .page-dialog header nav ul .menu li header .label-modified, html body .page .page-dialog header #wrapper #content #right nav ul li header .menu .label-modified, html body #wrapper #content #right .page .page-dialog header nav ul li header .menu .label-modified, html body #header #wrapper #content #right nav ul .menu li header .label-new, html body #wrapper #content #right #header nav ul .menu li header .label-new, html body #header #wrapper #content #right nav ul li header .menu .label-new, html body #wrapper #content #right #header nav ul li header .menu .label-new, html body .page .page-dialog header #wrapper #content #right nav ul .menu li header .label-new, html body #wrapper #content #right .page .page-dialog header nav ul .menu li header .label-new, html body .page .page-dialog header #wrapper #content #right nav ul li header .menu .label-new, html body #wrapper #content #right .page .page-dialog header nav ul li header .menu .label-new, html body #header #wrapper #content #right nav ul .menu li header .label-added, html body #wrapper #content #right #header nav ul .menu li header .label-added, html body #header #wrapper #content #right nav ul li header .menu .label-added, html body #wrapper #content #right #header nav ul li header .menu .label-added, html body .page .page-dialog header #wrapper #content #right nav ul .menu li header .label-added, html body #wrapper #content #right .page .page-dialog header nav ul .menu li header .label-added, html body .page .page-dialog header #wrapper #content #right nav ul li header .menu .label-added, html body #wrapper #content #right .page .page-dialog header nav ul li header .menu .label-added, html body #header #wrapper #content #right nav ul .menu li header .label-deleted, html body #wrapper #content #right #header nav ul .menu li header .label-deleted, html body #header #wrapper #content #right nav ul li header .menu .label-deleted, html body #wrapper #content #right #header nav ul li header .menu .label-deleted, html body .page .page-dialog header #wrapper #content #right nav ul .menu li header .label-deleted, html body #wrapper #content #right .page .page-dialog header nav ul .menu li header .label-deleted, html body .page .page-dialog header #wrapper #content #right nav ul li header .menu .label-deleted, html body #wrapper #content #right .page .page-dialog header nav ul li header .menu .label-deleted, html body #header #wrapper #content #right nav ul .menu li header .label-unmerged, html body #wrapper #content #right #header nav ul .menu li header .label-unmerged, html body #header #wrapper #content #right nav ul li header .menu .label-unmerged, html body #wrapper #content #right #header nav ul li header .menu .label-unmerged, html body .page .page-dialog header #wrapper #content #right nav ul .menu li header .label-unmerged, html body #wrapper #content #right .page .page-dialog header nav ul .menu li header .label-unmerged, html body .page .page-dialog header #wrapper #content #right nav ul li header .menu .label-unmerged, html body #wrapper #content #right .page .page-dialog header nav ul li header .menu .label-unmerged, html body #header #wrapper #content #right nav ul .menu li header .label-renamed, html body #wrapper #content #right #header nav ul .menu li header .label-renamed, html body #header #wrapper #content #right nav ul li header .menu .label-renamed, html body #wrapper #content #right #header nav ul li header .menu .label-renamed, html body .page .page-dialog header #wrapper #content #right nav ul .menu li header .label-renamed, html body #wrapper #content #right .page .page-dialog header nav ul .menu li header .label-renamed, html body .page .page-dialog header #wrapper #content #right nav ul li header .menu .label-renamed, html body #wrapper #content #right .page .page-dialog header nav ul li header .menu .label-renamed, html body #header #wrapper #content #right nav ul .menu li header .label-binary, html body #wrapper #content #right #header nav ul .menu li header .label-binary, html body #header #wrapper #content #right nav ul li header .menu .label-binary, html body #wrapper #content #right #header nav ul li header .menu .label-binary, html body .page .page-dialog header #wrapper #content #right nav ul .menu li header .label-binary, html body #wrapper #content #right .page .page-dialog header nav ul .menu li header .label-binary, html body .page .page-dialog header #wrapper #content #right nav ul li header .menu .label-binary, html body #wrapper #content #right .page .page-dialog header nav ul li header .menu .label-binary {
               padding: 20px 0;
               display: block;
               color: #666;
               font-size: 0.9em; }
-            html body #header nav ul .menu .center {
+            html body #header nav ul .menu .center, html body .page .page-dialog header nav ul .menu .center, html body body .page .page-dialog header nav ul .menu .center, html body .page .page-dialog body header nav ul .menu .center {
               text-align: center; }
-            html body #header nav ul .menu header {
+            html body #header nav ul .menu header, html body .page .page-dialog header nav ul .menu header, html body body .page .page-dialog header nav ul .menu header, html body .page .page-dialog body header nav ul .menu header {
               font-weight: bold;
               padding-bottom: 10px;
               overflow: hidden; }
-            html body #header nav ul .menu .tabPanel nav.tabHeader {
+            html body #header nav ul .menu .tabPanel nav.tabHeader, html body .page .page-dialog header nav ul .menu .tabPanel nav.tabHeader, html body body .page .page-dialog header nav ul .menu .tabPanel nav.tabHeader, html body .page .page-dialog body header nav ul .menu .tabPanel nav.tabHeader {
               margin: 0;
               padding: 0;
               display: flex;
@@ -351,7 +377,7 @@ html, html body {
               box-sizing: border-box;
               overflow: hidden;
               box-shadow: 0 4px 5px -2px rgba(1, 1, 1, 0.3); }
-              html body #header nav ul .menu .tabPanel nav.tabHeader div {
+              html body #header nav ul .menu .tabPanel nav.tabHeader div, html body .page .page-dialog header nav ul .menu .tabPanel nav.tabHeader div, html body body .page .page-dialog header nav ul .menu .tabPanel nav.tabHeader div, html body .page .page-dialog body header nav ul .menu .tabPanel nav.tabHeader div {
                 flex: 1 1 auto;
                 text-align: center;
                 padding: 10px;
@@ -359,25 +385,25 @@ html, html body {
                 color: #999;
                 cursor: default;
                 font-weight: bold; }
-                html body #header nav ul .menu .tabPanel nav.tabHeader div:hover {
+                html body #header nav ul .menu .tabPanel nav.tabHeader div:hover, html body .page .page-dialog header nav ul .menu .tabPanel nav.tabHeader div:hover, html body body .page .page-dialog header nav ul .menu .tabPanel nav.tabHeader div:hover, html body .page .page-dialog body header nav ul .menu .tabPanel nav.tabHeader div:hover {
                   color: #666; }
-              html body #header nav ul .menu .tabPanel nav.tabHeader div.active {
+              html body #header nav ul .menu .tabPanel nav.tabHeader div.active, html body .page .page-dialog header nav ul .menu .tabPanel nav.tabHeader div.active, html body body .page .page-dialog header nav ul .menu .tabPanel nav.tabHeader div.active, html body .page .page-dialog body header nav ul .menu .tabPanel nav.tabHeader div.active {
                 border-color: #DDD;
                 color: inherit; }
-            html body #header nav ul .menu .tabPanel nav.tabHeader {
+            html body #header nav ul .menu .tabPanel nav.tabHeader, html body .page .page-dialog header nav ul .menu .tabPanel nav.tabHeader, html body body .page .page-dialog header nav ul .menu .tabPanel nav.tabHeader, html body .page .page-dialog body header nav ul .menu .tabPanel nav.tabHeader {
               margin-bottom: 10px; }
-            html body #header nav ul .menu footer {
+            html body #header nav ul .menu footer, html body .page .page-dialog header nav ul .menu footer, html body body .page .page-dialog header nav ul .menu footer, html body .page .page-dialog body header nav ul .menu footer {
               text-align: right;
               padding-top: 15px;
               overflow: hidden;
               clear: both;
               padding-bottom: 5px;
               padding-right: 2px; }
-            html body #header nav ul .menu ul.container-list {
+            html body #header nav ul .menu ul.container-list, html body .page .page-dialog header nav ul .menu ul.container-list, html body body .page .page-dialog header nav ul .menu ul.container-list, html body .page .page-dialog body header nav ul .menu ul.container-list {
               width: 100%;
               overflow: auto;
               max-height: 400px; }
-            html body #header nav ul .menu::before {
+            html body #header nav ul .menu::before, html body .page .page-dialog header nav ul .menu::before, html body body .page .page-dialog header nav ul .menu::before, html body .page .page-dialog body header nav ul .menu::before {
               content: '';
               position: absolute;
               width: 0;
@@ -387,16 +413,16 @@ html, html body {
               border-bottom: 10px solid #FFF;
               position: absolute;
               top: -5px; }
-      html body #header #left {
+      html body #header #left, html body .page .page-dialog header #left, html body body .page .page-dialog header #left, html body .page .page-dialog body header #left {
         width: 17%;
         min-width: 110px;
         float: left; }
-      html body #header #right {
+      html body #header #right, html body .page .page-dialog header #right, html body body .page .page-dialog header #right, html body .page .page-dialog body header #right {
         width: 83%;
         float: left; }
-        html body #header #right #corner {
+        html body #header #right #corner, html body .page .page-dialog header #right #corner, html body body .page .page-dialog header #right #corner, html body .page .page-dialog body header #right #corner {
           float: right; }
-          html body #header #right #corner nav .num-indicator {
+          html body #header #right #corner nav .num-indicator, html body .page .page-dialog header #right #corner nav .num-indicator, html body body .page .page-dialog header #right #corner nav .num-indicator, html body .page .page-dialog body header #right #corner nav .num-indicator {
             color: #636e73;
             background-color: #CCCCCC;
             text-shadow: none;
@@ -408,7 +434,7 @@ html, html body {
             font-size: 0.7em;
             float: right;
             margin-top: -6px; }
-          html body #header #right #corner nav .stash-menu {
+          html body #header #right #corner nav .stash-menu, html body .page .page-dialog header #right #corner nav .stash-menu, html body body .page .page-dialog header #right #corner nav .stash-menu, html body .page .page-dialog body header #right #corner nav .stash-menu {
             background-color: #FFF;
             padding: 10px;
             border-radius: 3px;
@@ -421,35 +447,35 @@ html, html body {
             z-index: 10000;
             max-width: 300px;
             margin-left: -200px; }
-            html body #header #right #corner nav .stash-menu ul {
+            html body #header #right #corner nav .stash-menu ul, html body .page .page-dialog header #right #corner nav .stash-menu ul, html body body .page .page-dialog header #right #corner nav .stash-menu ul, html body .page .page-dialog body header #right #corner nav .stash-menu ul {
               list-style: none;
               display: inline-block;
               margin: 0;
               padding: 0; }
-              html body #header #right #corner nav .stash-menu ul li {
+              html body #header #right #corner nav .stash-menu ul li, html body .page .page-dialog header #right #corner nav .stash-menu ul li, html body body .page .page-dialog header #right #corner nav .stash-menu ul li, html body .page .page-dialog body header #right #corner nav .stash-menu ul li {
                 padding: 15px 10px;
                 display: block;
                 cursor: default;
                 text-shadow: none;
                 background-color: #FFF; }
-                html body #header #right #corner nav .stash-menu ul li .octicon {
+                html body #header #right #corner nav .stash-menu ul li .octicon, html body .page .page-dialog header #right #corner nav .stash-menu ul li .octicon, html body body .page .page-dialog header #right #corner nav .stash-menu ul li .octicon, html body .page .page-dialog body header #right #corner nav .stash-menu ul li .octicon {
                   margin-right: 10px; }
-                html body #header #right #corner nav .stash-menu ul li:hover {
+                html body #header #right #corner nav .stash-menu ul li:hover, html body .page .page-dialog header #right #corner nav .stash-menu ul li:hover, html body body .page .page-dialog header #right #corner nav .stash-menu ul li:hover, html body .page .page-dialog body header #right #corner nav .stash-menu ul li:hover {
                   color: #000;
                   cursor: pointer;
                   background-color: #FFF; }
-            html body #header #right #corner nav .stash-menu .label, html body #header #wrapper #content #right #corner nav .stash-menu ul li header .label-modified, html body #wrapper #content #header #right #corner nav .stash-menu ul li header .label-modified, html body #header #wrapper #content #right #corner nav ul li header .stash-menu .label-modified, html body #wrapper #content #header #right #corner nav ul li header .stash-menu .label-modified, html body #header #wrapper #content #right #corner nav .stash-menu ul li header .label-new, html body #wrapper #content #header #right #corner nav .stash-menu ul li header .label-new, html body #header #wrapper #content #right #corner nav ul li header .stash-menu .label-new, html body #wrapper #content #header #right #corner nav ul li header .stash-menu .label-new, html body #header #wrapper #content #right #corner nav .stash-menu ul li header .label-added, html body #wrapper #content #header #right #corner nav .stash-menu ul li header .label-added, html body #header #wrapper #content #right #corner nav ul li header .stash-menu .label-added, html body #wrapper #content #header #right #corner nav ul li header .stash-menu .label-added, html body #header #wrapper #content #right #corner nav .stash-menu ul li header .label-deleted, html body #wrapper #content #header #right #corner nav .stash-menu ul li header .label-deleted, html body #header #wrapper #content #right #corner nav ul li header .stash-menu .label-deleted, html body #wrapper #content #header #right #corner nav ul li header .stash-menu .label-deleted, html body #header #wrapper #content #right #corner nav .stash-menu ul li header .label-unmerged, html body #wrapper #content #header #right #corner nav .stash-menu ul li header .label-unmerged, html body #header #wrapper #content #right #corner nav ul li header .stash-menu .label-unmerged, html body #wrapper #content #header #right #corner nav ul li header .stash-menu .label-unmerged, html body #header #wrapper #content #right #corner nav .stash-menu ul li header .label-renamed, html body #wrapper #content #header #right #corner nav .stash-menu ul li header .label-renamed, html body #header #wrapper #content #right #corner nav ul li header .stash-menu .label-renamed, html body #wrapper #content #header #right #corner nav ul li header .stash-menu .label-renamed, html body #header #wrapper #content #right #corner nav .stash-menu ul li header .label-binary, html body #wrapper #content #header #right #corner nav .stash-menu ul li header .label-binary, html body #header #wrapper #content #right #corner nav ul li header .stash-menu .label-binary, html body #wrapper #content #header #right #corner nav ul li header .stash-menu .label-binary {
+            html body #header #right #corner nav .stash-menu .label, html body .page .page-dialog header #right #corner nav .stash-menu .label, html body body .page .page-dialog header #right #corner nav .stash-menu .label, html body .page .page-dialog body header #right #corner nav .stash-menu .label, html body #header #wrapper #content #right #corner nav .stash-menu ul li header .label-modified, html body #wrapper #content #header #right #corner nav .stash-menu ul li header .label-modified, html body #header #wrapper #content #right #corner nav ul li header .stash-menu .label-modified, html body #wrapper #content #header #right #corner nav ul li header .stash-menu .label-modified, html body .page .page-dialog header #wrapper #content #right #corner nav .stash-menu ul li header .label-modified, html body #wrapper #content .page .page-dialog header #right #corner nav .stash-menu ul li header .label-modified, html body .page .page-dialog header #wrapper #content #right #corner nav ul li header .stash-menu .label-modified, html body #wrapper #content .page .page-dialog header #right #corner nav ul li header .stash-menu .label-modified, html body #header #wrapper #content #right #corner nav .stash-menu ul li header .label-new, html body #wrapper #content #header #right #corner nav .stash-menu ul li header .label-new, html body #header #wrapper #content #right #corner nav ul li header .stash-menu .label-new, html body #wrapper #content #header #right #corner nav ul li header .stash-menu .label-new, html body .page .page-dialog header #wrapper #content #right #corner nav .stash-menu ul li header .label-new, html body #wrapper #content .page .page-dialog header #right #corner nav .stash-menu ul li header .label-new, html body .page .page-dialog header #wrapper #content #right #corner nav ul li header .stash-menu .label-new, html body #wrapper #content .page .page-dialog header #right #corner nav ul li header .stash-menu .label-new, html body #header #wrapper #content #right #corner nav .stash-menu ul li header .label-added, html body #wrapper #content #header #right #corner nav .stash-menu ul li header .label-added, html body #header #wrapper #content #right #corner nav ul li header .stash-menu .label-added, html body #wrapper #content #header #right #corner nav ul li header .stash-menu .label-added, html body .page .page-dialog header #wrapper #content #right #corner nav .stash-menu ul li header .label-added, html body #wrapper #content .page .page-dialog header #right #corner nav .stash-menu ul li header .label-added, html body .page .page-dialog header #wrapper #content #right #corner nav ul li header .stash-menu .label-added, html body #wrapper #content .page .page-dialog header #right #corner nav ul li header .stash-menu .label-added, html body #header #wrapper #content #right #corner nav .stash-menu ul li header .label-deleted, html body #wrapper #content #header #right #corner nav .stash-menu ul li header .label-deleted, html body #header #wrapper #content #right #corner nav ul li header .stash-menu .label-deleted, html body #wrapper #content #header #right #corner nav ul li header .stash-menu .label-deleted, html body .page .page-dialog header #wrapper #content #right #corner nav .stash-menu ul li header .label-deleted, html body #wrapper #content .page .page-dialog header #right #corner nav .stash-menu ul li header .label-deleted, html body .page .page-dialog header #wrapper #content #right #corner nav ul li header .stash-menu .label-deleted, html body #wrapper #content .page .page-dialog header #right #corner nav ul li header .stash-menu .label-deleted, html body #header #wrapper #content #right #corner nav .stash-menu ul li header .label-unmerged, html body #wrapper #content #header #right #corner nav .stash-menu ul li header .label-unmerged, html body #header #wrapper #content #right #corner nav ul li header .stash-menu .label-unmerged, html body #wrapper #content #header #right #corner nav ul li header .stash-menu .label-unmerged, html body .page .page-dialog header #wrapper #content #right #corner nav .stash-menu ul li header .label-unmerged, html body #wrapper #content .page .page-dialog header #right #corner nav .stash-menu ul li header .label-unmerged, html body .page .page-dialog header #wrapper #content #right #corner nav ul li header .stash-menu .label-unmerged, html body #wrapper #content .page .page-dialog header #right #corner nav ul li header .stash-menu .label-unmerged, html body #header #wrapper #content #right #corner nav .stash-menu ul li header .label-renamed, html body #wrapper #content #header #right #corner nav .stash-menu ul li header .label-renamed, html body #header #wrapper #content #right #corner nav ul li header .stash-menu .label-renamed, html body #wrapper #content #header #right #corner nav ul li header .stash-menu .label-renamed, html body .page .page-dialog header #wrapper #content #right #corner nav .stash-menu ul li header .label-renamed, html body #wrapper #content .page .page-dialog header #right #corner nav .stash-menu ul li header .label-renamed, html body .page .page-dialog header #wrapper #content #right #corner nav ul li header .stash-menu .label-renamed, html body #wrapper #content .page .page-dialog header #right #corner nav ul li header .stash-menu .label-renamed, html body #header #wrapper #content #right #corner nav .stash-menu ul li header .label-binary, html body #wrapper #content #header #right #corner nav .stash-menu ul li header .label-binary, html body #header #wrapper #content #right #corner nav ul li header .stash-menu .label-binary, html body #wrapper #content #header #right #corner nav ul li header .stash-menu .label-binary, html body .page .page-dialog header #wrapper #content #right #corner nav .stash-menu ul li header .label-binary, html body #wrapper #content .page .page-dialog header #right #corner nav .stash-menu ul li header .label-binary, html body .page .page-dialog header #wrapper #content #right #corner nav ul li header .stash-menu .label-binary, html body #wrapper #content .page .page-dialog header #right #corner nav ul li header .stash-menu .label-binary {
               padding: 20px 0;
               display: block;
               color: #666;
               font-size: 0.9em; }
-            html body #header #right #corner nav .stash-menu .center {
+            html body #header #right #corner nav .stash-menu .center, html body .page .page-dialog header #right #corner nav .stash-menu .center, html body body .page .page-dialog header #right #corner nav .stash-menu .center, html body .page .page-dialog body header #right #corner nav .stash-menu .center {
               text-align: center; }
-            html body #header #right #corner nav .stash-menu header {
+            html body #header #right #corner nav .stash-menu header, html body .page .page-dialog header #right #corner nav .stash-menu header, html body body .page .page-dialog header #right #corner nav .stash-menu header, html body .page .page-dialog body header #right #corner nav .stash-menu header {
               font-weight: bold;
               padding-bottom: 10px;
               overflow: hidden; }
-            html body #header #right #corner nav .stash-menu .tabPanel nav.tabHeader {
+            html body #header #right #corner nav .stash-menu .tabPanel nav.tabHeader, html body .page .page-dialog header #right #corner nav .stash-menu .tabPanel nav.tabHeader, html body body .page .page-dialog header #right #corner nav .stash-menu .tabPanel nav.tabHeader, html body .page .page-dialog body header #right #corner nav .stash-menu .tabPanel nav.tabHeader {
               margin: 0;
               padding: 0;
               display: flex;
@@ -457,7 +483,7 @@ html, html body {
               box-sizing: border-box;
               overflow: hidden;
               box-shadow: 0 4px 5px -2px rgba(1, 1, 1, 0.3); }
-              html body #header #right #corner nav .stash-menu .tabPanel nav.tabHeader div {
+              html body #header #right #corner nav .stash-menu .tabPanel nav.tabHeader div, html body .page .page-dialog header #right #corner nav .stash-menu .tabPanel nav.tabHeader div, html body body .page .page-dialog header #right #corner nav .stash-menu .tabPanel nav.tabHeader div, html body .page .page-dialog body header #right #corner nav .stash-menu .tabPanel nav.tabHeader div {
                 flex: 1 1 auto;
                 text-align: center;
                 padding: 10px;
@@ -465,25 +491,25 @@ html, html body {
                 color: #999;
                 cursor: default;
                 font-weight: bold; }
-                html body #header #right #corner nav .stash-menu .tabPanel nav.tabHeader div:hover {
+                html body #header #right #corner nav .stash-menu .tabPanel nav.tabHeader div:hover, html body .page .page-dialog header #right #corner nav .stash-menu .tabPanel nav.tabHeader div:hover, html body body .page .page-dialog header #right #corner nav .stash-menu .tabPanel nav.tabHeader div:hover, html body .page .page-dialog body header #right #corner nav .stash-menu .tabPanel nav.tabHeader div:hover {
                   color: #666; }
-              html body #header #right #corner nav .stash-menu .tabPanel nav.tabHeader div.active {
+              html body #header #right #corner nav .stash-menu .tabPanel nav.tabHeader div.active, html body .page .page-dialog header #right #corner nav .stash-menu .tabPanel nav.tabHeader div.active, html body body .page .page-dialog header #right #corner nav .stash-menu .tabPanel nav.tabHeader div.active, html body .page .page-dialog body header #right #corner nav .stash-menu .tabPanel nav.tabHeader div.active {
                 border-color: #DDD;
                 color: inherit; }
-            html body #header #right #corner nav .stash-menu .tabPanel nav.tabHeader {
+            html body #header #right #corner nav .stash-menu .tabPanel nav.tabHeader, html body .page .page-dialog header #right #corner nav .stash-menu .tabPanel nav.tabHeader, html body body .page .page-dialog header #right #corner nav .stash-menu .tabPanel nav.tabHeader, html body .page .page-dialog body header #right #corner nav .stash-menu .tabPanel nav.tabHeader {
               margin-bottom: 10px; }
-            html body #header #right #corner nav .stash-menu footer {
+            html body #header #right #corner nav .stash-menu footer, html body .page .page-dialog header #right #corner nav .stash-menu footer, html body body .page .page-dialog header #right #corner nav .stash-menu footer, html body .page .page-dialog body header #right #corner nav .stash-menu footer {
               text-align: right;
               padding-top: 15px;
               overflow: hidden;
               clear: both;
               padding-bottom: 5px;
               padding-right: 2px; }
-            html body #header #right #corner nav .stash-menu ul.container-list {
+            html body #header #right #corner nav .stash-menu ul.container-list, html body .page .page-dialog header #right #corner nav .stash-menu ul.container-list, html body body .page .page-dialog header #right #corner nav .stash-menu ul.container-list, html body .page .page-dialog body header #right #corner nav .stash-menu ul.container-list {
               width: 100%;
               overflow: auto;
               max-height: 400px; }
-            html body #header #right #corner nav .stash-menu::before {
+            html body #header #right #corner nav .stash-menu::before, html body .page .page-dialog header #right #corner nav .stash-menu::before, html body body .page .page-dialog header #right #corner nav .stash-menu::before, html body .page .page-dialog body header #right #corner nav .stash-menu::before {
               content: '';
               position: absolute;
               width: 0;
@@ -493,27 +519,27 @@ html, html body {
               border-bottom: 10px solid #FFF;
               position: absolute;
               top: -5px; }
-            html body #header #right #corner nav .stash-menu::before {
+            html body #header #right #corner nav .stash-menu::before, html body .page .page-dialog header #right #corner nav .stash-menu::before, html body body .page .page-dialog header #right #corner nav .stash-menu::before, html body .page .page-dialog body header #right #corner nav .stash-menu::before {
               right: 85px; }
-            html body #header #right #corner nav .stash-menu .sub-label {
+            html body #header #right #corner nav .stash-menu .sub-label, html body .page .page-dialog header #right #corner nav .stash-menu .sub-label, html body body .page .page-dialog header #right #corner nav .stash-menu .sub-label, html body .page .page-dialog body header #right #corner nav .stash-menu .sub-label {
               color: #3998D6;
               font-family: "Consolas", monospace, consolas, sans-serif;
               font-size: 0.9em;
               padding-top: 5px; }
-              html body #header #right #corner nav .stash-menu .sub-label .octicon {
+              html body #header #right #corner nav .stash-menu .sub-label .octicon, html body .page .page-dialog header #right #corner nav .stash-menu .sub-label .octicon, html body body .page .page-dialog header #right #corner nav .stash-menu .sub-label .octicon, html body .page .page-dialog body header #right #corner nav .stash-menu .sub-label .octicon {
                 margin-right: 0; }
-            html body #header #right #corner nav .stash-menu .button-container {
+            html body #header #right #corner nav .stash-menu .button-container, html body .page .page-dialog header #right #corner nav .stash-menu .button-container, html body body .page .page-dialog header #right #corner nav .stash-menu .button-container, html body .page .page-dialog body header #right #corner nav .stash-menu .button-container {
               padding-top: 10px; }
-              html body #header #right #corner nav .stash-menu .button-container button {
+              html body #header #right #corner nav .stash-menu .button-container button, html body .page .page-dialog header #right #corner nav .stash-menu .button-container button, html body body .page .page-dialog header #right #corner nav .stash-menu .button-container button, html body .page .page-dialog body header #right #corner nav .stash-menu .button-container button {
                 text-align: center;
                 border-radius: 50%;
                 width: 40px;
                 height: 40px;
                 padding: 0;
                 margin-right: 10px; }
-                html body #header #right #corner nav .stash-menu .button-container button .octicon {
+                html body #header #right #corner nav .stash-menu .button-container button .octicon, html body .page .page-dialog header #right #corner nav .stash-menu .button-container button .octicon, html body body .page .page-dialog header #right #corner nav .stash-menu .button-container button .octicon, html body .page .page-dialog body header #right #corner nav .stash-menu .button-container button .octicon {
                   margin: 0; }
-          html body #header #right #corner .pending-sync-container {
+          html body #header #right #corner .pending-sync-container, html body .page .page-dialog header #right #corner .pending-sync-container, html body body .page .page-dialog header #right #corner .pending-sync-container, html body .page .page-dialog body header #right #corner .pending-sync-container {
             display: inline-block;
             margin-left: 5px; }
     html body #wrapper {

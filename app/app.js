@@ -54,7 +54,7 @@ window.addEventListener('keydown', function (e) {
 
 /* AngularJS app init */
 (function () {
-  var app = angular.module('gitpie', ['components', 'attributes', 'header', 'content']);
+  var app = angular.module('gitpie', ['components', 'attributes', 'header', 'content', 'settings']);
 
   app.factory('CommomService', function ($rootScope) {
     var repositoriesStr = localStorage.getItem('repos'),

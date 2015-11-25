@@ -458,6 +458,10 @@
 
           }.bind(this));
         };
+
+        this.showSettingsPage = function () {
+          $scope.$root.showSettingsPage();
+        };
       },
 
       controllerAs: 'headerCtrl'
