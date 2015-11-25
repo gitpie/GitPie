@@ -71,5 +71,21 @@
   "Error syncronazing repository. \n Error: ": "Error syncronazing repository. \n Error: ",
   "'{cloneURL}' not appears to be a git remote URL. Let's try again!": "'{cloneURL}' not appears to be a git remote URL. Let's try again!",
   "The path '{path}' is not a folder. Pick a valid directory to clone projects.": "The path '{path}' is not a folder. Pick a valid directory to clone projects.",
-  "The path '{path}' is not a folder. Pick a valid directory to create projects.": "The path '{path}' is not a folder. Pick a valid directory to create projects."
+  "The path '{path}' is not a folder. Pick a valid directory to create projects.": "The path '{path}' is not a folder. Pick a valid directory to create projects.",
+
+  "SettingsPage": {
+    "Preferences": "Preferences",
+    "Font": "Font",
+    "Username": "Username",
+    "Email": "Email",
+    "Repository": "Repository",
+    "Password": "Password",
+    "Ignored files": "Ignored files",
+    "Using ssh key": "Using ssh key",
+    "About": "About",
+    "License": "License",
+    "default": "default",
+    "GitPie is distributed under the MIT License": "GitPie is distributed under the MIT License",
+    "GitPie is an open source git client that have the goal to be the most simple and nice client for any project and for any people": "GitPie is an open source git client that have the goal to be the most simple and nice client for any project and for any people"
+  }
 }

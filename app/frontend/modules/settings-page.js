@@ -8,6 +8,11 @@
       controller: function ($scope) {
         this.showSettingsPage = false;
         this.hidePage = true;
+        this.fonts = [
+          'Comic Sans MS',
+          'Ubuntu',
+          'Droid Sans'
+        ];
 
         this.hideSettingsPage = function () {
           this.showSettingsPage = false;
@@ -26,10 +31,6 @@
             $scope.$apply();
           }.bind(this), 200);
         }.bind(this);
-
-        this.changeFont = function () {
-
-        };
       },
 
       controllerAs: 'settingsCtrl'

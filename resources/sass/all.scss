@@ -175,7 +175,7 @@ html {
       }
     }
 
-    /* Dialog style */
+    /* Page style */
     .page {
 
       .page-overlay {
@@ -193,9 +193,9 @@ html {
       .page-dialog {
         z-index: 10000;
         position: absolute;
-        width: 85%;
+        width: 65%;
         top: 0;
-        margin-left: 15%;
+        margin-left: 35%;
         height: 100%;
         color: #222 !important;
         display: flex;
@@ -221,6 +221,10 @@ html {
               cursor: pointer;
             }
           }
+        }
+
+        input[type="text"], input[type="password"] {
+          min-width: 300px;
         }
 
         nav {

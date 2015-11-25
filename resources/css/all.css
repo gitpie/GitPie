@@ -116,7 +116,7 @@ html, html body {
   overflow: hidden; }
   html body {
     /* Context Menu style */
-    /* Dialog style */
+    /* Page style */
     /* Header of the application */
     /* Wrapper of the content */ }
     html body .context-menu {
@@ -204,9 +204,9 @@ html, html body {
     html body .page .page-dialog {
       z-index: 10000;
       position: absolute;
-      width: 85%;
+      width: 65%;
       top: 0;
-      margin-left: 15%;
+      margin-left: 35%;
       height: 100%;
       color: #222 !important;
       display: flex;
@@ -226,6 +226,8 @@ html, html body {
             font-size: 24px;
             margin-right: 15px;
             cursor: pointer; }
+      html body .page .page-dialog input[type="text"], html body .page .page-dialog * textarea, * html body .page .page-dialog textarea, html body body .page .page-dialog * textarea, * html body body .page .page-dialog textarea, html body .page .page-dialog input[type="password"] {
+        min-width: 300px; }
       html body .page .page-dialog nav {
         margin-top: 47px;
         padding-top: 15px;

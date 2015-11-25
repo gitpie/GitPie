@@ -132,6 +132,10 @@ window.addEventListener('keydown', function (e) {
 
     $rootScope.showRepositoryMenu = true;
 
+    $rootScope.Configs = {
+      fontFamily: 'Roboto'
+    };
+
     return {
 
       addRepository: function (repositoryPath, callback) {
