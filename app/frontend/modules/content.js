@@ -345,7 +345,7 @@
           menu.append(new GUI.MenuItem({
             label: MSGS['Show in folder'],
             click: function () {
-              this.openItemInFolder(this.treatPath(repository.path));
+              this.openItemInFolder(repository.path);
             }.bind(this)
           }));
 
@@ -358,7 +358,7 @@
           menu.append(new GUI.MenuItem({
             label: MSGS['Show in folder'],
             click: function () {
-              this.openItemInFolder(this.treatPath( path.join(selectedRepository.path, history.name.trim()) ));
+              this.openItemInFolder(path.join(selectedRepository.path, history.name.trim()));
             }.bind(this)
           }));
 
@@ -367,32 +367,8 @@
 
         this.openChangesContextualMenu = function (event, change, index) {
           var isUnknowChange = change.type == 'NEW',
-            dir = this.treatPath(change.path.trim());
-
-          //   contextMenu = $compile([
-          //     '<div class="context-menu" style="top: ' + event.y + 'px;  left: ' + event.x +  'px">',
-          //       '<ul>',
-          //         '<li ng-hide="', (change.type == 'ADDED'), '" ng-click="appCtrl.discartChanges(\'', this.treatPath(change.path),'\', \'', index,'\', ' + isUnknowChange + ')">',
-          //           MSGS.Discart,
-          //         '</li>',
-          //         '<li ng-hide="', (change.type == 'ADDED'), '" ng-click="appCtrl.assumeUnchanged(\'', this.treatPath(change.path),'\', \'', index,'\')">',
-          //           MSGS['Assume unchanged'],
-          //         '</li>',
-          //         '<li ng-show="', (change.type == 'ADDED'), '" ng-click="appCtrl.unstageFile(\'', this.treatPath(change.path),'\', \'', index,'\')">',
-          //           MSGS['Unstage file'],
-          //         '</li>',
-          //         '<li ng-click="appCtrl.openItemInFolder(\'', this.treatPath( path.join(selectedRepository.path, change.path.trim()) ), '\')">',
-          //           MSGS['Show in folder'],
-          //         '</li>',
-          //       '</ul>',
-          //     '</div>'
-          //   ].join(''))($scope);
-          //
-          // CommomService.closeAnyContextMenu();
-          //
-          // body.append(contextMenu);
-
-          var menu = new GUI.Menu();
+            dir = change.path.trim(),
+            menu = new GUI.Menu();
 
           if (change.type == 'ADDED') {
 
@@ -423,7 +399,7 @@
           menu.append(new GUI.MenuItem({
             label: MSGS['Show in folder'],
             click: function () {
-              this.openItemInFolder( this.treatPath( path.join(selectedRepository.path, dir) ) );
+              this.openItemInFolder(path.join(selectedRepository.path, dir));
             }.bind(this)
           }));
 
@@ -511,15 +487,6 @@
           GUI.Shell.showItemInFolder(path);
 
           CommomService.closeAnyContextMenu();
-        };
-
-        this.treatPath = function (path) {
-
-          if (wos.isWindows()) {
-            return path.replace(/\\/g, '\\\\');
-          }
-
-          return path;
         };
 
         this.removeRepository = function (repositoryType, index) {
