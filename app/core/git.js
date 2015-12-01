@@ -751,4 +751,25 @@ Git.prototype.getLocalConfigs = function (path, callback) {
   });
 };
 
+Git.prototype.alterGitConfig = function (path, opts) {
+  var command = 'git config ';
+  opts = opts || {};
+
+  if (opts.global) {
+    command = command.concat('--global ');
+  }
+
+  command = command.concat('user.name "').concat(opts.userName).concat('" && git config ');
+
+  if (opts.global) {
+    command = command.concat('--global ');
+  }
+
+  command = command.concat('user.email ').concat(opts.email)
+
+  exec(command, function (error) {
+    invokeCallback(opts.callback, [ error ]);
+  });
+};
+
 module.exports = new Git();
