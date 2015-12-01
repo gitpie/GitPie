@@ -132,9 +132,27 @@ window.addEventListener('keydown', function (e) {
 
     $rootScope.showRepositoryMenu = true;
 
-    $rootScope.Configs = {
-      fontFamily: 'Roboto'
-    };
+    // Load the application Configs
+    var Configs = JSON.parse(localStorage.getItem('configs'));
+
+    if (!Configs) {
+      Configs = {
+        fontFamily: 'Roboto'
+      };
+
+      localStorage.setItem('configs', JSON.stringify(Configs));
+    }
+
+    $rootScope.CONFIGS = Configs;
+
+    // Save any change made on global configs
+    WIN.on('close', function () {
+      WIN.hide();
+      
+      localStorage.setItem('configs', JSON.stringify($rootScope.CONFIGS));
+
+      GUI.App.quit();
+    });
 
     return {
 
@@ -155,7 +173,7 @@ window.addEventListener('keydown', function (e) {
 
             if (name) {
 
-              GIT.listRemotes(repositoryPath, function (err, stdout) {
+              GIT.showRemotes(repositoryPath, function (err, stdout) {
 
                 if (stdout.toLowerCase().indexOf('github.com') != -1) {
                   repositoryExists = findWhere(repositories.github, { path: repositoryPath});

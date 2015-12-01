@@ -407,7 +407,7 @@ Git.prototype.getCommitCount = function (path, callback) {
   });
 };
 
-Git.prototype.listRemotes = function (path, callback) {
+Git.prototype.showRemotes = function (path, callback) {
 
   exec('git remote -v', { cwd: path,  env: ENV}, function (error, stdout, stderr) {
     var err = null;
@@ -418,6 +418,53 @@ Git.prototype.listRemotes = function (path, callback) {
 
     invokeCallback(callback, [ err, stdout ]);
   });
+};
+
+Git.prototype.listRemotes = function (path, callback) {
+
+  exec('git remote show', { cwd: path,  env: ENV}, function (error, stdout, stderr) {
+    var err = null,
+      repositoryRemotes = {};
+
+    if (error !== null) {
+      err = error.message;
+
+      invokeCallback(callback, [ err, repositoryRemotes ]);
+    } else {
+      var remoteShowLines = stdout.split('\n');
+
+      remoteShowLines.forEach(function (line) {
+
+        if (line) {
+          repositoryRemotes[ line.trim() ] = {};
+        }
+      });
+
+      this.showRemotes(path, function (err, remotes) {
+
+        if (!err) {
+          var remoteList = remotes.split('\n');
+
+          for (var remote in repositoryRemotes) {
+
+            remoteList.forEach(function (remoteLine) {
+
+              if (remoteLine.indexOf(remote) > -1) {
+
+                if (remoteLine.indexOf('(push)') > -1) {
+                  repositoryRemotes[remote].push = remoteLine.replace('(push)', '').replace(remote, '').trim();
+                } else if (remoteLine.indexOf('(fetch)')) {
+                  repositoryRemotes[remote].fetch = remoteLine.replace('(fetch)', '').replace(remote, '').trim();
+                }
+              }
+            });
+          }
+        }
+
+        invokeCallback(callback, [ err, repositoryRemotes ]);
+      });
+    }
+  }.bind(this));
 };
 
 Git.prototype.discartChangesInFile = function (path, opts) {
@@ -651,6 +698,56 @@ Git.prototype.diffStashFile = function (path, opts) {
 
   exec('git diff '.concat(opts.reflogSelector).concat(' -- "').concat(opts.fileName.trim()).concat('"'), {cwd: path, env: ENV}, function (error, stdout) {
     invokeCallback(opts.callback, [ error, stdout ]);
+  });
+};
+
+Git.prototype.getGlobalConfigs = function (callback) {
+
+  exec('git config --global -l', function (error, stdout) {
+    var err,
+      configs = {};
+
+    if (error) {
+      err = error;
+    } else {
+      var lines = stdout.split('\n');
+
+      lines.forEach(function (line) {
+
+        if (line) {
+          var config = line.split('=');
+
+          configs[config[0].trim()] = config[1].trim();
+        }
+      });
+    }
+
+    invokeCallback(callback, [ err, configs ]);
+  });
+};
+
+Git.prototype.getLocalConfigs = function (path, callback) {
+
+  exec('git config -l', function (error, stdout) {
+    var err,
+      configs = {};
+
+    if (error) {
+      err = error;
+    } else {
+      var lines = stdout.split('\n');
+
+      lines.forEach(function (line) {
+
+        if (line) {
+          var config = line.split('=');
+
+          configs[config[0].trim()] = config[1].trim();
+        }
+      });
+    }
+
+    invokeCallback(callback, [ err, configs ]);
   });
 };
 

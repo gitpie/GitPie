@@ -12,8 +12,8 @@
           <ul>
             <li>
               <section class="label-field">{{ MSGS.SettingsPage.Font }}</section>
-              <select name="font" ng-model="Configs.fontFamily">
-                <option value="{{ Configs.fontFamily }}"><strong>{{ Configs.fontFamily }} ({{ MSGS.SettingsPage.default }})</strong></option>
+              <select name="font" ng-model="CONFIGS.fontFamily">
+                <option value="{{ CONFIGS.fontFamily }}">{{ CONFIGS.fontFamily }} ({{ MSGS.SettingsPage.default }})</option>
                 <option ng-repeat="font in settingsCtrl.fonts" value="{{ font }}">{{ font }}</option>
               </select>
             </li>
@@ -25,33 +25,42 @@
           <ul>
             <li class="column">
               <section class="label-field">{{ MSGS.SettingsPage.Username }}</section>
-              <input type="text" name="gitUsername">
+              <input type="text" value="{{ settingsCtrl.globalGitConfigs['user.name'] }}" name="gitUsername">
             </li>
 
             <li class="column">
               <section class="label-field">{{ MSGS.SettingsPage.Email }}</section>
-              <input type="text" name="gitEmail">
+              <input type="text" value="{{ settingsCtrl.globalGitConfigs['user.email'] }}" name="gitEmail">
+            </li>
+
+            <li>
+              <button type="button">CHANGE GLOBALS CONFIGURATIONS</button>
             </li>
           </ul>
         </li>
 
-        <li>
-          <div class="label">{{ MSGS.SettingsPage.Repository }}</div>
+        <li ng-show="settingsCtrl.selectedRepository">
+          <div class="label">{{ MSGS.SettingsPage.Repository }} (<em>{{ settingsCtrl.selectedRepository.name }}</em>)</div>
 
           <ul>
             <li>
               <section class="label-field">{{ MSGS.SettingsPage.Username }}</section>
-              <input type="text" name="username">
+              <input type="text" value="{{ settingsCtrl.localGitConfigs['user.name'] }}" />
             </li>
             <li>
-              <section class="label-field">{{ MSGS.SettingsPage.Password }}</section>
-              <input type="password" name="username">
+              <section class="label-field">{{ MSGS.SettingsPage.Email }}</section>
+              <input type="text" value="{{ settingsCtrl.localGitConfigs['user.email'] }}" />
             </li>
             <li>
+              <button type="button">CHANGE {{ settingsCtrl.selectedRepository.name.toUpperCase() }} CONFIGURATIONS</button>
+            </li>
+
+            <li ng-hide="true"><!-- Will be available when this functionality exists -->
               <section class="label-field">{{ MSGS.SettingsPage["Ignored files"] }}</section>
             </li>
             <li>
               <section class="label-field">{{ MSGS.SettingsPage["Using ssh key"] }}</section>
+              <div>{{ settingsCtrl.selectedRepository.usingSSH ? 'Yes' : 'No' }}</div>
             </li>
           </ul>
         </li>

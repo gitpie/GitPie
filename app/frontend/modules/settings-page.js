@@ -11,8 +11,10 @@
         this.fonts = [
           'Comic Sans MS',
           'Ubuntu',
-          'Droid Sans'
+          'Droid Sans',
+          'Roboto'
         ];
+        this.selectedRepository = null;
 
         this.hideSettingsPage = function () {
           this.showSettingsPage = false;
@@ -31,6 +33,53 @@
             $scope.$apply();
           }.bind(this), 200);
         }.bind(this);
+
+        GIT.getGlobalConfigs(function (err, configs) {
+
+          if (err) {
+            alert(err.message);
+          } else {
+            this.globalGitConfigs = configs;
+          }
+        }.bind(this));
+
+        $scope.$on('repositorychanged', function (event, repository) {
+          this.selectedRepository = repository;
+          this.selectedRepository.usingSSH = false;
+
+          GIT.listRemotes(repository.path, function (err, remotesList) {
+
+            if (err) {
+              alert(err.message);
+            } else {
+              var GitUrlParse = require('./node_modules/git-url-parse'),
+                repoSettings = GitUrlParse(remotesList.origin.push);
+
+              if (repoSettings.protocol == 'ssh') {
+                this.selectedRepository.usingSSH = true;
+              }
+            }
+          }.bind(this));
+
+          GIT.getGlobalConfigs(function (err, configs) {
+
+            if (err) {
+              alert(err.message);
+            } else {
+              this.globalGitConfigs = configs;
+            }
+          }.bind(this));
+
+          GIT.getLocalConfigs(this.selectedRepository.path, function (err, configs) {
+
+            if (err) {
+              alert(err.message);
+            } else {
+              this.localGitConfigs = configs;
+            }
+          }.bind(this));
+
+        }.bind(this));
       },
 
       controllerAs: 'settingsCtrl'
