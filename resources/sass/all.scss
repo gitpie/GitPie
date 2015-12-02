@@ -117,6 +117,10 @@
     color: #FFF;
     border-color: #3998D6;
   }
+
+  .featured[disabled] {
+    opacity: 0.6 !important;
+  }
 }
 
 /* Enable spin rotation */

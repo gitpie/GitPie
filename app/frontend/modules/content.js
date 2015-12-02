@@ -246,10 +246,12 @@
           }
         };
 
-        this.commitSelectedChanges = function (commitMessage, commitDescription) {
+        this.commitSelectedChanges = function (commitMessage, commitDescription, event) {
 
           if (commitMessage) {
             var hasAddedFiles;
+
+            event.target.setAttribute('disabled', true);
 
             this.commitChanges.forEach(function (file) {
 
@@ -286,6 +288,8 @@
               $scope.commitMessage = null;
               $scope.commitDescription = null;
             }
+
+            event.target.removeAttribute('disabled');
           }
         };
 

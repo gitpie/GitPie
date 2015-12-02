@@ -55,7 +55,7 @@
         <textarea ng-model="commitDescription"
           placeholder="{{ MSGS['Give a description to the commit. Tell more about your changes...'] }}"></textarea>
       </div>
-      <button type="button" class="featured" ng-click="appCtrl.commitSelectedChanges(commitMessage, commitDescription)"><span class="octicon octicon-cloud-upload"></span> {{ MSGS.COMMIT }}</button>
+      <button type="button" class="featured" ng-click="appCtrl.commitSelectedChanges(commitMessage, commitDescription, $event)"><span class="octicon octicon-cloud-upload"></span> {{ MSGS.COMMIT }}</button>
     </form>
 
     <nav ng-class="{ mask:appCtrl.loadingHistory }" ng-scroll="appCtrl.loadMoreCommits($event)">
