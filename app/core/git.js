@@ -703,7 +703,7 @@ Git.prototype.diffStashFile = function (path, opts) {
 
 Git.prototype.getGlobalConfigs = function (callback) {
 
-  exec('git config --global -l', function (error, stdout) {
+  exec('git config --global -l', {env: ENV}, function (error, stdout) {
     var err,
       configs = {};
 
@@ -728,7 +728,7 @@ Git.prototype.getGlobalConfigs = function (callback) {
 
 Git.prototype.getLocalConfigs = function (path, callback) {
 
-  exec('git config -l', function (error, stdout) {
+  exec('git config -l', {cwd: path, env: ENV}, function (error, stdout) {
     var err,
       configs = {};
 
@@ -752,14 +752,20 @@ Git.prototype.getLocalConfigs = function (path, callback) {
 };
 
 Git.prototype.alterGitConfig = function (path, opts) {
-  var command = 'git config ';
+  var command = 'git config ',
+    execOpts = {
+      env: ENV
+    };
+
   opts = opts || {};
 
   if (opts.global) {
     command = command.concat('--global ');
+  } else {
+    execOpts.cwd = path;
   }
 
-  command = command.concat('user.name "').concat(opts.userName).concat('" && git config ');
+  command = command.concat('user.name "').concat(opts.username).concat('" && git config ');
 
   if (opts.global) {
     command = command.concat('--global ');
@@ -767,7 +773,7 @@ Git.prototype.alterGitConfig = function (path, opts) {
 
   command = command.concat('user.email ').concat(opts.email)
 
-  exec(command, function (error) {
+  exec(command, execOpts, function (error) {
     invokeCallback(opts.callback, [ error ]);
   });
 };

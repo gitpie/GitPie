@@ -395,6 +395,22 @@
             }));
           }
 
+          if (change.type == 'UNMERGED') {
+            menu.append(new GUI.MenuItem({ type: 'separator' }));
+            menu.append(new GUI.MenuItem({
+              label: 'Use ours'
+            }));
+            menu.append(new GUI.MenuItem({
+              label: 'Use theirs'
+            }));
+            menu.append(new GUI.MenuItem({
+              label: 'Open merge tool'
+            }));
+            menu.append(new GUI.MenuItem({
+              label: 'Stage file'
+            }));
+          }
+
           menu.append(new GUI.MenuItem({ type: 'separator' }));
           menu.append(new GUI.MenuItem({
             label: MSGS['Show in folder'],
@@ -495,9 +511,9 @@
           if (repositoryWasSelected) {
             this.repositoryHistory = [];
             $scope.$broadcast('removedRepository');
-          } else {
-            $scope.$apply();
           }
+
+          $scope.$apply();
 
           CommomService.closeAnyContextMenu();
         };

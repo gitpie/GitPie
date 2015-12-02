@@ -34,7 +34,7 @@
             </li>
 
             <li>
-              <button type="button">CHANGE GLOBALS CONFIGURATIONS</button>
+              <button type="button" ng-click="settingsCtrl.changeGitCofigs(true, $event)">{{ MSGS.SettingsPage['CHANGE GLOBALS CONFIGURATIONS'] }}</button>
             </li>
           </ul>
         </li>
@@ -45,14 +45,16 @@
           <ul>
             <li>
               <section class="label-field">{{ MSGS.SettingsPage.Username }}</section>
-              <input type="text" value="{{ settingsCtrl.localGitConfigs['user.name'] }}" />
+              <input type="text" ng-model="settingsCtrl.localGitConfigs['user.name']" />
             </li>
             <li>
               <section class="label-field">{{ MSGS.SettingsPage.Email }}</section>
-              <input type="text" value="{{ settingsCtrl.localGitConfigs['user.email'] }}" />
+              <input type="text" ng-model="settingsCtrl.localGitConfigs['user.email']" />
             </li>
             <li>
-              <button type="button">CHANGE {{ settingsCtrl.selectedRepository.name.toUpperCase() }} CONFIGURATIONS</button>
+              <button type="button" ng-click="settingsCtrl.changeGitCofigs(false, $event)">
+                {{ MSGS.SettingsPage['CHANGE {repository} CONFIGURATIONS'].replace('{repository}', settingsCtrl.selectedRepository.name.toUpperCase()) }}
+              </button>
             </li>
 
             <li ng-hide="true"><!-- Will be available when this functionality exists -->

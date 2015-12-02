@@ -43,6 +43,37 @@
           }
         }.bind(this));
 
+        this.changeGitCofigs = function (global, event) {
+          var username,
+            email,
+            repositoryPath;
+
+          if (global) {
+            username = this.globalGitConfigs['user.name'];
+            email = this.globalGitConfigs['user.email'];
+          } else {
+            username = this.localGitConfigs['user.name'];
+            email = this.localGitConfigs['user.email'];
+            repositoryPath = this.selectedRepository.path;
+          }
+
+          event.target.setAttribute('disabled', true);
+
+          GIT.alterGitConfig(repositoryPath, {
+            global: global,
+            username: username,
+            email: email,
+            callback: function (err) {
+
+              if (err) {
+                alert(err);
+              }
+
+              event.target.removeAttribute('disabled');
+            }
+          });
+        };
+
         $scope.$on('repositorychanged', function (event, repository) {
           this.selectedRepository = repository;
           this.selectedRepository.usingSSH = false;
@@ -79,6 +110,10 @@
             }
           }.bind(this));
 
+        }.bind(this));
+
+        $scope.$on('removedRepository', function () {
+          this.selectedRepository = null;
         }.bind(this));
       },
 
