@@ -148,10 +148,10 @@ window.addEventListener('keydown', function (e) {
     // Save any change made on global configs
     WIN.on('close', function () {
       WIN.hide();
-      
+
       localStorage.setItem('configs', JSON.stringify($rootScope.CONFIGS));
 
-      GUI.App.quit();
+      WIN.close(true);
     });
 
     return {
