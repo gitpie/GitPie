@@ -614,6 +614,8 @@ html, html body {
                   background-color: #4dd0e1 !important; }
                 html body #wrapper #content #center nav ul li .i {
                   background-color: #fdd835 !important; }
+                html body #wrapper #content #center nav ul li .j {
+                  background-color: #57bb8a !important; }
                 html body #wrapper #content #center nav ul li .k {
                   background-color: #9ccc65 !important; }
                 html body #wrapper #content #center nav ul li .l {
@@ -626,6 +628,8 @@ html, html body {
                   background-color: #ffa726 !important; }
                 html body #wrapper #content #center nav ul li .p {
                   background-color: #ff8a65 !important; }
+                html body #wrapper #content #center nav ul li .q {
+                  background-color: #C2C2C2 !important; }
                 html body #wrapper #content #center nav ul li .r {
                   background-color: #90a4ae !important; }
                 html body #wrapper #content #center nav ul li .s {
@@ -636,8 +640,14 @@ html, html body {
                   background-color: #afb6e0 !important; }
                 html body #wrapper #content #center nav ul li .v {
                   background-color: #b39ddb !important; }
+                html body #wrapper #content #center nav ul li .x {
+                  background-color: #80DEEA !important; }
                 html body #wrapper #content #center nav ul li .y {
                   background-color: #bcaaa4 !important; }
+                html body #wrapper #content #center nav ul li .w {
+                  background-color: #c2c2c2 !important; }
+                html body #wrapper #content #center nav ul li .z {
+                  background-color: #AED581 !important; }
                 html body #wrapper #content #center nav ul li .commit-message {
                   font-size: 1.2em;
                   color: #111;
