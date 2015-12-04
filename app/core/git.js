@@ -14,7 +14,9 @@ var
   // Native node util class
   util = require('util'),
 
-  ENV = process.env;
+  ENV = process.env,
+  
+  wos = require('node-wos');
 
 ENV.LANG = 'en_US';
 
@@ -353,7 +355,12 @@ Git.prototype.commit = function (path, opts) {
   var commad = 'git commit -m "'.concat( (opts.message.replace(/"/g, '\\"')) ).concat('"');
 
   if (opts.description) {
-    commad = commad.concat(' -m "').concat( (opts.description.replace(/"/g, '\\"')) ).concat('"');
+    
+    if (wos.isWindows()) {
+      commad = commad + ' -m "' + opts.description.replace(/"/g, '\\"').replace(/\n/g, '" -m "') + '"';
+    } else {
+      commad = commad.concat(' -m "').concat( (opts.description.replace(/"/g, '\\"')) ).concat('"'); 
+    }
   }
 
   if (opts.forceSync) {
