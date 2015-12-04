@@ -80,8 +80,6 @@
           this.showBranchMenu = false;
           this.showSettingsMenu = false;
           this.showStashMenu = false;
-
-          CommomService.closeAnyContextMenu();
         };
 
         CommomService.hideHeaderMenu = this.hideAllMenu.bind(this);
@@ -293,8 +291,6 @@
               } else {
                 $scope.$broadcast('changedbranch', this.selectedRepository);
               }
-
-              CommomService.closeAnyContextMenu();
             }.bind(this)
           });
         };

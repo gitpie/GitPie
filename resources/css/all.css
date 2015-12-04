@@ -117,82 +117,9 @@ html, html body {
   color: #333;
   overflow: hidden; }
   html body {
-    /* Context Menu style */
     /* Page style */
     /* Header of the application */
     /* Wrapper of the content */ }
-    html body .context-menu {
-      background-color: #FFF;
-      padding: 10px;
-      border-radius: 3px;
-      box-shadow: 1px 1px 10px #666;
-      color: #333;
-      position: fixed;
-      overflow: hidden;
-      z-index: 1000;
-      padding: 6px 0 !important; }
-      html body .context-menu ul {
-        list-style: none;
-        display: inline-block;
-        margin: 0;
-        padding: 0; }
-        html body .context-menu ul li {
-          padding: 15px 10px;
-          display: block;
-          cursor: default;
-          text-shadow: none;
-          background-color: #FFF; }
-          html body .context-menu ul li .octicon {
-            margin-right: 10px; }
-          html body .context-menu ul li:hover {
-            color: #000;
-            cursor: pointer;
-            background-color: #FFF; }
-      html body .context-menu .label, html body .context-menu #wrapper #content #right nav ul li header .label-modified, html body #wrapper #content #right nav ul li header .context-menu .label-modified, html body .context-menu #wrapper #content #right nav ul li header .label-new, html body #wrapper #content #right nav ul li header .context-menu .label-new, html body .context-menu #wrapper #content #right nav ul li header .label-added, html body #wrapper #content #right nav ul li header .context-menu .label-added, html body .context-menu #wrapper #content #right nav ul li header .label-deleted, html body #wrapper #content #right nav ul li header .context-menu .label-deleted, html body .context-menu #wrapper #content #right nav ul li header .label-unmerged, html body #wrapper #content #right nav ul li header .context-menu .label-unmerged, html body .context-menu #wrapper #content #right nav ul li header .label-renamed, html body #wrapper #content #right nav ul li header .context-menu .label-renamed, html body .context-menu #wrapper #content #right nav ul li header .label-binary, html body #wrapper #content #right nav ul li header .context-menu .label-binary {
-        padding: 20px 0;
-        display: block;
-        color: #666;
-        font-size: 0.9em; }
-      html body .context-menu .center {
-        text-align: center; }
-      html body .context-menu header {
-        font-weight: bold;
-        padding-bottom: 10px;
-        overflow: hidden; }
-      html body .context-menu .tabPanel nav.tabHeader {
-        margin: 0;
-        padding: 0;
-        display: flex;
-        width: 100%;
-        box-sizing: border-box;
-        overflow: hidden;
-        box-shadow: 0 4px 5px -2px rgba(1, 1, 1, 0.3); }
-        html body .context-menu .tabPanel nav.tabHeader div {
-          flex: 1 1 auto;
-          text-align: center;
-          padding: 10px;
-          border-bottom: #FFF 3px solid;
-          color: #999;
-          cursor: default;
-          font-weight: bold; }
-          html body .context-menu .tabPanel nav.tabHeader div:hover {
-            color: #666; }
-        html body .context-menu .tabPanel nav.tabHeader div.active {
-          border-color: #DDD;
-          color: inherit; }
-      html body .context-menu .tabPanel nav.tabHeader {
-        margin-bottom: 10px; }
-      html body .context-menu footer {
-        text-align: right;
-        padding-top: 15px;
-        overflow: hidden;
-        clear: both;
-        padding-bottom: 5px;
-        padding-right: 2px; }
-      html body .context-menu li {
-        padding: 15px 30px !important; }
-        html body .context-menu li:hover {
-          background-color: #F5F5F5 !important; }
     html body .page .page-overlay {
       position: absolute;
       z-index: 9999;

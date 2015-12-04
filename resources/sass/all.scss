@@ -162,23 +162,6 @@ html {
   body {
   	@extend html;
 
-    /* Context Menu style */
-    .context-menu {
-      @include basicDialog;
-      position: fixed;
-      overflow: hidden;
-      z-index: 1000;
-      padding: 6px 0 !important;
-
-      li {
-        padding: 15px 30px !important;
-
-        &:hover {
-          background-color: #F5F5F5 !important;
-        }
-      }
-    }
-
     /* Page style */
     .page {
 

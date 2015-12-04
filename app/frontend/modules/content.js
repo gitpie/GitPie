@@ -477,7 +477,6 @@
                   $scope.$apply();
                 }
 
-                CommomService.closeAnyContextMenu();
                 $scope.$broadcast('apprefreshed', this.commitChanges);
               }.bind(this)
             });
@@ -497,16 +496,12 @@
               } else {
                 this.refreshRepositoryChanges();
               }
-
-              CommomService.closeAnyContextMenu();
             }.bind(this)
           });
         };
 
         this.openItemInFolder = function (path) {
           GUI.Shell.showItemInFolder(path);
-
-          CommomService.closeAnyContextMenu();
         };
 
         this.removeRepository = function (repositoryType, index) {
@@ -518,8 +513,6 @@
           }
 
           $scope.$apply();
-
-          CommomService.closeAnyContextMenu();
         };
 
         this.assumeUnchanged = function (filePath, index) {
@@ -535,8 +528,6 @@
                 this.commitChanges.splice(index, 1);
                 $scope.$apply();
               }
-
-              CommomService.closeAnyContextMenu();
             }.bind(this)
           });
         };

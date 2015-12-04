@@ -267,14 +267,6 @@ window.addEventListener('keydown', function (e) {
         return removedRepository[0].selected;
       },
 
-      closeAnyContextMenu: function () {
-        var contextMenus = document.querySelectorAll('.context-menu');
-
-        angular.forEach(contextMenus, function (item) {
-          document.body.removeChild(item);
-        });
-      },
-
       repositories: repositories
     };
   });
