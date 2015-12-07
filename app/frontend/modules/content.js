@@ -160,9 +160,9 @@
           return selectedCommit.body;
         };
 
-        this.showFileDiff = function (change) {
+        this.showFileDiff = function (change, forceReload) {
 
-          if (!change.code) {
+          if (!change.code || forceReload) {
 
             if (!change.isUnsyc) {
               GIT.getFileDiff({
@@ -200,10 +200,8 @@
                 } else {
                   change.code = $sce.trustAsHtml(cp.processCode( diff ));
 
-                  if (change.showCode) {
-                    change.showCode = false;
-                  } else {
-                    change.showCode = true;
+                  if (!forceReload) {
+                    change.showCode = !change.showCode;
                   }
                 }
 
@@ -582,17 +580,39 @@
         this.refreshRepositoryChanges = function () {
 
           GIT.getStatus(selectedRepository.path, function (err, syncStatus, files) {
-            this.commitChanges = [];
+            var i = 0,
+              deorderedFiles = {},
+              newChangesList = [];
 
-            files.forEach(function (item) {
-              item.isUnsyc = true;
-              item.checked = true;
+            for (i; i < files.length; i++) {
 
-              this.commitChanges.push(item);
-            }.bind(this));
+              if (this.commitChanges[i]) {
+
+                if (files[i].path == this.commitChanges[i].path || deorderedFiles[ this.commitChanges[i].path ]) {
+
+                  if (this.commitChanges[i].code) {
+                    this.showFileDiff(this.commitChanges[i], true);
+                  }
+
+                  newChangesList.push(this.commitChanges[i]);
+
+                } else {
+                  deorderedFiles[ this.commitChanges[i] ] = this.commitChanges[i];
+                  files[i].checked = true;
+                  files[i].isUnsyc = true;
+                  newChangesList.push(files[i]);
+                }
+
+              } else {
+                files[i].checked = true;
+                files[i].isUnsyc = true;
+                newChangesList.push(files[i]);
+              }
+            }
+
+            this.commitChanges = newChangesList;
 
             $scope.$broadcast('apprefreshed', this.commitChanges, syncStatus);
-
             $scope.$apply();
           }.bind(this));
         };
@@ -658,7 +678,7 @@
         /* Update the changed files ever time the application is focused */
         WIN.on('focus', function () {
 
-          if (selectedRepository) {
+          if (selectedRepository.path) {
             me.refreshRepositoryChanges();
           }
         });
