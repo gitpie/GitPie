@@ -1,3 +1,5 @@
+'use strict';
+
 (function () {
   var CodeProcessor = require('./app/core/code-processor'),
     cp = new CodeProcessor(),
@@ -16,6 +18,14 @@
           selectedCommit = {},
           selectedCommitAncestor = null,
           MSGS = $scope.MSGS;
+
+        const remote = require('remote');
+        const shell = require('shell');
+        // const BrowserWindow = remote.require('browser-window');
+
+        let Menu = remote.require('menu');
+        let MenuItem = remote.require('menu-item');
+        // let dialog = remote.require('dialog');
 
         this.updateNotify = {
           show: false
@@ -335,16 +345,16 @@
         }.bind(this));
 
         this.openRepositoryContextualMenu = function (event, repository, index) {
-          var menu = new GUI.Menu();
+          let menu = new Menu();
 
-          menu.append(new GUI.MenuItem({
+          menu.append(new MenuItem({
             label: MSGS.Remove,
             click : function () {
               this.removeRepository(repository.type, index);
             }.bind(this)
           }));
-          menu.append(new GUI.MenuItem({ type: 'separator' }));
-          menu.append(new GUI.MenuItem({
+          menu.append(new MenuItem({ type: 'separator' }));
+          menu.append(new MenuItem({
             label: MSGS['Show in folder'],
             click: function () {
               this.openItemInFolder(repository.path);
@@ -355,9 +365,9 @@
         };
 
         this.openHistoryContextualMenu = function (event, history, index) {
-          var menu = new GUI.Menu();
+          let menu = new Menu();
 
-          menu.append(new GUI.MenuItem({
+          menu.append(new MenuItem({
             label: MSGS['Show in folder'],
             click: function () {
               this.openItemInFolder(path.join(selectedRepository.path, history.name.trim()));
@@ -370,11 +380,11 @@
         this.openChangesContextualMenu = function (event, change, index) {
           var isUnknowChange = change.type == 'NEW',
             dir = change.path.trim(),
-            menu = new GUI.Menu();
+            menu = new Menu();
 
           if (change.type == 'ADDED') {
 
-            menu.append(new GUI.MenuItem({
+            menu.append(new MenuItem({
               label: MSGS['Unstage file'],
               click : function () {
                 this.unstageFile(dir, index);
@@ -382,14 +392,14 @@
             }));
           } else {
 
-            menu.append(new GUI.MenuItem({
+            menu.append(new MenuItem({
               label: MSGS.Discart,
               click : function () {
                 this.discartChanges(dir, index, isUnknowChange);
               }.bind(this)
             }));
 
-            menu.append(new GUI.MenuItem({
+            menu.append(new MenuItem({
               label: MSGS['Assume unchanged'],
               click : function () {
                 this.assumeUnchanged(dir, index);
@@ -398,23 +408,23 @@
           }
 
           if (change.type == 'UNMERGED') {
-            menu.append(new GUI.MenuItem({ type: 'separator' }));
-            menu.append(new GUI.MenuItem({
+            menu.append(new MenuItem({ type: 'separator' }));
+            menu.append(new MenuItem({
               label: 'Use ours'
             }));
-            menu.append(new GUI.MenuItem({
+            menu.append(new MenuItem({
               label: 'Use theirs'
             }));
-            menu.append(new GUI.MenuItem({
+            menu.append(new MenuItem({
               label: 'Open merge tool'
             }));
-            menu.append(new GUI.MenuItem({
+            menu.append(new MenuItem({
               label: 'Stage file'
             }));
           }
 
-          menu.append(new GUI.MenuItem({ type: 'separator' }));
-          menu.append(new GUI.MenuItem({
+          menu.append(new MenuItem({ type: 'separator' }));
+          menu.append(new MenuItem({
             label: MSGS['Show in folder'],
             click: function () {
               this.openItemInFolder(path.join(selectedRepository.path, dir));
@@ -499,7 +509,8 @@
         };
 
         this.openItemInFolder = function (path) {
-          GUI.Shell.showItemInFolder(path);
+          shell.showItemInFolder(path);
+          shell.beep();
         };
 
         this.removeRepository = function (repositoryType, index) {

@@ -2,21 +2,10 @@
   "name": "GitPie",
   "version": "0.1.0",
   "description": "A Multiplataform Client for Git",
-  "main": "index.html",
-  "window": {
-    "title": "GitPie",
-    "icon": "resources/images/icon.png",
-    "toolbar": false,
-    "frame": true,
-    "width": 1000,
-    "height": 600,
-    "min_width": 1000,
-    "min_height": 600,
-    "resizable": true
-  },
+  "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "npm run linux64",
+    "start": "electron .",
     "linux32": "grunt build && ./build/GitPie/linux32/GitPie",
     "linux64": "grunt build && ./build/GitPie/linux64/GitPie",
     "osx32": "grunt build && ./build/GitPie/osx32/GitPie",
@@ -46,6 +35,8 @@
   },
   "homepage": "https://github.com/mapaiva/GitPie",
   "devDependencies": {
+    "electron-packager": "^5.1.1",
+    "electron-prebuilt": "^0.35.1",
     "grunt": "^0.4.5",
     "grunt-cli": "^0.1.13",
     "grunt-contrib-sass": "^0.9.2",
@@ -54,6 +45,7 @@
   },
   "dependencies": {
     "adm-zip": "^0.4.7",
+    "electronify": "^1.1.0",
     "fs-extra": "^0.26.2",
     "git-repo-name": "^0.5.0",
     "git-url-parse": "^4.0.0",
