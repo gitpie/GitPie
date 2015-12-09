@@ -56,6 +56,13 @@ window.addEventListener('keydown', function (e) {
 (function () {
   var app = angular.module('gitpie', ['components', 'attributes', 'header', 'content', 'settings']);
 
+  // Trust as HTML Global filter
+  app.filter('trustAsHtml', function($sce) {
+    return function(html) {
+      return $sce.trustAsHtml(html);
+    };
+  });
+
   app.factory('CommomService', function ($rootScope) {
     var repositoriesStr = localStorage.getItem('repos'),
 

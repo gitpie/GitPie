@@ -73,7 +73,7 @@
           <div class="{{ commit.user.trim().toLowerCase()[0] }} thumb">
             {{ commit.user.trim()[0] }}
           </div>
-          <div class="commit-message">{{ commit.message }}</div>
+          <div class="commit-message" ng-bind-html="commit.message | trustAsHtml"></div>
           <div class="commit-details"><span class="date">{{ commit.date }} by</span> {{ commit.user }} </div>
         </li>
       </ul>
@@ -92,10 +92,9 @@
         </section>
 
         <header class="commit-message" ng-show="appCtrl.getCommitMessage()">
-          <h2>{{ appCtrl.getCommitMessage() }}</h2>
-          <p class="commit-body" ng-show="appCtrl.getCommitBody()">
-            {{ appCtrl.getCommitBody() }}
-          </p>
+          <h2 ng-bind-html="appCtrl.getCommitMessage() | trustAsHtml"></h2>
+          <p class="commit-body" ng-show="appCtrl.getCommitBody()"
+            ng-bind-html="appCtrl.getCommitBody() | trustAsHtml"></p>
 
           <h4 ng-show="appCtrl.getCommitUser()">
             <span class="octicon octicon-person"></span> {{ appCtrl.getCommitUser() }}

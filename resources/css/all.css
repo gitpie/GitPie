@@ -487,6 +487,10 @@ html, html body {
         background-color: #FFF;
         color: #666;
         height: 100%; }
+        html body #wrapper #content .emoji {
+          height: 22px;
+          display: inline-block;
+          margin-bottom: -3px; }
         html body #wrapper #content .column, html body #wrapper #content #left, html body #wrapper #content .getting-start-message, html body #wrapper #content #center, html body #wrapper #content #right {
           height: 100%;
           float: left;
@@ -743,7 +747,9 @@ html, html body {
               white-space: pre-line;
               line-height: 1.5;
               margin: 0;
-              color: #666; }
+              color: #666;
+              -webkit-margin-before: 1em;
+              -webkit-margin-after: 1em; }
           html body #wrapper #content #right nav ul {
             list-style: none;
             display: inline-block;
