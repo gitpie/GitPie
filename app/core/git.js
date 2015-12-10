@@ -786,4 +786,20 @@ Git.prototype.alterGitConfig = function (path, opts) {
   });
 };
 
+Git.prototype.useOurs = function (path, opts) {
+  opts = opts || {};
+
+  exec('git checkout --ours '.concat(opts.fileName), {cwd: path, env: ENV}, function (error) {
+    invokeCallback(opts.callback, [ error ]);
+  });
+};
+
+Git.prototype.useTheirs = function (path, opts) {
+  opts = opts || {};
+
+  exec('git checkout --theirs '.concat(opts.fileName), {cwd: path, env: ENV}, function (error) {
+    invokeCallback(opts.callback, [ error ]);
+  });
+};
+
 module.exports = new Git();
