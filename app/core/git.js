@@ -15,7 +15,7 @@ var
   util = require('util'),
 
   ENV = process.env,
-  
+
   wos = require('node-wos');
 
 ENV.LANG = 'en_US';
@@ -89,6 +89,7 @@ Git.prototype.getCurrentBranch = function (path, callback) {
  * @param  {function} callback - Callback to be execute in error or success case
  */
 Git.prototype.getCommitHistory = function (opts, callback) {
+  var emoji = require('./emoji');
 
   exec(
     "git --no-pager log -n 50 --pretty=format:%an-gtseparator-%cr-gtseparator-%h-gtseparator-%s-gtseparator-%b-gtseparator-%ae-pieLineBreak-" + (opts.skip ? ' --skip '.concat(opts.skip) : '' ),
@@ -113,7 +114,7 @@ Git.prototype.getCommitHistory = function (opts, callback) {
             user: historyItem[0],
             date: historyItem[1],
             hash: historyItem[2],
-            message: historyItem[3],
+            message: emoji.parse(historyItem[3]),
             body: historyItem[4],
             email: historyItem[5]
           });
@@ -355,11 +356,11 @@ Git.prototype.commit = function (path, opts) {
   var commad = 'git commit -m "'.concat( (opts.message.replace(/"/g, '\\"')) ).concat('"');
 
   if (opts.description) {
-    
+
     if (wos.isWindows()) {
       commad = commad + ' -m "' + opts.description.replace(/"/g, '\\"').replace(/\n/g, '" -m "') + '"';
     } else {
-      commad = commad.concat(' -m "').concat( (opts.description.replace(/"/g, '\\"')) ).concat('"'); 
+      commad = commad.concat(' -m "').concat( (opts.description.replace(/"/g, '\\"')) ).concat('"');
     }
   }
 
