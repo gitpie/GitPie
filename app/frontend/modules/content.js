@@ -383,7 +383,7 @@
           } else if (change.type == 'UNMERGED') {
             menu.append(new GUI.MenuItem({ type: 'separator' }));
             menu.append(new GUI.MenuItem({
-              label: 'Use ours',
+              label: MSGS['Use ours'],
               click : function () {
 
                 GIT.useOurs(selectedRepository.path, {
@@ -401,7 +401,7 @@
             }));
 
             menu.append(new GUI.MenuItem({
-              label: 'Use theirs',
+              label: MSGS['Use theirs'],
               click : function () {
 
                 GIT.useTheirs(selectedRepository.path, {
@@ -419,11 +419,11 @@
             }));
 
             menu.append(new GUI.MenuItem({
-              label: 'Open merge tool'
+              label: MSGS['Open merge tool']
             }));
 
             menu.append(new GUI.MenuItem({
-              label: 'Stage file',
+              label: MSGS['Stage file'],
               click: function () {
 
                 GIT.add(selectedRepository.path, {
