@@ -76,7 +76,7 @@
               this.repositoryHistory = historyList;
               this.loadingHistory = false;
 
-              $scope.$apply();
+              applyScope($scope);
               $scope.$broadcast('repositorychanged', selectedRepository);
 
             }.bind(this));
@@ -89,7 +89,7 @@
                 alert(MSGS['Error counting commits. Error: '] + err);
               } else {
                 this.commitNumber = size;
-                $scope.$apply();
+                applyScope($scope);
               }
             }.bind(this));
           }
@@ -147,7 +147,7 @@
 
             this.loadingChanges = false;
 
-            $scope.$apply();
+            applyScope($scope);
           }.bind(this));
         };
 
@@ -191,7 +191,7 @@
                     change.showCode = true;
                   }
 
-                  $scope.$apply();
+                  applyScope($scope);
                 }
               });
             } else if (change.type != 'DELETED') {
@@ -212,7 +212,7 @@
                   }
                 }
 
-                $scope.$apply();
+                applyScope($scope);
               });
             }
 
@@ -242,7 +242,7 @@
                   }
                 }
 
-                $scope.$apply();
+                applyScope($scope);
               }
             });
 
@@ -314,7 +314,7 @@
               } else {
                 this.repositoryHistory = this.repositoryHistory.concat(historyList);
 
-                $scope.$apply();
+                applyScope($scope);
               }
 
             }.bind(this));
@@ -337,7 +337,7 @@
               this.commitChanges.push(item);
             }.bind(this));
 
-            $scope.$apply();
+            applyScope($scope);
           }
         }.bind(this));
 
@@ -479,7 +479,7 @@
                   alert(err);
                 } else {
                   this.commitChanges.splice(index, 1);
-                  $scope.$apply();
+                  applyScope($scope);
                 }
 
                 $scope.$broadcast('apprefreshed', this.commitChanges);
@@ -518,7 +518,7 @@
             $scope.$broadcast('removedRepository');
           }
 
-          $scope.$apply();
+          applyScope($scope);
         };
 
         this.assumeUnchanged = function (filePath, index) {
@@ -532,7 +532,7 @@
                 alert(err);
               } else {
                 this.commitChanges.splice(index, 1);
-                $scope.$apply();
+                applyScope($scope);
               }
             }.bind(this)
           });
@@ -621,7 +621,7 @@
             this.commitChanges = newChangesList;
 
             $scope.$broadcast('apprefreshed', this.commitChanges, syncStatus);
-            $scope.$apply();
+            applyScope($scope);
           }.bind(this));
         };
 
@@ -665,7 +665,7 @@
 
           this.showStashTab();
 
-          $scope.$apply();
+          applyScope($scope);
         }.bind(this));
 
         /* Show notification if a update was installed */
@@ -674,7 +674,7 @@
           console.log('[INFO] A update is ready to be installed');
 
           this.updateNotify.show = true;
-          $scope.$apply();
+          applyScope($scope);
         }.bind(this));
 
         this.performUpdate = function () {

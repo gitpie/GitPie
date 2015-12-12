@@ -21,7 +21,7 @@
 
           setTimeout(function () {
             this.hidePage = true;
-            $scope.$apply();
+            applyScope($scope);
           }.bind(this), 500);
         };
 
@@ -30,7 +30,7 @@
 
           setTimeout(function () {
             this.showSettingsPage = true;
-            $scope.$apply();
+            applyScope($scope);
           }.bind(this), 200);
         }.bind(this);
 

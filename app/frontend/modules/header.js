@@ -110,13 +110,13 @@
             this.currentBranch = currentBranch;
             this.remoteBranchs = remoteBranchs;
 
-            $scope.$apply();
+            applyScope($scope);
           }.bind(this));
 
           GIT.getTag(this.selectedRepository.path, function (err, tags) {
             this.tags = tags;
 
-            $scope.$apply();
+            applyScope($scope);
           }.bind(this));
 
           GIT.fetch(this.selectedRepository.path, function (err) {
@@ -126,7 +126,7 @@
               this.syncStatus = syncStatus;
               this.loading = false;
 
-              $scope.$apply();
+              applyScope($scope);
             }.bind(this));
 
           }.bind(this));
@@ -134,7 +134,7 @@
           GIT.getStashList(this.selectedRepository.path, function (err, stashs) {
             this.stashList = stashs;
 
-            $scope.$apply();
+            applyScope($scope);
           }.bind(this));
 
         }.bind(this));
@@ -158,7 +158,7 @@
             }
 
             this.loading = false;
-            $scope.$apply();
+            applyScope($scope);
           }.bind(this));
         };
 
@@ -185,7 +185,7 @@
                 // Emit changedbranch event even on error case as a workaround to git push command fail
                 $scope.$broadcast('changedbranch', this.selectedRepository);
                 this.loading = false;
-                $scope.$apply();
+                applyScope($scope);
               }.bind(this));
             }.bind(this));
           }
@@ -261,7 +261,7 @@
                     this.cloneNotify.show = false;
                     this.cloneURL = null;
                     this.repositoryDestiny = null;
-                    $scope.$apply();
+                    applyScope($scope);
                   }.bind(this)
                 });
               } else {
@@ -337,7 +337,7 @@
                   }
 
                   this.createNotify.show = false;
-                  $scope.$apply();
+                  applyScope($scope);
                 }.bind(this)
               });
 
@@ -431,7 +431,7 @@
                 $scope.appCtrl.repositoryHistory = historyList;
                 $scope.appCtrl.commitHistory = [];
 
-                $scope.$apply();
+                applyScope($scope);
               }.bind(this));
             }
 
@@ -443,7 +443,7 @@
 
               this.stashList = stashs;
 
-              $scope.$apply();
+              applyScope($scope);
             }.bind(this));
           }
         }.bind(this));
