@@ -1,7 +1,12 @@
+'use strict';
+
 (function () {
-  var GitUrlParse = require('./node_modules/git-url-parse'),
+  const GitUrlParse = require('git-url-parse'),
     fs = require('fs'),
-    path = require('path');
+    path = require('path'),
+    remote = require('remote'),
+    dialog = remote.require('dialog'),
+    browserWindow = remote.require('browser-window');
 
   angular.module('header', [])
 
@@ -457,6 +462,18 @@
 
         this.showSettingsPage = function () {
           $scope.$root.showSettingsPage();
+        };
+
+        this.showOpenDialog = function (bindVarName) {
+          let currentWindow = browserWindow.getFocusedWindow();
+
+          dialog.showOpenDialog(currentWindow, { properties: [ 'openDirectory' ] }, function (filenames) {
+
+            if (filenames) {
+              this[bindVarName] = filenames[0];
+              applyScope($scope);
+            }
+          }.bind(this));
         };
       },
 

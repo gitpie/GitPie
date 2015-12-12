@@ -3,6 +3,7 @@
   "CLONE": "CLONE",
   "CREATE": "CREATE",
   "ADD REPOSITORY": "ADD REPOSITORY",
+  "BROWSE": "BROWSE",
   "Where are your stuffs": "Where are your stuffs",
   "Select a repository to start": "Select a repository to start",
   "Click on a commit to see what happend there": "Click on a commit to see what happend there",

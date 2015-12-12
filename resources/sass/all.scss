@@ -9,23 +9,6 @@
 * {
   outline: none;
 
-  [tooltip]:hover:after{
-    content: attr(tooltip);
-    padding: 7px;
-    background-color: #333;
-    color: #F7F7F7;
-    font-size: 0.85em;
-    position: absolute;
-    left: 1px;
-    top: 100%;
-    margin-top: 2px;
-    white-space: nowrap;
-    z-index: 200000;
-    border-radius: 2px;
-    overflow: hidden;
-    -webkit-animation: showTooltip 1s linear;
-  }
-
   .rotate {
 		-webkit-animation: spin 2s linear infinite;
 	}
@@ -47,7 +30,7 @@
 	}
 
   // Default style for input text
-  input[type="text"], input[type="password"], select {
+  input[type="text"] {
 		padding: 8px;
 		border: #DDD 1px solid;
     background-color: #FAFAFA;
@@ -64,6 +47,18 @@
     }
 	}
 
+  input[type="text"].inline-filed {
+    width: 185px;
+  }
+
+  input[type="password"] {
+    @extend input[type="text"];
+  }
+
+  select {
+    @extend input[type="text"];
+  }
+
   select {
     min-width: 300px;
   }
@@ -75,28 +70,6 @@
     box-sizing: border-box;
     resize: none;
   }
-
-  // Default style for input file
-  input[type="file"] {
-		width: 70px;
-	  overflow: hidden;
-	  height: 35px;
-	  display: inline-block;
-    float: right;
-    border-radius: 3px;
-    margin: 0 5px;
-
-		&::before {
-			content: 'Browse';
-			display: block;
-			background-color: #F7F7F7;
-			padding: 10px;
-
-      &:hover {
-        background-color: #DDD;
-      }
-		}
-	}
 
   // Default style for button and input button
   button, input[type="button"] {

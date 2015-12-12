@@ -10,9 +10,9 @@
               <pane pane-title="{{ MSGS.ADD }}">
 
                 <section class="content">
-                  <input type="text" style="width: 200px" name="repository" ng-model="headerCtrl.repositoryPath"
+                  <input class="inline-filed" type="text" name="repository" ng-model="headerCtrl.repositoryPath"
                     placeholder="{{ MSGS['Where are your stuffs'] }}?" />
-                  <input type="file" ng-model="headerCtrl.repositoryPath" ng-input-change nwdirectory />
+                  <button type="button" ng-click="headerCtrl.showOpenDialog('repositoryPath')">{{ MSGS.BROWSE }}</button>
                 </section>
                 <footer><button class="featured" ng-click="headerCtrl.addRepository(headerCtrl.repositoryPath)"><span class="octicon octicon-file-directory"></span> {{ MSGS["ADD REPOSITORY"] }}</button> </footer>
 
@@ -21,9 +21,9 @@
                 <section class="content">
                   <input type="text" style="width: 100%; box-sizing: border-box" ng-model="headerCtrl.cloneURL"
                     placeholder="{{ MSGS['Clone URL'] }}" />
-                  <input type="text" style="width: 200px" ng-model="headerCtrl.repositoryDestiny"
+                  <input type="text" class="inline-filed" ng-model="headerCtrl.repositoryDestiny"
                     placeholder="{{ MSGS['Destination Folder'] }}" />
-                  <input type="file" ng-model="headerCtrl.repositoryDestiny" ng-input-change nwdirectory />
+                    <button type="button" ng-click="headerCtrl.showOpenDialog('repositoryDestiny')">{{ MSGS.BROWSE }}</button>
                 </section>
                 <footer><button class="featured"
                   ng-click="headerCtrl.cloneRepository()"
@@ -40,9 +40,9 @@
                   <span class="label" ng-show="headerCtrl.repositoryName.length">
                     {{ MSGS['Your repository will be created as'] }} <strong>"{{ headerCtrl.treatBranch(headerCtrl.repositoryName) }}"</strong></span>
 
-                  <input type="text" style="width: 200px" ng-model="headerCtrl.repositoryHome"
+                  <input type="text" class="inline-filed" ng-model="headerCtrl.repositoryHome"
                     placeholder="{{ MSGS['Folder'] }}" />
-                  <input type="file" ng-model="headerCtrl.repositoryHome" ng-input-change nwdirectory />
+                  <button type="button" ng-click="headerCtrl.showOpenDialog('repositoryHome')">{{ MSGS.BROWSE }}</button>
 
                 </section>
                 <footer><button class="featured"

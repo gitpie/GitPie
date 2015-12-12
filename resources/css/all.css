@@ -6,21 +6,6 @@
 * {
   outline: none;
   /* Scrollbar style */ }
-  * [tooltip]:hover:after {
-    content: attr(tooltip);
-    padding: 7px;
-    background-color: #333;
-    color: #F7F7F7;
-    font-size: 0.85em;
-    position: absolute;
-    left: 1px;
-    top: 100%;
-    margin-top: 2px;
-    white-space: nowrap;
-    z-index: 200000;
-    border-radius: 2px;
-    overflow: hidden;
-    -webkit-animation: showTooltip 1s linear; }
   * .rotate {
     -webkit-animation: spin 2s linear infinite; }
   *::-webkit-scrollbar-track {
@@ -32,7 +17,7 @@
     background-color: rgba(0, 0, 0, 0.4);
     border-radius: 5px;
     border: 2px #F5F5F5 solid; }
-  * input[type="text"], * textarea, * input[type="password"], * select {
+  * input[type="text"], * input[type="password"], * select, * textarea {
     padding: 8px;
     border: #DDD 1px solid;
     background-color: #FAFAFA;
@@ -41,10 +26,12 @@
     transition: all 0.3s linear;
     margin-bottom: 6px;
     font-family: "Roboto", Helvetica, Arial; }
-    * input[type="text"]:focus, * textarea:focus, * input[type="password"]:focus, * select:focus {
+    * input[type="text"]:focus, * input[type="password"]:focus, * select:focus, * textarea:focus {
       background-color: #FFF;
       border-color: #51a7e8;
       box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.075), 0 0 5px rgba(81, 167, 232, 0.5); }
+  * input[type="text"].inline-filed, * input.inline-filed[type="password"], * select.inline-filed, * textarea.inline-filed {
+    width: 185px; }
   * select {
     min-width: 300px; }
   * textarea {
@@ -52,21 +39,6 @@
     width: 100%;
     box-sizing: border-box;
     resize: none; }
-  * input[type="file"] {
-    width: 70px;
-    overflow: hidden;
-    height: 35px;
-    display: inline-block;
-    float: right;
-    border-radius: 3px;
-    margin: 0 5px; }
-    * input[type="file"]::before {
-      content: 'Browse';
-      display: block;
-      background-color: #F7F7F7;
-      padding: 10px; }
-      * input[type="file"]::before:hover {
-        background-color: #DDD; }
   * button, * input[type="button"] {
     background-color: #DBDBDB;
     font-weight: bold;
@@ -155,7 +127,7 @@ html, html body {
             font-size: 24px;
             margin-right: 15px;
             cursor: pointer; }
-      html body .page .page-dialog input[type="text"], html body .page .page-dialog * textarea, * html body .page .page-dialog textarea, html body body .page .page-dialog * textarea, * html body body .page .page-dialog textarea, html body .page .page-dialog input[type="password"] {
+      html body .page .page-dialog input[type="text"], html body .page .page-dialog * input[type="password"], * html body .page .page-dialog input[type="password"], html body .page .page-dialog * select, * html body .page .page-dialog select, html body body .page .page-dialog * select, * html body body .page .page-dialog select, html body .page .page-dialog * textarea, * html body .page .page-dialog textarea, html body body .page .page-dialog * textarea, * html body body .page .page-dialog textarea, html body .page .page-dialog input[type="password"] {
         min-width: 300px; }
       html body .page .page-dialog nav {
         margin-top: 47px;
@@ -535,7 +507,7 @@ html, html body {
             cursor: default; }
             html body #wrapper #content #left .empty-msg .mega-octicon {
               display: block; }
-          html body #wrapper #content #left input[type="text"], html body #wrapper #content #left * textarea, * html body #wrapper #content #left textarea, html body body #wrapper #content #left * textarea, * html body body #wrapper #content #left textarea {
+          html body #wrapper #content #left input[type="text"], html body #wrapper #content #left * input[type="password"], * html body #wrapper #content #left input[type="password"], html body #wrapper #content #left * select, * html body #wrapper #content #left select, html body body #wrapper #content #left * select, * html body body #wrapper #content #left select, html body #wrapper #content #left * textarea, * html body #wrapper #content #left textarea, html body body #wrapper #content #left * textarea, * html body body #wrapper #content #left textarea {
             display: block;
             margin: 10px auto;
             padding-left: 11px;

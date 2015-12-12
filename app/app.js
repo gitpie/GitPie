@@ -20,7 +20,14 @@ var
   updater = new UpdaterModule(),
 
   // Messages and labels of the application
-  MSGS;
+  MSGS,
+
+  // Apply AngularJS scope if a apply task is not being digest
+  applyScope = function (scope) {
+    if (!scope.$$phase) {
+      scope.$apply();
+    }
+  };
 
 WIN.focus();
 

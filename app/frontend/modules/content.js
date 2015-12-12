@@ -14,18 +14,15 @@
       templateUrl: 'app/frontend/view/content/pieContent.html',
 
       controller: function ($scope, $sce, $compile, CommomService) {
-        var selectedRepository = {},
-          selectedCommit = {},
-          selectedCommitAncestor = null,
-          MSGS = $scope.MSGS;
-
         const remote = require('remote');
         const shell = require('shell');
-        // const BrowserWindow = remote.require('browser-window');
 
-        let Menu = remote.require('menu');
-        let MenuItem = remote.require('menu-item');
-        // let dialog = remote.require('dialog');
+        let selectedRepository = {},
+          selectedCommit = {},
+          selectedCommitAncestor = null,
+          MSGS = $scope.MSGS,
+          Menu = remote.require('menu'),
+          MenuItem = remote.require('menu-item');
 
         this.updateNotify = {
           show: false
@@ -681,7 +678,7 @@
         }.bind(this));
 
         this.performUpdate = function () {
-          updater.performUpdate(GUI, WIN);
+          // updater.performUpdate(GUI, WIN);
         };
 
         var me = this;
