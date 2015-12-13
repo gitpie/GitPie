@@ -18,8 +18,11 @@ gulp.task('sass:watch', function () {
 gulp.task('dev', ['sass:watch']);
 
 // Build tasks
+gulp.task('build', ['build:linux', 'build:osx', 'build:win']);
 
 // Linux
+gulp.task('build:linux', ['build:linux64', 'build:linux32']);
+
 gulp.task('build:linux64', ['sass'], function () {
   var buildOpts = getDefaultBuildOpts();
 
@@ -41,6 +44,8 @@ gulp.task('build:linux32', ['sass'], function () {
 });
 
 // Mac
+gulp.task('build:osx', ['build:osx64', 'build:osx32']);
+
 gulp.task('build:osx64', ['sass'], function () {
   var buildOpts = getDefaultBuildOpts();
 
@@ -64,6 +69,8 @@ gulp.task('build:osx32', ['sass'], function () {
 });
 
 // Windows
+gulp.task('build:win', ['build:win64', 'build:win32']);
+
 gulp.task('build:win64', ['sass'], function () {
   var buildOpts = getDefaultBuildOpts();
 
@@ -163,7 +170,7 @@ function getIgnoreRegex() {
 
     ignoreRegex = ignoreRegex.replace('{modules}', nonIgnoredModules.join('|'));
 
-    return ignoreRegex;
+    return [ignoreRegex, '^/build'];
   } catch (err) {
     throw new Error('Error getting the npm version. Error: '.concat(error.message));
   }

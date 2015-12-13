@@ -3,4 +3,4 @@ node_modules
 cache
 build
 .sass-cache
-resources/css/all.css.map
+resources/css/**
