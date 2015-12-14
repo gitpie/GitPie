@@ -12,7 +12,9 @@
                 <section class="content">
                   <input class="inline-filed" type="text" name="repository" ng-model="headerCtrl.repositoryPath"
                     placeholder="{{ MSGS['Where are your stuffs'] }}?" />
-                  <button type="button" ng-click="headerCtrl.showOpenDialog('repositoryPath')">{{ MSGS.BROWSE }}</button>
+                  <button type="button" ng-click="headerCtrl.showOpenDialog('repositoryPath')" title="{{ MSGS['Browse directory'] }}">
+                    <span class="octicon octicon-file-symlink-directory"></span>
+                  </button>
                 </section>
                 <footer><button class="featured" ng-click="headerCtrl.addRepository(headerCtrl.repositoryPath)"><span class="octicon octicon-file-directory"></span> {{ MSGS["ADD REPOSITORY"] }}</button> </footer>
 
@@ -23,7 +25,9 @@
                     placeholder="{{ MSGS['Clone URL'] }}" />
                   <input type="text" class="inline-filed" ng-model="headerCtrl.repositoryDestiny"
                     placeholder="{{ MSGS['Destination Folder'] }}" />
-                    <button type="button" ng-click="headerCtrl.showOpenDialog('repositoryDestiny')">{{ MSGS.BROWSE }}</button>
+                    <button type="button" ng-click="headerCtrl.showOpenDialog('repositoryDestiny')" title="{{ MSGS['Browse directory'] }}">
+                      <span class="octicon octicon-file-symlink-directory"></span>
+                    </button>
                 </section>
                 <footer><button class="featured"
                   ng-click="headerCtrl.cloneRepository()"
@@ -42,7 +46,9 @@
 
                   <input type="text" class="inline-filed" ng-model="headerCtrl.repositoryHome"
                     placeholder="{{ MSGS['Folder'] }}" />
-                  <button type="button" ng-click="headerCtrl.showOpenDialog('repositoryHome')">{{ MSGS.BROWSE }}</button>
+                  <button type="button" ng-click="headerCtrl.showOpenDialog('repositoryHome')" title="{{ MSGS['Browse directory'] }}">
+                    <span class="octicon octicon-file-symlink-directory"></span>
+                  </button>
 
                 </section>
                 <footer><button class="featured"
