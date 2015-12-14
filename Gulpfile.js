@@ -126,7 +126,7 @@ function build(electronBuildOpts) {
 function getIgnoreRegex() {
   var pack = require('./package'),
     execSync = require('child_process').execSync,
-    nonIgnoredModules = [ 'build' ],
+    nonIgnoredModules = [],
     ignoreRegex =  '^/node_modules/(?!({modules}))';
 
   function findDependentModule (parentModule, module) {
@@ -172,6 +172,6 @@ function getIgnoreRegex() {
 
     return [ignoreRegex, '^/build'];
   } catch (err) {
-    throw new Error('Error getting the npm version. Error: '.concat(error.message));
+    throw new Error('Error getting ignore regex for build. Error: '.concat(err.message));
   }
 }
