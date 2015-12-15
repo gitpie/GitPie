@@ -25,12 +25,12 @@
           <ul>
             <li class="column">
               <section class="label-field">{{ MSGS.SettingsPage.Username }}</section>
-              <input type="text" value="{{ settingsCtrl.globalGitConfigs['user.name'] }}" name="gitUsername">
+              <input type="text" ng-model="settingsCtrl.globalGitConfigs['user.name']" />
             </li>
 
             <li class="column">
               <section class="label-field">{{ MSGS.SettingsPage.Email }}</section>
-              <input type="text" value="{{ settingsCtrl.globalGitConfigs['user.email'] }}" name="gitEmail">
+              <input type="text" ng-model="settingsCtrl.globalGitConfigs['user.email']" />
             </li>
 
             <li>
