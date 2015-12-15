@@ -50,9 +50,6 @@ try {
   var app = angular.module('gitpie', ['components', 'attributes', 'header', 'content', 'settings']);
 
   app.factory('CommomService', function ($rootScope) {
-    // Module to discover the git repository name
-    let GitRepoName = require('git-repo-name');
-
     var repositoriesStr = localStorage.getItem('repos'),
 
       repositories = JSON.parse(repositoriesStr) || {},
@@ -161,50 +158,54 @@ try {
             alert($rootScope.MSGS['It happends with me all the time too. But lets\'s try find your project again!']);
 
           } else {
+            let gitUrlParse = require('git-url-parse');
 
-            GitRepoName(repositoryPath, function (err, name) {
+            GIT.listRemotes(repositoryPath, function (err, repositoryRemotes) {
 
               if (err) {
                 alert($rootScope.MSGS['Nothing for me here.\n The folder {folder} is not a git project'].replace('{folder}', repositoryPath));
               } else {
-                var type, index, repositoryExists, repository;
+                let gitUrl = gitUrlParse(repositoryRemotes.origin.push),
+                  type,
+                  index,
+                  repositoryExists,
+                  repository;
 
-                GIT.showRemotes(repositoryPath, function (err, stdout) {
-
-                  if (stdout.toLowerCase().indexOf('github.com') != -1) {
+                switch (gitUrl.resource) {
+                  case 'github.com':
                     repositoryExists = findWhere(repositories.github, { path: repositoryPath});
                     type = 'github';
-
-                  } else if (stdout.toLowerCase().indexOf('bitbucket.org') != -1) {
+                    break;
+                  case 'bitbucket.org':
                     repositoryExists = findWhere(repositories.bitbucket, { path: repositoryPath});
                     type = 'bitbucket';
-
-                  } else {
+                    break;
+                  default:
                     repositoryExists = findWhere(repositories.others, { path: repositoryPath});
                     type = 'others';
-                  }
+                    break;
+                }
 
-                  if (!repositoryExists) {
+                if (!repositoryExists) {
 
-                    index = repositories[type].push({
-                      name: name,
-                      path: repositoryPath,
-                      type : type.toUpperCase()
-                    });
+                  index = repositories[type].push({
+                    name: gitUrl.name,
+                    path: repositoryPath,
+                    type : type.toUpperCase()
+                  });
 
-                    repository = repositories[type][index - 1];
+                  repository = repositories[type][index - 1];
 
-                    saveRepository(repository);
-                  } else {
-                    repository = repositoryExists;
-                  }
+                  saveRepository(repository);
+                } else {
+                  repository = repositoryExists;
+                }
 
-                  repositories.isEmpty = false;
+                repositories.isEmpty = false;
 
-                  if (callback && typeof callback == 'function') {
-                    callback.call(this, repository);
-                  }
-                });
+                if (callback && typeof callback == 'function') {
+                  callback.call(this, repository);
+                }
               }
             });
           }

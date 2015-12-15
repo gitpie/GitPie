@@ -45,7 +45,6 @@
     "adm-zip": "^0.4.7",
     "electronify": "^1.1.0",
     "fs-extra": "^0.26.2",
-    "git-repo-name": "^0.5.0",
     "git-url-parse": "^4.0.0",
     "node-wos": "^0.1.0",
     "request": "^2.61.0",
