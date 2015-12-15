@@ -155,23 +155,22 @@ function getIgnoreRegex() {
     }
   }
 
-  try {
-    var npmVersion = execSync('npm -v');
+  var npmVersion = execSync('npm -v'),
+    i = 0;
 
-    if (parseInt(npmVersion[0]) >= 3) {
-      // The npm modules structure is flat
-      for (var i in pack.dependencies) {
-        findDependentModule('main', i);
-      }
-    } else {
-      // The npm modules structure is not flat
-      nonIgnoredModules = pack.dependencies;
+  if (parseInt(npmVersion.toString()[0]) >= 3) {
+    // The npm modules structure is flat
+    for (i in pack.dependencies) {
+      findDependentModule('main', i);
     }
-
-    ignoreRegex = ignoreRegex.replace('{modules}', nonIgnoredModules.join('|'));
-
-    return [ignoreRegex, '^/build'];
-  } catch (err) {
-    throw new Error('Error getting ignore regex for build. Error: '.concat(err.message));
+  } else {
+    // The npm modules structure is not flat
+    for (i in pack.dependencies) {
+      nonIgnoredModules.push(i);
+    }
   }
+
+  ignoreRegex = ignoreRegex.replace('{modules}', nonIgnoredModules.join('|'));
+
+  return [ignoreRegex, '^/build'];
 }
