@@ -15,14 +15,29 @@
           'Roboto'
         ];
         this.selectedRepository = null;
+        this.globalGitConfigs = {
+          'user.name': '',
+          'user.email': ''
+        };
 
         this.hideSettingsPage = function () {
           this.showSettingsPage = false;
 
           setTimeout(function () {
             this.hidePage = true;
-            $scope.$apply();
+            applyScope($scope);
           }.bind(this), 500);
+        };
+
+        this.getGlobalGitConfigs = function () {
+          GIT.getGlobalConfigs(function (err, configs) {
+
+            if (err) {
+              alert(err.message);
+            } else {
+              this.globalGitConfigs = configs;
+            }
+          }.bind(this));
         };
 
         $scope.$root.showSettingsPage = function () {
@@ -30,18 +45,12 @@
 
           setTimeout(function () {
             this.showSettingsPage = true;
-            $scope.$apply();
+            applyScope($scope);
           }.bind(this), 200);
         }.bind(this);
 
-        GIT.getGlobalConfigs(function (err, configs) {
-
-          if (err) {
-            alert(err.message);
-          } else {
-            this.globalGitConfigs = configs;
-          }
-        }.bind(this));
+        // Attemp to get the global git configs on load the application
+        this.getGlobalGitConfigs();
 
         this.changeGitCofigs = function (global, event) {
           var username,
@@ -82,8 +91,8 @@
 
             if (err) {
               alert(err.message);
-            } else {
-              var GitUrlParse = require('./node_modules/git-url-parse'),
+            } else if (remotesList.origin) {
+              var GitUrlParse = require('git-url-parse'),
                 repoSettings = GitUrlParse(remotesList.origin.push);
 
               if (repoSettings.protocol == 'ssh') {
@@ -92,18 +101,15 @@
             }
           }.bind(this));
 
-          GIT.getGlobalConfigs(function (err, configs) {
-
-            if (err) {
-              alert(err.message);
-            } else {
-              this.globalGitConfigs = configs;
-            }
-          }.bind(this));
+          this.getGlobalGitConfigs();
 
           GIT.getLocalConfigs(this.selectedRepository.path, function (err, configs) {
 
             if (err) {
+              this.localGitConfigs = {
+                'user.name': '',
+                'user.email': ''
+              };
               alert(err.message);
             } else {
               this.localGitConfigs = configs;

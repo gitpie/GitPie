@@ -2,28 +2,18 @@
   "name": "GitPie",
   "version": "0.1.0",
   "description": "A Multiplataform Client for Git",
-  "main": "index.html",
-  "window": {
-    "title": "GitPie",
-    "icon": "resources/images/icon.png",
-    "toolbar": false,
-    "frame": true,
-    "width": 1000,
-    "height": 600,
-    "min_width": 1000,
-    "min_height": 600,
-    "resizable": true
-  },
+  "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "npm run linux64",
-    "linux32": "grunt build && ./build/GitPie/linux32/GitPie",
-    "linux64": "grunt build && ./build/GitPie/linux64/GitPie",
-    "osx32": "grunt build && ./build/GitPie/osx32/GitPie",
-    "osx64": "grunt build && ./build/GitPie/osx64/GitPie",
-    "win32": "grunt build && ./build/GitPie/win32/GitPie",
-    "win64": "grunt build && ./build/GitPie/win64/GitPie",
-    "dev": "grunt dev"
+    "start": "electron .",
+    "dev": "gulp dev",
+    "build": "gulp build",
+    "linux32": "gulp build:linux32 && ./build/linux/32bit/GitPie-linux-ia32/GitPie",
+    "linux64": "gulp build:linux64 && ./build/linux/64bit/GitPie-linux-x64/GitPie",
+    "osx32": "gulp build:osx32 && ./build/osx/32bit/GitPie-darwin-ia32/GitPie.app",
+    "osx64": "gulp build:osx64 && ./build/osx/64bit/GitPie-darwin-x64/GitPie.app",
+    "win32": "gulp build:win32 && ./build/windows/32bit/GitPie-win32-ia32/GitPie.exe",
+    "win64": "gulp build:win64 && ./build/windows/64bit/GitPie-win32-x64/GitPie.exe"
   },
   "repository": {
     "type": "git",
@@ -46,16 +36,15 @@
   },
   "homepage": "https://github.com/mapaiva/GitPie",
   "devDependencies": {
-    "grunt": "^0.4.5",
-    "grunt-cli": "^0.1.13",
-    "grunt-contrib-sass": "^0.9.2",
-    "grunt-contrib-watch": "^0.6.1",
-    "grunt-nw-builder": "^2.0.0"
+    "electron-packager": "^5.1.1",
+    "electron-prebuilt": "^0.35.1",
+    "gulp": "^3.9.0",
+    "gulp-sass": "^2.1.1"
   },
   "dependencies": {
     "adm-zip": "^0.4.7",
+    "electronify": "^1.1.0",
     "fs-extra": "^0.26.2",
-    "git-repo-name": "^0.5.0",
     "git-url-parse": "^4.0.0",
     "node-wos": "^0.1.0",
     "request": "^2.61.0",

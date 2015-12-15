@@ -1,7 +1,12 @@
+'use strict';
+
 (function () {
-  var GitUrlParse = require('./node_modules/git-url-parse'),
+  const GitUrlParse = require('git-url-parse'),
     fs = require('fs'),
-    path = require('path');
+    path = require('path'),
+    remote = require('remote'),
+    dialog = remote.require('dialog'),
+    browserWindow = remote.require('browser-window');
 
   angular.module('header', [])
 
@@ -105,13 +110,13 @@
             this.currentBranch = currentBranch;
             this.remoteBranchs = remoteBranchs;
 
-            $scope.$apply();
+            applyScope($scope);
           }.bind(this));
 
           GIT.getTag(this.selectedRepository.path, function (err, tags) {
             this.tags = tags;
 
-            $scope.$apply();
+            applyScope($scope);
           }.bind(this));
 
           GIT.fetch(this.selectedRepository.path, function (err) {
@@ -121,7 +126,7 @@
               this.syncStatus = syncStatus;
               this.loading = false;
 
-              $scope.$apply();
+              applyScope($scope);
             }.bind(this));
 
           }.bind(this));
@@ -129,7 +134,7 @@
           GIT.getStashList(this.selectedRepository.path, function (err, stashs) {
             this.stashList = stashs;
 
-            $scope.$apply();
+            applyScope($scope);
           }.bind(this));
 
         }.bind(this));
@@ -153,7 +158,7 @@
             }
 
             this.loading = false;
-            $scope.$apply();
+            applyScope($scope);
           }.bind(this));
         };
 
@@ -180,7 +185,7 @@
                 // Emit changedbranch event even on error case as a workaround to git push command fail
                 $scope.$broadcast('changedbranch', this.selectedRepository);
                 this.loading = false;
-                $scope.$apply();
+                applyScope($scope);
               }.bind(this));
             }.bind(this));
           }
@@ -256,7 +261,7 @@
                     this.cloneNotify.show = false;
                     this.cloneURL = null;
                     this.repositoryDestiny = null;
-                    $scope.$apply();
+                    applyScope($scope);
                   }.bind(this)
                 });
               } else {
@@ -332,7 +337,7 @@
                   }
 
                   this.createNotify.show = false;
-                  $scope.$apply();
+                  applyScope($scope);
                 }.bind(this)
               });
 
@@ -426,7 +431,7 @@
                 $scope.appCtrl.repositoryHistory = historyList;
                 $scope.appCtrl.commitHistory = [];
 
-                $scope.$apply();
+                applyScope($scope);
               }.bind(this));
             }
 
@@ -438,7 +443,7 @@
 
               this.stashList = stashs;
 
-              $scope.$apply();
+              applyScope($scope);
             }.bind(this));
           }
         }.bind(this));
@@ -457,6 +462,18 @@
 
         this.showSettingsPage = function () {
           $scope.$root.showSettingsPage();
+        };
+
+        this.showOpenDialog = function (bindVarName) {
+          let currentWindow = browserWindow.getFocusedWindow();
+
+          dialog.showOpenDialog(currentWindow, { properties: [ 'openDirectory' ] }, function (filenames) {
+
+            if (filenames) {
+              this[bindVarName] = filenames[0];
+              applyScope($scope);
+            }
+          }.bind(this));
         };
       },
 

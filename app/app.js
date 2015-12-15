@@ -1,12 +1,14 @@
+'use strict';
+
+// Remote electron module
+const remote = require('remote');
+// Locale language
+const LANG = window.navigator.userLanguage || window.navigator.language;
+
 var
-  // Load native UI library
-  GUI = require('nw.gui'),
 
   // browser window object
-  WIN = GUI.Window.get(),
-
-  // Module to discover the git repository name
-  GIT_REPO_NAME = require('./node_modules/git-repo-name'),
+  WIN = remote.getCurrentWindow(),
 
   // Git class that perfoms git commands
   GIT = require('./app/core/git'),
@@ -17,11 +19,15 @@ var
   // Updater instance
   updater = new UpdaterModule(),
 
-  // Locale language
-  LANG = window.navigator.userLanguage || window.navigator.language,
-
   // Messages and labels of the application
-  MSGS;
+  MSGS,
+
+  // Apply AngularJS scope if a apply task is not being digest
+  applyScope = function (scope) {
+    if (!scope.$$phase) {
+      scope.$apply();
+    }
+  };
 
 WIN.focus();
 
@@ -38,19 +44,6 @@ try {
 } catch (err){
   MSGS = require('./language/en.json');
 }
-
-// Open devTools for debug
-window.addEventListener('keydown', function (e) {
-
-  if (e.shiftKey && e.ctrlKey && e.keyCode == 68) {
-
-      if (WIN.isDevToolsOpen()) {
-        WIN.closeDevTools();
-      } else {
-        WIN.showDevTools();
-      }
-  }
-});
 
 /* AngularJS app init */
 (function () {
@@ -172,33 +165,38 @@ window.addEventListener('keydown', function (e) {
             alert($rootScope.MSGS['It happends with me all the time too. But lets\'s try find your project again!']);
 
           } else {
-            var name = GIT_REPO_NAME.sync(repositoryPath),
-              type,
-              index,
-              repositoryExists,
-              repository;
+            let gitUrlParse = require('git-url-parse');
 
-            if (name) {
+            GIT.listRemotes(repositoryPath, function (err, repositoryRemotes) {
 
-              GIT.showRemotes(repositoryPath, function (err, stdout) {
+              if (err) {
+                alert($rootScope.MSGS['Nothing for me here.\n The folder {folder} is not a git project'].replace('{folder}', repositoryPath));
+              } else {
+                let gitUrl = gitUrlParse(repositoryRemotes.origin.push),
+                  type,
+                  index,
+                  repositoryExists,
+                  repository;
 
-                if (stdout.toLowerCase().indexOf('github.com') != -1) {
-                  repositoryExists = findWhere(repositories.github, { path: repositoryPath});
-                  type = 'github';
-
-                } else if (stdout.toLowerCase().indexOf('bitbucket.org') != -1) {
-                  repositoryExists = findWhere(repositories.bitbucket, { path: repositoryPath});
-                  type = 'bitbucket';
-
-                } else {
-                  repositoryExists = findWhere(repositories.others, { path: repositoryPath});
-                  type = 'others';
+                switch (gitUrl.resource) {
+                  case 'github.com':
+                    repositoryExists = findWhere(repositories.github, { path: repositoryPath});
+                    type = 'github';
+                    break;
+                  case 'bitbucket.org':
+                    repositoryExists = findWhere(repositories.bitbucket, { path: repositoryPath});
+                    type = 'bitbucket';
+                    break;
+                  default:
+                    repositoryExists = findWhere(repositories.others, { path: repositoryPath});
+                    type = 'others';
+                    break;
                 }
 
                 if (!repositoryExists) {
 
                   index = repositories[type].push({
-                    name: name,
+                    name: gitUrl.name,
                     path: repositoryPath,
                     type : type.toUpperCase()
                   });
@@ -215,11 +213,8 @@ window.addEventListener('keydown', function (e) {
                 if (callback && typeof callback == 'function') {
                   callback.call(this, repository);
                 }
-              });
-
-            } else {
-              alert($rootScope.MSGS['Nothing for me here.\n The folder {folder} is not a git project'].replace('{folder}', repositoryPath));
-            }
+              }
+            });
           }
         }
       },
