@@ -1,3 +1,5 @@
+'use strict';
+
 (function () {
   var CodeProcessor = require('./app/core/code-processor'),
     cp = new CodeProcessor(),
@@ -12,10 +14,15 @@
       templateUrl: 'app/frontend/view/content/pieContent.html',
 
       controller: function ($scope, $sce, $compile, CommomService) {
-        var selectedRepository = {},
+        const remote = require('remote');
+        const shell = require('shell');
+
+        let selectedRepository = {},
           selectedCommit = {},
           selectedCommitAncestor = null,
-          MSGS = $scope.MSGS;
+          MSGS = $scope.MSGS,
+          Menu = remote.require('menu'),
+          MenuItem = remote.require('menu-item');
 
         this.updateNotify = {
           show: false
@@ -69,7 +76,7 @@
               this.repositoryHistory = historyList;
               this.loadingHistory = false;
 
-              $scope.$apply();
+              applyScope($scope);
               $scope.$broadcast('repositorychanged', selectedRepository);
 
             }.bind(this));
@@ -82,7 +89,7 @@
                 alert(MSGS['Error counting commits. Error: '] + err);
               } else {
                 this.commitNumber = size;
-                $scope.$apply();
+                applyScope($scope);
               }
             }.bind(this));
           }
@@ -140,7 +147,7 @@
 
             this.loadingChanges = false;
 
-            $scope.$apply();
+            applyScope($scope);
           }.bind(this));
         };
 
@@ -184,7 +191,7 @@
                     change.showCode = true;
                   }
 
-                  $scope.$apply();
+                  applyScope($scope);
                 }
               });
             } else if (change.type != 'DELETED') {
@@ -205,7 +212,7 @@
                   }
                 }
 
-                $scope.$apply();
+                applyScope($scope);
               });
             }
 
@@ -235,7 +242,7 @@
                   }
                 }
 
-                $scope.$apply();
+                applyScope($scope);
               }
             });
 
@@ -307,7 +314,7 @@
               } else {
                 this.repositoryHistory = this.repositoryHistory.concat(historyList);
 
-                $scope.$apply();
+                applyScope($scope);
               }
 
             }.bind(this));
@@ -330,21 +337,21 @@
               this.commitChanges.push(item);
             }.bind(this));
 
-            $scope.$apply();
+            applyScope($scope);
           }
         }.bind(this));
 
         this.openRepositoryContextualMenu = function (event, repository, index) {
-          var menu = new GUI.Menu();
+          let menu = new Menu();
 
-          menu.append(new GUI.MenuItem({
+          menu.append(new MenuItem({
             label: MSGS.Remove,
             click : function () {
               this.removeRepository(repository.type, index);
             }.bind(this)
           }));
-          menu.append(new GUI.MenuItem({ type: 'separator' }));
-          menu.append(new GUI.MenuItem({
+          menu.append(new MenuItem({ type: 'separator' }));
+          menu.append(new MenuItem({
             label: MSGS['Show in folder'],
             click: function () {
               this.openItemInFolder(repository.path);
@@ -355,9 +362,9 @@
         };
 
         this.openHistoryContextualMenu = function (event, history, index) {
-          var menu = new GUI.Menu();
+          let menu = new Menu();
 
-          menu.append(new GUI.MenuItem({
+          menu.append(new MenuItem({
             label: MSGS['Show in folder'],
             click: function () {
               this.openItemInFolder(path.join(selectedRepository.path, history.name.trim()));
@@ -370,27 +377,25 @@
         this.openChangesContextualMenu = function (event, change, index) {
           var isUnknowChange = change.type == 'NEW',
             dir = change.path.trim(),
-            menu = new GUI.Menu();
+            menu = new Menu();
 
           if (change.type == 'ADDED') {
 
-            menu.append(new GUI.MenuItem({
+            menu.append(new MenuItem({
               label: MSGS['Unstage file'],
               click : function () {
                 this.unstageFile(dir, index);
               }.bind(this)
             }));
           } else if (change.type == 'UNMERGED') {
-            menu.append(new GUI.MenuItem({ type: 'separator' }));
-            menu.append(new GUI.MenuItem({
+            menu.append(new MenuItem({ type: 'separator' }));
+            menu.append(new MenuItem({
               label: MSGS['Use ours'],
               click : function () {
-
                 GIT.useOurs(selectedRepository.path, {
                   fileName: dir,
                   callback: function (err) {
-
-                    if (err) {
+                              if (err) {
                       alert(err);
                     } else {
                       this.refreshRepositoryChanges();
@@ -399,15 +404,12 @@
                 });
               }.bind(this)
             }));
-
-            menu.append(new GUI.MenuItem({
+            menu.append(new MenuItem({
               label: MSGS['Use theirs'],
               click : function () {
-
                 GIT.useTheirs(selectedRepository.path, {
                   fileName: dir,
                   callback: function (err) {
-
                     if (err) {
                       alert(err);
                     } else {
@@ -417,19 +419,15 @@
                 });
               }.bind(this)
             }));
-
-            menu.append(new GUI.MenuItem({
+            menu.append(new MenuItem({
               label: MSGS['Open merge tool']
             }));
-
-            menu.append(new GUI.MenuItem({
+            menu.append(new MenuItem({
               label: MSGS['Stage file'],
               click: function () {
-
                 GIT.add(selectedRepository.path, {
                   file: dir,
                   callback: function (err) {
-
                     if (err) {
                       alert(err);
                     } else {
@@ -440,15 +438,14 @@
               }.bind(this)
             }));
           } else {
-
-            menu.append(new GUI.MenuItem({
+            menu.append(new MenuItem({
               label: MSGS.Discart,
               click : function () {
                 this.discartChanges(dir, index, isUnknowChange);
               }.bind(this)
             }));
 
-            menu.append(new GUI.MenuItem({
+            menu.append(new MenuItem({
               label: MSGS['Assume unchanged'],
               click : function () {
                 this.assumeUnchanged(dir, index);
@@ -456,8 +453,8 @@
             }));
           }
 
-          menu.append(new GUI.MenuItem({ type: 'separator' }));
-          menu.append(new GUI.MenuItem({
+          menu.append(new MenuItem({ type: 'separator' }));
+          menu.append(new MenuItem({
             label: MSGS['Show in folder'],
             click: function () {
               this.openItemInFolder(path.join(selectedRepository.path, dir));
@@ -515,7 +512,7 @@
                   alert(err);
                 } else {
                   this.commitChanges.splice(index, 1);
-                  $scope.$apply();
+                  applyScope($scope);
                 }
 
                 $scope.$broadcast('apprefreshed', this.commitChanges);
@@ -542,7 +539,7 @@
         };
 
         this.openItemInFolder = function (path) {
-          GUI.Shell.showItemInFolder(path);
+          shell.showItemInFolder(path);
         };
 
         this.removeRepository = function (repositoryType, index) {
@@ -553,7 +550,7 @@
             $scope.$broadcast('removedRepository');
           }
 
-          $scope.$apply();
+          applyScope($scope);
         };
 
         this.assumeUnchanged = function (filePath, index) {
@@ -567,7 +564,7 @@
                 alert(err);
               } else {
                 this.commitChanges.splice(index, 1);
-                $scope.$apply();
+                applyScope($scope);
               }
             }.bind(this)
           });
@@ -656,7 +653,7 @@
             this.commitChanges = newChangesList;
 
             $scope.$broadcast('apprefreshed', this.commitChanges, syncStatus);
-            $scope.$apply();
+            applyScope($scope);
           }.bind(this));
         };
 
@@ -700,7 +697,7 @@
 
           this.showStashTab();
 
-          $scope.$apply();
+          applyScope($scope);
         }.bind(this));
 
         /* Show notification if a update was installed */
@@ -709,11 +706,11 @@
           console.log('[INFO] A update is ready to be installed');
 
           this.updateNotify.show = true;
-          $scope.$apply();
+          applyScope($scope);
         }.bind(this));
 
         this.performUpdate = function () {
-          updater.performUpdate(GUI, WIN);
+          // updater.performUpdate(GUI, WIN);
         };
 
         var me = this;
