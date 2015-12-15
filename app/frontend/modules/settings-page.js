@@ -91,8 +91,8 @@
 
             if (err) {
               alert(err.message);
-            } else {
-              var GitUrlParse = require('./node_modules/git-url-parse'),
+            } else if (remotesList.origin) {
+              var GitUrlParse = require('git-url-parse'),
                 repoSettings = GitUrlParse(remotesList.origin.push);
 
               if (repoSettings.protocol == 'ssh') {
