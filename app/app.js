@@ -110,6 +110,7 @@ try {
 
     // Set the application messages globally
     $rootScope.MSGS = MSGS;
+    $rootScope.showApp = false;
 
     /* Verify if there's a available update */
     updater.on('availableUpdate', function (remotePackJson) {

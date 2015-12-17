@@ -53,6 +53,8 @@
 
         this.enableCommitBlock = null;
 
+        $scope.showApp = true;
+
         this.showRepositoryInfo = function (repository, forceReload) {
 
           if (forceReload || selectedRepository.name != repository.name) {

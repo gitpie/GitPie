@@ -14,13 +14,19 @@
     <script src="app/app.js"></script>
   </head>
   <body style="font-family: {{ CONFIGS.fontFamily }}">
+    <div class="fallback-loading" ng-hide="showApp">
+      <svg class="spinner" width="65px" height="65px" viewBox="0 0 66 66" xmlns="http://www.w3.org/2000/svg">
+        <circle class="path" fill="none" stroke-width="6" stroke-linecap="round" cx="33" cy="33" r="30"></circle>
+      </svg>
+    </div>
+    <section ng-show="showApp" id="global-container">
+      <pie-header></pie-header>
 
-    <pie-header></pie-header>
+      <section id="wrapper">
+        <pie-content></pie-content>
+      </section>
 
-    <section id="wrapper">
-      <pie-content></pie-content>
+      <settings-page></settings-page>
     </section>
-
-    <settings-page></settings-page>
   </body>
 </html>
