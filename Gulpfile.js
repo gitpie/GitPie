@@ -15,7 +15,7 @@ gulp.task('sass:watch', function () {
   gulp.watch('./resources/sass/**/*.scss', ['sass']);
 });
 
-gulp.task('dev', ['sass:watch']);
+gulp.task('dev', ['sass', 'sass:watch']);
 
 // Build tasks
 gulp.task('build', ['build:linux', 'build:osx', 'build:win']);
