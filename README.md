@@ -11,7 +11,7 @@ GitPie is under hard development. And can have a lot of bug and unterminated cap
 
 ## What's in the pie stuffing?
 
-GitPie is built on [NW.js](https://github.com/nwjs/nw.js) and [Angular](https://github.com/angular/angular) to have a maintainable and organized source to anyone understand what's going on behind the scenes.
+GitPie is built on [Electron](https://github.com/atom/electron) and [Angular](https://github.com/angular/angular) to have a maintainable and organized source to anyone understand what's going on behind the scenes.
 
 ## What's the taste of GitPie?
 
@@ -68,6 +68,12 @@ Want to contribute with the project? This is awesome. But before doing that we p
 
 - Be the most creative as possible.
 
+If you want to make changes in the style of the application, you need to convert the sass code into css. For this execute:
+
+```bash
+npm run dev
+```
+
 ## Building
 
 Just execute the follow commands to build the project from source:
@@ -76,10 +82,10 @@ Just execute the follow commands to build the project from source:
 git clone https://github.com/mapaiva/GitPie.git
 cd GitPie
 npm install
-npm start # This is aliased with `npm run linux64`
+npm build # This will build binaries for the all supported platforms: `linux`, `osx` and `windows`
 ```
 
-If you're not using `linux64`, choose the right command for you, depending on the platform:
+If you want build to a specific platform, just execute one of the above commands:
 
 ```sh
 npm run linux32
@@ -88,12 +94,6 @@ npm run osx32
 npm run osx64
 npm run win32
 npm run win64
-```
-
-If you want to make changes in the style of the application, you need to run the dev grunt task that will convert your sass changes into css. For this execute:
-
-```bash
-npm run dev
 ```
 
 ## License
