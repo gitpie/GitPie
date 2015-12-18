@@ -14,7 +14,9 @@ var
   // Native node util class
   util = require('util'),
 
-  ENV = process.env;
+  ENV = process.env,
+
+  wos = require('node-wos');
 
 ENV.LANG = 'en_US';
 
@@ -87,6 +89,7 @@ Git.prototype.getCurrentBranch = function (path, callback) {
  * @param  {function} callback - Callback to be execute in error or success case
  */
 Git.prototype.getCommitHistory = function (opts, callback) {
+  var emoji = require('./emoji');
 
   exec(
     "git --no-pager log -n 50 --pretty=format:%an-gtseparator-%cr-gtseparator-%h-gtseparator-%s-gtseparator-%b-gtseparator-%ae-pieLineBreak-" + (opts.skip ? ' --skip '.concat(opts.skip) : '' ),
@@ -111,7 +114,7 @@ Git.prototype.getCommitHistory = function (opts, callback) {
             user: historyItem[0],
             date: historyItem[1],
             hash: historyItem[2],
-            message: historyItem[3],
+            message: emoji.parse(historyItem[3]),
             body: historyItem[4],
             email: historyItem[5]
           });
@@ -353,7 +356,12 @@ Git.prototype.commit = function (path, opts) {
   var commad = 'git commit -m "'.concat( (opts.message.replace(/"/g, '\\"')) ).concat('"');
 
   if (opts.description) {
-    commad = commad.concat(' -m "').concat( (opts.description.replace(/"/g, '\\"')) ).concat('"');
+
+    if (wos.isWindows()) {
+      commad = commad + ' -m "' + opts.description.replace(/"/g, '\\"').replace(/\n/g, '" -m "') + '"';
+    } else {
+      commad = commad.concat(' -m "').concat( (opts.description.replace(/"/g, '\\"')) ).concat('"');
+    }
   }
 
   if (opts.forceSync) {
@@ -407,7 +415,7 @@ Git.prototype.getCommitCount = function (path, callback) {
   });
 };
 
-Git.prototype.listRemotes = function (path, callback) {
+Git.prototype.showRemotes = function (path, callback) {
 
   exec('git remote -v', { cwd: path,  env: ENV}, function (error, stdout, stderr) {
     var err = null;
@@ -418,6 +426,53 @@ Git.prototype.listRemotes = function (path, callback) {
 
     invokeCallback(callback, [ err, stdout ]);
   });
+};
+
+Git.prototype.listRemotes = function (path, callback) {
+
+  exec('git remote show', { cwd: path,  env: ENV}, function (error, stdout, stderr) {
+    var err = null,
+      repositoryRemotes = {};
+
+    if (error !== null) {
+      err = error.message;
+
+      invokeCallback(callback, [ err, repositoryRemotes ]);
+    } else {
+      var remoteShowLines = stdout.split('\n');
+
+      remoteShowLines.forEach(function (line) {
+
+        if (line) {
+          repositoryRemotes[ line.trim() ] = {};
+        }
+      });
+
+      this.showRemotes(path, function (err, remotes) {
+
+        if (!err) {
+          var remoteList = remotes.split('\n');
+
+          for (var remote in repositoryRemotes) {
+
+            remoteList.forEach(function (remoteLine) {
+
+              if (remoteLine.indexOf(remote) > -1) {
+
+                if (remoteLine.indexOf('(push)') > -1) {
+                  repositoryRemotes[remote].push = remoteLine.replace('(push)', '').replace(remote, '').trim();
+                } else if (remoteLine.indexOf('(fetch)')) {
+                  repositoryRemotes[remote].fetch = remoteLine.replace('(fetch)', '').replace(remote, '').trim();
+                }
+              }
+            });
+          }
+        }
+
+        invokeCallback(callback, [ err, repositoryRemotes ]);
+      });
+    }
+  }.bind(this));
 };
 
 Git.prototype.discartChangesInFile = function (path, opts) {
@@ -651,6 +706,99 @@ Git.prototype.diffStashFile = function (path, opts) {
 
   exec('git diff '.concat(opts.reflogSelector).concat(' -- "').concat(opts.fileName.trim()).concat('"'), {cwd: path, env: ENV}, function (error, stdout) {
     invokeCallback(opts.callback, [ error, stdout ]);
+  });
+};
+
+Git.prototype.getGlobalConfigs = function (callback) {
+
+  exec('git config --global -l', {env: ENV}, function (error, stdout) {
+    var err,
+      configs = {};
+
+    if (error) {
+      err = error;
+    } else {
+      var lines = stdout.split('\n');
+
+      lines.forEach(function (line) {
+
+        if (line) {
+          var config = line.split('=');
+
+          configs[config[0].trim()] = config[1].trim();
+        }
+      });
+    }
+
+    invokeCallback(callback, [ err, configs ]);
+  });
+};
+
+Git.prototype.getLocalConfigs = function (path, callback) {
+
+  exec('git config -l', {cwd: path, env: ENV}, function (error, stdout) {
+    var err,
+      configs = {};
+
+    if (error) {
+      err = error;
+    } else {
+      var lines = stdout.split('\n');
+
+      lines.forEach(function (line) {
+
+        if (line) {
+          var config = line.split('=');
+
+          configs[config[0].trim()] = config[1].trim();
+        }
+      });
+    }
+
+    invokeCallback(callback, [ err, configs ]);
+  });
+};
+
+Git.prototype.alterGitConfig = function (path, opts) {
+  var command = 'git config ',
+    execOpts = {
+      env: ENV
+    };
+
+  opts = opts || {};
+
+  if (opts.global) {
+    command = command.concat('--global ');
+  } else {
+    execOpts.cwd = path;
+  }
+
+  command = command.concat('user.name "').concat(opts.username).concat('" && git config ');
+
+  if (opts.global) {
+    command = command.concat('--global ');
+  }
+
+  command = command.concat('user.email ').concat(opts.email)
+
+  exec(command, execOpts, function (error) {
+    invokeCallback(opts.callback, [ error ]);
+  });
+};
+
+Git.prototype.useOurs = function (path, opts) {
+  opts = opts || {};
+
+  exec('git checkout --ours '.concat(opts.fileName), {cwd: path, env: ENV}, function (error) {
+    invokeCallback(opts.callback, [ error ]);
+  });
+};
+
+Git.prototype.useTheirs = function (path, opts) {
+  opts = opts || {};
+
+  exec('git checkout --theirs '.concat(opts.fileName), {cwd: path, env: ENV}, function (error) {
+    invokeCallback(opts.callback, [ error ]);
   });
 };
 

@@ -3,15 +3,17 @@
   <section id="left" style="width: {{ showRepositoryMenu ? '17%' : '0%' }}">
     <div class="empty-msg" ng-show="appCtrl.repositories.isEmpty">
       <span class="mega-octicon octicon-rocket"></span>
-      {{ MSGS["Start adding or clonning some awesome things"] }}! <3
+      {{ MSGS["Start adding or clonning some awesome things"] }}!
     </div>
+
+    <input ng-hide="appCtrl.repositories.isEmpty" type="text" placeholder="{{MSGS['Search repositories']}}" ng-model="searchRepoFilter" />
 
     <nav>
       <ul>
         <li ng-show="appCtrl.repositories.github.length > 0">
           <div class="label">Github</div>
           <ul>
-            <li ng-repeat="repository in appCtrl.repositories.github" ng-class="{ selected:repository.selected }"
+            <li ng-repeat="repository in appCtrl.repositories.github | filter:searchRepoFilter" ng-class="{ selected:repository.selected }"
               ng-click="appCtrl.showRepositoryInfo(repository)" ng-right-click="appCtrl.openRepositoryContextualMenu($event, repository, $index)">
               <span class="octicon octicon-repo"></span> {{ repository.name }}
             </li>
@@ -20,7 +22,7 @@
         <li ng-show="appCtrl.repositories.bitbucket.length > 0">
           <div class="label">Bitbucket</div>
           <ul>
-            <li ng-repeat="repository in appCtrl.repositories.bitbucket" ng-class="{ selected:repository.selected }"
+            <li ng-repeat="repository in appCtrl.repositories.bitbucket | filter:searchRepoFilter" ng-class="{ selected:repository.selected }"
               ng-click="appCtrl.showRepositoryInfo(repository)" ng-right-click="appCtrl.openRepositoryContextualMenu($event, repository, $index)">
               <i class="fa fa-bitbucket"></i> {{ repository.name }}
             </li>
@@ -29,7 +31,7 @@
         <li ng-show="appCtrl.repositories.others.length > 0">
           <div class="label">{{ MSGS.Others }}</div>
           <ul>
-            <li ng-repeat="repository in appCtrl.repositories.others" ng-class="{ selected:repository.selected }"
+            <li ng-repeat="repository in appCtrl.repositories.others | filter:searchRepoFilter" ng-class="{ selected:repository.selected }"
               ng-click="appCtrl.showRepositoryInfo(repository)" ng-right-click="appCtrl.openRepositoryContextualMenu($event, repository, $index)">
               <i class="fa fa-git-square"></i> {{ repository.name }}
             </li>
@@ -37,13 +39,6 @@
         </li>
       </ul>
     </nav>
-
-    <pie-dialog show="false">
-      Are you sure to remove <strong>{{ repository }}</strong>?
-      <footer>
-        <button type="button">NO</button> <button type="button" class="featured">YES</button>
-      </footer>
-    </pie-dialog>
   </section>
 
   <section class="getting-start-message" ng-hide="appCtrl.repositoryHistory.length > 0">
@@ -60,7 +55,7 @@
         <textarea ng-model="commitDescription"
           placeholder="{{ MSGS['Give a description to the commit. Tell more about your changes...'] }}"></textarea>
       </div>
-      <button type="button" class="featured" ng-click="appCtrl.commitSelectedChanges(commitMessage, commitDescription)"><span class="octicon octicon-cloud-upload"></span> {{ MSGS.COMMIT }}</button>
+      <button type="button" class="featured" ng-click="appCtrl.commitSelectedChanges(commitMessage, commitDescription, $event)"><span class="octicon octicon-cloud-upload"></span> {{ MSGS.COMMIT }}</button>
     </form>
 
     <nav ng-class="{ mask:appCtrl.loadingHistory }" ng-scroll="appCtrl.loadMoreCommits($event)">
@@ -75,10 +70,10 @@
         </li>
         <li ng-repeat="commit in appCtrl.repositoryHistory" ng-class="{ selected:commit.selected }"
           ng-click="appCtrl.showCommitChanges(commit, $index)">
-          <div class="thumb">
+          <div class="{{ commit.user.trim().toLowerCase()[0] }} thumb">
             {{ commit.user.trim()[0] }}
           </div>
-          <div class="commit-message">{{ commit.message }}</div>
+          <div class="commit-message" ng-bind-html="commit.message | trustAsHtml"></div>
           <div class="commit-details"><span class="date">{{ commit.date }} by</span> {{ commit.user }} </div>
         </li>
       </ul>
@@ -97,10 +92,9 @@
         </section>
 
         <header class="commit-message" ng-show="appCtrl.getCommitMessage()">
-          <h2>{{ appCtrl.getCommitMessage() }}</h2>
-          <p class="commit-body" ng-show="appCtrl.getCommitBody()">
-            {{ appCtrl.getCommitBody() }}
-          </p>
+          <h2 ng-bind-html="appCtrl.getCommitMessage() | trustAsHtml"></h2>
+          <p class="commit-body" ng-show="appCtrl.getCommitBody()"
+            ng-bind-html="appCtrl.getCommitBody() | trustAsHtml"></p>
 
           <h4 ng-show="appCtrl.getCommitUser()">
             <span class="octicon octicon-person"></span> {{ appCtrl.getCommitUser() }}

@@ -3,6 +3,7 @@
   "CLONE": "CLONE",
   "CREATE": "CREATE",
   "ADD REPOSITORY": "ADD REPOSITORY",
+  "Browse directory": "Browse directory",
   "Where are your stuffs": "Where are your stuffs",
   "Select a repository to start": "Select a repository to start",
   "Click on a commit to see what happend there": "Click on a commit to see what happend there",
@@ -14,6 +15,7 @@
   "Add, Clone or Create a repository": "Add, Clone or Create a repository",
   "Type a message for your commit": "Type a message for your commit",
   "Give a description to the commit. Tell more about your changes...": "Give a description to the commit. Tell more about your changes...",
+  "Search repositories": "Search repositories",
   "COMMIT": "COMMIT",
   "Clone URL": "Clone URL",
   "Destination Folder": "Destination Folder",
@@ -35,6 +37,10 @@
   "Remove": "Remove",
   "Pop": "Pop",
   "Publish branch": "Publish branch",
+  "Use ours": "Use ours",
+  "Use theirs": "Use theirs",
+  "Stage file": "Stage file",
+  "Open merge tool": "Open merge tool",
   "CLONING REPOSITORY FROM": "CLONING REPOSITORY FROM",
   "CREATING REPOSITORY IN": "CREATING REPOSITORY IN",
   "INTO": "INTO",
@@ -70,5 +76,22 @@
   "Error syncronazing repository. \n Error: ": "Error syncronazing repository. \n Error: ",
   "'{cloneURL}' not appears to be a git remote URL. Let's try again!": "'{cloneURL}' not appears to be a git remote URL. Let's try again!",
   "The path '{path}' is not a folder. Pick a valid directory to clone projects.": "The path '{path}' is not a folder. Pick a valid directory to clone projects.",
-  "The path '{path}' is not a folder. Pick a valid directory to create projects.": "The path '{path}' is not a folder. Pick a valid directory to create projects."
+  "The path '{path}' is not a folder. Pick a valid directory to create projects.": "The path '{path}' is not a folder. Pick a valid directory to create projects.",
+
+  "SettingsPage": {
+    "Preferences": "Preferences",
+    "Font": "Font",
+    "Username": "Username",
+    "Email": "Email",
+    "Repository": "Repository",
+    "Ignored files": "Ignored files",
+    "Using ssh key": "Using ssh key",
+    "About": "About",
+    "License": "License",
+    "default": "default",
+    "GitPie is distributed under the MIT License": "GitPie is distributed under the MIT License",
+    "GitPie is an open source git client that have the goal to be the most simple and nice client for any project and for any people": "GitPie is an open source git client that have the goal to be the most simple and nice client for any project and for any people",
+    "CHANGE GLOBALS CONFIGURATIONS": "CHANGE GLOBALS CONFIGURATIONS",
+    "CHANGE {repository} CONFIGURATIONS": "CHANGE {repository} CONFIGURATIONS"
+  }
 }

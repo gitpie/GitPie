@@ -1,7 +1,12 @@
+'use strict';
+
 (function () {
-  var GitUrlParse = require('./node_modules/git-url-parse'),
+  const GitUrlParse = require('git-url-parse'),
     fs = require('fs'),
-    path = require('path');
+    path = require('path'),
+    remote = require('remote'),
+    dialog = remote.require('dialog'),
+    browserWindow = remote.require('browser-window');
 
   angular.module('header', [])
 
@@ -80,8 +85,6 @@
           this.showBranchMenu = false;
           this.showSettingsMenu = false;
           this.showStashMenu = false;
-
-          CommomService.closeAnyContextMenu();
         };
 
         CommomService.hideHeaderMenu = this.hideAllMenu.bind(this);
@@ -107,13 +110,13 @@
             this.currentBranch = currentBranch;
             this.remoteBranchs = remoteBranchs;
 
-            $scope.$apply();
+            applyScope($scope);
           }.bind(this));
 
           GIT.getTag(this.selectedRepository.path, function (err, tags) {
             this.tags = tags;
 
-            $scope.$apply();
+            applyScope($scope);
           }.bind(this));
 
           GIT.fetch(this.selectedRepository.path, function (err) {
@@ -123,7 +126,7 @@
               this.syncStatus = syncStatus;
               this.loading = false;
 
-              $scope.$apply();
+              applyScope($scope);
             }.bind(this));
 
           }.bind(this));
@@ -131,7 +134,7 @@
           GIT.getStashList(this.selectedRepository.path, function (err, stashs) {
             this.stashList = stashs;
 
-            $scope.$apply();
+            applyScope($scope);
           }.bind(this));
 
         }.bind(this));
@@ -155,7 +158,7 @@
             }
 
             this.loading = false;
-            $scope.$apply();
+            applyScope($scope);
           }.bind(this));
         };
 
@@ -182,7 +185,7 @@
                 // Emit changedbranch event even on error case as a workaround to git push command fail
                 $scope.$broadcast('changedbranch', this.selectedRepository);
                 this.loading = false;
-                $scope.$apply();
+                applyScope($scope);
               }.bind(this));
             }.bind(this));
           }
@@ -258,7 +261,7 @@
                     this.cloneNotify.show = false;
                     this.cloneURL = null;
                     this.repositoryDestiny = null;
-                    $scope.$apply();
+                    applyScope($scope);
                   }.bind(this)
                 });
               } else {
@@ -293,8 +296,6 @@
               } else {
                 $scope.$broadcast('changedbranch', this.selectedRepository);
               }
-
-              CommomService.closeAnyContextMenu();
             }.bind(this)
           });
         };
@@ -336,7 +337,7 @@
                   }
 
                   this.createNotify.show = false;
-                  $scope.$apply();
+                  applyScope($scope);
                 }.bind(this)
               });
 
@@ -421,7 +422,8 @@
           if (this.selectedRepository) {
             this.setStashableFiles(unsyncChanges);
 
-            if (this.syncStatus.ahead != syncStatus.ahead) {
+            if (syncStatus && this.syncStatus.ahead != syncStatus.ahead) {
+              this.syncStatus = syncStatus;
 
               GIT.getCommitHistory({
                 path: this.selectedRepository.path
@@ -429,11 +431,9 @@
                 $scope.appCtrl.repositoryHistory = historyList;
                 $scope.appCtrl.commitHistory = [];
 
-                $scope.$apply();
+                applyScope($scope);
               }.bind(this));
             }
-
-            this.syncStatus = syncStatus;
 
             GIT.getStashList(this.selectedRepository.path, function (err, stashs) {
 
@@ -443,7 +443,7 @@
 
               this.stashList = stashs;
 
-              $scope.$apply();
+              applyScope($scope);
             }.bind(this));
           }
         }.bind(this));
@@ -457,6 +457,22 @@
               this.stashableFiles.push(file);
             }
 
+          }.bind(this));
+        };
+
+        this.showSettingsPage = function () {
+          $scope.$root.showSettingsPage();
+        };
+
+        this.showOpenDialog = function (bindVarName) {
+          let currentWindow = browserWindow.getFocusedWindow();
+
+          dialog.showOpenDialog(currentWindow, { properties: [ 'openDirectory' ] }, function (filenames) {
+
+            if (filenames) {
+              this[bindVarName] = filenames[0];
+              applyScope($scope);
+            }
           }.bind(this));
         };
       },

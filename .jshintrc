@@ -1,0 +1,13 @@
+{
+  "esnext": true,
+  "node": true,
+  "browser": true,
+  "devel": true,
+  "globals": {
+    "angular": true,
+    "GIT": true,
+    "updater": true,
+    "WIN": true,
+    "applyScope": true
+  }
+}

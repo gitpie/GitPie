@@ -1,0 +1,86 @@
+<div class="page" ng-hide="settingsCtrl.hidePage">
+  <div class="page-overlay" ng-click="settingsCtrl.hideSettingsPage()" style="opacity : {{ settingsCtrl.showSettingsPage ? '0.5' : '0' }}"></div>
+  <div class="page-dialog" style="margin-left : {{ settingsCtrl.showSettingsPage ? '35%' : '120%' }}">
+    <header>
+      <div class="title"><span class="octicon octicon-arrow-left" ng-click="settingsCtrl.hideSettingsPage()"></span> {{ MSGS.Settings }}</div>
+    </header>
+
+    <nav>
+      <ul>
+        <li>
+          <div class="label">{{ MSGS.SettingsPage.Preferences }}</div>
+          <ul>
+            <li>
+              <section class="label-field">{{ MSGS.SettingsPage.Font }}</section>
+              <select name="font" ng-model="CONFIGS.fontFamily">
+                <option value="{{ CONFIGS.fontFamily }}">{{ CONFIGS.fontFamily }} ({{ MSGS.SettingsPage.default }})</option>
+                <option ng-repeat="font in settingsCtrl.fonts" value="{{ font }}">{{ font }}</option>
+              </select>
+            </li>
+          </ul>
+        </li>
+
+        <li>
+          <div class="label">Git</div>
+          <ul>
+            <li class="column">
+              <section class="label-field">{{ MSGS.SettingsPage.Username }}</section>
+              <input type="text" ng-model="settingsCtrl.globalGitConfigs['user.name']" />
+            </li>
+
+            <li class="column">
+              <section class="label-field">{{ MSGS.SettingsPage.Email }}</section>
+              <input type="text" ng-model="settingsCtrl.globalGitConfigs['user.email']" />
+            </li>
+
+            <li>
+              <button type="button" ng-click="settingsCtrl.changeGitCofigs(true, $event)">{{ MSGS.SettingsPage['CHANGE GLOBALS CONFIGURATIONS'] }}</button>
+            </li>
+          </ul>
+        </li>
+
+        <li ng-show="settingsCtrl.selectedRepository">
+          <div class="label">{{ MSGS.SettingsPage.Repository }} (<em>{{ settingsCtrl.selectedRepository.name }}</em>)</div>
+
+          <ul>
+            <li>
+              <section class="label-field">{{ MSGS.SettingsPage.Username }}</section>
+              <input type="text" ng-model="settingsCtrl.localGitConfigs['user.name']" />
+            </li>
+            <li>
+              <section class="label-field">{{ MSGS.SettingsPage.Email }}</section>
+              <input type="text" ng-model="settingsCtrl.localGitConfigs['user.email']" />
+            </li>
+            <li>
+              <button type="button" ng-click="settingsCtrl.changeGitCofigs(false, $event)">
+                {{ MSGS.SettingsPage['CHANGE {repository} CONFIGURATIONS'].replace('{repository}', settingsCtrl.selectedRepository.name.toUpperCase()) }}
+              </button>
+            </li>
+
+            <li ng-hide="true"><!-- Will be available when this functionality exists -->
+              <section class="label-field">{{ MSGS.SettingsPage["Ignored files"] }}</section>
+            </li>
+            <li>
+              <section class="label-field">{{ MSGS.SettingsPage["Using ssh key"] }}</section>
+              <div>{{ settingsCtrl.selectedRepository.usingSSH ? 'Yes' : 'No' }}</div>
+            </li>
+          </ul>
+        </li>
+
+        <li>
+          <div class="label">{{ MSGS.SettingsPage.About }}</div>
+          <ul>
+            <li>{{ MSGS.SettingsPage["GitPie is an open source git client that have the goal to be the most simple and nice client for any project and for any people"] }}</li>
+          </ul>
+        </li>
+
+        <li>
+          <div class="label">{{ MSGS.SettingsPage.License }}</div>
+          <ul>
+            <li>{{ MSGS.SettingsPage["GitPie is distributed under the MIT License"] }}</li>
+          </ul>
+        </li>
+      </ul>
+    </nav>
+  </div>
+</div>
