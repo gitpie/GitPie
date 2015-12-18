@@ -352,6 +352,13 @@
               this.removeRepository(repository.type, index);
             }.bind(this)
           }));
+          menu.append(new MenuItem({
+            label: MSGS['Move to Trash'],
+            click : function () {
+              shell.moveItemToTrash(repository.path);
+              this.removeRepository(repository.type, index);
+            }.bind(this)
+          }));
           menu.append(new MenuItem({ type: 'separator' }));
           menu.append(new MenuItem({
             label: MSGS['Show in folder'],
