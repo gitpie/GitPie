@@ -76,6 +76,8 @@
 
               if (err) {
                 alert(err);
+              } else {
+                new GPNotification(MSGS['THE GIT CONFIGURATIONS HAVE BEEN SUCCESSFULLY CHANGED'], { autoclose: true }).pop();
               }
 
               event.target.removeAttribute('disabled');
