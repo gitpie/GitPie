@@ -268,7 +268,7 @@ html {
 
       .notify-dialog {
         background-color: #404040;
-        z-index: 1000;
+        z-index: 100000;
         color: #FFF;
         border-radius: 3px;
         padding: 15px;
@@ -279,6 +279,7 @@ html {
         margin: 20px;
         bottom: 10px;
         transition: all 0.2s linear;
+        margin-bottom: -100px;
 
         .link {
           font-weight: bold;

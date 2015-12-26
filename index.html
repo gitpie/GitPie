@@ -4,17 +4,9 @@
     <meta charset="utf-8">
     <title>GitPie</title>
     <link href='resources/css/all.css' rel='stylesheet' type='text/css'>
-
-    <script src="libraries/angular.min.js"></script>
-    <script src="app/frontend/modules/attributes.js"></script>
-    <script src="app/frontend/modules/components.js"></script>
-    <script src="app/frontend/modules/header.js"></script>
-    <script src="app/frontend/modules/content.js"></script>
-    <script src="app/frontend/modules/settings-page.js"></script>
-    <script src="app/app.js"></script>
   </head>
   <body style="font-family: {{ CONFIGS.fontFamily }}">
-    <div class="fallback-loading" ng-hide="showApp">
+    <div class="fallback-loading">
       <svg class="spinner" width="65px" height="65px" viewBox="0 0 66 66" xmlns="http://www.w3.org/2000/svg">
         <circle class="path" fill="none" stroke-width="6" stroke-linecap="round" cx="33" cy="33" r="30"></circle>
       </svg>
@@ -28,5 +20,14 @@
 
       <settings-page></settings-page>
     </section>
+
+    <script src="libraries/angular.min.js"></script>
+    <script src="app/frontend/modules/attributes.js"></script>
+    <script src="app/frontend/modules/components.js"></script>
+    <script src="app/frontend/modules/header.js"></script>
+    <script src="app/frontend/modules/content.js"></script>
+    <script src="app/frontend/modules/settings-page.js"></script>
+    <script src="app/frontend/global/notification.js"></script>
+    <script src="app/app.js"></script>
   </body>
 </html>
