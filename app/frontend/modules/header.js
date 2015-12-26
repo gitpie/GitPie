@@ -43,17 +43,6 @@
         this.showSettingsMenu = false;
         this.showStashMenu = false;
 
-        this.cloneNotify = {
-          show: false,
-          cloneURL: null,
-          destinyFolder: null
-        };
-
-        this.createNotify = {
-          show: false,
-          repositoryHome: null
-        };
-
         // Scope variables to bind te "add repository" fields
         this.repositoryPath = null;
         this.cloneURL = null;
@@ -240,9 +229,13 @@
               destinyFolder = fs.lstatSync(this.repositoryDestiny);
 
               if (repositoryData.name) {
-                this.cloneNotify.show = true;
-                this.cloneNotify.cloneURL = this.cloneURL;
-                this.cloneNotify.destinyFolder = this.repositoryDestiny;
+                var cloneURL = this.cloneURL,
+                  cloneDirectory = this.repositoryDestiny,
+                  noti = new GPNotification(`${MSGS['CLONING REPOSITORY FROM']} <strong>${cloneURL}</strong> ${MSGS.INTO} <strong>${cloneDirectory}</strong>`, {
+                    showLoad: true
+                  });
+
+                noti.pop();
 
                 CommomService.hideHeaderMenu();
 
@@ -256,11 +249,14 @@
                       alert(err);
                     } else {
                       this.addRepository(path.join(this.repositoryDestiny, repositoryData.name));
+
+                      new GPNotification(`${repositoryData.name} ${MSGS.cloned} ${MSGS['with success']}`, {
+                        type: 'global',
+                        body: `${repositoryData.name} ${MSGS.cloned} ${MSGS.INTO.toLowerCase()} ${cloneDirectory}`
+                      }).pop();
                     }
 
-                    this.cloneNotify.show = false;
-                    this.cloneURL = null;
-                    this.repositoryDestiny = null;
+                    noti.close();
                     applyScope($scope);
                   }.bind(this)
                 });
@@ -309,8 +305,12 @@
 
             try {
               destinyFolder = fs.lstatSync(repositoryHome);
-              this.createNotify.repositoryHome = repositoryHome;
-              this.createNotify.show = true;
+
+              var noti = new GPNotification(`${MSGS['CREATING REPOSITORY IN']} <strong>${repositoryHome}</strong>`, {
+                showLoad: true
+              });
+
+              noti.pop();
 
               CommomService.hideHeaderMenu();
 
@@ -336,7 +336,7 @@
                     }
                   }
 
-                  this.createNotify.show = false;
+                  noti.close();
                   applyScope($scope);
                 }.bind(this)
               });

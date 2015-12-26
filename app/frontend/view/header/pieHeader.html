@@ -176,24 +176,3 @@
   </section>
 
 </header>
-
-<section class="notify-dialog" style="margin-bottom: {{ headerCtrl.cloneNotify.show ? '' : '-100px' }}">
-  <section class="icon">
-    <loading-icon></loading-icon>
-  </section>
-
-  <section class="content">
-    {{ MSGS['CLONING REPOSITORY FROM'] }} <strong>{{ headerCtrl.cloneNotify.cloneURL }}</strong> {{ MSGS.INTO }}
-    <strong>{{ headerCtrl.cloneNotify.destinyFolder }}</strong>
-  </section>
-</section>
-
-<section class="notify-dialog" style="margin-bottom: {{ headerCtrl.createNotify.show ? '' : '-100px' }}">
-  <section class="icon">
-    <loading-icon></loading-icon>
-  </section>
-
-  <section class="content">
-    {{ MSGS['CREATING REPOSITORY IN'] }} <strong>{{ headerCtrl.createNotify.repositoryHome }}</strong>
-  </section>
-</section>

@@ -33,8 +33,8 @@ class GPNotification {
         icon: path.join(__dirname, 'resources', 'images', 'icon.png')
       });
     } else {
-      var bodyText = (this.body && this.body.toUpperCase());
-      var titleText = (this.title && this.title.toUpperCase());
+      var bodyText = this.body;
+      var titleText = this.title;
 
       this.notificationElement = document.createElement('section');
       this.notificationElement.className = 'notify-dialog';
