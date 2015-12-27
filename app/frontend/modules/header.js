@@ -133,11 +133,17 @@
           this.hideAllMenu();
           this.loading = true;
 
+          let noti = new GPNotification(`${MSGS['Switching to branch']} ${branch}`, { showLoad: true });
+
+          noti.pop();
+
           GIT.switchBranch({
             path: this.selectedRepository.path,
             branch: branch,
             forceCreateIfNotExists: forceCreateIfNotExists
           }, function (err) {
+
+            noti.close();
 
             if (err) {
               alert(MSGS['Error switching branch. Error: '] + err);
