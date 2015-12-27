@@ -1,12 +1,13 @@
 'use strict';
 
 (function () {
-  const GitUrlParse = require('git-url-parse'),
-    fs = require('fs'),
-    path = require('path'),
-    remote = require('remote'),
-    dialog = remote.require('dialog'),
-    browserWindow = remote.require('browser-window');
+  const GitUrlParse = require('git-url-parse');
+  const fs = require('fs');
+  const path = require('path');
+  const remote = require('remote');
+  const dialog = remote.require('dialog');
+  const browserWindow = remote.require('browser-window');
+  const globalShortcut = remote.globalShortcut;
 
   angular.module('header', [])
 
@@ -475,6 +476,36 @@
             }
           }.bind(this));
         };
+
+        this.toggleRepositoryMenu = function () {
+          $scope.showRepositoryMenu = !$scope.showRepositoryMenu;
+        };
+
+        // Register shortcuts
+        globalShortcut.register('ctrl+left', function() {
+          if ($scope.showRepositoryMenu) {
+            this.toggleRepositoryMenu();
+            applyScope($scope);
+          }
+        }.bind(this));
+
+        globalShortcut.register('ctrl+right', function() {
+          if (!$scope.showRepositoryMenu) {
+            this.toggleRepositoryMenu();
+            applyScope($scope);
+          }
+        }.bind(this));
+
+        globalShortcut.register('ctrl+a', function() {
+          let currentWindow = browserWindow.getFocusedWindow();
+
+          dialog.showOpenDialog(currentWindow, { properties: [ 'openDirectory' ] }, function (filenames) {
+
+            if (filenames) {
+              this.addRepository(filenames[0]);
+            }
+          }.bind(this));
+        }.bind(this));
       },
 
       controllerAs: 'headerCtrl'
