@@ -24,10 +24,6 @@
           Menu = remote.require('menu'),
           MenuItem = remote.require('menu-item');
 
-        this.updateNotify = {
-          show: false
-        };
-
         this.loadingHistory = false;
 
         this.loadingChanges = false;
@@ -709,28 +705,13 @@
           applyScope($scope);
         }.bind(this));
 
-        /* Show notification if a update was installed */
-
-        updater.on('readytoinstall', function () {
-          console.log('[INFO] A update is ready to be installed');
-
-          this.updateNotify.show = true;
-          applyScope($scope);
-        }.bind(this));
-
-        this.performUpdate = function () {
-          // updater.performUpdate(GUI, WIN);
-        };
-
-        var me = this;
-
         /* Update the changed files ever time the application is focused */
         WIN.on('focus', function () {
 
           if (selectedRepository.path) {
-            me.refreshRepositoryChanges();
+            this.refreshRepositoryChanges();
           }
-        });
+        }.bind(this));
       },
 
       controllerAs: 'appCtrl'

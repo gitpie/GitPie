@@ -112,25 +112,6 @@ try {
     $rootScope.MSGS = MSGS;
     $rootScope.showApp = false;
 
-    /* Verify if there's a available update */
-    updater.on('availableUpdate', function (remotePackJson) {
-      console.log('[INFO] There is a available update. New version '.concat(remotePackJson.version));
-
-      updater.downloadFiles();
-    });
-
-    updater.on('downloadingfiles', function () {
-      console.log('[INFO] Downloading files...');
-    });
-
-    updater.on('error', function (err) {
-      console.error('[ERROR] Error updating GitPie. Error: ', err);
-
-      alert('Error updating GitPie. Error: ' + err.message);
-    });
-
-    updater.checkAvailableUpdate();
-
     $rootScope.showRepositoryMenu = true;
 
     // Load the application Configs
