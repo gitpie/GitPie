@@ -16,7 +16,9 @@ var
 
   ENV = process.env,
 
-  wos = require('node-wos');
+  wos = require('node-wos'),
+
+  GitUrlParse = require('git-url-parse');
 
 ENV.LANG = 'en_US';
 
@@ -302,34 +304,61 @@ Git.prototype.getFileDiff = function (opts, callback) {
 };
 
 Git.prototype.sync = function (opts, callback) {
+  opts = opts || {};
 
-  if (opts.setUpstream) {
+  this.listRemotes(opts.path, function (err, repositoryRemotes) {
+    var gitFetchURL = GitUrlParse(repositoryRemotes.origin.fetch);
+    var gitPushURL = GitUrlParse(repositoryRemotes.origin.push);
+    var fetchOrigin = 'origin';
+    var pushOrigin = 'origin';
 
-    exec('git push -u origin '.concat(opts.branch), { cwd: opts.path,  env: ENV}, function (error) {
+    if (gitFetchURL.protocol == 'https' && opts.httpsConfigs) {
+      fetchOrigin = 'https://' + opts.httpsConfigs.username + ':' + opts.httpsConfigs.password + '@' + gitFetchURL.source + '/' + gitFetchURL.owner + '/' + gitFetchURL.name + '.git';
+    }
 
-      invokeCallback(callback, [ error ]);
-    });
+    if (gitPushURL.protocol == 'https' && opts.httpsConfigs) {
+      pushOrigin = 'https://' + opts.httpsConfigs.username + ':' + opts.httpsConfigs.password + '@' + gitPushURL.source + '/' + gitPushURL.owner + '/' + gitPushURL.name + '.git';
+    }
 
-  } else {
+    console.log('fetchOrigin', fetchOrigin);
+    console.log('pushOrigin', pushOrigin);
 
-    exec('git pull', { cwd: opts.path,  env: ENV}, function (error, stdout, stderr) {
+    if (opts.setUpstream) {
 
-      if (error) {
+      exec('git push -u '.concat(pushOrigin).concat(' ').concat(opts.branch), { cwd: opts.path,  env: ENV}, function (error) {
 
-        invokeCallback(callback, [ error ]);
-      } else if (opts.push) {
+        if (error && gitPushURL.protocol == 'https' && !opts.httpsConfigs) {
+          invokeCallback(opts.noHTTPAuthcallback, [gitFetchURL, gitPushURL]);
+        } else {
+          invokeCallback(callback, [ error ]);
+        }
+      });
 
-        exec('git push origin '.concat(opts.branch), { cwd: opts.path,  env: ENV}, function (error) {
+    } else {
+
+      exec('git pull '.concat(fetchOrigin), { cwd: opts.path,  env: ENV}, function (error, stdout, stderr) {
+
+        if (error) {
 
           invokeCallback(callback, [ error ]);
-        });
+        } else if (opts.push) {
 
-      } else {
+          exec('git push '.concat(pushOrigin).concat(' ').concat(opts.branch), { cwd: opts.path,  env: ENV}, function (error) {
 
-        invokeCallback(callback, [ error ]);
-      }
-    });
-  }
+            if (error && gitPushURL.protocol == 'https' && !opts.httpsConfigs) {
+              invokeCallback(opts.noHTTPAuthcallback, [gitFetchURL, gitPushURL]);
+            } else {
+              invokeCallback(callback, [ error ]);
+            }
+          });
+
+        } else {
+
+          invokeCallback(callback, [ error ]);
+        }
+      });
+    }
+  });
 };
 
 Git.prototype.add = function (path, opts) {

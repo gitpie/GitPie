@@ -9,8 +9,33 @@ angular.module('dialogs', []).directive('pushModalDialog', function () {
 
       this.showDialog = false;
 
-      this.submitAuthPushForm = function (user) {
-        console.log(user);
+      this.submitAuthPushForm = function (formFields) {
+        var repositoryName = this.pushConfigs.gitFetchURL.name;
+
+        let header = $scope.headerCtrl;
+        let notification = new GPNotification(`Syncronizing ${repositoryName}`, { showLoad: true });
+
+        notification.pop();
+        this.hideDialog();
+
+        GIT.sync({
+          path: header.selectedRepository.path,
+          branch: header.currentBranch,
+          setUpstream: !header.isRemoteBranch(header.currentBranch),
+          push: header.syncStatus.ahead,
+          httpsConfigs: formFields
+        }, function (err) {
+
+          if (err) {
+            alert(MSGS['Error syncronazing repository. \n Error: '] + err.message);
+          } else {
+            $scope.$broadcast('changedbranch', header.selectedRepository);
+          }
+
+          notification.close();
+
+          applyScope($scope);
+        }.bind(this));
       };
 
       this.hideDialog = function () {
@@ -21,14 +46,13 @@ angular.module('dialogs', []).directive('pushModalDialog', function () {
         this.showDialog = true;
         this.pushConfigs = pushConfigs;
 
-        console.log('oloko bixu');
         applyScope($scope);
       };
 
       this.pushConfigs = {};
 
       // Expose pop dialog
-      $rootScope.showPushModalDialog = this.popDialog;
+      $rootScope.showPushModalDialog = this.popDialog.bind(this);
     },
 
     controllerAs: 'modalCtrl'

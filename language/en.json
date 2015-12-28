@@ -102,7 +102,7 @@
   },
 
   "Authentication required": "Authentication required",
-  "You're trying to push changes into a https remote": "You're trying to push changes into a https remote",
+  "You're trying to make changes into a https remote": "You're trying to make changes into a https remote",
   "and a username and password are required. Please type it and let us publish your changes LOL": "and a username and password are required. Please type it and let us publish your changes LOL",
   "Password": "Password",
   "SUBMIT": "SUBMIT",

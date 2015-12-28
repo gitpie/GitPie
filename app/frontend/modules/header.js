@@ -163,26 +163,31 @@
           if (this.selectedRepository && !this.loading) {
             this.loading = true;
 
-            GIT.fetch(this.selectedRepository.path, function (err) {
-
-              // Ignored error for while to not block status for private repositories
-
-              GIT.sync({
-                path: this.selectedRepository.path,
-                branch: this.currentBranch,
-                setUpstream: !this.isRemoteBranch(this.currentBranch),
-                push: this.syncStatus.ahead
-              }, function (err) {
-
-                if (err) {
-                  alert(MSGS['Error syncronazing repository. \n Error: '] + err.message);
-                }
-
-                // Emit changedbranch event even on error case as a workaround to git push command fail
-                $scope.$broadcast('changedbranch', this.selectedRepository);
+            GIT.sync({
+              path: this.selectedRepository.path,
+              branch: this.currentBranch,
+              setUpstream: !this.isRemoteBranch(this.currentBranch),
+              push: this.syncStatus.ahead,
+              noHTTPAuthcallback : function (gitFetchURL, gitPushURL) {
                 this.loading = false;
                 applyScope($scope);
-              }.bind(this));
+
+                $scope.showPushModalDialog({
+                  remote: gitFetchURL.href,
+                  gitFetchURL: gitFetchURL,
+                  gitPushURL: gitPushURL
+                });
+              }.bind(this)
+            }, function (err) {
+
+              if (err) {
+                alert(MSGS['Error syncronazing repository. \n Error: '] + err.message);
+              } else {
+                $scope.$broadcast('changedbranch', this.selectedRepository);
+              }
+
+              this.loading = false;
+              applyScope($scope);
             }.bind(this));
           }
         };
