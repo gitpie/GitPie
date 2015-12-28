@@ -41,11 +41,23 @@
     font-family: $font;
 
     &:focus {
-      background-color: #FFF;
-      border-color: #51a7e8;
-      box-shadow: inset 0 1px 2px rgba(0,0,0,0.075),0 0 5px rgba(81,167,232,0.5);
+      background-color: #FFF !important;
+      border-color: #51a7e8 !important;
+      box-shadow: inset 0 1px 2px rgba(0,0,0,0.075),0 0 5px rgba(81,167,232,0.5) !important;
     }
 	}
+
+  input[type="text"].ng-invalid {
+    background-color: #FFF;
+    border-color: #E85151;
+    box-shadow: inset 0 1px 2px rgba(0,0,0,0.075),0 0 5px rgba(232,81,81,0.5);
+  }
+
+  input[type="text"].ng-invalid.ng-untouched {
+    background-color: #FAFAFA;
+    border-color: #DDD;
+    box-shadow: inset 0 1px 2px rgba(0,0,0,0.075);
+  }
 
   input[type="text"].inline-filed {
     width: 230px;
@@ -85,7 +97,7 @@
     }
   }
 
-  button.featured, input[type="button"].featured {
+  button.featured {
     background-color: #3998D6;
     color: #FFF;
     border-color: #3998D6;
@@ -93,6 +105,14 @@
 
   .featured[disabled] {
     opacity: 0.6 !important;
+  }
+
+  input[type="button"] {
+    @extend button;
+  }
+
+  input[type="submit"] {
+    @extend button;
   }
 }
 
@@ -187,6 +207,36 @@ html {
           background-color:#000000;
           opacity: 0.5;
           transition: opacity 0.2s ease;
+        }
+
+        .page-modal {
+          position: absolute;
+          top: 50%;
+          left: 50%;
+          background-color: #FFF;
+          padding: 15px;
+          z-index: 10000;
+          margin-top: -200px;
+          margin-left: -250px;
+          width: 500px;
+          border-radius: 3px;
+
+          h1 {
+            .octicon {
+              float: left;
+              margin-bottom: -3px;
+              margin-right: 7px;
+            }
+          }
+
+          input[type="text"], input[type="password"] {
+            width: 49%;
+            box-sizing: border-box;
+          }
+
+          footer {
+            margin-top: 10px;
+          }
         }
 
         .page-dialog {

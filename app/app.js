@@ -47,7 +47,7 @@ try {
 
 /* AngularJS app init */
 (function () {
-  var app = angular.module('gitpie', ['components', 'attributes', 'header', 'content', 'settings']);
+  var app = angular.module('gitpie', ['components', 'attributes', 'header', 'content', 'settings', 'dialogs']);
 
   // Trust as HTML Global filter
   app.filter('trustAsHtml', function($sce) {

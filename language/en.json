@@ -99,5 +99,12 @@
     "GitPie is an open source git client that have the goal to be the most simple and nice client for any project and for any people": "GitPie is an open source git client that have the goal to be the most simple and nice client for any project and for any people",
     "CHANGE GLOBALS CONFIGURATIONS": "CHANGE GLOBALS CONFIGURATIONS",
     "CHANGE {repository} CONFIGURATIONS": "CHANGE {repository} CONFIGURATIONS"
-  }
+  },
+
+  "Authentication required": "Authentication required",
+  "You're trying to push changes into a https remote": "You're trying to push changes into a https remote",
+  "and a username and password are required. Please type it and let us publish your changes LOL": "and a username and password are required. Please type it and let us publish your changes LOL",
+  "Password": "Password",
+  "SUBMIT": "SUBMIT",
+  "CANCEL": "CANCEL"
 }
