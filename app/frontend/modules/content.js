@@ -375,6 +375,11 @@
               this.openItemInFolder(path.join(selectedRepository.path, history.name.trim()));
             }.bind(this)
           }));
+          menu.append(new MenuItem({ type: 'separator' }));
+          menu.append(new MenuItem({
+            label: MSGS.Copy,
+            role: 'copy'
+          }));
 
           menu.popup(event.x, event.y);
         };
@@ -464,6 +469,11 @@
             click: function () {
               this.openItemInFolder(path.join(selectedRepository.path, dir));
             }.bind(this)
+          }));
+          menu.append(new MenuItem({ type: 'separator' }));
+          menu.append(new MenuItem({
+            label: MSGS.Copy,
+            role: 'copy'
           }));
 
           menu.popup(event.x, event.y);
