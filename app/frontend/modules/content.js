@@ -377,7 +377,7 @@
           }));
           menu.append(new MenuItem({ type: 'separator' }));
           menu.append(new MenuItem({
-            label: MSGS.Copy,
+            label: MSGS['Copy selection'],
             role: 'copy'
           }));
 
@@ -472,7 +472,7 @@
           }));
           menu.append(new MenuItem({ type: 'separator' }));
           menu.append(new MenuItem({
-            label: MSGS.Copy,
+            label: MSGS['Copy selection'],
             role: 'copy'
           }));
 
