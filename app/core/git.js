@@ -313,15 +313,12 @@ Git.prototype.sync = function (opts, callback) {
     var pushOrigin = 'origin';
 
     if (gitFetchURL.protocol == 'https' && opts.httpsConfigs) {
-      fetchOrigin = 'https://' + opts.httpsConfigs.username + ':' + opts.httpsConfigs.password + '@' + gitFetchURL.source + '/' + gitFetchURL.owner + '/' + gitFetchURL.name + '.git';
+      fetchOrigin = 'https://' + opts.httpsConfigs.username + ':' + opts.httpsConfigs.password + '@' + gitFetchURL.source + gitFetchURL.pathname;
     }
 
     if (gitPushURL.protocol == 'https' && opts.httpsConfigs) {
-      pushOrigin = 'https://' + opts.httpsConfigs.username + ':' + opts.httpsConfigs.password + '@' + gitPushURL.source + '/' + gitPushURL.owner + '/' + gitPushURL.name + '.git';
+      pushOrigin = 'https://' + opts.httpsConfigs.username + ':' + opts.httpsConfigs.password + '@' + gitPushURL.source + gitPushURL.pathname;
     }
-
-    console.log('fetchOrigin', fetchOrigin);
-    console.log('pushOrigin', pushOrigin);
 
     if (opts.setUpstream) {
 
