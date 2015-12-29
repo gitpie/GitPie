@@ -325,15 +325,13 @@ Git.prototype.sync = function (opts, callback) {
 
     if (opts.setUpstream) {
 
-      exec('git push -u '.concat(pushOrigin).concat(' ').concat(opts.branch), { cwd: opts.path,  env: ENV}, function (error) {
-
-        if (error && gitPushURL.protocol == 'https' && !opts.httpsConfigs) {
-          invokeCallback(opts.noHTTPAuthcallback, [gitFetchURL, gitPushURL]);
-        } else {
+      if (gitPushURL.protocol == 'https' && !opts.httpsConfigs) {
+        invokeCallback(opts.noHTTPAuthcallback, [gitFetchURL, gitPushURL]);
+      } else {
+        exec('git push -u '.concat(pushOrigin).concat(' ').concat(opts.branch), { cwd: opts.path,  env: ENV}, function (error) {
           invokeCallback(callback, [ error ]);
-        }
-      });
-
+        });
+      }
     } else {
 
       exec('git pull '.concat(fetchOrigin), { cwd: opts.path,  env: ENV}, function (error, stdout, stderr) {
@@ -343,15 +341,13 @@ Git.prototype.sync = function (opts, callback) {
           invokeCallback(callback, [ error ]);
         } else if (opts.push) {
 
-          exec('git push '.concat(pushOrigin).concat(' ').concat(opts.branch), { cwd: opts.path,  env: ENV}, function (error) {
-
-            if (error && gitPushURL.protocol == 'https' && !opts.httpsConfigs) {
-              invokeCallback(opts.noHTTPAuthcallback, [gitFetchURL, gitPushURL]);
-            } else {
+          if (gitPushURL.protocol == 'https' && !opts.httpsConfigs) {
+            invokeCallback(opts.noHTTPAuthcallback, [gitFetchURL, gitPushURL]);
+          } else {
+            exec('git push '.concat(pushOrigin).concat(' ').concat(opts.branch), { cwd: opts.path,  env: ENV}, function (error) {
               invokeCallback(callback, [ error ]);
-            }
-          });
-
+            });
+          }
         } else {
 
           invokeCallback(callback, [ error ]);
