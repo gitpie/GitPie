@@ -8,20 +8,4 @@ let Electronify = require('electronify'),
     height: 600,
     minWidth: 1000,
     minHeight: 600
-  }),
-  globalShortcut = require('global-shortcut');
-
-App.on('ready', function () {
-
-  // Open devTools for debug
-  globalShortcut.register('ctrl+shift+d', function() {
-    let Win = App.mainWindow;
-
-    if (Win.isDevToolsOpened()) {
-      Win.closeDevTools();
-    } else {
-      Win.openDevTools();
-    }
-  });
-
 });

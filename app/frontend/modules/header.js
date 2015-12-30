@@ -493,30 +493,58 @@
         };
 
         // Register shortcuts
-        globalShortcut.register('ctrl+left', function() {
-          if ($scope.showRepositoryMenu) {
-            this.toggleRepositoryMenu();
-            applyScope($scope);
-          }
-        }.bind(this));
+        var registerShortcuts = function() {
 
-        globalShortcut.register('ctrl+right', function() {
-          if (!$scope.showRepositoryMenu) {
-            this.toggleRepositoryMenu();
-            applyScope($scope);
-          }
-        }.bind(this));
-
-        globalShortcut.register('ctrl+a', function() {
-          let currentWindow = browserWindow.getFocusedWindow();
-
-          dialog.showOpenDialog(currentWindow, { properties: [ 'openDirectory' ] }, function (filenames) {
-
-            if (filenames) {
-              this.addRepository(filenames[0]);
+          // Hide repository menu
+          globalShortcut.register('ctrl+left', function() {
+            if ($scope.showRepositoryMenu) {
+              this.toggleRepositoryMenu();
+              applyScope($scope);
             }
           }.bind(this));
-        }.bind(this));
+
+          // Show repository menu
+          globalShortcut.register('ctrl+right', function() {
+            if (!$scope.showRepositoryMenu) {
+              this.toggleRepositoryMenu();
+              applyScope($scope);
+            }
+          }.bind(this));
+
+          // Open devTools for debug
+          globalShortcut.register('ctrl+shift+d', function() {
+            let Win = browserWindow.getFocusedWindow();
+
+            if (Win.isDevToolsOpened()) {
+              Win.closeDevTools();
+            } else {
+              Win.openDevTools();
+            }
+          });
+
+          // Open dialog to add a repository
+          globalShortcut.register('ctrl+shift+a', function() {
+            let currentWindow = browserWindow.getFocusedWindow();
+
+            dialog.showOpenDialog(currentWindow, { properties: [ 'openDirectory' ] }, function (filenames) {
+
+              if (filenames) {
+                this.addRepository(filenames[0]);
+              }
+            }.bind(this));
+          }.bind(this));
+
+        }.bind(this);
+
+        registerShortcuts();
+
+        WIN.on('blur', function () {
+          globalShortcut.unregisterAll();
+        });
+
+        WIN.on('focus', function () {
+          registerShortcuts();
+        });
       },
 
       controllerAs: 'headerCtrl'
