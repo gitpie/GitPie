@@ -155,11 +155,12 @@
           <ul>
 
             <li ng-repeat="change in appCtrl.commitChanges" ng-right-click="appCtrl.openChangesContextualMenu($event, change, $index)">
-              <header ng-class="{'read-only' : change.type == 'ADDED'}">
+              <header ng-class="{'read-only' : (change.type == 'ADDED' || change.staged)}">
                 <span ng-hide="change.type == 'DELETED'" ng-click="appCtrl.showFileDiff(change)" ng-class="{ 'octicon-triangle-right': !change.showCode, 'octicon-triangle-down': change.showCode}" class="octicon octicon-triangle-right"></span>
                 <input id="change{{$index}}" type="checkbox" ng-model="change.checked" checked="true" />
                 <label ng-hide="change.type == 'ADDED'" for="change{{$index}}"></label>
                 <span title="{{ change.displayPath.length > 50 ? change.displayPath : '' }}">{{ change.displayPath.length > 50 ? '...' : ''}} {{ change.displayPath | limitTo: - 50 }}</span>
+                <menuitem class="label-added staged" title="{{ MSGS.ADDED }}" ng-show="change.staged">{{ MSGS.ADDED[0] }}</menuitem>
                 <menuitem ng-class="appCtrl.getChangeTypeClass(change.type)">{{ MSGS[change.type] }}</menuitem>
               </header>
               <code ng-show="change.showCode" ng-bind-html="change.code"></code>

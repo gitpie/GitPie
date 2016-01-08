@@ -389,7 +389,7 @@
             dir = change.path.trim(),
             menu = new Menu();
 
-          if (change.type == 'ADDED') {
+          if (change.type == 'ADDED' || change.staged) {
 
             menu.append(new MenuItem({
               label: MSGS['Unstage file'],
@@ -648,6 +648,8 @@
                   if (this.commitChanges[i].code) {
                     this.showFileDiff(this.commitChanges[i], true);
                   }
+
+                  this.commitChanges[i].staged = files[i].staged;
 
                   newChangesList.push(this.commitChanges[i]);
 

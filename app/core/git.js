@@ -1,3 +1,5 @@
+'use strict';
+
 var
   // nodejs child_process object
   cp = require('child_process'),
@@ -7,12 +9,6 @@ var
 
   // The executor of system process
   execSync = cp.execSync,
-
-  // Native event object
-  events = require('events'),
-
-  // Native node util class
-  util = require('util'),
 
   ENV = process.env,
 
@@ -43,8 +39,6 @@ function invokeCallback(callback, args) {
     callback.apply(this, args);
   }
 }
-
-util.inherits(Git, events.EventEmitter);
 
 /**
  * @method getCurrentBranch - Return current branch of a git repository
@@ -167,13 +161,23 @@ Git.prototype.getStatus = function (path, callback) {
     });
 
     for (var i = 1; i < lines.length; i++) {
+      let staged = false,
+        referenceChar;
 
-      switch (lines[i].trim()[0]) {
+      if (lines[i][0] != ' ' && lines[i][0] != '?') {
+        referenceChar = lines[i][0];
+        staged = true;
+      } else {
+        referenceChar = lines[i][1];
+      }
+
+      switch (referenceChar) {
         case 'R':
           files.push({
             type: 'RENAMED',
             displayPath: lines[i].replace('R', '').replace(/"/g, '').trim(),
-            path: lines[i].replace('R', '').replace(/"/g, '').split('->')[1].trim()
+            path: lines[i].replace('R', '').replace(/"/g, '').split('->')[1].trim(),
+            staged: staged
           });
           break;
 
@@ -181,7 +185,8 @@ Git.prototype.getStatus = function (path, callback) {
           files.push({
             type: 'MODIFIED',
             displayPath: lines[i].replace('M', '').replace(/"/g, '').trim(),
-            path: lines[i].replace('M', '').replace(/"/g, '').trim()
+            path: lines[i].replace('M', '').replace(/"/g, '').trim(),
+            staged: staged
           });
           break;
 
@@ -189,7 +194,8 @@ Git.prototype.getStatus = function (path, callback) {
             files.push({
               type: 'NEW', //UNTRACKED
               displayPath: lines[i].replace('??', '').replace(/"/g, '').trim(),
-              path: lines[i].replace('??', '').replace(/"/g, '').trim()
+              path: lines[i].replace('??', '').replace(/"/g, '').trim(),
+              staged: staged
             });
             break;
 
@@ -197,7 +203,8 @@ Git.prototype.getStatus = function (path, callback) {
             files.push({
               type: 'ADDED',
               displayPath: lines[i].replace('A', '').replace(/"/g, '').trim(),
-              path: lines[i].replace('A', '').replace(/"/g, '').trim()
+              path: lines[i].replace('A', '').replace(/"/g, '').trim(),
+              staged: staged
             });
             break;
 
@@ -205,7 +212,8 @@ Git.prototype.getStatus = function (path, callback) {
             files.push({
               type: 'DELETED',
               displayPath: lines[i].replace('D', '').replace(/"/g, '').trim(),
-              path: lines[i].replace('D', '').replace(/"/g, '').trim()
+              path: lines[i].replace('D', '').replace(/"/g, '').trim(),
+              staged: staged
             });
             break;
 
@@ -213,7 +221,8 @@ Git.prototype.getStatus = function (path, callback) {
             files.push({
               type: 'UNMERGED',
               displayPath: lines[i].replace('UU', '').replace(/"/g, '').trim(),
-              path: lines[i].replace('UU', '').replace(/"/g, '').trim()
+              path: lines[i].replace('UU', '').replace(/"/g, '').trim(),
+              staged: staged
             });
             break;
       }
@@ -801,7 +810,7 @@ Git.prototype.alterGitConfig = function (path, opts) {
     command = command.concat('--global ');
   }
 
-  command = command.concat('user.email ').concat(opts.email)
+  command = command.concat('user.email ').concat(opts.email);
 
   exec(command, execOpts, function (error) {
     invokeCallback(opts.callback, [ error ]);
