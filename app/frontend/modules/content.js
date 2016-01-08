@@ -398,7 +398,7 @@
               }.bind(this)
             }));
           } else if (change.type == 'UNMERGED') {
-            menu.append(new MenuItem({ type: 'separator' }));
+
             menu.append(new MenuItem({
               label: MSGS['Use ours'],
               click : function () {
@@ -650,6 +650,7 @@
                   }
 
                   this.commitChanges[i].staged = files[i].staged;
+                  this.commitChanges[i].type = files[i].type;
 
                   newChangesList.push(this.commitChanges[i]);
 
