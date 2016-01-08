@@ -616,9 +616,9 @@
 
         this.discartAllSelected = function (fileList) {
 
-          for (var i = 0; i < fileList.length; i++) {
+          for (let i = 0; i < fileList.length; i++) {
 
-            if (fileList[i].checked) {
+            if (fileList[i].checked && !fileList[i].staged) {
               this.discartChanges(fileList[i].path, i, (fileList[i].type == 'NEW'), true);
 
               if (this.commitChanges.length === 0) {
