@@ -597,25 +597,6 @@ html {
               }
             }
 
-            .empty-msg {
-              margin: auto;
-              margin-top: 50px;
-              color: #636e73;
-              border: #636e73 2px solid;
-              border-radius: 50%;
-
-              padding: 30px;
-              text-align: center;
-              width: 90px;
-              height:90px;
-              line-height: 1;
-              cursor: default;
-
-              .mega-octicon {
-                display: block;
-              }
-            }
-
             input[type="text"] {
               display: block;
               margin: 10px auto;
@@ -640,13 +621,26 @@ html {
             padding: 30px;
             padding-top: 50px;
             text-align: center;
-            line-height: 1;
+            line-height: 1.5;
             cursor: default;
 
             .mega-octicon {
               display: block;
-              margin-bottom: 30px;
+              margin-bottom: 20px;
               font-size: 3em;
+            }
+
+            .inline-icons-container {
+              display: block;
+              // margin-bottom: 10px;
+              text-align: center;
+
+              .inline-icons {
+                display: inline-block;
+                font-size: 2em;
+                margin-right: 5%;
+                margin-left: 5%
+              }
             }
           }
 

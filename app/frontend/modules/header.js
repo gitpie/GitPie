@@ -492,6 +492,10 @@
           $scope.showRepositoryMenu = !$scope.showRepositoryMenu;
         };
 
+        this.isRepositoryListEmpty = function () {
+          return CommomService.isRepoListEmpty();
+        };
+
         // Register shortcuts
         var registerShortcuts = function() {
 

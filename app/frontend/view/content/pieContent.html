@@ -1,12 +1,8 @@
 <section id="content" ng-click="appCtrl.hideHeaderMenus()">
 
-  <section id="left" style="width: {{ showRepositoryMenu ? '17%' : '0%' }}">
-    <div class="empty-msg" ng-show="appCtrl.repositories.isEmpty">
-      <span class="mega-octicon octicon-rocket"></span>
-      {{ MSGS["Start adding or clonning some awesome things"] }}!
-    </div>
+  <section id="left" style="width: {{ (showRepositoryMenu && !appCtrl.isRepositoryListEmpty()) ? '17%' : '0%' }}">
 
-    <input ng-hide="appCtrl.repositories.isEmpty" type="text" placeholder="{{MSGS['Search repositories']}}" ng-model="searchRepoFilter" />
+    <input ng-hide="appCtrl.isRepositoryListEmpty()" type="text" placeholder="{{MSGS['Search repositories']}}" ng-model="searchRepoFilter" />
 
     <nav>
       <ul>
@@ -41,7 +37,14 @@
     </nav>
   </section>
 
-  <section class="getting-start-message" ng-hide="appCtrl.repositoryHistory.length > 0">
+  <div class="getting-start-message" ng-show="appCtrl.isRepositoryListEmpty()">
+    <div class="inline-icons-container">
+      <span class="mega-octicon octicon-repo inline-icons"></span><i class="fa fa-bitbucket inline-icons"></i><i class="fa fa-git-square inline-icons"></i>
+    </div>
+    {{ MSGS["Start adding, clonning or creating some awesome things"] }}!
+  </div>
+
+  <section class="getting-start-message" ng-hide="appCtrl.repositoryHistory.length > 0 || appCtrl.isRepositoryListEmpty()">
     <span class="mega-octicon octicon-inbox"></span>
     {{ MSGS["Select a repository to start"] }}
   </section>

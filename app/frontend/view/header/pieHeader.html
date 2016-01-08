@@ -59,8 +59,10 @@
             </tabs>
 
         </div>
-        <li title="{{ MSGS['Hide menu'] }}" ng-show="showRepositoryMenu" ng-click="headerCtrl.toggleRepositoryMenu()"><i class="fa fa-toggle-on"></i></li>
-        <li title="{{ MSGS['Show menu'] }}" ng-hide="showRepositoryMenu" ng-click="headerCtrl.toggleRepositoryMenu()"><i class="fa fa-toggle-off"></i></li>
+        <span ng-hide="headerCtrl.isRepositoryListEmpty()">
+          <li title="{{ MSGS['Hide menu'] }}" ng-show="showRepositoryMenu" ng-click="headerCtrl.toggleRepositoryMenu()"><i class="fa fa-toggle-on"></i></li>
+          <li title="{{ MSGS['Show menu'] }}" ng-hide="showRepositoryMenu" ng-click="headerCtrl.toggleRepositoryMenu()"><i class="fa fa-toggle-off"></i></li>
+        </span>
       </ul>
     </nav>
 

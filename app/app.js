@@ -102,12 +102,6 @@ try {
     repositories.bitbucket = repositories.bitbucket || [];
     repositories.others = repositories.others || [];
 
-    if (repositories.github.length > 0 || repositories.bitbucket.length > 0 || repositories.others.length > 0) {
-      repositories.isEmpty = false;
-    } else {
-      repositories.isEmpty = true;
-    }
-
     // Set the application messages globally
     $rootScope.MSGS = MSGS;
     $rootScope.showApp = false;
@@ -190,8 +184,6 @@ try {
                   repository = repositoryExists;
                 }
 
-                repositories.isEmpty = false;
-
                 if (callback && typeof callback == 'function') {
                   callback.call(this, repository);
                 }
@@ -226,8 +218,6 @@ try {
             repository = repositoryExists;
           }
 
-          repositories.isEmpty = false;
-
           return repository;
         }
       },
@@ -249,6 +239,15 @@ try {
         repositoriesStr = JSON.stringify(storagedRepositories);
 
         return removedRepository[0].selected;
+      },
+
+      isRepoListEmpty: function () {
+        
+        if (repositories.github.length > 0 || repositories.bitbucket.length > 0 || repositories.others.length > 0) {
+          return false;
+        }
+
+        return true;
       },
 
       repositories: repositories

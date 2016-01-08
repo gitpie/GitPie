@@ -680,6 +680,10 @@
           CommomService.changesTabPanel.showPanel(2);
         };
 
+        this.isRepositoryListEmpty = function () {
+          return CommomService.isRepoListEmpty();
+        };
+
         // Listener to "showStashDiff" event fired on click View file on a Stash
         $scope.$on('showStashDiff', function (event, stash, files) {
           this.stash.info = stash;
