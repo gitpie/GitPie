@@ -222,7 +222,7 @@ Git.prototype.getStatus = function (path, callback) {
               type: 'UNMERGED',
               displayPath: lines[i].replace('UU', '').replace(/"/g, '').trim(),
               path: lines[i].replace('UU', '').replace(/"/g, '').trim(),
-              staged: staged
+              // staged: staged TODO: Improve indicators to UNMERGED files
             });
             break;
       }
