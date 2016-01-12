@@ -89,7 +89,7 @@
                 <span ng-show="headerCtrl.localBranches.length > 0">
                   <div class="label">Local branches</div>
 
-                  <li style="display:block; opacity: 0.5" title="This branch only exits locally" ng-click="headerCtrl.switchBranch(branch)"
+                  <li style="display:block; opacity: 0.5" title="{{ MSGS['This branch only exits locally'] }}" ng-click="headerCtrl.switchBranch(branch)"
                     ng-repeat="branch in headerCtrl.localBranches | filter:headerCtrl.treatBranch(newBranch) || ''"><span
                     class="octicon octicon-git-branch"></span> {{ branch}}</li>
                 </span>
