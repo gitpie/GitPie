@@ -80,14 +80,17 @@
                 placeholder="{{ MSGS['Select or create a new branch'] }}" ng-keypress="headerCtrl.checkoutBranch($event, newBranch)" />
 
               <span class="label" ng-show="newBranch.length > 0 && !headerCtrl.branchExists(newBranch)">
-                {{ MSGS['Create new branch'] }} <strong>"{{ headerCtrl.treatBranch(newBranch) }}"</strong></span>
+                <span class="octicon octicon-git-branch"></span>  {{ MSGS['Create new branch'] }} <strong>"{{ headerCtrl.treatBranch(newBranch) }}"</strong></span>
+
+              <span class="label" ng-show="newBranch.length > 0 && headerCtrl.branchExists(newBranch)">
+                <span class="octicon octicon-sync"></span>  {{ MSGS['Switch to branch'] }} <strong>"{{ headerCtrl.treatBranch(newBranch) }}"</strong></span>
 
               <ul style="display: block; overflow: auto; max-height: 400px;">
                 <li style="display:block" ng-repeat="branch in headerCtrl.remoteBranchs | filter:headerCtrl.treatBranch(newBranch) || ''"
                   ng-click="headerCtrl.switchBranch(branch)"><span class="octicon octicon-git-branch"></span> {{ branch }}</li>
 
                 <span ng-show="headerCtrl.localBranches.length > 0">
-                  <div class="label">Local branches</div>
+                  <div class="label">{{ MSGS['Local branches'] }}</div>
 
                   <li style="display:block; opacity: 0.5" title="{{ MSGS['This branch only exits locally'] }}" ng-click="headerCtrl.switchBranch(branch)"
                     ng-repeat="branch in headerCtrl.localBranches | filter:headerCtrl.treatBranch(newBranch) || ''"><span

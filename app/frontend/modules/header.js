@@ -219,6 +219,10 @@
         this.branchExists = function (branchName) {
           var treatedBranchName = this.treatBranch(branchName);
 
+          if (treatedBranchName == this.currentBranch.trim()) {
+            return true;
+          }
+
           for (let i = 0; i < this.remoteBranchs.length; i++) {
 
             if (this.remoteBranchs[i].trim() == treatedBranchName) {
