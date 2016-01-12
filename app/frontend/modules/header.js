@@ -34,6 +34,7 @@
 
         this.selectedRepository = null;
         this.remoteBranchs = [];
+        this.localBranchs = [];
         this.tags = [];
         this.syncStatus = {};
         this.loading = false;
@@ -96,9 +97,10 @@
             this.setStashableFiles(files);
           }.bind(this));
 
-          GIT.getCurrentBranch(repository.path, function (err, currentBranch, remoteBranchs) {
+          GIT.getCurrentBranch(repository.path, function (err, currentBranch, remoteBranches, localBranches) {
             this.currentBranch = currentBranch;
-            this.remoteBranchs = remoteBranchs;
+            this.remoteBranchs = remoteBranches;
+            this.localBranches = localBranches;
 
             applyScope($scope);
           }.bind(this));
@@ -217,9 +219,16 @@
         this.branchExists = function (branchName) {
           var treatedBranchName = this.treatBranch(branchName);
 
-          for (var i = 0; i < this.remoteBranchs.length; i++) {
+          for (let i = 0; i < this.remoteBranchs.length; i++) {
 
             if (this.remoteBranchs[i].trim() == treatedBranchName) {
+              return true;
+            }
+          }
+
+          for (let i = 0; i < this.localBranches.length; i++) {
+
+            if (this.localBranches[i].trim() == treatedBranchName) {
               return true;
             }
           }

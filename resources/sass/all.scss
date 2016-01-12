@@ -434,6 +434,19 @@ html {
 
             .menu {
               @include navMenu;
+
+              ul {
+
+                &::-webkit-scrollbar-track {
+              		border-radius: 5px !important;
+              	}
+              }
+
+              .label {
+                padding: 10px 0;
+                font-weight: bold;
+                color: #5cb6ad;
+              }
             }
           }
         }

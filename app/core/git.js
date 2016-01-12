@@ -48,31 +48,46 @@ function invokeCallback(callback, args) {
  */
 Git.prototype.getCurrentBranch = function (path, callback) {
 
-  exec('git branch -r && git symbolic-ref --short HEAD', { cwd: path, env: ENV }, function (error, stdout, stderr) {
+  exec('git branch -r && git branch', { cwd: path, env: ENV }, function (error, stdout, stderr) {
     var err = null,
-      localBranchs = stdout.split('\n'),
+      lines = stdout.split('\n'),
       currentBranch,
-      remoteBranchs = [];
+      localBranches = [],
+      remoteBranches = [],
+      branchesDictionary = {};
 
     if (error !== null) {
       err = error;
     } else {
 
-      for (var i = 0; i < (localBranchs.length - 2); i++) {
+      for (let i = 0; i < lines.length; i++) {
+        let isRemote = lines[i].indexOf('origin/') > -1;
+        let isHEAD = lines[i].indexOf('HEAD ->') > -1;
+        let existsInAnyList = branchesDictionary[ (lines[i]) ];
 
-        if (localBranchs[i].indexOf('HEAD') == -1) {
-          localBranchs[i] = localBranchs[i].replace('origin/', '');
+        if (!existsInAnyList && !isHEAD && lines[i]) {
 
-          if (localBranchs[i]) {
-            remoteBranchs.push(localBranchs[i]);
+          if (isRemote) {
+            lines[i] = lines[i].replace('origin/', '');
+            remoteBranches.push(lines[i]);
+          } else {
+
+            if (lines[i].indexOf('*') > -1) {
+              lines[i] = lines[i].replace('*', '');
+
+              currentBranch = lines[i];
+              continue;
+            }
+
+            localBranches.push(lines[i]);
           }
+
+          branchesDictionary[ lines[i] ] = lines[i];
         }
       }
-
-      currentBranch = localBranchs[localBranchs.length - 2];
     }
 
-    invokeCallback(callback, [ err, currentBranch, remoteBranchs ]);
+    invokeCallback(callback, [ err, currentBranch, remoteBranches, localBranches ]);
   }.bind(this));
 };
 
