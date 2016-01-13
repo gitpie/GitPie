@@ -848,4 +848,12 @@ Git.prototype.useTheirs = function (path, opts) {
   });
 };
 
+Git.prototype.deleteBranch = function (path, opts) {
+  opts = opts || {};
+
+  exec('git branch -D '.concat(opts.branchName), {cwd: path, env: ENV}, function (error) {
+    invokeCallback(opts.callback, [ error ]);
+  });
+};
+
 module.exports = new Git();

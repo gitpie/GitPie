@@ -251,9 +251,20 @@
           }, function (response) {
 
             if (response === 0) {
-              // TODO: Delete branch git branch -D [branchName]
+
+              GIT.deleteBranch(this.selectedRepository.path, {
+                branchName: branch,
+                callback: function (err) {
+
+                  if (err) {
+                    alert(err);
+                  } else {
+                    $scope.$broadcast('changedbranch', this.selectedRepository);
+                  }
+                }.bind(this)
+              });
             }
-          });
+          }.bind(this));
         };
 
         this.treatBranch = function (branchName) {
