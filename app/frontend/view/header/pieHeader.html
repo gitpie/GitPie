@@ -12,7 +12,7 @@
                 <section class="content">
                   <input class="inline-filed" type="text" name="repository" ng-model="headerCtrl.repositoryPath"
                     placeholder="{{ MSGS['Where are your stuffs'] }}?" />
-                  <button type="button" ng-click="headerCtrl.showOpenDialog('repositoryPath')" title="{{ MSGS['Browse directory'] }}">
+                  <button class="no-shadow" type="button" ng-click="headerCtrl.showOpenDialog('repositoryPath')" title="{{ MSGS['Browse directory'] }}">
                     <span class="octicon octicon-file-symlink-directory"></span>
                   </button>
                 </section>
@@ -25,7 +25,7 @@
                     placeholder="{{ MSGS['Clone URL'] }}" />
                   <input type="text" class="inline-filed" ng-model="headerCtrl.repositoryDestiny"
                     placeholder="{{ MSGS['Destination Folder'] }}" />
-                    <button type="button" ng-click="headerCtrl.showOpenDialog('repositoryDestiny')" title="{{ MSGS['Browse directory'] }}">
+                    <button class="no-shadow" type="button" ng-click="headerCtrl.showOpenDialog('repositoryDestiny')" title="{{ MSGS['Browse directory'] }}">
                       <span class="octicon octicon-file-symlink-directory"></span>
                     </button>
                 </section>
@@ -46,7 +46,7 @@
 
                   <input type="text" class="inline-filed" ng-model="headerCtrl.repositoryHome"
                     placeholder="{{ MSGS['Folder'] }}" />
-                  <button type="button" ng-click="headerCtrl.showOpenDialog('repositoryHome')" title="{{ MSGS['Browse directory'] }}">
+                  <button class="no-shadow" type="button" ng-click="headerCtrl.showOpenDialog('repositoryHome')" title="{{ MSGS['Browse directory'] }}">
                     <span class="octicon octicon-file-symlink-directory"></span>
                   </button>
 
@@ -92,9 +92,10 @@
                 <span ng-show="headerCtrl.localBranches.length > 0">
                   <div class="label">{{ MSGS['Local branches'] }}</div>
 
-                  <li style="display:block; opacity: 0.5" title="{{ MSGS['This branch only exits locally'] }}" ng-click="headerCtrl.switchBranch(branch)"
-                    ng-repeat="branch in headerCtrl.localBranches | filter:headerCtrl.treatBranch(newBranch) || ''"><span
-                    class="octicon octicon-git-branch"></span> {{ branch}}</li>
+                  <li style="opacity: 0.5" title="{{ MSGS['This branch only exits locally'] }}" ng-repeat="branch in headerCtrl.localBranches | filter:headerCtrl.treatBranch(newBranch) || ''">
+                    <span ng-click="headerCtrl.switchBranch(branch)"><span class="octicon octicon-git-branch"></span> {{ branch}}</span>
+                    <span class="octicon octicon-trashcan" ng-click="headerCtrl.deleteBranch(branch)" style="float: right" title="{{ MSGS['Delete this branch'] }}"></span>
+                  </li>
                 </span>
               </ul>
 

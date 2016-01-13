@@ -103,6 +103,15 @@
     border-color: #3998D6;
   }
 
+  button.no-shadow {
+    box-shadow: none;
+
+    &:active {
+      box-shadow:none;
+      opacity: 0.6;
+    }
+  }
+
   .featured[disabled] {
     opacity: 0.6 !important;
   }

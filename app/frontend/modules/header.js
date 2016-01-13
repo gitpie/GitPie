@@ -240,6 +240,22 @@
           return false;
         };
 
+        this.deleteBranch = function (branch) {
+          branch = branch.trim();
+
+          let currentWindow = browserWindow.getFocusedWindow();
+
+          dialog.showMessageBox(currentWindow, {
+            type: 'question', title: `${MSGS['Delete branch']} ${branch}`, message: `${MSGS['All the unmerged changes will be lost! Are you sure to delete the branch']} '${branch}'?`,
+            buttons: ['Yes', 'No']
+          }, function (response) {
+
+            if (response === 0) {
+              // TODO: Delete branch git branch -D [branchName]
+            }
+          });
+        };
+
         this.treatBranch = function (branchName) {
           return branchName && branchName.replace(/ /g, '-');
         };
@@ -543,7 +559,7 @@
           globalShortcut.register('ctrl+shift+a', function() {
             let currentWindow = browserWindow.getFocusedWindow();
 
-            dialog.showOpenDialog(currentWindow, { properties: [ 'openDirectory' ] }, function (filenames) {
+            dialog.showOpenDialog(currentWindow, { properties: [ 'openDirectory' ], title: MSGS['Add local git projects to GitPie'] }, function (filenames) {
 
               if (filenames) {
                 this.addRepository(filenames[0]);
