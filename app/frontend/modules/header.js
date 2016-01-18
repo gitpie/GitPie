@@ -34,7 +34,7 @@
 
         this.selectedRepository = null;
         this.remoteBranchs = [];
-        this.localBranchs = [];
+        this.localBranches = [];
         this.tags = [];
         this.syncStatus = {};
         this.loading = false;
@@ -534,6 +534,12 @@
 
         this.isRepositoryListEmpty = function () {
           return CommomService.isRepoListEmpty();
+        };
+
+        this.countBranches = function () {
+          let count = this.remoteBranchs.length + this.localBranches.length;
+
+          return count;
         };
 
         // Register shortcuts

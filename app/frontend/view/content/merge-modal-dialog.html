@@ -1,0 +1,16 @@
+<section class="page" ng-show="mergeCtrl.showDialog">
+  <div class="page-overlay"></div>
+  <div class="page-modal">
+    <h1><span class="octicon octicon-git-merge"></span> Merge changes</h1>
+
+    <form>
+      <select ng-change="mergeCtrl.getBranchesDiff()" ng-model="mergeCtrl.branchCompare" style="width: 150px; min-width: 150px">
+        <option ng-repeat="branch in mergeCtrl.branchesList" value="{{branch}}">{{branch}}</option>
+      </select>
+      ... <strong><span class="octicon octicon-git-branch"></span> {{ mergeCtrl.currentBranch }}</strong>
+
+      <footer><input type="submit" class="featured" disabled value="MERGE" style="margin-right: 5px" /><button
+        type="button" ng-click="mergeCtrl.hideDialog()">{{ MSGS.CANCEL }}</button></footer>
+    </form>
+  </div>
+</section>

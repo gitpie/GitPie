@@ -856,4 +856,41 @@ Git.prototype.deleteBranch = function (path, opts) {
   });
 };
 
+Git.prototype.geDiffMerge = function (path, opts) {
+  opts = opts || {};
+
+  exec('git diff --numstat --shortstat '.concat(opts.branchBase).concat('...').concat(opts.branchCompare), {cwd: path, env: ENV}, function (error, stdout) {
+
+    if (error) {
+      invokeCallback(opts.callback, [ error ]);
+    } else {
+      let diffInformation = {
+        shortstat: null,
+        files: []
+      };
+      let lines = stdout.split('\n');
+
+      for (let i = 0; i < (lines.length + 1); i++) {
+
+        if (lines[i]) {
+          let props = lines[i].split('\t');
+
+          diffInformation.files.push({
+            name: props[2],
+            additions: parseInt(props[0]),
+            deletions: parseInt(props[1]),
+            isBinary: (props[0] == '-' || props[1] == '-') ? true : false
+          });
+        }
+      }
+
+      diffInformation.shortstat = lines[ lines.length ];
+
+      invokeCallback(opts.callback, [ error, diffInformation ]);
+
+      // exec('git diff '.concat(opts.branchBase).concat(' ').concat(opts.branchCompare).concat(' --name-status'), {cwd: path, env: ENV}, function (error, stdout) {
+    }
+  });
+};
+
 module.exports = new Git();

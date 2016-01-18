@@ -1,6 +1,8 @@
 'use strict';
 
-angular.module('dialogs', []).directive('pushModalDialog', function () {
+angular.module('dialogs', [])
+
+.directive('pushModalDialog', function () {
   return {
     restrict: 'E',
     templateUrl: 'app/frontend/view/content/push-modal-dialog.html',
@@ -56,5 +58,58 @@ angular.module('dialogs', []).directive('pushModalDialog', function () {
     },
 
     controllerAs: 'modalCtrl'
+  };
+})
+
+.directive('mergeModalDialog', function () {
+  return {
+    restrict: 'E',
+    templateUrl: 'app/frontend/view/content/merge-modal-dialog.html',
+
+    controller: function ($rootScope, $scope) {
+
+      this.showDialog = false;
+      this.currentBranch = null;
+      this.branchCompare = null;
+      this.branchesList = [];
+
+      this.hideDialog = function () {
+        this.showDialog = false;
+      };
+
+      this.popDialog = function (pushConfigs) {
+        this.showDialog = true;
+        this.branchCompare = null;
+
+        this.currentBranch = $scope.headerCtrl.currentBranch;
+        this.branchesList = $scope.headerCtrl.remoteBranchs.concat($scope.headerCtrl.localBranches);
+
+        applyScope($scope);
+      };
+
+      this.getBranchesDiff = function () {
+        let header = $scope.headerCtrl;
+
+        console.log(this.branchCompare);
+
+        GIT.geDiffMerge(header.selectedRepository, {
+          branchBase: header.currentBranch.trim(),
+          branchCompare: this.branchCompare.trim(),
+          callback: function (err, diffInformation) {
+
+            if (err) {
+              alert(err);
+            } else {
+              console.log(diffInformation);
+            }
+          }
+        });
+      };
+
+      // Expose pop dialog
+      $rootScope.showMergeModalDialog = this.popDialog.bind(this);
+    },
+
+    controllerAs: 'mergeCtrl'
   };
 });

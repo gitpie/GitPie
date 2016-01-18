@@ -122,6 +122,7 @@
 
       <nav>
         <ul>
+          <li ng-show="headerCtrl.countBranches() > 1" title="{{ MSGS['Merge branches'] }}" ng-click="showMergeModalDialog()"><span class="octicon octicon-git-merge"></span></li>
           <li ng-show="headerCtrl.showResetButton()"
             ng-click="headerCtrl.resetBranchToCommit()"
             title="{{ MSGS['Reset branch {branch} to selected commit'].replace('{branch}', headerCtrl.currentBranch) }}">
