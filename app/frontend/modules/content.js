@@ -126,17 +126,20 @@
                   var changesHTML = [];
 
                   if (file.additions > 0) {
-                    changesHTML.push('<span class="plus-text">+', file.additions, '</span>');
+                    changesHTML.push('<span class="plus-text"><span class="octicon octicon-diff-added"></span>', file.additions, '</span>');
                   }
 
 
                   if (file.deletions > 0) {
-                    changesHTML.push('<span class="minor-text">-', file.deletions, '</span>');
+                    changesHTML.push('<span class="minor-text"><span class="octicon octicon-diff-removed"></span>', file.deletions, '</span>');
                   }
 
                   file.changes = $sce.trustAsHtml(changesHTML.join(''));
                 } else {
-                  file.changes = $sce.trustAsHtml('<span class="label-binary">' + MSGS.BINARY + '</span>');
+                  file.changes = $sce.trustAsHtml(`
+                  <span class="label-binary no-background">
+                    <span class="octicon octicon-file-binary"></span> ${MSGS.BINARY}
+                  </span>`);
                 }
 
                 this.commitHistory.push(file);

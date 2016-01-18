@@ -1049,9 +1049,8 @@ html {
 
                       .plus-text {
                         color: #58B231;
-                        background-color: #ccffcc;
                         border-radius: 2px;
-                        padding: 3px 15px;
+                        padding: 0 3px;
                         font-weight: bold;
                         margin: 0 3px;
                         display: inline-block;
@@ -1065,9 +1064,8 @@ html {
 
                       .minor-text {
                         color: #D7431B;
-                        background-color: #ffdddd;
                         border-radius: 2px;
-                        padding: 3px 15px;
+                        padding: 0 3px;
                         font-weight: bold;
                         margin: 0 3px;
                         display: inline-block;
@@ -1119,6 +1117,11 @@ html {
                       color: #986B45;
                       display: inline-block;
                       background-color: #F5E8DB;
+                    }
+
+                    .no-background {
+                      background-color: #FFF !important;
+                      padding: 0 3px !important;
                     }
                   }
 
