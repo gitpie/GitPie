@@ -71,7 +71,9 @@ angular.module('dialogs', [])
       this.showDialog = false;
       this.currentBranch = null;
       this.branchCompare = null;
-      this.branchesList = [];
+      this.remoteBranches = [];
+      this.localBranches = [];
+      this.diffInformation = {};
 
       this.hideDialog = function () {
         this.showDialog = false;
@@ -80,29 +82,38 @@ angular.module('dialogs', [])
       this.popDialog = function (pushConfigs) {
         this.showDialog = true;
         this.branchCompare = null;
+        this.diffInformation = {};
 
         this.currentBranch = $scope.headerCtrl.currentBranch;
-        this.branchesList = $scope.headerCtrl.remoteBranchs.concat($scope.headerCtrl.localBranches);
+        this.remoteBranches = $scope.headerCtrl.remoteBranchs;
+        this.localBranches = $scope.headerCtrl.localBranches;
 
         applyScope($scope);
       };
 
       this.getBranchesDiff = function () {
+        this.diffInformation = {};
+        
         let header = $scope.headerCtrl;
+        let notification = new GPNotification(`Comparing branchs...`, { showLoad: true });
 
-        console.log(this.branchCompare);
+        notification.pop();
 
-        GIT.geDiffMerge(header.selectedRepository, {
-          branchBase: header.currentBranch.trim(),
-          branchCompare: this.branchCompare.trim(),
+        GIT.geDiffMerge(header.selectedRepository.path, {
+          branchCompare: this.branchCompare,
           callback: function (err, diffInformation) {
+            notification.close();
 
             if (err) {
               alert(err);
             } else {
               console.log(diffInformation);
+
+              this.diffInformation = diffInformation;
+
+              applyScope($scope);
             }
-          }
+          }.bind(this)
         });
       };
 

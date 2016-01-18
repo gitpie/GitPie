@@ -63,12 +63,12 @@ Git.prototype.getCurrentBranch = function (path, callback) {
       for (let i = 0; i < lines.length; i++) {
         let isRemote = lines[i].indexOf('origin/') > -1;
         let isHEAD = lines[i].indexOf('HEAD ->') > -1;
-        let existsInAnyList = branchesDictionary[ (lines[i]) ];
+        let existsInAnyList = branchesDictionary[ (lines[i].trim()) ];
 
         if (!existsInAnyList && !isHEAD && lines[i]) {
 
           if (isRemote) {
-            lines[i] = lines[i].replace('origin/', '');
+            lines[i] = lines[i].replace('origin/', '').trim();
             remoteBranches.push(lines[i]);
           } else {
 
@@ -79,10 +79,10 @@ Git.prototype.getCurrentBranch = function (path, callback) {
               continue;
             }
 
-            localBranches.push(lines[i]);
+            localBranches.push(lines[i].trim());
           }
 
-          branchesDictionary[ lines[i] ] = lines[i];
+          branchesDictionary[ lines[i].trim() ] = lines[i].trim();
         }
       }
     }
@@ -859,7 +859,7 @@ Git.prototype.deleteBranch = function (path, opts) {
 Git.prototype.geDiffMerge = function (path, opts) {
   opts = opts || {};
 
-  exec('git diff --numstat --shortstat '.concat(opts.branchBase).concat('...').concat(opts.branchCompare), {cwd: path, env: ENV}, function (error, stdout) {
+  exec('git diff '.concat(opts.branchCompare).concat(' --numstat --shortstat'), {cwd: path, env: ENV}, function (error, stdout) {
 
     if (error) {
       invokeCallback(opts.callback, [ error ]);
@@ -870,7 +870,7 @@ Git.prototype.geDiffMerge = function (path, opts) {
       };
       let lines = stdout.split('\n');
 
-      for (let i = 0; i < (lines.length + 1); i++) {
+      for (let i = 0; i < (lines.length - 2); i++) {
 
         if (lines[i]) {
           let props = lines[i].split('\t');
@@ -884,7 +884,7 @@ Git.prototype.geDiffMerge = function (path, opts) {
         }
       }
 
-      diffInformation.shortstat = lines[ lines.length ];
+      diffInformation.shortstat = lines[ (lines.length - 2) ];
 
       invokeCallback(opts.callback, [ error, diffInformation ]);
 
