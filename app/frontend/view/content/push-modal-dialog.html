@@ -1,5 +1,5 @@
 <section class="page" ng-show="modalCtrl.showDialog">
-  <div class="page-overlay"></div>
+  <div class="page-overlay" ng-click="modalCtrl.hideDialog()"></div>
   <div class="page-modal">
     <h1><span class="octicon octicon-lock"></span> {{ MSGS['Authentication required'] }}</h1>
     <p>
