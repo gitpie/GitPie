@@ -101,8 +101,6 @@
 
           this.selectedRepository = repository;
 
-          updateIsMerging();
-
           GIT.getStatus(repository.path, function (err, syncStatus, files) {
             $scope.$broadcast('unsynChanges', files);
 
@@ -113,6 +111,8 @@
             this.currentBranch = currentBranch;
             this.remoteBranchs = remoteBranches;
             this.localBranches = localBranches;
+
+            updateIsMerging();
 
             applyScope($scope);
           }.bind(this));

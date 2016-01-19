@@ -72,7 +72,9 @@
 
     <nav>
       <ul>
-        <li ng-show="headerCtrl.currentBranch" ng-click="headerCtrl.toggleMenu(2)"><span class="octicon octicon-git-branch"></span> {{ headerCtrl.currentBranch }}</li>
+        <li ng-show="headerCtrl.currentBranch" ng-click="headerCtrl.toggleMenu(2)"><span class="octicon octicon-git-branch"></span> {{ headerCtrl.currentBranch }}
+          <span class="mergin-indicator" ng-hide="headerCtrl.isMergeButtonVisible()"><span class="octicon octicon-git-compare"></span> {{ MSGS.MERGING }}</span>
+        </li>
         <div class="menu" style="min-width: 300px" ng-show="headerCtrl.showBranchMenu">
           <tabs>
             <pane pane-title="Branches" icon="octicon octicon-git-branch">
@@ -127,7 +129,7 @@
             <i class="fa fa-ban"></i><span class="octicon octicon-git-merge"></span>
           </li>
           <li ng-show="headerCtrl.isMergeButtonVisible()" title="{{ MSGS['Merge branches'] }}" ng-click="showMergeModalDialog()"><span class="octicon octicon-git-merge"></span></li>
-          <li ng-show="headerCtrl.showResetButton()"
+          <li ng-show="headerCtrl.showResetButton() && headerCtrl.isMergeButtonVisible()"
             ng-click="headerCtrl.resetBranchToCommit()"
             title="{{ MSGS['Reset branch {branch} to selected commit'].replace('{branch}', headerCtrl.currentBranch) }}">
             <span class="octicon octicon-mail-reply"></span>

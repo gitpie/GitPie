@@ -516,6 +516,26 @@ html {
               .sync-status {
                 margin-left: 10px;
               }
+
+              .mergin-indicator {
+                border-radius: 3px;
+                padding: 5px;
+                font-size: 0.9em;
+                margin-left: 10px;
+                background-color: #C3C4C4;
+                color: #636E73;
+                text-shadow: none;
+                opacity: 0.6;
+              }
+            }
+
+            li.abort-merge {
+
+              .fa-ban {
+                float: right;
+                opacity: 0.8;
+                margin-top: -5px;
+              }
             }
 
             .menu {
