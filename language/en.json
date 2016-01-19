@@ -36,6 +36,7 @@
   "Delete branch": "Delete branch",
   "Merge branches": "Merge branches",
   "MERGE": "MERGE",
+  "Abort Merge": "Abort Merge",
   "Comparing branchs...": "Comparing branchs...",
   "All the unmerged changes will be lost! Are you sure to delete the branch": "All the unmerged changes will be lost! Are you sure to delete the branch",
   "MODIFIED": "MODIFIED",

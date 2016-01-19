@@ -36,8 +36,8 @@
       </section>
       <section class="shortstat" ng-show="mergeCtrl.diffInformation.shortstat">{{ mergeCtrl.diffInformation.shortstat }}</section>
 
-      <footer><input id="merge-button" type="submit" class="featured" disabled value="{{ MSGS.MERGE }}"/><button
-        type="button" ng-click="mergeCtrl.hideDialog()">{{ MSGS.CANCEL }}</button></footer>
+      <footer><input id="merge-button" type="submit" class="featured" disabled value="{{ MSGS.MERGE }}"
+          ng-click="mergeCtrl.mergeBranches()"/><button type="button" ng-click="mergeCtrl.hideDialog()">{{ MSGS.CANCEL }}</button></footer>
     </form>
   </div>
 </section>

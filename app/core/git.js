@@ -887,10 +887,42 @@ Git.prototype.geDiffMerge = function (path, opts) {
       diffInformation.shortstat = lines[ (lines.length - 2) ];
 
       invokeCallback(opts.callback, [ error, diffInformation ]);
-
-      // exec('git diff '.concat(opts.branchBase).concat(' ').concat(opts.branchCompare).concat(' --name-status'), {cwd: path, env: ENV}, function (error, stdout) {
     }
   });
+};
+
+Git.prototype.merge = function (path, opts) {
+  opts = opts || {};
+
+  exec('git merge '.concat(opts.branchCompare), {cwd: path, env: ENV}, function (error, stdout, stderr) {
+    let isConflituosMerge = false;
+
+    if (error && stdout.toString().indexOf('Automatic merge failed') > -1) {
+      isConflituosMerge = true;
+    }
+
+    invokeCallback(opts.callback, [ error, stdout, isConflituosMerge ]);
+  });
+};
+
+Git.prototype.mergeAbort = function (path, callback) {
+
+  exec('git merge --abort', {cwd: path, env: ENV}, function (error) {
+    invokeCallback(callback, [ error ]);
+  });
+};
+
+Git.prototype.isMerging = function (path) {  
+  let fs = require('fs');
+  let pathModule = require('path');
+
+  try {
+    let statRepository = fs.statSync( pathModule.join(path, '.git', 'MERGE_HEAD') );
+
+    return statRepository.isFile();
+  } catch (err) {
+    return false;
+  }
 };
 
 module.exports = new Git();

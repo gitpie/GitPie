@@ -126,6 +126,78 @@ angular.module('dialogs', [])
         }
       };
 
+      this.mergeBranches = function () {
+        let header = $scope.headerCtrl;
+        let notification;
+
+        var branchBase = header.currentBranch,
+          branchCompare = this.branchCompare.replace('origin/', '');
+
+        notification = new GPNotification(`Merging branch <strong>${branchCompare}</strong> into <strong>${branchBase}</strong>...`, { showLoad: true });
+
+        this.hideDialog();
+
+        notification.pop();
+
+        GIT.merge(header.selectedRepository.path, {
+          branchCompare: branchCompare,
+          callback: function (err, stdout, isConflituosMerge) {
+            notification.close();
+
+            if (err) {
+              const remote = require('remote');
+              const dialog = remote.require('dialog');
+              const browserWindow = remote.require('browser-window');
+
+              let currentWindow = browserWindow.getFocusedWindow();
+              let message;
+              let buttons = ['Ok'];
+              let detail = null;
+
+              if (isConflituosMerge) {
+                message = `There are conflicts merging ${branchCompare} into ${branchBase}. Resolve them and commit the changes to complete the merge.\n\n If you want, you can abort this merge clicking on "Abort Merge".`;
+
+                detail = stdout;
+
+                buttons.push(MSGS['Abort Merge']);
+              } else {
+                message = `Something wrong happend merging ${branchCompare} into ${branchBase}. \n\n${err.message}`;
+              }
+
+              dialog.showMessageBox(currentWindow,
+                {
+                  type: 'error',
+                  title: 'Error merging branches',
+                  message: message,
+                  detail: detail,
+                  buttons: buttons
+                },
+                function (response) {
+
+                  console.log(response);
+
+                  if (response == 1) {
+
+                    GIT.mergeAbort(header.selectedRepository.path, function (err) {
+
+                      if (err) {
+                        alert(err);
+                      }
+
+                      $scope.$broadcast('changedbranch', header.selectedRepository);
+                    });
+                  } else {
+                    $scope.$broadcast('changedbranch', header.selectedRepository);
+                  }
+                }
+              );
+            } else {
+              $scope.$broadcast('changedbranch', header.selectedRepository);
+            }
+          }
+        });
+      };
+
       // Expose pop dialog
       $rootScope.showMergeModalDialog = this.popDialog.bind(this);
     },
