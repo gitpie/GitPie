@@ -18,6 +18,16 @@
 
       controller: function ($scope, $element, CommomService) {
         var MSGS = $scope.MSGS;
+        let isMerging = false;
+
+        let updateIsMerging = function () {
+
+          if (this.countBranches() > 1 && !GIT.isMerging(this.selectedRepository.path)) {
+            isMerging = true;
+          } else {
+            isMerging = false;
+          }
+        }.bind(this);
 
         // Verify if a branch is in remoteBranchs array
         this.isRemoteBranch = function (branch) {
@@ -90,6 +100,8 @@
           this.loading = true;
 
           this.selectedRepository = repository;
+
+          updateIsMerging();
 
           GIT.getStatus(repository.path, function (err, syncStatus, files) {
             $scope.$broadcast('unsynChanges', files);
@@ -474,6 +486,8 @@
           if (this.selectedRepository) {
             this.setStashableFiles(unsyncChanges);
 
+            updateIsMerging();
+
             if (syncStatus && this.syncStatus.ahead != syncStatus.ahead) {
               this.syncStatus = syncStatus;
 
@@ -540,6 +554,22 @@
           let count = this.remoteBranchs.length + this.localBranches.length;
 
           return count;
+        };
+
+        this.isMergeButtonVisible = function () {
+          return isMerging;
+        };
+
+        this.abortMerge = function () {
+
+          GIT.mergeAbort(this.selectedRepository.path, function (err) {
+
+            if (err) {
+              alert(err);
+            } else {
+              $scope.$broadcast('changedbranch', this.selectedRepository);
+            }
+          }.bind(this));
         };
 
         // Register shortcuts
