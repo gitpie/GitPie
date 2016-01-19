@@ -84,6 +84,8 @@ angular.module('dialogs', [])
         this.branchCompare = null;
         this.diffInformation = {};
 
+        document.querySelector('#merge-button').setAttribute('disabled', 'true');
+
         this.currentBranch = $scope.headerCtrl.currentBranch;
         this.remoteBranches = $scope.headerCtrl.remoteBranchs;
         this.localBranches = $scope.headerCtrl.localBranches;
