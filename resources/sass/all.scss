@@ -231,6 +231,77 @@ html {
           border-radius: 3px;
           box-shadow: 4px 4px 40px #333;
 
+          .merge-modal {
+
+            .compare-box {
+              background-color: #f4f4f4;
+              padding: 10px 5px 5px 10px;
+              border-radius: 3px;
+              border: #eee 1px solid;
+              margin-bottom: 10px;
+
+              .padding-side {
+                padding: 0 10px;
+              }
+
+              select {
+                width: 150px;
+                min-width: 150px;
+              }
+
+              .octicon-git-compare {
+                padding: 10px;
+                float: right;
+                opacity: 0.5;
+              }
+            }
+
+            .diff-box {
+              max-height: 250px;
+              overflow: auto;
+
+              ul {
+                list-style: none;
+                margin: 0;
+                padding: 0;
+
+                li {
+                  padding: 5px 0;
+
+                  .label {
+                    float: right;
+                    margin: 0 5px;
+                  }
+
+                  .label-deletions {
+                    @extend .label;
+                    color: #D7431B;
+                  }
+
+                  .label-additions {
+                    @extend .label;
+                    color: #58B231;
+                  }
+
+                  .label-binary {
+                    @extend .label;
+                    color: #986B45;
+                  }
+                }
+              }
+            }
+
+            .shortstat {
+              font-family: $code-font;
+              font-size: 0.9em;
+              padding-top: 15px;
+            }
+
+            #merge-button {
+              margin-right: 5px;
+            }
+          }
+
           h1 {
             .octicon {
               float: left;
