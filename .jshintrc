@@ -9,6 +9,7 @@
     "updater": true,
     "WIN": true,
     "applyScope": true,
-    "GPNotification": true
+    "GPNotification": true,
+    "MSGS": true
   }
 }

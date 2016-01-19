@@ -101,7 +101,7 @@ angular.module('dialogs', [])
 
         if (treatedBranchCompare != $scope.headerCtrl.currentBranch) {
           let header = $scope.headerCtrl;
-          let notification = new GPNotification(`Comparing branchs...`, { showLoad: true });
+          let notification = new GPNotification(`${MSGS['Comparing branchs...']}`, { showLoad: true });
 
           notification.pop();
 
