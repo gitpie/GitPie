@@ -235,10 +235,11 @@ html {
 
             .compare-box {
               background-color: #f4f4f4;
-              padding: 10px 5px 5px 10px;
+              padding: 5px 10px 0;
               border-radius: 3px;
               border: #eee 1px solid;
               margin-bottom: 10px;
+              font-size: 0.95em;
 
               .padding-side {
                 padding: 0 10px;
@@ -247,10 +248,11 @@ html {
               select {
                 width: 150px;
                 min-width: 150px;
+                padding: 5px;
               }
 
               .octicon-git-compare {
-                padding: 10px;
+                padding: 5px 0;
                 float: right;
                 opacity: 0.5;
               }
@@ -294,7 +296,8 @@ html {
             .shortstat {
               font-family: $code-font;
               font-size: 0.9em;
-              padding-top: 15px;
+              padding-top: 20px;
+              padding-bottom: 5px;
             }
 
             #merge-button {

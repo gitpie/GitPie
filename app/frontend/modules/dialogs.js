@@ -92,29 +92,36 @@ angular.module('dialogs', [])
       };
 
       this.getBranchesDiff = function () {
+        let treatedBranchCompare = this.branchCompare.replace('origin/', '');
+        let mergeBtn = document.querySelector('#merge-button');
+
         this.diffInformation = {};
-        
-        let header = $scope.headerCtrl;
-        let notification = new GPNotification(`Comparing branchs...`, { showLoad: true });
 
-        notification.pop();
+        mergeBtn.setAttribute('disabled', 'true');
 
-        GIT.geDiffMerge(header.selectedRepository.path, {
-          branchCompare: this.branchCompare,
-          callback: function (err, diffInformation) {
-            notification.close();
+        if (treatedBranchCompare != $scope.headerCtrl.currentBranch) {
+          let header = $scope.headerCtrl;
+          let notification = new GPNotification(`Comparing branchs...`, { showLoad: true });
 
-            if (err) {
-              alert(err);
-            } else {
-              console.log(diffInformation);
+          notification.pop();
 
-              this.diffInformation = diffInformation;
+          GIT.geDiffMerge(header.selectedRepository.path, {
+            branchCompare: this.branchCompare,
+            callback: function (err, diffInformation) {
+              notification.close();
 
-              applyScope($scope);
-            }
-          }.bind(this)
-        });
+              if (err) {
+                alert(err);
+              } else {
+                this.diffInformation = diffInformation;
+
+                mergeBtn.removeAttribute('disabled');
+
+                applyScope($scope);
+              }
+            }.bind(this)
+          });
+        }
       };
 
       // Expose pop dialog

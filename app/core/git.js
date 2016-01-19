@@ -73,7 +73,7 @@ Git.prototype.getCurrentBranch = function (path, callback) {
           } else {
 
             if (lines[i].indexOf('*') > -1) {
-              lines[i] = lines[i].replace('*', '');
+              lines[i] = lines[i].replace('*', '').trim();
 
               currentBranch = lines[i];
               continue;

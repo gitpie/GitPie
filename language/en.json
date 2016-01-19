@@ -35,6 +35,7 @@
   "Delete this branch": "Delete this branch",
   "Delete branch": "Delete branch",
   "Merge branches": "Merge branches",
+  "MERGE": "MERGE",
   "All the unmerged changes will be lost! Are you sure to delete the branch": "All the unmerged changes will be lost! Are you sure to delete the branch",
   "MODIFIED": "MODIFIED",
   "NEW": "NEW",
