@@ -133,7 +133,7 @@ angular.module('dialogs', [])
         var branchBase = header.currentBranch,
           branchCompare = this.branchCompare.replace('origin/', '');
 
-        notification = new GPNotification(`Merging branch <strong>${branchCompare}</strong> into <strong>${branchBase}</strong>...`, { showLoad: true });
+        notification = new GPNotification(`${MSGS['Merging branch']} <strong>${branchCompare}</strong> ${MSGS.INTO.toLowerCase()} <strong>${branchBase}</strong>...`, { showLoad: true });
 
         this.hideDialog();
 
@@ -151,23 +151,23 @@ angular.module('dialogs', [])
 
               let currentWindow = browserWindow.getFocusedWindow();
               let message;
-              let buttons = ['Ok'];
+              let buttons = [`${MSGS.Ok}`];
               let detail = null;
 
               if (isConflituosMerge) {
-                message = `There are conflicts merging ${branchCompare} into ${branchBase}. Resolve them and commit the changes to complete the merge.\n\n If you want, you can abort this merge clicking on "Abort Merge".`;
+                message = `${MSGS['There are conflicts merging']} ${branchCompare} ${MSGS.INTO.toLowerCase()} ${branchBase}. ${MSGS['Resolve them and commit the changes to complete the merge.\n\n If you want, you can abort this merge clicking on "Abort Merge"']}`;
 
                 detail = stdout;
 
                 buttons.push(MSGS['Abort Merge']);
               } else {
-                message = `Something wrong happend merging ${branchCompare} into ${branchBase}. \n\n${err.message}`;
+                message = `${MSGS['Something wrong happened merging']} ${branchCompare} ${MSGS.INTO.toLowerCase()} ${branchBase}. \n\n${err.message}`;
               }
 
               dialog.showMessageBox(currentWindow,
                 {
                   type: 'error',
-                  title: 'Error merging branches',
+                  title: `${MSGS['Error merging branches']}`,
                   message: message,
                   detail: detail,
                   buttons: buttons
