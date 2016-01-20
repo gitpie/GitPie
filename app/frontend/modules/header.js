@@ -18,6 +18,16 @@
 
       controller: function ($scope, $element, CommomService) {
         var MSGS = $scope.MSGS;
+        let isMerging = false;
+
+        let updateIsMerging = function () {
+
+          if (GIT.isMerging(this.selectedRepository.path)) {
+            isMerging = true;
+          } else {
+            isMerging = false;
+          }
+        }.bind(this);
 
         // Verify if a branch is in remoteBranchs array
         this.isRemoteBranch = function (branch) {
@@ -34,7 +44,7 @@
 
         this.selectedRepository = null;
         this.remoteBranchs = [];
-        this.localBranchs = [];
+        this.localBranches = [];
         this.tags = [];
         this.syncStatus = {};
         this.loading = false;
@@ -101,6 +111,8 @@
             this.currentBranch = currentBranch;
             this.remoteBranchs = remoteBranches;
             this.localBranches = localBranches;
+
+            updateIsMerging();
 
             applyScope($scope);
           }.bind(this));
@@ -474,6 +486,8 @@
           if (this.selectedRepository) {
             this.setStashableFiles(unsyncChanges);
 
+            updateIsMerging();
+
             if (syncStatus && this.syncStatus.ahead != syncStatus.ahead) {
               this.syncStatus = syncStatus;
 
@@ -534,6 +548,32 @@
 
         this.isRepositoryListEmpty = function () {
           return CommomService.isRepoListEmpty();
+        };
+
+        this.countBranches = function () {
+          let count = this.remoteBranchs.length + this.localBranches.length;
+
+          return count;
+        };
+
+        this.isMergeButtonVisible = function () {
+          return (this.countBranches() > 1) && !isMerging;
+        };
+
+        this.isRepositoryMerging = function () {
+          return isMerging;
+        };
+
+        this.abortMerge = function () {
+
+          GIT.mergeAbort(this.selectedRepository.path, function (err) {
+
+            if (err) {
+              alert(err);
+            } else {
+              $scope.$broadcast('changedbranch', this.selectedRepository);
+            }
+          }.bind(this));
         };
 
         // Register shortcuts

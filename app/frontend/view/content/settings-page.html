@@ -22,49 +22,64 @@
 
         <li>
           <div class="label">Git</div>
-          <ul>
-            <li class="column">
-              <section class="label-field">{{ MSGS.SettingsPage.Username }}</section>
-              <input type="text" ng-model="settingsCtrl.globalGitConfigs['user.name']" />
-            </li>
+          <form ng-submit="settingsCtrl.changeGitCofigs(true, $event)">
+            <ul>
+              <li class="column">
+                <section class="label-field">{{ MSGS.SettingsPage.Username }}</section>
+                <input type="text" ng-model="settingsCtrl.globalGitConfigs['user.name']" required />
+              </li>
 
-            <li class="column">
-              <section class="label-field">{{ MSGS.SettingsPage.Email }}</section>
-              <input type="text" ng-model="settingsCtrl.globalGitConfigs['user.email']" />
-            </li>
+              <li class="column">
+                <section class="label-field">{{ MSGS.SettingsPage.Email }}</section>
+                <input type="text" ng-model="settingsCtrl.globalGitConfigs['user.email']" required />
+              </li>
 
-            <li>
-              <button type="button" ng-click="settingsCtrl.changeGitCofigs(true, $event)">{{ MSGS.SettingsPage['CHANGE GLOBALS CONFIGURATIONS'] }}</button>
-            </li>
-          </ul>
+              <li class="column">
+                <section class="label-field">{{ MSGS.SettingsPage['Merge Tool'] }}</section>
+                <input type="text" ng-model="settingsCtrl.globalGitConfigs['merge.tool']" placeholder="{{ MSGS.SettingsPage['Put here the merge tool name. Ex: meld'] }}" />
+                <div class="info" ng-show="settingsCtrl.globalGitConfigs['merge.tool']">
+                  <span class="octicon octicon-info"></span> {{ MSGS.SettingsPage['GitPie set some defaults configurations to setting up the mergetool. You can change this after'] }}.
+                  <span ng-click="settingsCtrl.openMergeToolConfigHelp()" class="link">{{ MSGS.SettingsPage['See how'] }}...</span>
+                </div>
+              </li>
+
+              <li>
+                <input type="submit" value="{{ MSGS.SettingsPage['CHANGE GLOBALS CONFIGURATIONS'] }}" />
+              </li>
+            </ul>
+          </form>
         </li>
 
         <li ng-show="settingsCtrl.selectedRepository">
           <div class="label">{{ MSGS.SettingsPage.Repository }} (<em>{{ settingsCtrl.selectedRepository.name }}</em>)</div>
 
-          <ul>
-            <li>
-              <section class="label-field">{{ MSGS.SettingsPage.Username }}</section>
-              <input type="text" ng-model="settingsCtrl.localGitConfigs['user.name']" />
-            </li>
-            <li>
-              <section class="label-field">{{ MSGS.SettingsPage.Email }}</section>
-              <input type="text" ng-model="settingsCtrl.localGitConfigs['user.email']" />
-            </li>
-            <li>
-              <button type="button" ng-click="settingsCtrl.changeGitCofigs(false, $event)">
-                {{ MSGS.SettingsPage['CHANGE {repository} CONFIGURATIONS'].replace('{repository}', settingsCtrl.selectedRepository.name.toUpperCase()) }}
-              </button>
-            </li>
-
-            <li ng-hide="true"><!-- Will be available when this functionality exists -->
-              <section class="label-field">{{ MSGS.SettingsPage["Ignored files"] }}</section>
-            </li>
-            <li>
-              <section class="label-field">{{ MSGS.SettingsPage["Using ssh key"] }}</section>
-              <div>{{ settingsCtrl.selectedRepository.usingSSH ? 'Yes' : 'No' }}</div>
-            </li>
-          </ul>
+          <form ng-submit="settingsCtrl.changeGitCofigs(false, $event)">
+            <ul>
+              <li>
+                <section class="label-field">{{ MSGS.SettingsPage.Username }}</section>
+                <input type="text" ng-model="settingsCtrl.localGitConfigs['user.name']" required />
+              </li>
+              <li>
+                <section class="label-field">{{ MSGS.SettingsPage.Email }}</section>
+                <input type="text" ng-model="settingsCtrl.localGitConfigs['user.email']" required />
+              </li>
+              <li class="column">
+                <section class="label-field">{{ MSGS.SettingsPage['Merge Tool'] }}</section>
+                <input type="text" ng-model="settingsCtrl.localGitConfigs['merge.tool']" placeholder="{{ MSGS.SettingsPage['Put here the merge tool name. Ex: meld'] }}" />
+                <div class="info" ng-show="settingsCtrl.localGitConfigs['merge.tool']">
+                  <span class="octicon octicon-info"></span> {{ MSGS.SettingsPage['GitPie set some defaults configurations to setting up the mergetool. You can change this after'] }}.
+                  <span ng-click="settingsCtrl.openMergeToolConfigHelp()" class="link">{{ MSGS.SettingsPage['See how'] }}...</span>
+                </div>
+              </li>
+              <li>
+                <input type="submit" value="{{ MSGS.SettingsPage['CHANGE {repository} CONFIGURATIONS'].replace('{repository}', settingsCtrl.selectedRepository.name.toUpperCase()) }}" />
+              </li>
+              <li>
+                <section class="label-field">{{ MSGS.SettingsPage["Using ssh key"] }}</section>
+                <div>{{ settingsCtrl.selectedRepository.usingSSH ? 'Yes' : 'No' }}</div>
+              </li>
+            </ul>
+          </form>
         </li>
 
         <li>

@@ -231,6 +231,83 @@ html {
           border-radius: 3px;
           box-shadow: 4px 4px 40px #333;
 
+          .merge-modal {
+
+            .compare-box {
+              background-color: #f4f4f4;
+              padding: 5px 10px 0;
+              border-radius: 3px;
+              border: #eee 1px solid;
+              margin-bottom: 10px;
+              font-size: 0.95em;
+
+              .padding-side {
+                padding: 0 10px;
+              }
+
+              select {
+                width: 150px;
+                min-width: 150px;
+                padding: 5px;
+              }
+
+              .octicon-git-compare {
+                padding: 7px 0;
+                float: right;
+                opacity: 0.5;
+              }
+            }
+
+            .diff-box {
+              max-height: 250px;
+              overflow: auto;
+
+              ul {
+                list-style: none;
+                margin: 0;
+                padding: 0;
+
+                li {
+                  padding: 5px 0;
+
+                  .label {
+                    float: right;
+                    margin: 0 5px;
+                    opacity: 0.8;
+                  }
+
+                  .label-deletions {
+                    @extend .label;
+                    color: #D7431B;
+                    font-size: 0.9em;
+                  }
+
+                  .label-additions {
+                    @extend .label;
+                    color: #58B231;
+                    font-size: 0.9em;
+                  }
+
+                  .label-binary {
+                    @extend .label;
+                    color: #986B45;
+                  }
+                }
+              }
+            }
+
+            .shortstat {
+              font-family: $code-font;
+              font-size: 0.9em;
+              padding-top: 20px;
+              padding-bottom: 5px;
+            }
+
+            #merge-button {
+              margin-right: 5px;
+            }
+          }
+
           h1 {
             .octicon {
               float: left;
@@ -317,6 +394,20 @@ html {
                       color: #666;
                       font-weight: bold;
                       margin-bottom: 5px;
+                    }
+                  }
+                }
+
+                .info {
+                  font-size: 0.9em;
+                  color: #5CB6AD;
+
+                  .link {
+                    text-decoration: underline;
+                    cursor: pointer;
+
+                    &:hover {
+                      text-decoration: none;
                     }
                   }
                 }
@@ -438,6 +529,26 @@ html {
 
               .sync-status {
                 margin-left: 10px;
+              }
+
+              .mergin-indicator {
+                border-radius: 3px;
+                padding: 5px;
+                font-size: 0.9em;
+                margin-left: 10px;
+                background-color: #C3C4C4;
+                color: #636E73;
+                text-shadow: none;
+                opacity: 0.6;
+              }
+            }
+
+            li.abort-merge {
+
+              .fa-ban {
+                float: right;
+                opacity: 0.8;
+                margin-top: -5px;
               }
             }
 
