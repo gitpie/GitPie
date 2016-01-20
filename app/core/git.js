@@ -806,30 +806,46 @@ Git.prototype.getLocalConfigs = function (path, callback) {
 };
 
 Git.prototype.alterGitConfig = function (path, opts) {
-  var command = 'git config ',
+  var command,
     execOpts = {
       env: ENV
+    },
+    concatConfig = function (name, value) {
+
+      if (value) {
+
+        if (command) {
+          command = command.concat(' && ');
+        } else {
+          command = '';
+        }
+
+        command = command.concat('git config ');
+
+        if (opts.global) {
+          command = command.concat('--global ');
+        }
+
+        command = command.concat(name).concat(' "').concat(value).concat('"');
+      }
     };
 
   opts = opts || {};
 
-  if (opts.global) {
-    command = command.concat('--global ');
-  } else {
+  concatConfig('user.name', opts.username);
+  concatConfig('user.email', opts.email);
+  concatConfig('merge.tool', opts.mergeTool);
+
+  if (!opts.global) {
     execOpts.cwd = path;
   }
 
-  command = command.concat('user.name "').concat(opts.username).concat('" && git config ');
+  if (command) {
 
-  if (opts.global) {
-    command = command.concat('--global ');
+    exec(command, execOpts, function (error) {
+      invokeCallback(opts.callback, [  ]);
+    });
   }
-
-  command = command.concat('user.email ').concat(opts.email);
-
-  exec(command, execOpts, function (error) {
-    invokeCallback(opts.callback, [ error ]);
-  });
 };
 
 Git.prototype.useOurs = function (path, opts) {
@@ -912,7 +928,7 @@ Git.prototype.mergeAbort = function (path, callback) {
   });
 };
 
-Git.prototype.isMerging = function (path) {  
+Git.prototype.isMerging = function (path) {
   let fs = require('fs');
   let pathModule = require('path');
 
@@ -923,6 +939,13 @@ Git.prototype.isMerging = function (path) {
   } catch (err) {
     return false;
   }
+};
+
+Git.prototype.mergeTool = function (path, callback) {
+  
+  exec('git mergetool', {cwd: path, env: ENV}, function (error) {
+    invokeCallback(callback, [ error ]);
+  });
 };
 
 module.exports = new Git();

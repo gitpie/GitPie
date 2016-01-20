@@ -397,6 +397,20 @@ html {
                     }
                   }
                 }
+
+                .info {
+                  font-size: 0.9em;
+                  color: #5CB6AD;
+
+                  .link {
+                    text-decoration: underline;
+                    cursor: pointer;
+
+                    &:hover {
+                      text-decoration: none;
+                    }
+                  }
+                }
               }
             }
           }

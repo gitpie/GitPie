@@ -430,7 +430,18 @@
               }.bind(this)
             }));
             menu.append(new MenuItem({
-              label: MSGS['Open merge tool']
+              label: MSGS['Open merge tool'],
+              click: function () {
+
+                GIT.mergeTool(selectedRepository.path, function (err) {
+
+                  if (err) {
+                    alert(err);
+                  } else {
+                    this.refreshRepositoryChanges();
+                  }
+                }.bind(this));
+              }.bind(this)
             }));
             menu.append(new MenuItem({
               label: MSGS['Stage file'],
