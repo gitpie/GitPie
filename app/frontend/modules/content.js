@@ -359,7 +359,7 @@
           menu.append(new MenuItem({
             label: MSGS['Show in folder'],
             click: function () {
-              this.openItemInFolder(repository.path);
+              this.openItemInFolder( path.join(repository.path, '.git') );
             }.bind(this)
           }));
 
