@@ -1,0 +1,50 @@
+<section class="page" ng-show="mergeCtrl.showDialog">
+  <div class="page-overlay" ng-click="mergeCtrl.hideDialog()"></div>
+  <div class="page-modal">
+    <h1><span class="octicon octicon-git-merge"></span> Merge changes</h1>
+
+    <form class="merge-modal">
+      <section class="compare-box">
+        <strong><span class="octicon octicon-git-branch"></span> {{ mergeCtrl.currentBranch }}</strong>
+        <span class="padding-side">...</span>
+
+        <select ng-change="mergeCtrl.getBranchesDiff()" ng-model="mergeCtrl.branchCompare">
+          <option ng-repeat="branch in mergeCtrl.remoteBranches" value="origin/{{branch}}">{{branch}}</option>
+          <option ng-repeat="branch in mergeCtrl.localBranches" value="{{branch}}">{{branch}}</option>
+        </select>
+        <span class="octicon octicon-git-compare"></span>
+      </section>
+
+      <section style="text-align: center; padding: 20px 0" ng-show="mergeCtrl.showIsUpToDateMsg">
+        <strong>{{ MSGS['The things are the same near here'] }}</strong>
+        <p>
+          <strong>{{ mergeCtrl.currentBranch }}</strong> {{ MSGS['is up to date  with all commits from'] }} <strong>{{ mergeCtrl.branchCompare.replace('origin/', '') }}</strong>. {{ MSGS['Try choose another branch to compare'] }}.
+        </p>
+      </section>
+
+      <section class="diff-box">
+        <ul>
+          <li ng-repeat="file in mergeCtrl.diffInformation.files">
+            <span class="octicon octicon-file-code" ng-hide="file.isBinary"></span>
+            <span class="octicon octicon-file-binary" ng-show="file.isBinary"></span>
+            <span title="{{ file.name.length > 50 ? file.name : '' }}">
+              {{ file.name.length > 50 ? '...' : ''}}{{ file.name | limitTo: - 50 }}
+            </span>
+
+            <span class="label-deletions" ng-show="file.deletions">
+              <span class="octicon octicon-diff-removed"></span> {{ file.deletions }}
+            </span>
+            <span class="label-additions" ng-show="file.additions">
+              <span class="octicon octicon-diff-added"></span> {{ file.additions }}
+            </span>
+            <span ng-show="file.isBinary" class="octicon octicon-file-binary label-binary" title="{{ MSGS.BINARY }}"></span>
+          </li>
+        </ul>
+      </section>
+      <section class="shortstat" ng-show="mergeCtrl.diffInformation.shortstat">{{ mergeCtrl.diffInformation.shortstat }}</section>
+
+      <footer><input id="merge-button" type="submit" class="featured" disabled value="{{ MSGS.MERGE }}"
+          ng-click="mergeCtrl.mergeBranches()"/><button type="button" ng-click="mergeCtrl.hideDialog()">{{ MSGS.CANCEL }}</button></footer>
+    </form>
+  </div>
+</section>

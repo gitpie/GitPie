@@ -8,6 +8,8 @@
     "GIT": true,
     "updater": true,
     "WIN": true,
-    "applyScope": true
+    "applyScope": true,
+    "GPNotification": true,
+    "MSGS": true
   }
 }

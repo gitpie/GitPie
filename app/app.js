@@ -47,7 +47,7 @@ try {
 
 /* AngularJS app init */
 (function () {
-  var app = angular.module('gitpie', ['components', 'attributes', 'header', 'content', 'settings']);
+  var app = angular.module('gitpie', ['components', 'attributes', 'header', 'content', 'settings', 'dialogs']);
 
   // Trust as HTML Global filter
   app.filter('trustAsHtml', function($sce) {
@@ -102,34 +102,9 @@ try {
     repositories.bitbucket = repositories.bitbucket || [];
     repositories.others = repositories.others || [];
 
-    if (repositories.github.length > 0 || repositories.bitbucket.length > 0 || repositories.others.length > 0) {
-      repositories.isEmpty = false;
-    } else {
-      repositories.isEmpty = true;
-    }
-
     // Set the application messages globally
     $rootScope.MSGS = MSGS;
     $rootScope.showApp = false;
-
-    /* Verify if there's a available update */
-    updater.on('availableUpdate', function (remotePackJson) {
-      console.log('[INFO] There is a available update. New version '.concat(remotePackJson.version));
-
-      updater.downloadFiles();
-    });
-
-    updater.on('downloadingfiles', function () {
-      console.log('[INFO] Downloading files...');
-    });
-
-    updater.on('error', function (err) {
-      console.error('[ERROR] Error updating GitPie. Error: ', err);
-
-      alert('Error updating GitPie. Error: ' + err.message);
-    });
-
-    updater.checkAvailableUpdate();
 
     $rootScope.showRepositoryMenu = true;
 
@@ -209,8 +184,6 @@ try {
                   repository = repositoryExists;
                 }
 
-                repositories.isEmpty = false;
-
                 if (callback && typeof callback == 'function') {
                   callback.call(this, repository);
                 }
@@ -245,8 +218,6 @@ try {
             repository = repositoryExists;
           }
 
-          repositories.isEmpty = false;
-
           return repository;
         }
       },
@@ -268,6 +239,15 @@ try {
         repositoriesStr = JSON.stringify(storagedRepositories);
 
         return removedRepository[0].selected;
+      },
+
+      isRepoListEmpty: function () {
+        
+        if (repositories.github.length > 0 || repositories.bitbucket.length > 0 || repositories.others.length > 0) {
+          return false;
+        }
+
+        return true;
       },
 
       repositories: repositories

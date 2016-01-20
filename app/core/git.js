@@ -1,3 +1,5 @@
+'use strict';
+
 var
   // nodejs child_process object
   cp = require('child_process'),
@@ -8,15 +10,11 @@ var
   // The executor of system process
   execSync = cp.execSync,
 
-  // Native event object
-  events = require('events'),
-
-  // Native node util class
-  util = require('util'),
-
   ENV = process.env,
 
-  wos = require('node-wos');
+  wos = require('node-wos'),
+
+  GitUrlParse = require('git-url-parse');
 
 ENV.LANG = 'en_US';
 
@@ -42,8 +40,6 @@ function invokeCallback(callback, args) {
   }
 }
 
-util.inherits(Git, events.EventEmitter);
-
 /**
  * @method getCurrentBranch - Return current branch of a git repository
  *
@@ -52,31 +48,46 @@ util.inherits(Git, events.EventEmitter);
  */
 Git.prototype.getCurrentBranch = function (path, callback) {
 
-  exec('git branch -r && git symbolic-ref --short HEAD', { cwd: path, env: ENV }, function (error, stdout, stderr) {
+  exec('git branch -r && git branch', { cwd: path, env: ENV }, function (error, stdout, stderr) {
     var err = null,
-      localBranchs = stdout.split('\n'),
+      lines = stdout.split('\n'),
       currentBranch,
-      remoteBranchs = [];
+      localBranches = [],
+      remoteBranches = [],
+      branchesDictionary = {};
 
     if (error !== null) {
       err = error;
     } else {
 
-      for (var i = 0; i < (localBranchs.length - 2); i++) {
+      for (let i = 0; i < lines.length; i++) {
+        let isRemote = lines[i].indexOf('origin/') > -1;
+        let isHEAD = lines[i].indexOf('HEAD ->') > -1;
+        let existsInAnyList = branchesDictionary[ (lines[i].trim()) ];
 
-        if (localBranchs[i].indexOf('HEAD') == -1) {
-          localBranchs[i] = localBranchs[i].replace('origin/', '');
+        if (!existsInAnyList && !isHEAD && lines[i]) {
 
-          if (localBranchs[i]) {
-            remoteBranchs.push(localBranchs[i]);
+          if (isRemote) {
+            lines[i] = lines[i].replace('origin/', '').trim();
+            remoteBranches.push(lines[i]);
+          } else {
+
+            if (lines[i].indexOf('*') > -1) {
+              lines[i] = lines[i].replace('*', '').trim();
+
+              currentBranch = lines[i];
+              continue;
+            }
+
+            localBranches.push(lines[i].trim());
           }
+
+          branchesDictionary[ lines[i].trim() ] = lines[i].trim();
         }
       }
-
-      currentBranch = localBranchs[localBranchs.length - 2];
     }
 
-    invokeCallback(callback, [ err, currentBranch, remoteBranchs ]);
+    invokeCallback(callback, [ err, currentBranch, remoteBranches, localBranches ]);
   }.bind(this));
 };
 
@@ -165,13 +176,23 @@ Git.prototype.getStatus = function (path, callback) {
     });
 
     for (var i = 1; i < lines.length; i++) {
+      let staged = false,
+        referenceChar;
 
-      switch (lines[i].trim()[0]) {
+      if (lines[i][0] != ' ' && lines[i][0] != '?') {
+        referenceChar = lines[i][0];
+        staged = true;
+      } else {
+        referenceChar = lines[i][1];
+      }
+
+      switch (referenceChar) {
         case 'R':
           files.push({
             type: 'RENAMED',
             displayPath: lines[i].replace('R', '').replace(/"/g, '').trim(),
-            path: lines[i].replace('R', '').replace(/"/g, '').split('->')[1].trim()
+            path: lines[i].replace('R', '').replace(/"/g, '').split('->')[1].trim(),
+            staged: staged
           });
           break;
 
@@ -179,7 +200,8 @@ Git.prototype.getStatus = function (path, callback) {
           files.push({
             type: 'MODIFIED',
             displayPath: lines[i].replace('M', '').replace(/"/g, '').trim(),
-            path: lines[i].replace('M', '').replace(/"/g, '').trim()
+            path: lines[i].replace('M', '').replace(/"/g, '').trim(),
+            staged: staged
           });
           break;
 
@@ -187,7 +209,8 @@ Git.prototype.getStatus = function (path, callback) {
             files.push({
               type: 'NEW', //UNTRACKED
               displayPath: lines[i].replace('??', '').replace(/"/g, '').trim(),
-              path: lines[i].replace('??', '').replace(/"/g, '').trim()
+              path: lines[i].replace('??', '').replace(/"/g, '').trim(),
+              staged: staged
             });
             break;
 
@@ -195,7 +218,8 @@ Git.prototype.getStatus = function (path, callback) {
             files.push({
               type: 'ADDED',
               displayPath: lines[i].replace('A', '').replace(/"/g, '').trim(),
-              path: lines[i].replace('A', '').replace(/"/g, '').trim()
+              path: lines[i].replace('A', '').replace(/"/g, '').trim(),
+              staged: staged
             });
             break;
 
@@ -203,7 +227,8 @@ Git.prototype.getStatus = function (path, callback) {
             files.push({
               type: 'DELETED',
               displayPath: lines[i].replace('D', '').replace(/"/g, '').trim(),
-              path: lines[i].replace('D', '').replace(/"/g, '').trim()
+              path: lines[i].replace('D', '').replace(/"/g, '').trim(),
+              staged: staged
             });
             break;
 
@@ -211,7 +236,8 @@ Git.prototype.getStatus = function (path, callback) {
             files.push({
               type: 'UNMERGED',
               displayPath: lines[i].replace('UU', '').replace(/"/g, '').trim(),
-              path: lines[i].replace('UU', '').replace(/"/g, '').trim()
+              path: lines[i].replace('UU', '').replace(/"/g, '').trim(),
+              // staged: staged TODO: Improve indicators to UNMERGED files
             });
             break;
       }
@@ -302,34 +328,54 @@ Git.prototype.getFileDiff = function (opts, callback) {
 };
 
 Git.prototype.sync = function (opts, callback) {
+  opts = opts || {};
 
-  if (opts.setUpstream) {
+  this.listRemotes(opts.path, function (err, repositoryRemotes) {
+    var gitFetchURL = GitUrlParse(repositoryRemotes.origin.fetch);
+    var gitPushURL = GitUrlParse(repositoryRemotes.origin.push);
+    var fetchOrigin = 'origin';
+    var pushOrigin = 'origin';
 
-    exec('git push -u origin '.concat(opts.branch), { cwd: opts.path,  env: ENV}, function (error) {
+    if (gitFetchURL.protocol == 'https' && opts.httpsConfigs) {
+      fetchOrigin = 'https://' + opts.httpsConfigs.username + ':' + opts.httpsConfigs.password + '@' + gitFetchURL.source + gitFetchURL.pathname;
+    }
 
-      invokeCallback(callback, [ error ]);
-    });
+    if (gitPushURL.protocol == 'https' && opts.httpsConfigs) {
+      pushOrigin = 'https://' + opts.httpsConfigs.username + ':' + opts.httpsConfigs.password + '@' + gitPushURL.source + gitPushURL.pathname;
+    }
 
-  } else {
+    if (opts.setUpstream) {
 
-    exec('git pull', { cwd: opts.path,  env: ENV}, function (error, stdout, stderr) {
-
-      if (error) {
-
-        invokeCallback(callback, [ error ]);
-      } else if (opts.push) {
-
-        exec('git push origin '.concat(opts.branch), { cwd: opts.path,  env: ENV}, function (error) {
-
+      if (gitPushURL.protocol == 'https' && !opts.httpsConfigs) {
+        invokeCallback(opts.noHTTPAuthcallback, [gitFetchURL, gitPushURL]);
+      } else {
+        exec('git push -u '.concat(pushOrigin).concat(' ').concat(opts.branch), { cwd: opts.path,  env: ENV}, function (error) {
           invokeCallback(callback, [ error ]);
         });
-
-      } else {
-
-        invokeCallback(callback, [ error ]);
       }
-    });
-  }
+    } else {
+
+      exec('git pull '.concat(fetchOrigin), { cwd: opts.path,  env: ENV}, function (error, stdout, stderr) {
+
+        if (error) {
+
+          invokeCallback(callback, [ error ]);
+        } else if (opts.push) {
+
+          if (gitPushURL.protocol == 'https' && !opts.httpsConfigs) {
+            invokeCallback(opts.noHTTPAuthcallback, [gitFetchURL, gitPushURL]);
+          } else {
+            exec('git push '.concat(pushOrigin).concat(' ').concat(opts.branch), { cwd: opts.path,  env: ENV}, function (error) {
+              invokeCallback(callback, [ error ]);
+            });
+          }
+        } else {
+
+          invokeCallback(callback, [ error ]);
+        }
+      });
+    }
+  });
 };
 
 Git.prototype.add = function (path, opts) {
@@ -760,30 +806,57 @@ Git.prototype.getLocalConfigs = function (path, callback) {
 };
 
 Git.prototype.alterGitConfig = function (path, opts) {
-  var command = 'git config ',
+  var command,
     execOpts = {
       env: ENV
+    },
+    concatConfig = function (name, value) {
+
+      if (value) {
+
+        if (command) {
+          command = command.concat(' && ');
+        } else {
+          command = '';
+        }
+
+        command = command.concat('git config ');
+
+        if (opts.global) {
+          command = command.concat('--global ');
+        }
+
+        command = command.concat(name).concat(' ').concat(value);
+      }
     };
 
   opts = opts || {};
 
-  if (opts.global) {
-    command = command.concat('--global ');
-  } else {
+  concatConfig('user.name', `"${opts.username}"`);
+  concatConfig('user.email', `"${opts.email}"`);
+
+  if (opts.mergeTool) {
+    concatConfig('merge.tool', opts.mergeTool);
+
+    if (wos.isWindows()) {
+      concatConfig(`mergetool.${opts.mergeTool}.cmd`, `'${opts.mergeTool}.exe $PWD/$LOCAL $PDW/$MERGED $PWD/$REMOTE'`);
+      concatConfig(`mergetool.${opts.mergeTool}.trustExitCode`, 'true');
+    } else {
+      concatConfig(`mergetool.${opts.mergeTool}.cmd`, `'${opts.mergeTool} "$LOCAL" "$MERGED" "$REMOTE"'`);
+      concatConfig(`mergetool.${opts.mergeTool}.trustExitCode`, 'true');
+    }
+  }
+
+  if (!opts.global) {
     execOpts.cwd = path;
   }
 
-  command = command.concat('user.name "').concat(opts.username).concat('" && git config ');
+  if (command) {
 
-  if (opts.global) {
-    command = command.concat('--global ');
+    exec(command, execOpts, function (error) {
+      invokeCallback(opts.callback, [  ]);
+    });
   }
-
-  command = command.concat('user.email ').concat(opts.email)
-
-  exec(command, execOpts, function (error) {
-    invokeCallback(opts.callback, [ error ]);
-  });
 };
 
 Git.prototype.useOurs = function (path, opts) {
@@ -799,6 +872,90 @@ Git.prototype.useTheirs = function (path, opts) {
 
   exec('git checkout --theirs '.concat(opts.fileName), {cwd: path, env: ENV}, function (error) {
     invokeCallback(opts.callback, [ error ]);
+  });
+};
+
+Git.prototype.deleteBranch = function (path, opts) {
+  opts = opts || {};
+
+  exec('git branch -D '.concat(opts.branchName), {cwd: path, env: ENV}, function (error) {
+    invokeCallback(opts.callback, [ error ]);
+  });
+};
+
+Git.prototype.geDiffMerge = function (path, opts) {
+  opts = opts || {};
+
+  exec('git diff '.concat(opts.branchBase).concat('...').concat(opts.branchCompare).concat(' --numstat --shortstat'), {cwd: path, env: ENV}, function (error, stdout) {
+
+    if (error) {
+      invokeCallback(opts.callback, [ error ]);
+    } else {
+      let diffInformation = {
+        shortstat: null,
+        files: []
+      };
+      let lines = stdout.split('\n');
+
+      for (let i = 0; i < (lines.length - 2); i++) {
+
+        if (lines[i]) {
+          let props = lines[i].split('\t');
+
+          diffInformation.files.push({
+            name: props[2],
+            additions: parseInt(props[0]),
+            deletions: parseInt(props[1]),
+            isBinary: (props[0] == '-' || props[1] == '-') ? true : false
+          });
+        }
+      }
+
+      diffInformation.shortstat = lines[ (lines.length - 2) ];
+
+      invokeCallback(opts.callback, [ error, diffInformation ]);
+    }
+  });
+};
+
+Git.prototype.merge = function (path, opts) {
+  opts = opts || {};
+
+  exec('git merge '.concat(opts.branchCompare), {cwd: path, env: ENV}, function (error, stdout, stderr) {
+    let isConflituosMerge = false;
+
+    if (error && stdout.toString().indexOf('Automatic merge failed') > -1) {
+      isConflituosMerge = true;
+    }
+
+    invokeCallback(opts.callback, [ error, stdout, isConflituosMerge ]);
+  });
+};
+
+Git.prototype.mergeAbort = function (path, callback) {
+
+  exec('git merge --abort', {cwd: path, env: ENV}, function (error) {
+    invokeCallback(callback, [ error ]);
+  });
+};
+
+Git.prototype.isMerging = function (path) {
+  let fs = require('fs');
+  let pathModule = require('path');
+
+  try {
+    let statRepository = fs.statSync( pathModule.join(path, '.git', 'MERGE_HEAD') );
+
+    return statRepository.isFile();
+  } catch (err) {
+    return false;
+  }
+};
+
+Git.prototype.mergeTool = function (path, callback) {
+
+  exec('git mergetool -y', {cwd: path, env: ENV}, function (error) {
+    invokeCallback(callback, [ error ]);
   });
 };
 

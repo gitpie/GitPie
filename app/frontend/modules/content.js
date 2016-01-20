@@ -24,10 +24,6 @@
           Menu = remote.require('menu'),
           MenuItem = remote.require('menu-item');
 
-        this.updateNotify = {
-          show: false
-        };
-
         this.loadingHistory = false;
 
         this.loadingChanges = false;
@@ -352,11 +348,18 @@
               this.removeRepository(repository.type, index);
             }.bind(this)
           }));
+          menu.append(new MenuItem({
+            label: MSGS['Move to Trash'],
+            click : function () {
+              shell.moveItemToTrash(repository.path);
+              this.removeRepository(repository.type, index);
+            }.bind(this)
+          }));
           menu.append(new MenuItem({ type: 'separator' }));
           menu.append(new MenuItem({
             label: MSGS['Show in folder'],
             click: function () {
-              this.openItemInFolder(repository.path);
+              this.openItemInFolder( path.join(repository.path, '.git') );
             }.bind(this)
           }));
 
@@ -372,6 +375,11 @@
               this.openItemInFolder(path.join(selectedRepository.path, history.name.trim()));
             }.bind(this)
           }));
+          menu.append(new MenuItem({ type: 'separator' }));
+          menu.append(new MenuItem({
+            label: MSGS['Copy selection'],
+            role: 'copy'
+          }));
 
           menu.popup(event.x, event.y);
         };
@@ -381,7 +389,7 @@
             dir = change.path.trim(),
             menu = new Menu();
 
-          if (change.type == 'ADDED') {
+          if (change.type == 'ADDED' || change.staged) {
 
             menu.append(new MenuItem({
               label: MSGS['Unstage file'],
@@ -390,7 +398,7 @@
               }.bind(this)
             }));
           } else if (change.type == 'UNMERGED') {
-            menu.append(new MenuItem({ type: 'separator' }));
+
             menu.append(new MenuItem({
               label: MSGS['Use ours'],
               click : function () {
@@ -422,7 +430,43 @@
               }.bind(this)
             }));
             menu.append(new MenuItem({
-              label: MSGS['Open merge tool']
+              label: MSGS['Open merge tool'],
+              click: function () {
+                let settingCtrl = $scope.settingsCtrl;
+
+                if (settingCtrl.globalGitConfigs['merge.tool'] || settingCtrl.localGitConfigs['merge.tool']) {
+
+                  GIT.mergeTool(selectedRepository.path, function (err) {
+
+                    if (err) {
+                      alert(err);
+                    } else {
+                      this.refreshRepositoryChanges();
+                    }
+                  }.bind(this));
+                } else {
+                  const remote = require('remote');
+                  const dialog = remote.require('dialog');
+                  const browserWindow = remote.require('browser-window');
+
+                  let currentWindow = browserWindow.getFocusedWindow();
+
+                  dialog.showMessageBox(currentWindow,
+                    {
+                      type: 'info',
+                      title: `${MSGS['Merge Tool not defined']}`,
+                      message: `${MSGS['No Merge Tool is globaly or localy defined. You can easily set one by the Setting menu']}`,
+                      buttons: [`${MSGS['Open Setting menu']}`, `${MSGS['Maybe later']}`]
+                    },
+                    function (response) {
+
+                      if (response === 0) {
+                        $scope.showSettingsPage();
+                      }
+                    }
+                  );
+                }
+              }.bind(this)
             }));
             menu.append(new MenuItem({
               label: MSGS['Stage file'],
@@ -461,6 +505,11 @@
             click: function () {
               this.openItemInFolder(path.join(selectedRepository.path, dir));
             }.bind(this)
+          }));
+          menu.append(new MenuItem({ type: 'separator' }));
+          menu.append(new MenuItem({
+            label: MSGS['Copy selection'],
+            role: 'copy'
           }));
 
           menu.popup(event.x, event.y);
@@ -603,9 +652,9 @@
 
         this.discartAllSelected = function (fileList) {
 
-          for (var i = 0; i < fileList.length; i++) {
+          for (let i = 0; i < fileList.length; i++) {
 
-            if (fileList[i].checked) {
+            if (fileList[i].checked && !fileList[i].staged) {
               this.discartChanges(fileList[i].path, i, (fileList[i].type == 'NEW'), true);
 
               if (this.commitChanges.length === 0) {
@@ -636,6 +685,9 @@
                     this.showFileDiff(this.commitChanges[i], true);
                   }
 
+                  this.commitChanges[i].staged = files[i].staged;
+                  this.commitChanges[i].type = files[i].type;
+
                   newChangesList.push(this.commitChanges[i]);
 
                 } else {
@@ -665,6 +717,10 @@
 
         this.showStashTab = function () {
           CommomService.changesTabPanel.showPanel(2);
+        };
+
+        this.isRepositoryListEmpty = function () {
+          return CommomService.isRepoListEmpty();
         };
 
         // Listener to "showStashDiff" event fired on click View file on a Stash
@@ -702,28 +758,13 @@
           applyScope($scope);
         }.bind(this));
 
-        /* Show notification if a update was installed */
-
-        updater.on('readytoinstall', function () {
-          console.log('[INFO] A update is ready to be installed');
-
-          this.updateNotify.show = true;
-          applyScope($scope);
-        }.bind(this));
-
-        this.performUpdate = function () {
-          // updater.performUpdate(GUI, WIN);
-        };
-
-        var me = this;
-
         /* Update the changed files ever time the application is focused */
         WIN.on('focus', function () {
 
           if (selectedRepository.path) {
-            me.refreshRepositoryChanges();
+            this.refreshRepositoryChanges();
           }
-        });
+        }.bind(this));
       },
 
       controllerAs: 'appCtrl'

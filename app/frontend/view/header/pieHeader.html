@@ -12,7 +12,7 @@
                 <section class="content">
                   <input class="inline-filed" type="text" name="repository" ng-model="headerCtrl.repositoryPath"
                     placeholder="{{ MSGS['Where are your stuffs'] }}?" />
-                  <button type="button" ng-click="headerCtrl.showOpenDialog('repositoryPath')" title="{{ MSGS['Browse directory'] }}">
+                  <button class="no-shadow" type="button" ng-click="headerCtrl.showOpenDialog('repositoryPath')" title="{{ MSGS['Browse directory'] }}">
                     <span class="octicon octicon-file-symlink-directory"></span>
                   </button>
                 </section>
@@ -25,7 +25,7 @@
                     placeholder="{{ MSGS['Clone URL'] }}" />
                   <input type="text" class="inline-filed" ng-model="headerCtrl.repositoryDestiny"
                     placeholder="{{ MSGS['Destination Folder'] }}" />
-                    <button type="button" ng-click="headerCtrl.showOpenDialog('repositoryDestiny')" title="{{ MSGS['Browse directory'] }}">
+                    <button class="no-shadow" type="button" ng-click="headerCtrl.showOpenDialog('repositoryDestiny')" title="{{ MSGS['Browse directory'] }}">
                       <span class="octicon octicon-file-symlink-directory"></span>
                     </button>
                 </section>
@@ -46,7 +46,7 @@
 
                   <input type="text" class="inline-filed" ng-model="headerCtrl.repositoryHome"
                     placeholder="{{ MSGS['Folder'] }}" />
-                  <button type="button" ng-click="headerCtrl.showOpenDialog('repositoryHome')" title="{{ MSGS['Browse directory'] }}">
+                  <button class="no-shadow" type="button" ng-click="headerCtrl.showOpenDialog('repositoryHome')" title="{{ MSGS['Browse directory'] }}">
                     <span class="octicon octicon-file-symlink-directory"></span>
                   </button>
 
@@ -59,8 +59,10 @@
             </tabs>
 
         </div>
-        <li title="{{ MSGS['Hide menu'] }}" ng-show="showRepositoryMenu" ng-click="showRepositoryMenu = false"><i class="fa fa-toggle-on"></i></li>
-        <li title="{{ MSGS['Show menu'] }}" ng-hide="showRepositoryMenu" ng-click="showRepositoryMenu = true"><i class="fa fa-toggle-off"></i></li>
+        <span ng-hide="headerCtrl.isRepositoryListEmpty()">
+          <li title="{{ MSGS['Hide menu'] }}" ng-show="showRepositoryMenu" ng-click="headerCtrl.toggleRepositoryMenu()"><i class="fa fa-toggle-on"></i></li>
+          <li title="{{ MSGS['Show menu'] }}" ng-hide="showRepositoryMenu" ng-click="headerCtrl.toggleRepositoryMenu()"><i class="fa fa-toggle-off"></i></li>
+        </span>
       </ul>
     </nav>
 
@@ -70,7 +72,9 @@
 
     <nav>
       <ul>
-        <li ng-show="headerCtrl.currentBranch" ng-click="headerCtrl.toggleMenu(2)"><span class="octicon octicon-git-branch"></span> {{ headerCtrl.currentBranch }}</li>
+        <li ng-show="headerCtrl.currentBranch" ng-click="headerCtrl.toggleMenu(2)"><span class="octicon octicon-git-branch"></span> {{ headerCtrl.currentBranch }}
+          <span class="mergin-indicator" ng-show="headerCtrl.isRepositoryMerging()"><span class="octicon octicon-git-compare"></span> {{ MSGS.MERGING }}</span>
+        </li>
         <div class="menu" style="min-width: 300px" ng-show="headerCtrl.showBranchMenu">
           <tabs>
             <pane pane-title="Branches" icon="octicon octicon-git-branch">
@@ -78,10 +82,23 @@
                 placeholder="{{ MSGS['Select or create a new branch'] }}" ng-keypress="headerCtrl.checkoutBranch($event, newBranch)" />
 
               <span class="label" ng-show="newBranch.length > 0 && !headerCtrl.branchExists(newBranch)">
-                {{ MSGS['Create new branch'] }} <strong>"{{ headerCtrl.treatBranch(newBranch) }}"</strong></span>
+                <span class="octicon octicon-git-branch"></span>  {{ MSGS['Create new branch'] }} <strong>"{{ headerCtrl.treatBranch(newBranch) }}"</strong></span>
+
+              <span class="label" ng-show="newBranch.length > 0 && headerCtrl.branchExists(newBranch)">
+                <span class="octicon octicon-sync"></span>  {{ MSGS['Switch to branch'] }} <strong>"{{ headerCtrl.treatBranch(newBranch) }}"</strong></span>
 
               <ul style="display: block; overflow: auto; max-height: 400px;">
-                <li style="display:block" ng-repeat="branch in headerCtrl.remoteBranchs | filter:headerCtrl.treatBranch(newBranch) || ''" ng-click="headerCtrl.switchBranch(branch)"><span class="octicon octicon-git-branch"></span> {{ branch }}</li>
+                <li style="display:block" ng-repeat="branch in headerCtrl.remoteBranchs | filter:headerCtrl.treatBranch(newBranch) || ''"
+                  ng-click="headerCtrl.switchBranch(branch)"><span class="octicon octicon-git-branch"></span> {{ branch }}</li>
+
+                <span ng-show="headerCtrl.localBranches.length > 0">
+                  <div class="label">{{ MSGS['Local branches'] }}</div>
+
+                  <li style="opacity: 0.5" title="{{ MSGS['This branch only exits locally'] }}" ng-repeat="branch in headerCtrl.localBranches | filter:headerCtrl.treatBranch(newBranch) || ''">
+                    <span ng-click="headerCtrl.switchBranch(branch)"><span class="octicon octicon-git-branch"></span> {{ branch}}</span>
+                    <span class="octicon octicon-trashcan" ng-click="headerCtrl.deleteBranch(branch)" style="float: right" title="{{ MSGS['Delete this branch'] }}"></span>
+                  </li>
+                </span>
               </ul>
 
               <span class="label center" ng-show="headerCtrl.remoteBranchs.length == 0">{{ MSGS['No branchs here'] }}</span>
@@ -107,14 +124,19 @@
 
       <nav>
         <ul>
-          <li ng-show="headerCtrl.showResetButton()"
+          <li ng-show="headerCtrl.isRepositoryMerging() && headerCtrl.currentBranch" title="{{ MSGS['Abort Merge'] }}"
+            class="abort-merge" ng-click="headerCtrl.abortMerge()">
+            <i class="fa fa-ban"></i><span class="octicon octicon-git-merge"></span>
+          </li>
+          <li ng-show="headerCtrl.isMergeButtonVisible()" title="{{ MSGS['Merge branches'] }}" ng-click="showMergeModalDialog()"><span class="octicon octicon-git-merge"></span></li>
+          <li ng-show="headerCtrl.showResetButton() && !headerCtrl.isRepositoryMerging()"
             ng-click="headerCtrl.resetBranchToCommit()"
             title="{{ MSGS['Reset branch {branch} to selected commit'].replace('{branch}', headerCtrl.currentBranch) }}">
             <span class="octicon octicon-mail-reply"></span>
           </li>
 
           <li title="{{ MSGS['Stash {number} changes'].replace('{number}', headerCtrl.stashableFiles.length) }}"
-              ng-show="headerCtrl.stashableFiles.length > 0" ng-click="headerCtrl.stashChanges()">
+              ng-show="headerCtrl.stashableFiles.length > 0 && !headerCtrl.isRepositoryMerging()" ng-click="headerCtrl.stashChanges()">
             <span class="octicon octicon-package"></span>
           </li>
 
@@ -176,24 +198,3 @@
   </section>
 
 </header>
-
-<section class="notify-dialog" style="margin-bottom: {{ headerCtrl.cloneNotify.show ? '' : '-100px' }}">
-  <section class="icon">
-    <loading-icon></loading-icon>
-  </section>
-
-  <section class="content">
-    {{ MSGS['CLONING REPOSITORY FROM'] }} <strong>{{ headerCtrl.cloneNotify.cloneURL }}</strong> {{ MSGS.INTO }}
-    <strong>{{ headerCtrl.cloneNotify.destinyFolder }}</strong>
-  </section>
-</section>
-
-<section class="notify-dialog" style="margin-bottom: {{ headerCtrl.createNotify.show ? '' : '-100px' }}">
-  <section class="icon">
-    <loading-icon></loading-icon>
-  </section>
-
-  <section class="content">
-    {{ MSGS['CREATING REPOSITORY IN'] }} <strong>{{ headerCtrl.createNotify.repositoryHome }}</strong>
-  </section>
-</section>

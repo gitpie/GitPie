@@ -17,7 +17,8 @@
         this.selectedRepository = null;
         this.globalGitConfigs = {
           'user.name': '',
-          'user.email': ''
+          'user.email': '',
+          'merge.tool': ''
         };
 
         this.hideSettingsPage = function () {
@@ -55,14 +56,17 @@
         this.changeGitCofigs = function (global, event) {
           var username,
             email,
-            repositoryPath;
+            repositoryPath,
+            mergeTool;
 
           if (global) {
             username = this.globalGitConfigs['user.name'];
             email = this.globalGitConfigs['user.email'];
+            mergeTool = this.globalGitConfigs['merge.tool'];
           } else {
             username = this.localGitConfigs['user.name'];
             email = this.localGitConfigs['user.email'];
+            mergeTool = this.localGitConfigs['merge.tool'];
             repositoryPath = this.selectedRepository.path;
           }
 
@@ -72,15 +76,24 @@
             global: global,
             username: username,
             email: email,
+            mergeTool: mergeTool,
             callback: function (err) {
 
               if (err) {
                 alert(err);
+              } else {
+                new GPNotification(MSGS['THE GIT CONFIGURATIONS HAVE BEEN SUCCESSFULLY CHANGED'], { autoclose: true }).pop();
               }
 
               event.target.removeAttribute('disabled');
             }
           });
+        };
+
+        this.openMergeToolConfigHelp = function () {
+          const shell = require('shell');
+
+          shell.openExternal('https://gist.github.com/mapaiva/c77bd11de94014a9d865');
         };
 
         $scope.$on('repositorychanged', function (event, repository) {
@@ -108,7 +121,8 @@
             if (err) {
               this.localGitConfigs = {
                 'user.name': '',
-                'user.email': ''
+                'user.email': '',
+                'merge.tool': ''
               };
               alert(err.message);
             } else {

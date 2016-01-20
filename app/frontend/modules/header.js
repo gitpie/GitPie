@@ -1,12 +1,13 @@
 'use strict';
 
 (function () {
-  const GitUrlParse = require('git-url-parse'),
-    fs = require('fs'),
-    path = require('path'),
-    remote = require('remote'),
-    dialog = remote.require('dialog'),
-    browserWindow = remote.require('browser-window');
+  const GitUrlParse = require('git-url-parse');
+  const fs = require('fs');
+  const path = require('path');
+  const remote = require('remote');
+  const dialog = remote.require('dialog');
+  const browserWindow = remote.require('browser-window');
+  const globalShortcut = remote.globalShortcut;
 
   angular.module('header', [])
 
@@ -17,6 +18,16 @@
 
       controller: function ($scope, $element, CommomService) {
         var MSGS = $scope.MSGS;
+        let isMerging = false;
+
+        let updateIsMerging = function () {
+
+          if (GIT.isMerging(this.selectedRepository.path)) {
+            isMerging = true;
+          } else {
+            isMerging = false;
+          }
+        }.bind(this);
 
         // Verify if a branch is in remoteBranchs array
         this.isRemoteBranch = function (branch) {
@@ -33,6 +44,7 @@
 
         this.selectedRepository = null;
         this.remoteBranchs = [];
+        this.localBranches = [];
         this.tags = [];
         this.syncStatus = {};
         this.loading = false;
@@ -42,17 +54,6 @@
         this.showBranchMenu = false;
         this.showSettingsMenu = false;
         this.showStashMenu = false;
-
-        this.cloneNotify = {
-          show: false,
-          cloneURL: null,
-          destinyFolder: null
-        };
-
-        this.createNotify = {
-          show: false,
-          repositoryHome: null
-        };
 
         // Scope variables to bind te "add repository" fields
         this.repositoryPath = null;
@@ -106,9 +107,12 @@
             this.setStashableFiles(files);
           }.bind(this));
 
-          GIT.getCurrentBranch(repository.path, function (err, currentBranch, remoteBranchs) {
+          GIT.getCurrentBranch(repository.path, function (err, currentBranch, remoteBranches, localBranches) {
             this.currentBranch = currentBranch;
-            this.remoteBranchs = remoteBranchs;
+            this.remoteBranchs = remoteBranches;
+            this.localBranches = localBranches;
+
+            updateIsMerging();
 
             applyScope($scope);
           }.bind(this));
@@ -143,11 +147,17 @@
           this.hideAllMenu();
           this.loading = true;
 
+          let noti = new GPNotification(`${MSGS['Switching to branch']} ${branch}`, { showLoad: true });
+
+          noti.pop();
+
           GIT.switchBranch({
             path: this.selectedRepository.path,
             branch: branch,
             forceCreateIfNotExists: forceCreateIfNotExists
           }, function (err) {
+
+            noti.close();
 
             if (err) {
               alert(MSGS['Error switching branch. Error: '] + err);
@@ -167,26 +177,31 @@
           if (this.selectedRepository && !this.loading) {
             this.loading = true;
 
-            GIT.fetch(this.selectedRepository.path, function (err) {
-
-              // Ignored error for while to not block status for private repositories
-
-              GIT.sync({
-                path: this.selectedRepository.path,
-                branch: this.currentBranch,
-                setUpstream: !this.isRemoteBranch(this.currentBranch),
-                push: this.syncStatus.ahead
-              }, function (err) {
-
-                if (err) {
-                  alert(MSGS['Error syncronazing repository. \n Error: '] + err.message);
-                }
-
-                // Emit changedbranch event even on error case as a workaround to git push command fail
-                $scope.$broadcast('changedbranch', this.selectedRepository);
+            GIT.sync({
+              path: this.selectedRepository.path,
+              branch: this.currentBranch,
+              setUpstream: !this.isRemoteBranch(this.currentBranch),
+              push: this.syncStatus.ahead,
+              noHTTPAuthcallback : function (gitFetchURL, gitPushURL) {
                 this.loading = false;
                 applyScope($scope);
-              }.bind(this));
+
+                $scope.showPushModalDialog({
+                  remote: gitFetchURL.href,
+                  gitFetchURL: gitFetchURL,
+                  gitPushURL: gitPushURL
+                });
+              }.bind(this)
+            }, function (err) {
+
+              if (err) {
+                alert(MSGS['Error syncronazing repository. \n Error: '] + err.message);
+              } else {
+                $scope.$broadcast('changedbranch', this.selectedRepository);
+              }
+
+              this.loading = false;
+              applyScope($scope);
             }.bind(this));
           }
         };
@@ -216,14 +231,52 @@
         this.branchExists = function (branchName) {
           var treatedBranchName = this.treatBranch(branchName);
 
-          for (var i = 0; i < this.remoteBranchs.length; i++) {
+          if (treatedBranchName == this.currentBranch.trim()) {
+            return true;
+          }
+
+          for (let i = 0; i < this.remoteBranchs.length; i++) {
 
             if (this.remoteBranchs[i].trim() == treatedBranchName) {
               return true;
             }
           }
 
+          for (let i = 0; i < this.localBranches.length; i++) {
+
+            if (this.localBranches[i].trim() == treatedBranchName) {
+              return true;
+            }
+          }
+
           return false;
+        };
+
+        this.deleteBranch = function (branch) {
+          branch = branch.trim();
+
+          let currentWindow = browserWindow.getFocusedWindow();
+
+          dialog.showMessageBox(currentWindow, {
+            type: 'question', title: `${MSGS['Delete branch']} ${branch}`, message: `${MSGS['All the unmerged changes will be lost! Are you sure to delete the branch']} '${branch}'?`,
+            buttons: ['Yes', 'No']
+          }, function (response) {
+
+            if (response === 0) {
+
+              GIT.deleteBranch(this.selectedRepository.path, {
+                branchName: branch,
+                callback: function (err) {
+
+                  if (err) {
+                    alert(err);
+                  } else {
+                    $scope.$broadcast('changedbranch', this.selectedRepository);
+                  }
+                }.bind(this)
+              });
+            }
+          }.bind(this));
         };
 
         this.treatBranch = function (branchName) {
@@ -240,9 +293,13 @@
               destinyFolder = fs.lstatSync(this.repositoryDestiny);
 
               if (repositoryData.name) {
-                this.cloneNotify.show = true;
-                this.cloneNotify.cloneURL = this.cloneURL;
-                this.cloneNotify.destinyFolder = this.repositoryDestiny;
+                var cloneURL = this.cloneURL,
+                  cloneDirectory = this.repositoryDestiny,
+                  noti = new GPNotification(`${MSGS['CLONING REPOSITORY FROM']} <strong>${cloneURL}</strong> ${MSGS.INTO} <strong>${cloneDirectory}</strong>`, {
+                    showLoad: true
+                  });
+
+                noti.pop();
 
                 CommomService.hideHeaderMenu();
 
@@ -256,11 +313,14 @@
                       alert(err);
                     } else {
                       this.addRepository(path.join(this.repositoryDestiny, repositoryData.name));
+
+                      new GPNotification(`${repositoryData.name} ${MSGS.cloned} ${MSGS['with success']}`, {
+                        type: 'global',
+                        body: `${repositoryData.name} ${MSGS.cloned} ${MSGS.INTO.toLowerCase()} ${cloneDirectory}`
+                      }).pop();
                     }
 
-                    this.cloneNotify.show = false;
-                    this.cloneURL = null;
-                    this.repositoryDestiny = null;
+                    noti.close();
                     applyScope($scope);
                   }.bind(this)
                 });
@@ -309,8 +369,12 @@
 
             try {
               destinyFolder = fs.lstatSync(repositoryHome);
-              this.createNotify.repositoryHome = repositoryHome;
-              this.createNotify.show = true;
+
+              var noti = new GPNotification(`${MSGS['CREATING REPOSITORY IN']} <strong>${repositoryHome}</strong>`, {
+                showLoad: true
+              });
+
+              noti.pop();
 
               CommomService.hideHeaderMenu();
 
@@ -336,7 +400,7 @@
                     }
                   }
 
-                  this.createNotify.show = false;
+                  noti.close();
                   applyScope($scope);
                 }.bind(this)
               });
@@ -422,6 +486,8 @@
           if (this.selectedRepository) {
             this.setStashableFiles(unsyncChanges);
 
+            updateIsMerging();
+
             if (syncStatus && this.syncStatus.ahead != syncStatus.ahead) {
               this.syncStatus = syncStatus;
 
@@ -475,6 +541,94 @@
             }
           }.bind(this));
         };
+
+        this.toggleRepositoryMenu = function () {
+          $scope.showRepositoryMenu = !$scope.showRepositoryMenu;
+        };
+
+        this.isRepositoryListEmpty = function () {
+          return CommomService.isRepoListEmpty();
+        };
+
+        this.countBranches = function () {
+          let count = this.remoteBranchs.length + this.localBranches.length;
+
+          return count;
+        };
+
+        this.isMergeButtonVisible = function () {
+          return (this.countBranches() > 1) && !isMerging;
+        };
+
+        this.isRepositoryMerging = function () {
+          return isMerging;
+        };
+
+        this.abortMerge = function () {
+
+          GIT.mergeAbort(this.selectedRepository.path, function (err) {
+
+            if (err) {
+              alert(err);
+            } else {
+              $scope.$broadcast('changedbranch', this.selectedRepository);
+            }
+          }.bind(this));
+        };
+
+        // Register shortcuts
+        var registerShortcuts = function() {
+
+          // Hide repository menu
+          globalShortcut.register('ctrl+left', function() {
+            if ($scope.showRepositoryMenu) {
+              this.toggleRepositoryMenu();
+              applyScope($scope);
+            }
+          }.bind(this));
+
+          // Show repository menu
+          globalShortcut.register('ctrl+right', function() {
+            if (!$scope.showRepositoryMenu) {
+              this.toggleRepositoryMenu();
+              applyScope($scope);
+            }
+          }.bind(this));
+
+          // Open devTools for debug
+          globalShortcut.register('ctrl+shift+d', function() {
+            let Win = browserWindow.getFocusedWindow();
+
+            if (Win.isDevToolsOpened()) {
+              Win.closeDevTools();
+            } else {
+              Win.openDevTools();
+            }
+          });
+
+          // Open dialog to add a repository
+          globalShortcut.register('ctrl+shift+a', function() {
+            let currentWindow = browserWindow.getFocusedWindow();
+
+            dialog.showOpenDialog(currentWindow, { properties: [ 'openDirectory' ], title: MSGS['Add local git projects to GitPie'] }, function (filenames) {
+
+              if (filenames) {
+                this.addRepository(filenames[0]);
+              }
+            }.bind(this));
+          }.bind(this));
+
+        }.bind(this);
+
+        registerShortcuts();
+
+        WIN.on('blur', function () {
+          globalShortcut.unregisterAll();
+        });
+
+        WIN.on('focus', function () {
+          registerShortcuts();
+        });
       },
 
       controllerAs: 'headerCtrl'
