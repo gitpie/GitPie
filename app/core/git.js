@@ -886,7 +886,7 @@ Git.prototype.deleteBranch = function (path, opts) {
 Git.prototype.geDiffMerge = function (path, opts) {
   opts = opts || {};
 
-  exec('git diff '.concat(opts.branchCompare).concat(' --numstat --shortstat'), {cwd: path, env: ENV}, function (error, stdout) {
+  exec('git diff '.concat(opts.branchBase).concat('...').concat(opts.branchCompare).concat(' --numstat --shortstat'), {cwd: path, env: ENV}, function (error, stdout) {
 
     if (error) {
       invokeCallback(opts.callback, [ error ]);

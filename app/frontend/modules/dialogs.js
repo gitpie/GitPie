@@ -109,6 +109,7 @@ angular.module('dialogs', [])
 
           GIT.geDiffMerge(header.selectedRepository.path, {
             branchCompare: this.branchCompare,
+            branchBase: header.currentBranch,
             callback: function (err, diffInformation) {
               notification.close();
 
