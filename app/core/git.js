@@ -839,7 +839,7 @@ Git.prototype.alterGitConfig = function (path, opts) {
     concatConfig('merge.tool', opts.mergeTool);
 
     if (wos.isWindows()) {
-      concatConfig(`mergetool.${opts.mergeTool}.cmd`, `'${opts.mergeTool}.exe "$LOCAL" "$MERGED" "$REMOTE"'`);
+      concatConfig(`mergetool.${opts.mergeTool}.cmd`, `'${opts.mergeTool}.exe $PWD/$LOCAL $PDW/$MERGED $PWD/$REMOTE'`);
       concatConfig(`mergetool.${opts.mergeTool}.trustExitCode`, 'true');
     } else {
       concatConfig(`mergetool.${opts.mergeTool}.cmd`, `'${opts.mergeTool} "$LOCAL" "$MERGED" "$REMOTE"'`);
@@ -954,7 +954,7 @@ Git.prototype.isMerging = function (path) {
 
 Git.prototype.mergeTool = function (path, callback) {
 
-  exec('git mergetool', {cwd: path, env: ENV}, function (error) {
+  exec('git mergetool -y', {cwd: path, env: ENV}, function (error) {
     invokeCallback(callback, [ error ]);
   });
 };
