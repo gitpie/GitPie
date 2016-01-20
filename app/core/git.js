@@ -839,7 +839,8 @@ Git.prototype.alterGitConfig = function (path, opts) {
     concatConfig('merge.tool', opts.mergeTool);
 
     if (wos.isWindows()) {
-      // TODO
+      concatConfig(`mergetool.${opts.mergeTool}.cmd`, `'${opts.mergeTool}.exe "$LOCAL" "$MERGED" "$REMOTE"'`);
+      concatConfig(`mergetool.${opts.mergeTool}.trustExitCode`, 'true');
     } else {
       concatConfig(`mergetool.${opts.mergeTool}.cmd`, `'${opts.mergeTool} "$LOCAL" "$MERGED" "$REMOTE"'`);
       concatConfig(`mergetool.${opts.mergeTool}.trustExitCode`, 'true');
