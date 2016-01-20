@@ -22,7 +22,7 @@
 
         let updateIsMerging = function () {
 
-          if (this.countBranches() > 1 && !GIT.isMerging(this.selectedRepository.path)) {
+          if (GIT.isMerging(this.selectedRepository.path)) {
             isMerging = true;
           } else {
             isMerging = false;
@@ -557,6 +557,10 @@
         };
 
         this.isMergeButtonVisible = function () {
+          return (this.countBranches() > 1) && !isMerging;
+        };
+
+        this.isRepositoryMerging = function () {
           return isMerging;
         };
 
