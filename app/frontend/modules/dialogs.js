@@ -140,7 +140,7 @@ angular.module('dialogs', [])
         notification.pop();
 
         GIT.merge(header.selectedRepository.path, {
-          branchCompare: branchCompare,
+          branchCompare: this.branchCompare,
           callback: function (err, stdout, isConflituosMerge) {
             notification.close();
 
