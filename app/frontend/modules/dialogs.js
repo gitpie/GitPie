@@ -69,6 +69,7 @@ angular.module('dialogs', [])
     controller: function ($rootScope, $scope) {
 
       this.showDialog = false;
+      this.showIsUpToDateMsg = false;
       this.currentBranch = null;
       this.branchCompare = null;
       this.remoteBranches = [];
@@ -81,6 +82,7 @@ angular.module('dialogs', [])
 
       this.popDialog = function (pushConfigs) {
         this.showDialog = true;
+        this.showIsUpToDateMsg = false;
         this.branchCompare = null;
         this.diffInformation = {};
 
@@ -118,12 +120,19 @@ angular.module('dialogs', [])
               } else {
                 this.diffInformation = diffInformation;
 
-                mergeBtn.removeAttribute('disabled');
+                if (diffInformation.files.length > 0) {
+                  this.showIsUpToDateMsg = false;
+                  mergeBtn.removeAttribute('disabled');
+                } else {
+                  this.showIsUpToDateMsg = true;
+                }
 
                 applyScope($scope);
               }
             }.bind(this)
           });
+        } else {
+          this.showIsUpToDateMsg = true;
         }
       };
 

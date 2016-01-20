@@ -15,6 +15,13 @@
         <span class="octicon octicon-git-compare"></span>
       </section>
 
+      <section style="text-align: center; padding: 20px 0" ng-show="mergeCtrl.showIsUpToDateMsg">
+        <strong>{{ MSGS['The things are the same near here'] }}</strong>
+        <p>
+          <strong>{{ mergeCtrl.currentBranch }}</strong> {{ MSGS['is up to date  with all commits from'] }} <strong>{{ mergeCtrl.branchCompare.replace('origin/', '') }}</strong>. {{ MSGS['Try choose another branch to compare'] }}.
+        </p>
+      </section>
+
       <section class="diff-box">
         <ul>
           <li ng-repeat="file in mergeCtrl.diffInformation.files">
