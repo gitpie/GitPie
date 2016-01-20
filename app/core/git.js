@@ -826,15 +826,25 @@ Git.prototype.alterGitConfig = function (path, opts) {
           command = command.concat('--global ');
         }
 
-        command = command.concat(name).concat(' "').concat(value).concat('"');
+        command = command.concat(name).concat(' ').concat(value);
       }
     };
 
   opts = opts || {};
 
-  concatConfig('user.name', opts.username);
-  concatConfig('user.email', opts.email);
-  concatConfig('merge.tool', opts.mergeTool);
+  concatConfig('user.name', `"${opts.username}"`);
+  concatConfig('user.email', `"${opts.email}"`);
+
+  if (opts.mergeTool) {
+    concatConfig('merge.tool', opts.mergeTool);
+
+    if (wos.isWindows()) {
+      // TODO
+    } else {
+      concatConfig(`mergetool.${opts.mergeTool}.cmd`, `'${opts.mergeTool} "$LOCAL" "$MERGED" "$REMOTE"'`);
+      concatConfig(`mergetool.${opts.mergeTool}.trustExitCode`, 'true');
+    }
+  }
 
   if (!opts.global) {
     execOpts.cwd = path;
@@ -942,7 +952,7 @@ Git.prototype.isMerging = function (path) {
 };
 
 Git.prototype.mergeTool = function (path, callback) {
-  
+
   exec('git mergetool', {cwd: path, env: ENV}, function (error) {
     invokeCallback(callback, [ error ]);
   });
