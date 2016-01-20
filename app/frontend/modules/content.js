@@ -432,15 +432,40 @@
             menu.append(new MenuItem({
               label: MSGS['Open merge tool'],
               click: function () {
+                let settingCtrl = $scope.settingsCtrl;
 
-                GIT.mergeTool(selectedRepository.path, function (err) {
+                if (settingCtrl.globalGitConfigs['merge.tool'] || settingCtrl.localGitConfigs['merge.tool']) {
 
-                  if (err) {
-                    alert(err);
-                  } else {
-                    this.refreshRepositoryChanges();
-                  }
-                }.bind(this));
+                  GIT.mergeTool(selectedRepository.path, function (err) {
+
+                    if (err) {
+                      alert(err);
+                    } else {
+                      this.refreshRepositoryChanges();
+                    }
+                  }.bind(this));
+                } else {
+                  const remote = require('remote');
+                  const dialog = remote.require('dialog');
+                  const browserWindow = remote.require('browser-window');
+
+                  let currentWindow = browserWindow.getFocusedWindow();
+
+                  dialog.showMessageBox(currentWindow,
+                    {
+                      type: 'info',
+                      title: `${MSGS['Merge Tool not defined']}`,
+                      message: `${MSGS['No Merge Tool is globaly or localy defined. You can easily set one open the Setting menu']}`,
+                      buttons: [`${MSGS['Open Setting menu']}`, `${MSGS['Maybe later']}`]
+                    },
+                    function (response) {
+
+                      if (response === 0) {
+                        $scope.showSettingsPage();
+                      }
+                    }
+                  );
+                }
               }.bind(this)
             }));
             menu.append(new MenuItem({
