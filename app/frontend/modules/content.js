@@ -455,7 +455,7 @@
                     {
                       type: 'info',
                       title: `${MSGS['Merge Tool not defined']}`,
-                      message: `${MSGS['No Merge Tool is globaly or localy defined. You can easily set one open the Setting menu']}`,
+                      message: `${MSGS['No Merge Tool is globaly or localy defined. You can easily set one by the Setting menu']}`,
                       buttons: [`${MSGS['Open Setting menu']}`, `${MSGS['Maybe later']}`]
                     },
                     function (response) {
