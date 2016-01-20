@@ -174,8 +174,6 @@ angular.module('dialogs', [])
                 },
                 function (response) {
 
-                  console.log(response);
-
                   if (response == 1) {
 
                     GIT.mergeAbort(header.selectedRepository.path, function (err) {
