@@ -1,0 +1,194 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:xlink="http://www.w3.org/1999/xlink"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   width="46.566666mm"
+   height="88.900002mm"
+   viewBox="0 0 165 315"
+   id="svg6312"
+   version="1.1"
+   inkscape:version="0.91 r13725"
+   sodipodi:docname="gitpie-wizard-image.svg">
+  <defs
+     id="defs6314">
+    <pattern
+       patternTransform="translate(114.99999,349.3622)"
+       id="pattern6136-7"
+       xlink:href="#pattern5386-9-7"
+       inkscape:collect="always" />
+    <pattern
+       patternUnits="userSpaceOnUse"
+       width="165"
+       height="315"
+       patternTransform="translate(114.20815,349.31635)"
+       id="pattern5386-9-7">
+      <rect
+         y="0"
+         x="0"
+         height="315"
+         width="165"
+         id="rect3477-3-7"
+         style="opacity:1;fill:#ef5d4f;fill-opacity:1" />
+    </pattern>
+    <clipPath
+       clipPathUnits="userSpaceOnUse"
+       id="clipPath6155-1">
+      <rect
+         style="fill:url(#pattern6159);stroke:none"
+         width="165"
+         height="315"
+         x="115.4899"
+         y="349.37982"
+         id="rect6157-8" />
+    </clipPath>
+    <filter
+       style="color-interpolation-filters:sRGB"
+       inkscape:label="Drop Shadow"
+       id="filter5112-2-4">
+      <feFlood
+         flood-opacity="1"
+         flood-color="rgb(186,23,23)"
+         result="flood"
+         id="feFlood5114-9-4" />
+      <feComposite
+         in="flood"
+         in2="SourceGraphic"
+         operator="out"
+         result="composite1"
+         id="feComposite5116-0-5" />
+      <feGaussianBlur
+         in="composite1"
+         stdDeviation="5"
+         result="blur"
+         id="feGaussianBlur5118-7-0" />
+      <feOffset
+         dx="-1"
+         dy="5"
+         result="offset"
+         id="feOffset5120-4-8" />
+      <feComposite
+         in="offset"
+         in2="SourceGraphic"
+         operator="atop"
+         result="composite2"
+         id="feComposite5122-3-5" />
+    </filter>
+    <filter
+       style="color-interpolation-filters:sRGB"
+       inkscape:label="Drop Shadow"
+       id="filter5148-4-2">
+      <feFlood
+         flood-opacity="1"
+         flood-color="rgb(169,46,46)"
+         result="flood"
+         id="feFlood5150-4-5" />
+      <feComposite
+         in="flood"
+         in2="SourceGraphic"
+         operator="in"
+         result="composite1"
+         id="feComposite5152-8-9" />
+      <feGaussianBlur
+         in="composite1"
+         stdDeviation="5"
+         result="blur"
+         id="feGaussianBlur5154-4-0" />
+      <feOffset
+         dx="-1"
+         dy="5"
+         result="offset"
+         id="feOffset5156-4-7" />
+      <feComposite
+         in="SourceGraphic"
+         in2="offset"
+         operator="over"
+         result="composite2"
+         id="feComposite5158-1-6" />
+    </filter>
+  </defs>
+  <sodipodi:namedview
+     id="base"
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1.0"
+     inkscape:pageopacity="0.0"
+     inkscape:pageshadow="2"
+     inkscape:zoom="0.98994949"
+     inkscape:cx="338.12462"
+     inkscape:cy="253.27779"
+     inkscape:document-units="px"
+     inkscape:current-layer="layer1"
+     showgrid="false"
+     fit-margin-top="0"
+     fit-margin-left="0"
+     fit-margin-right="0"
+     fit-margin-bottom="0"
+     inkscape:window-width="1366"
+     inkscape:window-height="704"
+     inkscape:window-x="0"
+     inkscape:window-y="27"
+     inkscape:window-maximized="1" />
+  <metadata
+     id="metadata6317">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+        <dc:title></dc:title>
+      </cc:Work>
+    </rdf:RDF>
+  </metadata>
+  <g
+     inkscape:label="Camada 1"
+     inkscape:groupmode="layer"
+     id="layer1"
+     transform="translate(-334.64286,-469.14792)">
+    <g
+       transform="translate(219.64286,119.78571)"
+       id="g6272">
+      <rect
+         id="rect5389-9"
+         y="349.36221"
+         x="115"
+         height="315"
+         width="165"
+         style="fill:url(#pattern6136-7);stroke:none" />
+      <g
+         clip-path="url(#clipPath6155-1)"
+         id="g6107"
+         transform="translate(-0.48989868,-0.01761705)">
+        <circle
+           style="opacity:1;fill:#fac9c0;fill-opacity:1"
+           id="path3517-3"
+           cx="248.03864"
+           cy="569.32355"
+           r="141.93697" />
+        <g
+           id="g5214"
+           transform="translate(203.75292,375.53278)">
+          <circle
+             r="135.86552"
+             cy="193.79079"
+             cx="44.285713"
+             id="path3517-4"
+             style="opacity:1;fill:#eb5d4f;fill-opacity:1;filter:url(#filter5112-2-4)" />
+          <path
+             inkscape:connector-curvature="0"
+             id="rect4351-1-9"
+             d="m 46.927764,90.751378 c -3.83318,-0.092 -7.70129,1.28371 -10.70898,4.15039 l -18.43164,17.568362 21.45703,20.89258 a 17,17 0 0 1 4.63476,-0.64844 17,17 0 0 1 17,17 17,17 0 0 1 -0.54492,4.18555 l 24.2461,23.60742 a 17,17 0 0 1 4.79882,-0.70508 17,17 0 0 1 16.999996,17 17,17 0 0 1 -16.999996,17 17,17 0 0 1 -17,-17 17,17 0 0 1 0.91016,-5.43555 l -20.86719,-20.31836 0,55.55079 a 17,17 0 0 1 9.17188,15.07617 17,17 0 0 1 -17,17 17,17 0 0 1 -17,-17 17,17 0 0 1 9.17187,-15.08399 l 0,-58.45703 a 17,17 0 0 1 -9.88672,-15.41992 17,17 0 0 1 0.96875,-5.5957 l -18.6777298,-18.1875 -0.008,0.008 -2.72461,-2.65234 -59.2558602,56.47656 c -6.01538,5.73335 -6.24312,15.19165 -0.50977,21.20703 l 84.86329,89.03711 c 5.73335,6.01537 15.19165,6.24312 21.20703,0.50976 l 89.035146,-84.86328 c 6.01538,-5.73335 6.24312,-15.19165 0.50977,-21.20703 L 57.425624,95.411728 c -2.86668,-3.00769 -6.66486,-4.56815 -10.49805,-4.66016 z m -29.14062,21.718752 -4.16993,-4.06055 -0.006,0.006 4.16993,4.06055 0.006,-0.006 z"
+             style="opacity:1;fill:#fac9c0;fill-opacity:1;filter:url(#filter5148-4-2)" />
+        </g>
+      </g>
+    </g>
+  </g>
+</svg>
