@@ -174,3 +174,25 @@ function getIgnoreRegex() {
 
   return [ignoreRegex, '^/build'];
 }
+
+// Packing tasks
+gulp.task('pack:win64', function () {
+  var electronBuilder = require('electron-builder');
+  var path = require('path');
+  var fs = require('fs-extra');
+
+  fs.ensureDirSync( path.join('releases', 'windows', '64bit') );
+
+  electronBuilder.init().build({
+    appPath: 'build/windows/64bit/GitPie-win32-x64',
+    platform: 'win',
+    config: 'app/core/builder/config.json',
+    out: 'releases/windows/64bit'
+  },
+  function (err) {
+
+    if (err) {
+      console.error(err);
+    }
+  });
+});
