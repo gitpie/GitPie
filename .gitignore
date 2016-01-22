@@ -2,6 +2,6 @@ node_modules
 .tern-project
 cache
 build
-releases
+release
 .sass-cache
 resources/css/**
