@@ -1,9 +1,19 @@
-var gulp = require('gulp');
-var sass = require('gulp-sass');
-var packager = require('electron-packager');
+'use strict';
 
-// Development tasks
+let gulp = require('gulp');
+let sass = require('gulp-sass');
+let packager = require('electron-packager');
+let path = require('path');
 
+const BUILD_FOLDER = 'build';
+const RELEASE_FOLDER = 'release';
+const LINUX = 'linux';
+const MAC = 'osx';
+const WINDOWS = 'windows';
+const ARCH_64 = '64bit';
+const ARCH_32 = '32bit';
+
+/* Development tasks */
 gulp.task('sass', function () {
   gulp.src('./resources/sass/all.scss')
     .pipe(sass().on('error', sass.logError))
@@ -17,7 +27,7 @@ gulp.task('sass:watch', function () {
 
 gulp.task('dev', ['sass', 'sass:watch']);
 
-// Build tasks
+/* Build tasks */
 gulp.task('build', ['build:linux', 'build:osx', 'build:win']);
 
 // Linux
@@ -28,7 +38,7 @@ gulp.task('build:linux64', ['sass'], function () {
 
   buildOpts.platform = 'linux';
   buildOpts.arch = 'x64';
-  buildOpts.out = 'build/linux/64bit';
+  buildOpts.out = path.join(BUILD_FOLDER, LINUX, ARCH_64);
 
   build(buildOpts);
 });
@@ -38,31 +48,20 @@ gulp.task('build:linux32', ['sass'], function () {
 
   buildOpts.platform = 'linux';
   buildOpts.arch = 'ia32';
-  buildOpts.out = 'build/linux/32bit';
+  buildOpts.out = path.join(BUILD_FOLDER, LINUX, ARCH_32);
 
   build(buildOpts);
 });
 
 // Mac
-gulp.task('build:osx', ['build:osx64', 'build:osx32']);
+gulp.task('build:osx', ['build:osx64']);
 
 gulp.task('build:osx64', ['sass'], function () {
   var buildOpts = getDefaultBuildOpts();
 
   buildOpts.platform = 'darwin';
   buildOpts.arch = 'x64';
-  buildOpts.out = 'build/osx/64bit';
-  buildOpts.icon = 'resources/images/icon.icns';
-
-  build(buildOpts);
-});
-
-gulp.task('build:osx32', ['sass'], function () {
-  var buildOpts = getDefaultBuildOpts();
-
-  buildOpts.platform = 'darwin';
-  buildOpts.arch = 'ia32';
-  buildOpts.out = 'build/osx/32bit';
+  buildOpts.out = path.join(BUILD_FOLDER, MAC, ARCH_64);
   buildOpts.icon = 'resources/images/icon.icns';
 
   build(buildOpts);
@@ -76,7 +75,7 @@ gulp.task('build:win64', ['sass'], function () {
 
   buildOpts.platform = 'win32';
   buildOpts.arch = 'x64';
-  buildOpts.out = 'build/windows/64bit';
+  buildOpts.out = path.join(BUILD_FOLDER, WINDOWS, ARCH_64);
   buildOpts.icon = 'resources/images/icon.ico';
 
   build(buildOpts);
@@ -87,7 +86,7 @@ gulp.task('build:win32', ['sass'], function () {
 
   buildOpts.platform = 'win32';
   buildOpts.arch = 'ia32';
-  buildOpts.out = 'build/windows/32bit';
+  buildOpts.out = path.join(BUILD_FOLDER, WINDOWS, ARCH_32);
   buildOpts.icon = 'resources/images/icon.ico';
 
   build(buildOpts);
@@ -104,7 +103,7 @@ function getDefaultBuildOpts() {
     // Fallbacks
 
     icon: 'resources/images/icon.png',
-    out: 'build/'
+    out: BUILD_FOLDER
   };
 }
 
@@ -172,20 +171,21 @@ function getIgnoreRegex() {
 
   ignoreRegex = ignoreRegex.replace('{modules}', nonIgnoredModules.join('|'));
 
-  return [ignoreRegex, '^/build'];
+  return [ignoreRegex, '^/'.concat(BUILD_FOLDER)];
 }
 
-// Packing tasks
+/* Packing tasks */
+
+// Windows
 gulp.task('pack:win64', function () {
   var electronBuilder = require('electron-builder');
-  var path = require('path');
   var fs = require('fs-extra');
-  var releasePath = path.join('release', 'windows', '64bit');
+  var releasePath = path.join(RELEASE_FOLDER, WINDOWS, ARCH_64);
 
-  fs.ensureDirSync(releasePath);
+  console.log('Creating windows inataller on', releasePath, '...');
 
   electronBuilder.init().build({
-    appPath: 'build/windows/64bit/GitPie-win32-x64',
+    appPath: path.join(BUILD_FOLDER, WINDOWS, ARCH_64, 'GitPie-win32-x64'),
     platform: 'win',
     config: 'app/core/packager/config.json',
     out: releasePath
@@ -193,7 +193,47 @@ gulp.task('pack:win64', function () {
   function (err) {
 
     if (err) {
-      console.error(err);
+      console.error('Error creating windows installer.', err);
+    } else {
+      console.log('Windows installer created with success on ', releasePath);
     }
   });
+});
+
+// Linux
+gulp.task('pack:linux64', function () {
+  var electronBuilder = require('electron-builder');
+  var fs = require('fs-extra');
+  var releasePath = path.join(RELEASE_FOLDER, LINUX, ARCH_64);
+  var targz = require('tar.gz');
+
+  fs.ensureDirSync(releasePath);
+
+  console.log('Start compressing ', path.join(BUILD_FOLDER, LINUX, ARCH_64, 'GitPie-linux-x64'), 'please wait...');
+
+  targz().compress(path.join(BUILD_FOLDER, LINUX, ARCH_64, 'GitPie-linux-x64'), path.join(releasePath, 'GitPie-linux-x64.tar.gz'))
+    .then(function(){
+      console.log('File', path.join(releasePath, 'GitPie-linux-x64.tar.gz'), 'created!');
+    })
+    .catch(function(err){
+      console.error('Error compressing ', path.join(BUILD_FOLDER, WINDOWS, ARCH_64, 'GitPie-linux-x64'), 'folder.', err);
+    });
+});
+
+// Mac
+gulp.task('pack:osx64', function () {
+  var electronBuilder = require('electron-builder');
+  var fs = require('fs-extra');
+  var releasePath = path.join(RELEASE_FOLDER, MAC, ARCH_64);
+  var AdmZip = require('adm-zip');
+  var zip = new AdmZip();
+
+  fs.ensureDirSync(releasePath);
+
+  console.log('Start compressing ', path.join(BUILD_FOLDER, MAC, ARCH_64, 'GitPie-darwin-x64'), 'please wait...');
+
+  zip.addLocalFolder(path.join(BUILD_FOLDER, MAC, ARCH_64, 'GitPie-darwin-x64'));
+  zip.writeZip(path.join(releasePath, 'GitPie-darwin-x64.zip'));
+
+  console.log('File', path.join(releasePath, 'GitPie-darwin-x64.zip'), 'created!');
 });
