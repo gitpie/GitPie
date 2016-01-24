@@ -17,6 +17,25 @@
                 <option ng-repeat="font in settingsCtrl.fonts" value="{{ font }}">{{ font }}</option>
               </select>
             </li>
+            <li>
+              <section class="label-field">{{ MSGS.SettingsPage['Show repositories from'] }}</section>
+              <div class="checkbox-container">
+                <span class="item">
+                  <input id="github" type="checkbox" ng-model="CONFIGS.showRepository.github" />
+                  <label for="github"></label> Github
+                </span>
+
+                <span class="item">
+                  <input id="bitbucket" type="checkbox" ng-model="CONFIGS.showRepository.bitbucket" />
+                  <label for="bitbucket"></label> Bitbucket
+                </span>
+
+                <span class="item">
+                  <input id="others" type="checkbox" ng-model="CONFIGS.showRepository.others" />
+                  <label for="others"></label> {{ MSGS.Others }}
+                </span>
+              </div>
+            </li>
           </ul>
         </li>
 
