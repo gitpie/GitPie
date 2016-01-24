@@ -97,7 +97,7 @@ function getDefaultBuildOpts() {
   return {
     dir: __dirname,
     name: 'GitPie',
-    version: '0.36.0',
+    version: '0.36.4',
     ignore: getIgnoreRegex(),
 
     // Fallbacks
