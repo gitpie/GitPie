@@ -20,20 +20,14 @@
             <li>
               <section class="label-field">{{ MSGS.SettingsPage['Show repositories from'] }}</section>
               <div class="checkbox-container">
-                <span class="item">
-                  <input id="github" type="checkbox" ng-model="CONFIGS.showRepository.github" />
-                  <label for="github"></label> Github
-                </span>
+                <input id="github" type="checkbox" ng-model="CONFIGS.showRepository.github" />
+                <label for="github">Github</label>
 
-                <span class="item">
-                  <input id="bitbucket" type="checkbox" ng-model="CONFIGS.showRepository.bitbucket" />
-                  <label for="bitbucket"></label> Bitbucket
-                </span>
+                <input id="bitbucket" type="checkbox" ng-model="CONFIGS.showRepository.bitbucket" />
+                <label for="bitbucket">Bitbucket</label>
 
-                <span class="item">
-                  <input id="others" type="checkbox" ng-model="CONFIGS.showRepository.others" />
-                  <label for="others"></label> {{ MSGS.Others }}
-                </span>
+                <input id="others" type="checkbox" ng-model="CONFIGS.showRepository.others" />
+                <label for="others">{{ MSGS.Others }}</label>
               </div>
             </li>
           </ul>
