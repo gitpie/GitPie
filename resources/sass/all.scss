@@ -395,6 +395,36 @@ html {
                       font-weight: bold;
                       margin-bottom: 5px;
                     }
+
+                    .checkbox-container {
+                      margin-top: 30px;
+
+                      label {
+                        margin-right: 30px;
+
+                        &:before {
+                          font-family: 'octicons';
+                          content: '\f03a';
+                          text-align: center;
+                          color: #FFF;
+                          display: inline-block;
+                          width: 13px;
+                          height: 13px;
+                          border: 2px solid #999;
+                          border-radius: 3px;
+                          margin-right: 5px;
+                        }
+                      }
+
+                      input[type=checkbox] {
+                        display: none;
+
+                        &:checked + label:before {
+                          background-color: #3998D6;
+                          border-color: #3998D6;
+                        }
+                      }
+                    }
                   }
                 }
 
