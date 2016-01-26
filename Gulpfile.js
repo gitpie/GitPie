@@ -182,6 +182,8 @@ gulp.task('pack:win64', function () {
   var fs = require('fs-extra');
   var releasePath = path.join(RELEASE_FOLDER, WINDOWS, ARCH_64);
 
+  fs.ensureDirSync(releasePath);
+
   console.log('Creating windows inataller on', releasePath, '...');
 
   electronBuilder.init().build({
