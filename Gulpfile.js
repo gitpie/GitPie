@@ -4,6 +4,7 @@ let gulp = require('gulp');
 let sass = require('gulp-sass');
 let packager = require('electron-packager');
 let path = require('path');
+let fs = require('fs-extra');
 
 const BUILD_FOLDER = 'build';
 const RELEASE_FOLDER = 'release';
@@ -108,8 +109,6 @@ function getDefaultBuildOpts() {
 }
 
 function build(electronBuildOpts) {
-  var fs = require('fs-extra');
-
   fs.removeSync(electronBuildOpts.out);
 
   packager(electronBuildOpts, function (err, appPath) {
@@ -179,7 +178,6 @@ function getIgnoreRegex() {
 // Windows
 gulp.task('pack:win64', function () {
   var electronBuilder = require('electron-builder');
-  var fs = require('fs-extra');
   var releasePath = path.join(RELEASE_FOLDER, WINDOWS, ARCH_64);
 
   fs.ensureDirSync(releasePath);
@@ -198,6 +196,15 @@ gulp.task('pack:win64', function () {
       console.error('Error creating windows installer.', err);
     } else {
       console.log('Windows installer created with success on ', releasePath);
+      console.log('Preparing to compress windows build folder...');
+
+      setTimeout(function () {
+        compressBuild({
+          platform: WINDOWS,
+          arch: ARCH_64,
+          fileName: 'GitPie-win32-x64'
+        });
+      }, 4000);
     }
   });
 });
@@ -205,7 +212,6 @@ gulp.task('pack:win64', function () {
 // Linux
 gulp.task('pack:linux64', function () {
   var electronBuilder = require('electron-builder');
-  var fs = require('fs-extra');
   var releasePath = path.join(RELEASE_FOLDER, LINUX, ARCH_64);
   var targz = require('tar.gz');
 
@@ -224,18 +230,38 @@ gulp.task('pack:linux64', function () {
 
 // Mac
 gulp.task('pack:osx64', function () {
-  var electronBuilder = require('electron-builder');
-  var fs = require('fs-extra');
-  var releasePath = path.join(RELEASE_FOLDER, MAC, ARCH_64);
-  var AdmZip = require('adm-zip');
-  var zip = new AdmZip();
 
-  fs.ensureDirSync(releasePath);
+  compressBuild({
+    platform: MAC,
+    arch: ARCH_64,
+    fileName: 'GitPie-darwin-x64'
+  });
 
-  console.log('Start compressing ', path.join(BUILD_FOLDER, MAC, ARCH_64, 'GitPie-darwin-x64'), 'please wait...');
-
-  zip.addLocalFolder(path.join(BUILD_FOLDER, MAC, ARCH_64, 'GitPie-darwin-x64'));
-  zip.writeZip(path.join(releasePath, 'GitPie-darwin-x64.zip'));
-
-  console.log('File', path.join(releasePath, 'GitPie-darwin-x64.zip'), 'created!');
 });
+
+function compressBuild(opts) {
+  const RELEASE_DIRECTORY = path.join(__dirname, RELEASE_FOLDER, opts.platform, opts.arch);
+  const BUILD_DIRECTORY = path.join(__dirname, BUILD_FOLDER, opts.platform, opts.arch);
+
+  var zipFilePath = path.join(RELEASE_DIRECTORY, opts.fileName.concat('.zip'));
+
+  const spawn = require('child_process').spawn;
+
+  console.log(`Start compressing "${zipFilePath}" please wait...`);
+
+  const zip = spawn('zip', ['-y', '-r', '-v', zipFilePath, opts.fileName.concat('/')], { cwd: BUILD_DIRECTORY });
+
+  zip.stdout.on('data', (data) => {
+    console.log(`${data}`);
+  });
+
+  zip.on('error', (err) => {
+    console.error(`Error compressing "${zipFilePath}". Error:`, err);
+  });
+
+  zip.on('close', (code) => {
+    if (code === 0) {
+      console.log(`File "${zipFilePath}" created!`);
+    }
+  });
+}
