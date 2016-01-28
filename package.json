@@ -8,19 +8,16 @@
     "start": "gulp sass && electron .",
     "dev": "gulp dev",
     "build": "gulp build",
-
     "build:linux32": "gulp build:linux32",
     "build:linux64": "gulp build:linux64",
     "build:osx64": "gulp build:osx64",
     "build:win32": "gulp build:win32",
     "build:win64": "gulp build:win64",
-
     "linux32": "npm run build:linux32 && ./build/linux/32bit/GitPie-linux-ia32/GitPie",
     "linux64": "npm run build:linux64 && ./build/linux/64bit/GitPie-linux-x64/GitPie",
     "osx64": "npm run build:osx64 && ./build/osx/64bit/GitPie-darwin-x64/GitPie.app",
     "win32": "npm run build:win32 && build\\windows\\32bit\\GitPie-win32-ia32\\GitPie.exe",
     "win64": "npm run build:win64 && build\\windows\\64bit\\GitPie-win32-x64\\GitPie.exe",
-
     "pack:win64": "gulp pack:win64",
     "pack:linux64": "gulp pack:linux64",
     "pack:osx64": "gulp pack:osx64"
@@ -49,6 +46,7 @@
     "electron-builder": "^2.6.0",
     "electron-packager": "^5.2.1",
     "electron-prebuilt": "^0.36.4",
+    "gitpie-util": "^0.1.0",
     "gulp": "^3.9.0",
     "gulp-sass": "^2.1.1"
   },

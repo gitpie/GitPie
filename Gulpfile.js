@@ -6,6 +6,8 @@ let packager = require('electron-packager');
 let path = require('path');
 let fs = require('fs-extra');
 let wos = require('node-wos');
+let gputil = require('gitpie-util');
+let logger = gputil.logger;
 
 const BUILD_FOLDER = 'build';
 const RELEASE_FOLDER = 'release';
@@ -115,9 +117,9 @@ function build(electronBuildOpts) {
   packager(electronBuildOpts, function (err, appPath) {
 
     if (err) {
-      console.error('Error building electron application for "' + electronBuildOpts.platform + '" arch "' + electronBuildOpts.arch + '". Error:', err);
+      logger.error(`Error building electron application for "${electronBuildOpts.platform}" arch "${electronBuildOpts.arch}". Error: ${err}`);
     } else {
-      console.info('Build application for "' + electronBuildOpts.platform + '" arch "' + electronBuildOpts.arch + '" in ', appPath, ' with success!');
+      logger.success(`Application built for "${electronBuildOpts.platform}" arch "${electronBuildOpts.arch}" in "${electronBuildOpts.out}"`);
     }
   });
 }
@@ -178,12 +180,12 @@ function getIgnoreRegex() {
 
 // Windows
 gulp.task('pack:win64', function () {
-  var electronBuilder = require('electron-builder');
-  var releasePath = path.join(RELEASE_FOLDER, WINDOWS, ARCH_64);
+  let electronBuilder = require('electron-builder');
+  let releasePath = path.join(RELEASE_FOLDER, WINDOWS, ARCH_64);
 
   fs.ensureDirSync(releasePath);
 
-  console.log('Creating windows inataller on', releasePath, '...');
+  logger.info(`Creating windows installer on ${releasePath}...`);
 
   electronBuilder.init().build({
     appPath: path.join(BUILD_FOLDER, WINDOWS, ARCH_64, 'GitPie-win32-x64'),
@@ -194,10 +196,10 @@ gulp.task('pack:win64', function () {
   function (err) {
 
     if (err) {
-      console.error('Error creating windows installer.', err);
+      logger.error(`Error creating windows installer. ${err}`);
     } else {
-      console.log('Windows installer created with success on ', releasePath);
-      console.log('Preparing to compress windows build folder...');
+      logger.success(`Windows installer created with success on ${releasePath}`);
+      logger.info('Preparing to compress windows build folder...');
 
       setTimeout(function () {
         compressBuild({
@@ -218,20 +220,27 @@ gulp.task('pack:linux64', function () {
 
   fs.ensureDirSync(releasePath);
 
-  console.log('Start compressing ', path.join(BUILD_FOLDER, LINUX, ARCH_64, 'GitPie-linux-x64'), 'please wait...');
+  logger.info(`Start compressing ${path.join(BUILD_FOLDER, LINUX, ARCH_64, 'GitPie-linux-x64')} please wait...`);
 
   targz().compress(path.join(BUILD_FOLDER, LINUX, ARCH_64, 'GitPie-linux-x64'), path.join(releasePath, 'GitPie-linux-x64.tar.gz'))
     .then(function(){
-      console.log('File', path.join(releasePath, 'GitPie-linux-x64.tar.gz'), 'created!');
+      logger.success(`File ${path.join(releasePath, 'GitPie-linux-x64.tar.gz')} created!`);
     })
     .then(function () {
 
       if (wos.isLinux()) {
-        createDeb({ arch: ARCH_64 });
+        
+        if (gputil.util.isRoot()) {
+          createDeb({ arch: ARCH_64 });
+        } else {
+          logger.error('To create a .DEB package you must run the task with root privilegies');
+        }
+      } else {
+        logger.warn('Unfortunately to create .deb and .rmp packages you must be on a linux machine.');
       }
     })
     .catch(function(err){
-      console.error('Error compressing ', path.join(BUILD_FOLDER, WINDOWS, ARCH_64, 'GitPie-linux-x64'), 'folder.', err);
+      logger.error(`Error compressing ${path.join(BUILD_FOLDER, WINDOWS, ARCH_64)} GitPie-linux-x64 folder. ${err}`);
     });
 });
 
@@ -254,7 +263,7 @@ function compressBuild(opts) {
 
   const spawn = require('child_process').spawn;
 
-  console.log(`Start compressing "${zipFilePath}" please wait...`);
+  logger.info(`Start compressing "${zipFilePath}" please wait...`);
 
   const zip = spawn('zip', ['-y', '-r', '-v', zipFilePath, opts.fileName.concat('/')], { cwd: BUILD_DIRECTORY });
 
@@ -263,12 +272,12 @@ function compressBuild(opts) {
   });
 
   zip.on('error', (err) => {
-    console.error(`Error compressing "${zipFilePath}". Error:`, err);
+    logger.error(`Error compressing "${zipFilePath}". Error:`, err);
   });
 
   zip.on('close', (code) => {
     if (code === 0) {
-      console.log(`File "${zipFilePath}" created!`);
+      logger.success(`File "${zipFilePath}" created!`);
     }
   });
 }
@@ -297,14 +306,15 @@ function createDeb(opts) {
 
   var packageJSON = require('./package');
 
-  console.log(`Start creating .deb file for GitPie. Arch: ${opts.arch}`);
+  logger.info(`Start creating .DEB package for GitPie. Arch: ${opts.arch}`);
 
   const baseFolder = path.join(RELEASE_DIRECTORY, `${packageJSON.name.toLowerCase()}_${packageJSON.version}_${archDescription}`);
 
-  // fs.mkdirsSync( path.join(baseFolder, 'DEBIAN') );
-  // fs.mkdirsSync( path.join(baseFolder, 'usr', 'share', 'applications') );
   fs.mkdirsSync( path.join(baseFolder, 'usr', 'share', 'pixmaps') );
+  logger.info(`Directory ${path.join(baseFolder, 'usr', 'share', 'pixmaps')} created`);
+
   fs.mkdirsSync( path.join(baseFolder, 'usr', 'local', 'bin') );
+  logger.info(`Directory ${path.join(baseFolder, 'usr', 'local', 'bin')} created`);
 
   fs.outputFileSync(path.join(baseFolder, 'DEBIAN', 'control'), `Package: ${packageJSON.name.toLowerCase()}
 Upstream-Name: ${packageJSON.name}
@@ -315,7 +325,12 @@ Essential: no
 Section: util
 Priority: optional
 Maintainer: Matheus Paiva <matheus.a.paiva@gmail.com>
-Description: ${packageJSON.description}`);
+Installed-Size: 115,2
+Description: ${packageJSON.description}
+
+`);
+
+  logger.info(`File ${path.join(baseFolder, 'DEBIAN', 'control')} created`);
 
   // Create Desktop Entry
   fs.outputFileSync(path.join(baseFolder, 'usr', 'share', 'applications', 'gitpie.desktop'), `[Desktop Entry]
@@ -327,11 +342,18 @@ Type=Application
 Categories=GNOME;GTK;Utility;Development;
 `);
 
+  logger.info('Desktop Entry created');
+
   // Copy icon image
   fs.copySync(path.join(__dirname, 'resources', 'images', 'icon.png'), path.join(baseFolder, 'usr', 'share', 'pixmaps', 'gitpie.png'));
 
+  logger.info('Icon copied');
+
   // Copy binaries
   fs.copySync(path.join(BUILD_DIRECTORY, binariesFolder), path.join(baseFolder, 'usr', 'share', 'gitpie'));
+
+  logger.info('Binaries copied');
+  logger.info('Creating symbolic link...');
 
   // Create symbolic link
   let execFolder = path.join(baseFolder, 'usr', 'local', 'bin');
@@ -342,17 +364,35 @@ Categories=GNOME;GTK;Utility;Development;
   });
 
   ln.on('error', (err) => {
-    console.error(`Error creating symbolic link. Error:`, err);
+    logger.error(`Error creating symbolic link. Error: ${err}`);
   });
 
   ln.on('close', (code) => {
-    if (code === 0) {
-      console.log(`Symbolic link created!`);
+    logger.success(`Symbolic link created!. Exit code ${code}`);
 
-      // dpkg-deb -b gitpie_0.3.0_amd64/
-      let dpkg = spawn('dpkg-deb', ['-b', 'gitpie_0.3.0_amd64/'], { cwd: RELEASE_FOLDER });
-    }
+    logger.info('Creating .DEB file...');
+
+    let dpkg = spawn('dpkg-deb', ['-b', `${packageJSON.name.toLowerCase()}_${packageJSON.version}_${archDescription}`], { cwd: RELEASE_DIRECTORY });
+
+    dpkg.stdout.on('data', (data) => {
+      console.log(`${data}`);
+    });
+
+    dpkg.stderr.on('data', (data) => {
+      console.log(`${data}`);
+    });
+
+    dpkg.on('error', (err) => {
+      logger.error(`Error creating .DEB file. Error: ${err}`);
+    });
+
+    dpkg.on('close', (code) => {
+
+      if (code != 2) {
+        logger.success(`.DEB file created!`);
+      }
+
+      logger.info(`Exit with code ${code}`);
+    });
   });
-
-  console.log('.deb file created!');
 }
