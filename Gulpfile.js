@@ -246,12 +246,38 @@ gulp.task('pack:linux64', function () {
 
 // Mac
 gulp.task('pack:osx64', function () {
+  var releasePath = path.join(RELEASE_FOLDER, MAC, ARCH_64);
+
+  fs.ensureDirSync(releasePath);
 
   compressBuild({
     platform: MAC,
     arch: ARCH_64,
     fileName: 'GitPie-darwin-x64'
   });
+
+  if (wos.isMac()) {
+    var electronBuilder = require('electron-builder');
+
+    logger.info(`Creating .dmg file on ${releasePath}...`);
+
+    electronBuilder.init().build({
+      appPath: path.join(BUILD_FOLDER, MAC, ARCH_64, 'GitPie-darwin-x64', 'GitPie.app'),
+      platform: 'osx',
+      config: 'app/core/packager/config.json',
+      out: releasePath
+    },
+    function (err) {
+
+      if (err) {
+        logger.error(`Error creating .dmg file. ${err}`);
+      } else {
+        logger.success(`.dmg file created with success on ${releasePath}`);
+      }
+    });
+  } else {
+    logger.warn('Unfortunately to create a .dmg file you must be on a OS X machine.');
+  }
 
 });
 

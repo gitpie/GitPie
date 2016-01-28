@@ -1,7 +1,6 @@
 {
   "osx" : {
     "title": "GitPie",
-    "background": "resources/images/gitpie-wizard-image.bmp",
     "icon": "resources/images/icon.icns",
     "icon-size": 80,
     "contents": [
