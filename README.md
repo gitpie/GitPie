@@ -114,6 +114,11 @@ Prerequisites
 - makensis [See how install it](https://github.com/loopline-systems/electron-builder#pre-requisites)
 - wine (*Required only if you're on OSX or Linux*)
 
+*The following  programs are required only if you want to build .deb and .rpm packages*
+
+- dpkg-deb
+- alien
+
 ```sh
 npm run pack # This will pack the application for the all supported platforms: `linux`, `osx` and `windows`
 npm run pack:linux32

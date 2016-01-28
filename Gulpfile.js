@@ -229,7 +229,7 @@ gulp.task('pack:linux64', function () {
     .then(function () {
 
       if (wos.isLinux()) {
-        
+
         if (gputil.util.isRoot()) {
           createDeb({ arch: ARCH_64 });
         } else {
@@ -393,6 +393,31 @@ Categories=GNOME;GTK;Utility;Development;
       }
 
       logger.info(`Exit with code ${code}`);
+
+      logger.info('Creating .RPM file...');
+
+      let alien = spawn('alien', ['-r', '-c', '-v', `${packageJSON.name.toLowerCase()}_${packageJSON.version}_${archDescription}.deb`], { cwd: RELEASE_DIRECTORY });
+
+      alien.stdout.on('data', (data) => {
+        console.log(`${data}`);
+      });
+
+      alien.stderr.on('data', (data) => {
+        console.log(`${data}`);
+      });
+
+      alien.on('error', (err) => {
+        logger.error(`Error creating .RPM file. Error: ${err}`);
+      });
+
+      alien.on('close', (code) => {
+
+        if (code === 0) {
+          logger.success('.RPM file created!');
+        }
+
+        logger.info(`Exit with code ${code}`);
+      });
     });
   });
 }
