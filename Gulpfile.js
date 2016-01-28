@@ -173,7 +173,7 @@ function getIgnoreRegex() {
 
   ignoreRegex = ignoreRegex.replace('{modules}', nonIgnoredModules.join('|'));
 
-  return [ignoreRegex, '^/'.concat(BUILD_FOLDER)];
+  return [ignoreRegex, '^/'.concat(BUILD_FOLDER), '^/'.concat(RELEASE_FOLDER)];
 }
 
 /* Packing tasks */
