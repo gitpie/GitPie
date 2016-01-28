@@ -18,8 +18,11 @@
     "osx64": "npm run build:osx64 && ./build/osx/64bit/GitPie-darwin-x64/GitPie.app",
     "win32": "npm run build:win32 && build\\windows\\32bit\\GitPie-win32-ia32\\GitPie.exe",
     "win64": "npm run build:win64 && build\\windows\\64bit\\GitPie-win32-x64\\GitPie.exe",
+    "pack": "gulp pack",
     "pack:win64": "gulp pack:win64",
+    "pack:win32": "gulp pack:win32",
     "pack:linux64": "gulp pack:linux64",
+    "pack:linux32": "gulp pack:linux32",
     "pack:osx64": "gulp pack:osx64"
   },
   "repository": {

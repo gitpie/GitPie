@@ -177,6 +177,7 @@ function getIgnoreRegex() {
 }
 
 /* Packing tasks */
+gulp.task('pack', ['pack:linux64', 'pack:linux32', 'pack:osx64', 'pack:win64', 'pack:win32']);
 
 // Windows
 gulp.task('pack:win64', function () {
@@ -212,6 +213,39 @@ gulp.task('pack:win64', function () {
   });
 });
 
+gulp.task('pack:win32', function () {
+  let electronBuilder = require('electron-builder');
+  let releasePath = path.join(RELEASE_FOLDER, WINDOWS, ARCH_32);
+
+  fs.ensureDirSync(releasePath);
+
+  logger.info(`Creating windows installer on ${releasePath}...`);
+
+  electronBuilder.init().build({
+    appPath: path.join(BUILD_FOLDER, WINDOWS, ARCH_32, 'GitPie-win32-ia32'),
+    platform: 'win',
+    config: 'app/core/packager/config.json',
+    out: releasePath
+  },
+  function (err) {
+
+    if (err) {
+      logger.error(`Error creating windows installer. ${err}`);
+    } else {
+      logger.success(`Windows installer created with success on ${releasePath}`);
+      logger.info('Preparing to compress windows build folder...');
+
+      setTimeout(function () {
+        compressBuild({
+          platform: WINDOWS,
+          arch: ARCH_32,
+          fileName: 'GitPie-win32-ia32'
+        });
+      }, 4000);
+    }
+  });
+});
+
 // Linux
 gulp.task('pack:linux64', function () {
   var electronBuilder = require('electron-builder');
@@ -241,6 +275,38 @@ gulp.task('pack:linux64', function () {
     })
     .catch(function(err){
       logger.error(`Error compressing ${path.join(BUILD_FOLDER, WINDOWS, ARCH_64)} GitPie-linux-x64 folder. ${err}`);
+    });
+});
+
+// Linux
+gulp.task('pack:linux32', function () {
+  var electronBuilder = require('electron-builder');
+  var releasePath = path.join(RELEASE_FOLDER, LINUX, ARCH_32);
+  var targz = require('tar.gz');
+
+  fs.ensureDirSync(releasePath);
+
+  logger.info(`Start compressing ${path.join(BUILD_FOLDER, LINUX, ARCH_32, 'GitPie-linux-ia32')} please wait...`);
+
+  targz().compress(path.join(BUILD_FOLDER, LINUX, ARCH_32, 'GitPie-linux-ia32'), path.join(releasePath, 'GitPie-linux-ia32.tar.gz'))
+    .then(function(){
+      logger.success(`File ${path.join(releasePath, 'GitPie-linux-ia32.tar.gz')} created!`);
+    })
+    .then(function () {
+
+      if (wos.isLinux()) {
+
+        if (gputil.util.isRoot()) {
+          createDeb({ arch: ARCH_32 });
+        } else {
+          logger.error('To create a .DEB package you must run the task with root privilegies');
+        }
+      } else {
+        logger.warn('Unfortunately to create .deb and .rmp packages you must be on a linux machine.');
+      }
+    })
+    .catch(function(err){
+      logger.error(`Error compressing ${path.join(BUILD_FOLDER, WINDOWS, ARCH_32)} GitPie-linux-x64 folder. ${err}`);
     });
 });
 
