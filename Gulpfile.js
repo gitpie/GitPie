@@ -5,6 +5,7 @@ let sass = require('gulp-sass');
 let packager = require('electron-packager');
 let path = require('path');
 let fs = require('fs-extra');
+let wos = require('node-wos');
 
 const BUILD_FOLDER = 'build';
 const RELEASE_FOLDER = 'release';
@@ -223,6 +224,12 @@ gulp.task('pack:linux64', function () {
     .then(function(){
       console.log('File', path.join(releasePath, 'GitPie-linux-x64.tar.gz'), 'created!');
     })
+    .then(function () {
+
+      if (wos.isLinux()) {
+        createDeb({ arch: ARCH_64 });
+      }
+    })
     .catch(function(err){
       console.error('Error compressing ', path.join(BUILD_FOLDER, WINDOWS, ARCH_64, 'GitPie-linux-x64'), 'folder.', err);
     });
@@ -264,4 +271,88 @@ function compressBuild(opts) {
       console.log(`File "${zipFilePath}" created!`);
     }
   });
+}
+
+function createDeb(opts) {
+  let archDescription;
+  let binariesFolder;
+
+  switch (opts.arch) {
+    case ARCH_32:
+      archDescription = 'ia32';
+      binariesFolder = 'GitPie-linux-ia32';
+      break;
+    case ARCH_64:
+      archDescription = 'amd64';
+      binariesFolder = 'GitPie-linux-x64';
+      break;
+    default:
+      throw new Error(`Architucture ${opts.arch} invalid`);
+  }
+
+  const RELEASE_DIRECTORY = path.join(__dirname, RELEASE_FOLDER, LINUX, opts.arch);
+  const BUILD_DIRECTORY = path.join(__dirname, BUILD_FOLDER, LINUX, opts.arch);
+
+  const spawn = require('child_process').spawn;
+
+  var packageJSON = require('./package');
+
+  console.log(`Start creating .deb file for GitPie. Arch: ${opts.arch}`);
+
+  const baseFolder = path.join(RELEASE_DIRECTORY, `${packageJSON.name.toLowerCase()}_${packageJSON.version}_${archDescription}`);
+
+  // fs.mkdirsSync( path.join(baseFolder, 'DEBIAN') );
+  // fs.mkdirsSync( path.join(baseFolder, 'usr', 'share', 'applications') );
+  fs.mkdirsSync( path.join(baseFolder, 'usr', 'share', 'pixmaps') );
+  fs.mkdirsSync( path.join(baseFolder, 'usr', 'local', 'bin') );
+
+  fs.outputFileSync(path.join(baseFolder, 'DEBIAN', 'control'), `Package: ${packageJSON.name.toLowerCase()}
+Upstream-Name: ${packageJSON.name}
+Version: ${packageJSON.version}
+Architecture: ${archDescription}
+Name: ${packageJSON.name}
+Essential: no
+Section: util
+Priority: optional
+Maintainer: Matheus Paiva <matheus.a.paiva@gmail.com>
+Description: ${packageJSON.description}`);
+
+  // Create Desktop Entry
+  fs.outputFileSync(path.join(baseFolder, 'usr', 'share', 'applications', 'gitpie.desktop'), `[Desktop Entry]
+Name=${packageJSON.name}
+Comment=${packageJSON.description}
+Exec=${packageJSON.name.toLowerCase()}
+Icon=${packageJSON.name.toLowerCase()}
+Type=Application
+Categories=GNOME;GTK;Utility;Development;
+`);
+
+  // Copy icon image
+  fs.copySync(path.join(__dirname, 'resources', 'images', 'icon.png'), path.join(baseFolder, 'usr', 'share', 'pixmaps', 'gitpie.png'));
+
+  // Copy binaries
+  fs.copySync(path.join(BUILD_DIRECTORY, binariesFolder), path.join(baseFolder, 'usr', 'share', 'gitpie'));
+
+  // Create symbolic link
+  let execFolder = path.join(baseFolder, 'usr', 'local', 'bin');
+  let ln = spawn('ln', ['-s', '../../share/gitpie/GitPie', 'gitpie'], { cwd: execFolder });
+
+  ln.stdout.on('data', (data) => {
+    console.log(`${data}`);
+  });
+
+  ln.on('error', (err) => {
+    console.error(`Error creating symbolic link. Error:`, err);
+  });
+
+  ln.on('close', (code) => {
+    if (code === 0) {
+      console.log(`Symbolic link created!`);
+
+      // dpkg-deb -b gitpie_0.3.0_amd64/
+      let dpkg = spawn('dpkg-deb', ['-b', 'gitpie_0.3.0_amd64/'], { cwd: RELEASE_FOLDER });
+    }
+  });
+
+  console.log('.deb file created!');
 }
