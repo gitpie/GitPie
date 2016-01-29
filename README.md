@@ -1,6 +1,6 @@
-![GitPie](https://raw.githubusercontent.com/git-pie/GitPie/master/resources/images/gitpie-banner.png)
+![GitPie](https://raw.githubusercontent.com/gitpie/GitPie/master/resources/images/gitpie-banner.png)
 
-![dependencies](https://david-dm.org/git-pie/GitPie.svg) ![devdependecies](https://david-dm.org/git-pie/GitPie/dev-status.svg?style=flat)
+![dependencies](https://david-dm.org/gitpie/GitPie.svg) ![devdependecies](https://david-dm.org/gitpie/GitPie/dev-status.svg?style=flat)
 
 GitPie is a Multiplataform Client for [Git](https://git-scm.com/) that have the goal to be a simple and elegant solution to manage any git project don't matter what git service you use. And the best is 100% open source.
 
@@ -43,19 +43,19 @@ With GitPie you can:
 
 Available on 32-bit and 64-bit.
 
-Download the latest Pie from the GitPie [release page](https://github.com/git-pie/GitPie/releases).
+Download the latest Pie from the GitPie [release page](https://github.com/gitpie/GitPie/releases).
 
 ### OS X
 
 Available on 32-bit and 64-bit.
 
-Download the latest Pie from the GitPie [release page](https://github.com/git-pie/GitPie/releases).
+Download the latest Pie from the GitPie [release page](https://github.com/gitpie/GitPie/releases).
 
 ### Windows
 
 Available on 32-bit and 64-bit.
 
-Download the latest Pie from the GitPie [release page](https://github.com/git-pie/GitPie/releases).
+Download the latest Pie from the GitPie [release page](https://github.com/gitpie/GitPie/releases).
 
 ## Contributing
 Want to contribute with the project? This is awesome. But before doing that we prepare a recipe to you do it the right way.
@@ -82,7 +82,7 @@ Prerequisites
 - wine (*Required only if you're on OSX or Linux*)
 
 ```bash
-git clone https://github.com/git-pie/GitPie.git
+git clone https://github.com/gitpie/GitPie.git
 cd GitPie
 npm install
 npm build # This will build binaries for the all supported platforms: `linux`, `osx` and `windows`
