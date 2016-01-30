@@ -76,6 +76,11 @@ Git.prototype.getCurrentBranch = function (path, callback) {
               lines[i] = lines[i].replace('*', '').trim();
 
               currentBranch = lines[i];
+
+              if (!branchesDictionary[ lines[i].trim() ]) {
+                localBranches.push(lines[i].trim());
+              }
+
               continue;
             }
 

@@ -28,8 +28,8 @@ With GitPie you can:
 - Commit changes
 - Pull changes *(An ssh key needs to be configured properly)*
 - Push changes *(An ssh key needs to be configured properly)*
-- Create new branchs
-- Switch between branchs
+- Create new branches
+- Switch between branches
 - Visualize repository tags
 - Stash changes
 - Pop a Stash
