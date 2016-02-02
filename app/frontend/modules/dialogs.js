@@ -89,7 +89,7 @@ angular.module('dialogs', [])
         document.querySelector('#merge-button').setAttribute('disabled', 'true');
 
         this.currentBranch = $scope.headerCtrl.currentBranch;
-        this.remoteBranches = $scope.headerCtrl.remoteBranchs;
+        this.remoteBranches = $scope.headerCtrl.remoteBranches;
         this.localBranches = $scope.headerCtrl.localBranches;
 
         applyScope($scope);
@@ -105,7 +105,7 @@ angular.module('dialogs', [])
 
         if (treatedBranchCompare != $scope.headerCtrl.currentBranch) {
           let header = $scope.headerCtrl;
-          let notification = new GPNotification(`${MSGS['Comparing branchs...']}`, { showLoad: true });
+          let notification = new GPNotification(`${MSGS['Comparing branches...']}`, { showLoad: true });
 
           notification.pop();
 

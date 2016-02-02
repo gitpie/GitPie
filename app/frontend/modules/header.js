@@ -29,12 +29,12 @@
           }
         }.bind(this);
 
-        // Verify if a branch is in remoteBranchs array
+        // Verify if a branch is in remoteBranches array
         this.isRemoteBranch = function (branch) {
 
-          for (var i = 0; i < this.remoteBranchs.length; i++) {
+          for (var i = 0; i < this.remoteBranches.length; i++) {
 
-            if (this.remoteBranchs[i].trim() == branch.trim()) {
+            if (this.remoteBranches[i].trim() == branch.trim()) {
               return true;
             }
           }
@@ -43,7 +43,7 @@
         };
 
         this.selectedRepository = null;
-        this.remoteBranchs = [];
+        this.remoteBranches = [];
         this.localBranches = [];
         this.tags = [];
         this.syncStatus = {};
@@ -93,7 +93,7 @@
         $scope.$on('removedRepository', function () {
           this.selectedRepository = null;
           this.currentBranch = null;
-          this.remoteBranchs = [];
+          this.remoteBranches = [];
         }.bind(this));
 
         $scope.$on('repositorychanged', function (event, repository) {
@@ -109,7 +109,7 @@
 
           GIT.getCurrentBranch(repository.path, function (err, currentBranch, remoteBranches, localBranches) {
             this.currentBranch = currentBranch;
-            this.remoteBranchs = remoteBranches;
+            this.remoteBranches = remoteBranches;
             this.localBranches = localBranches;
 
             updateIsMerging();
@@ -235,9 +235,9 @@
             return true;
           }
 
-          for (let i = 0; i < this.remoteBranchs.length; i++) {
+          for (let i = 0; i < this.remoteBranches.length; i++) {
 
-            if (this.remoteBranchs[i].trim() == treatedBranchName) {
+            if (this.remoteBranches[i].trim() == treatedBranchName) {
               return true;
             }
           }
@@ -551,7 +551,7 @@
         };
 
         this.countBranches = function () {
-          let count = this.remoteBranchs.length + this.localBranches.length;
+          let count = this.remoteBranches.length + this.localBranches.length;
 
           return count;
         };

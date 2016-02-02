@@ -395,6 +395,36 @@ html {
                       font-weight: bold;
                       margin-bottom: 5px;
                     }
+
+                    .checkbox-container {
+                      margin-top: 30px;
+
+                      label {
+                        margin-right: 30px;
+
+                        &:before {
+                          font-family: 'octicons';
+                          content: '\f03a';
+                          text-align: center;
+                          color: #FFF;
+                          display: inline-block;
+                          width: 13px;
+                          height: 13px;
+                          border: 2px solid #999;
+                          border-radius: 3px;
+                          margin-right: 5px;
+                        }
+                      }
+
+                      input[type=checkbox] {
+                        display: none;
+
+                        &:checked + label:before {
+                          background-color: #3998D6;
+                          border-color: #3998D6;
+                        }
+                      }
+                    }
                   }
                 }
 
@@ -1160,9 +1190,9 @@ html {
 
                       .plus-text {
                         color: #58B231;
-                        background-color: #ccffcc;
+                        opacity: 0.8;
                         border-radius: 2px;
-                        padding: 3px 15px;
+                        padding: 0 3px;
                         font-weight: bold;
                         margin: 0 3px;
                         display: inline-block;
@@ -1176,9 +1206,9 @@ html {
 
                       .minor-text {
                         color: #D7431B;
-                        background-color: #ffdddd;
+                        opacity: 0.8;
                         border-radius: 2px;
-                        padding: 3px 15px;
+                        padding: 0 3px;
                         font-weight: bold;
                         margin: 0 3px;
                         display: inline-block;
@@ -1230,6 +1260,12 @@ html {
                       color: #986B45;
                       display: inline-block;
                       background-color: #F5E8DB;
+                    }
+
+                    .no-background {
+                      background-color: #FFF !important;
+                      padding: 0 3px !important;
+                      opacity: 0.8;
                     }
                   }
 

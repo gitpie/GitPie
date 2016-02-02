@@ -26,7 +26,7 @@
   "Changes": "Changes",
   "Unsyncronized Changes": "Unsyncronized Changes",
   "No tags here": "No tags here",
-  "No branchs here": "No branchs here",
+  "No branches here": "No branches here",
   "Search for a tag": "Search for a tag",
   "Switching to branch": "Switching to branch",
   "This branch only exits locally": "This branch only exits locally",
@@ -38,7 +38,7 @@
   "MERGE": "MERGE",
   "MERGING": "MERGING",
   "Abort Merge": "Abort Merge",
-  "Comparing branchs...": "Comparing branchs...",
+  "Comparing branches...": "Comparing branches...",
   "All the unmerged changes will be lost! Are you sure to delete the branch": "All the unmerged changes will be lost! Are you sure to delete the branch",
   "Something wrong happened merging": "Something wrong happened merging",
   "There are conflicts merging": "There are conflicts merging",
@@ -127,7 +127,8 @@
     "GitPie is distributed under the MIT License": "GitPie is distributed under the MIT License",
     "GitPie is an open source git client that have the goal to be the most simple and nice client for any project and for any people": "GitPie is an open source git client that have the goal to be the most simple and nice client for any project and for any people",
     "CHANGE GLOBALS CONFIGURATIONS": "CHANGE GLOBALS CONFIGURATIONS",
-    "CHANGE {repository} CONFIGURATIONS": "CHANGE {repository} CONFIGURATIONS"
+    "CHANGE {repository} CONFIGURATIONS": "CHANGE {repository} CONFIGURATIONS",
+    "Show repositories from": "Show repositories from"
   },
 
   "Authentication required": "Authentication required",

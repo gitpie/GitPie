@@ -113,7 +113,12 @@ try {
 
     if (!Configs) {
       Configs = {
-        fontFamily: 'Roboto'
+        fontFamily: 'Roboto',
+        showRepository: {
+          github: true,
+          bitbucket: true,
+          others: true
+        }
       };
 
       localStorage.setItem('configs', JSON.stringify(Configs));
@@ -242,7 +247,7 @@ try {
       },
 
       isRepoListEmpty: function () {
-        
+
         if (repositories.github.length > 0 || repositories.bitbucket.length > 0 || repositories.others.length > 0) {
           return false;
         }
