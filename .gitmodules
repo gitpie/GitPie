@@ -1,3 +1,0 @@
-[submodule "app/core/updater/windows"]
-	path = app/core/updater/windows
-	url = https://github.com/lvlofenix/updateGitPie.git
