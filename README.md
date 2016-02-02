@@ -13,31 +13,11 @@ GitPie is under hard development. And can have a lot of bug and unterminated cap
 
 GitPie is built on [Electron](https://github.com/atom/electron) and [Angular](https://github.com/angular/angular) to have a maintainable and organized source to anyone understand what's going on behind the scenes.
 
-## What's the taste of GitPie?
-
-With GitPie you can:
-
-- Add any Git repository
-- Clone any Git repository
-- Create a git repository from zero
-- Visualize the commit history
-- Visualize the number of commits
-- Visualize changes per commit
-- Visualize changes in files
-- Add files to commit
-- Commit changes
-- Pull changes *(An ssh key needs to be configured properly)*
-- Push changes *(An ssh key needs to be configured properly)*
-- Create new branches
-- Switch between branches
-- Visualize repository tags
-- Stash changes
-- Pop a Stash
-- Remove a Stash
-- Visualize files in a Stash
-- Revert a repository to a specific commit
-
 ## Installing
+
+**Prerequisites**
+
+ - [Git](https://git-scm.com/downloads)
 
 ### Linux
 
