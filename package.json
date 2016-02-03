@@ -4,7 +4,7 @@
   "description": "A Multiplataform Client for Git",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "test": "npm start && npm build && npm pack",
     "start": "gulp sass && electron .",
     "dev": "gulp dev",
     "build": "gulp build",

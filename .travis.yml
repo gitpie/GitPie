@@ -1,0 +1,14 @@
+language: node_js
+nodejs:
+  - 4
+  - 0.12
+os:
+  - linux
+  - osx
+
+sudo: true
+
+
+branches:
+  only:
+    - travis-integration
