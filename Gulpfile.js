@@ -380,7 +380,7 @@ function createDeb(opts) {
 
   switch (opts.arch) {
     case ARCH_32:
-      archDescription = 'ia32';
+      archDescription = 'i386';
       binariesFolder = 'GitPie-linux-ia32';
       break;
     case ARCH_64:
