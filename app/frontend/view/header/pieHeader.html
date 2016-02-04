@@ -78,8 +78,12 @@
         <div class="menu" style="min-width: 300px" ng-show="headerCtrl.showBranchMenu">
           <tabs>
             <pane pane-title="Branches" icon="octicon octicon-git-branch">
-              <input style="display:block; width:100%; box-sizing: border-box;" type="text" name="newBranch" ng-model="newBranch"
-                placeholder="{{ MSGS['Select or create a new branch'] }}" ng-keypress="headerCtrl.checkoutBranch($event, newBranch)" />
+              <input style="width: 84%; box-sizing: border-box;" type="text" name="newBranch" ng-model="newBranch"
+                placeholder="{{ MSGS['Select or create a new branch'] }}" ng-keypress="headerCtrl.checkoutBranchKeyPress($event, newBranch)" />
+              <button class="no-shadow" type="button" title="{{ (newBranch.length > 0 && headerCtrl.branchExists(newBranch) ? MSGS['Switch to branch'] : MSGS['Create new branch'])  }}" 
+                ng-click="headerCtrl.checkoutBranch(newBranch)">
+                <span class="octicon octicon-git-branch"></span>
+              </button>
 
               <span class="label" ng-show="newBranch.length > 0 && !headerCtrl.branchExists(newBranch)">
                 <span class="octicon octicon-git-branch"></span>  {{ MSGS['Create new branch'] }} <strong>"{{ headerCtrl.treatBranch(newBranch) }}"</strong></span>
