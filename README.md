@@ -2,7 +2,7 @@
 
 ![dependencies](https://david-dm.org/gitpie/GitPie.svg) ![devdependecies](https://david-dm.org/gitpie/GitPie/dev-status.svg?style=flat)
 
-GitPie is a Multiplataform Client for [Git](https://git-scm.com/) that have the goal to be a simple and elegant solution to manage any git project don't matter what git service you use. And the best is 100% open source.
+GitPie is a Multiplatform Client for [Git](https://git-scm.com/) that have the goal to be a simple and elegant solution to manage any git project don't matter what git service you use. And the best is 100% open source.
 
 ## Warning
 The pie is extremely hot! Eating it can hurt!
