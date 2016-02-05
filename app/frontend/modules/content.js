@@ -56,6 +56,14 @@
           if (forceReload || selectedRepository.name != repository.name) {
             this.loadingHistory = true;
 
+            let notification;
+
+            if (!forceReload) {
+              notification = new GPNotification(`${MSGS['Opening repository']} <strong>${repository.name}</strong>`, { showLoad: true });
+
+              notification.pop();
+            }
+
             if (selectedRepository) {
               selectedRepository.selected = false;
             }
@@ -73,6 +81,10 @@
             }, function (err, historyList) {
               this.repositoryHistory = historyList;
               this.loadingHistory = false;
+
+              if (notification) {
+                notification.close();
+              }
 
               applyScope($scope);
               $scope.$broadcast('repositorychanged', selectedRepository);

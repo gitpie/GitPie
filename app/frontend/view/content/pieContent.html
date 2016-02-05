@@ -61,7 +61,7 @@
       <button type="button" class="featured" ng-click="appCtrl.commitSelectedChanges(commitMessage, commitDescription, $event)"><span class="octicon octicon-cloud-upload"></span> {{ MSGS.COMMIT }}</button>
     </form>
 
-    <nav ng-class="{ mask:appCtrl.loadingHistory }" ng-scroll="appCtrl.loadMoreCommits($event)">
+    <nav ng-scroll="appCtrl.loadMoreCommits($event)">
       <ul>
         <li class="commit-number">
           <div ng-show="appCtrl.commitNumber != 'counting' && appCtrl.commitNumber.length > 0">
@@ -84,7 +84,7 @@
 
   </section>
 
-  <section id="right" ng-class="{ mask:appCtrl.loadingChanges }" ng-show="appCtrl.repositoryHistory.length > 0">
+  <section id="right" ng-show="appCtrl.repositoryHistory.length > 0">
 
     <tabs id="chagesTabPanel">
       <pane pane-title="{{ MSGS.History }}" icon="octicon octicon-history">

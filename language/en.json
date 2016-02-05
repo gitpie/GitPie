@@ -38,6 +38,7 @@
   "MERGE": "MERGE",
   "MERGING": "MERGING",
   "Abort Merge": "Abort Merge",
+  "Opening repository": "Opening repository",
   "Comparing branches...": "Comparing branches...",
   "All the unmerged changes will be lost! Are you sure to delete the branch": "All the unmerged changes will be lost! Are you sure to delete the branch",
   "Something wrong happened merging": "Something wrong happened merging",
