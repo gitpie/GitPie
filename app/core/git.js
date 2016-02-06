@@ -28,15 +28,27 @@ function Git() {
 
 /**
  * @private
+ * @method performCommand
+ * Perform commands on a standardized way
+ * @param {String} command
+ * @param {String} cwd
+ * @param {function} callback
+*/
+function performCommand(command, cwd, callback) {
+  exec(command, { cwd: cwd, env: ENV  }, callback);
+}
+
+/**
+ * @private
  * @method invokeCallback
  * Verify if the callback param is a function an try to invoke it
  * @param {function} callback
  * @param {Array} args - Array of arguments
 */
-function invokeCallback(callback, args) {
+function invokeCallback(callback, args, scope) {
 
   if (callback && typeof callback == 'function') {
-    callback.apply(this, args);
+    callback.apply(scope, args);
   }
 }
 
@@ -384,23 +396,24 @@ Git.prototype.sync = function (opts, callback) {
 };
 
 Git.prototype.add = function (path, opts) {
+  opts = opts || {};
 
-  if (opts.forceSync) {
-    return execSync('git add "'.concat(opts.file).concat('"'), { cwd: path});
-  } else {
+  let command = '';
 
-    exec(
-      'git add "'.concat(opts.file).concat('"'),
-      { cwd: path}, function (error, stdout, stderr) {
-      var err = null;
+  if (opts.files instanceof Array) {
 
-      if (error !== null) {
-        err = error;
+    for (let i = 0; i < opts.files.length; i++) {
+      command = command.concat(`git add "${opts.files[i]}"`);
+
+      if (i != (opts.files.length - 1)) {
+        command = command.concat(' && ');
       }
-
-      invokeCallback(opts.callback, [ err ]);
-    });
+    }
+  } else {
+    command = `git add "${opts.files}"`;
   }
+
+  performCommand(command, path, opts.callback);
 };
 
 Git.prototype.commit = function (path, opts) {
@@ -415,20 +428,7 @@ Git.prototype.commit = function (path, opts) {
     }
   }
 
-  if (opts.forceSync) {
-    return execSync(commad, { cwd: path});
-  } else {
-
-    exec(commad, { cwd: path}, function (error, stdout, stderr) {
-      var err = null;
-
-      if (error !== null) {
-        err = error;
-      }
-
-      invokeCallback(opts.callback, [ err ]);
-    });
-  }
+  performCommand(commad, path, opts.callback);
 };
 
 Git.prototype.switchBranch = function (opts, callback) {

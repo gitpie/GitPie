@@ -100,7 +100,7 @@
   "Nothing for me here.\n The folder {folder} is not a git project": "Nothing for me here.\n The folder {folder} is not a git project",
 
   "Error counting commits. Error: ": "Error counting commits. Error: ",
-  "Error adding file '{fileName}' Error: ": "Error adding file '{fileName}' Error: ",
+  "Error adding files. Error:": "Error adding files. Error:",
   "Error commiting changes. Error: ": "Error commiting changes. Error: ",
   "Error getting more history. Error: ": "Error getting more history. Error: ",
 

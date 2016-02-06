@@ -267,47 +267,68 @@
         this.commitSelectedChanges = function (commitMessage, commitDescription, event) {
 
           if (commitMessage) {
-            var hasAddedFiles;
+            let selectedFiles = [];
 
             event.target.setAttribute('disabled', true);
 
+            // this.commitChanges.forEach(function (file) {
+            //
+            //   if (file.checked) {
+            //     try {
+            //
+            //       GIT.add(selectedRepository.path, {
+            //         forceSync: true,
+            //         file: file.path
+            //       });
+            //
+            //       hasAddedFiles = true;
+            //     } catch(err) {
+            //       alert(MSGS['Error adding file \'{fileName}\' Error: '].concat(err).replace('{fileName}', file.name));
+            //     }
+            //   }
+            // }.bind(this));
+
             this.commitChanges.forEach(function (file) {
-
               if (file.checked) {
-                try {
-
-                  GIT.add(selectedRepository.path, {
-                    forceSync: true,
-                    file: file.path
-                  });
-
-                  hasAddedFiles = true;
-                } catch(err) {
-                  alert(MSGS['Error adding file \'{fileName}\' Error: '].concat(err).replace('{fileName}', file.name));
-                }
+                selectedFiles.push(file.path);
               }
-            }.bind(this));
+            });
 
-            if (hasAddedFiles) {
+            if (selectedFiles.length > 0) {
 
-              try {
+              GIT.add(selectedRepository.path, {
+                files: selectedFiles,
+                callback: function (error) {
 
-                GIT.commit(selectedRepository.path, {
-                  message: commitMessage,
-                  description: commitDescription,
-                  forceSync: true
-                });
+                  if (error) {
+                    alert(`${MSGS['Error adding files. Error:']} ${error.message}`);
 
-                this.showRepositoryInfo(selectedRepository, true);
-              } catch (err) {
-                alert(MSGS['Error commiting changes. Error: '] + err);
-              }
+                    event.target.removeAttribute('disabled');
+                  } else {
 
-              $scope.commitMessage = null;
-              $scope.commitDescription = null;
+                    GIT.commit(selectedRepository.path, {
+                      message: commitMessage,
+                      description: commitDescription,
+                      callback: function (err) {
+                        if (err) {
+                          alert(MSGS['Error commiting changes. Error: '] + err);
+                        } else {
+                          this.showRepositoryInfo(selectedRepository, true);
+
+                          $scope.commitMessage = null;
+                          $scope.commitDescription = null;
+                        }
+
+                        event.target.removeAttribute('disabled');
+                      }.bind(this)
+                    });
+
+                  }
+                }.bind(this)
+              });
+            } else {
+              event.target.removeAttribute('disabled');
             }
-
-            event.target.removeAttribute('disabled');
           }
         };
 
