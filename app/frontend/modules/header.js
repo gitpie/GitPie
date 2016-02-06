@@ -226,10 +226,13 @@
         };
 
         this.checkoutBranch = function (newBranch) {
-          var newBranchName = this.treatBranch(newBranch),
-            forceCreateIfNotExists = !this.branchExists(newBranchName);
+          
+          if (newBranch) {
+            var newBranchName = this.treatBranch(newBranch),
+              forceCreateIfNotExists = !this.branchExists(newBranchName);
 
-          this.switchBranch(newBranchName, forceCreateIfNotExists);
+            this.switchBranch(newBranchName, forceCreateIfNotExists);
+          }
         };
 
         this.branchExists = function (branchName) {
