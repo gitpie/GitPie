@@ -7,9 +7,6 @@ var
   // The executor of system process
   exec = cp.exec,
 
-  // The executor of system process
-  execSync = cp.execSync,
-
   ENV = process.env,
 
   wos = require('node-wos'),
@@ -433,24 +430,12 @@ Git.prototype.commit = function (path, opts) {
 
 Git.prototype.switchBranch = function (opts, callback) {
   opts = opts || {};
+
   var path = opts.path,
     branch = opts.branch,
     forceCreateIfNotExists = opts.forceCreateIfNotExists;
 
-  if (opts.forceSync) {
-    execSync('git checkout ' + (forceCreateIfNotExists ? ' -b ': '') + branch, { cwd: path,  env: ENV});
-  } else {
-
-    exec('git checkout ' + (forceCreateIfNotExists ? ' -b ': '') + branch, { cwd: path,  env: ENV}, function(error, stdout, stderr) {
-      var err = null;
-
-      if (error !== null) {
-        err = error.message;
-      }
-
-      invokeCallback(callback, [ err ]);
-    });
-  }
+  performCommand('git checkout ' + (forceCreateIfNotExists ? ' -b ': '') + branch, path, callback);
 };
 
 Git.prototype.getCommitCount = function (path, callback) {
