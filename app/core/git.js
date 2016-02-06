@@ -7,9 +7,6 @@ var
   // The executor of system process
   exec = cp.exec,
 
-  // The executor of system process
-  execSync = cp.execSync,
-
   ENV = process.env,
 
   wos = require('node-wos'),
@@ -28,15 +25,27 @@ function Git() {
 
 /**
  * @private
+ * @method performCommand
+ * Perform commands on a standardized way
+ * @param {String} command
+ * @param {String} cwd
+ * @param {function} callback
+*/
+function performCommand(command, cwd, callback) {
+  exec(command, { cwd: cwd, env: ENV  }, callback);
+}
+
+/**
+ * @private
  * @method invokeCallback
  * Verify if the callback param is a function an try to invoke it
  * @param {function} callback
  * @param {Array} args - Array of arguments
 */
-function invokeCallback(callback, args) {
+function invokeCallback(callback, args, scope) {
 
   if (callback && typeof callback == 'function') {
-    callback.apply(this, args);
+    callback.apply(scope, args);
   }
 }
 
@@ -384,23 +393,24 @@ Git.prototype.sync = function (opts, callback) {
 };
 
 Git.prototype.add = function (path, opts) {
+  opts = opts || {};
 
-  if (opts.forceSync) {
-    return execSync('git add "'.concat(opts.file).concat('"'), { cwd: path});
-  } else {
+  let command = '';
 
-    exec(
-      'git add "'.concat(opts.file).concat('"'),
-      { cwd: path}, function (error, stdout, stderr) {
-      var err = null;
+  if (opts.files instanceof Array) {
 
-      if (error !== null) {
-        err = error;
+    for (let i = 0; i < opts.files.length; i++) {
+      command = command.concat(`git add "${opts.files[i]}"`);
+
+      if (i != (opts.files.length - 1)) {
+        command = command.concat(' && ');
       }
-
-      invokeCallback(opts.callback, [ err ]);
-    });
+    }
+  } else {
+    command = `git add "${opts.files}"`;
   }
+
+  performCommand(command, path, opts.callback);
 };
 
 Git.prototype.commit = function (path, opts) {
@@ -415,42 +425,17 @@ Git.prototype.commit = function (path, opts) {
     }
   }
 
-  if (opts.forceSync) {
-    return execSync(commad, { cwd: path});
-  } else {
-
-    exec(commad, { cwd: path}, function (error, stdout, stderr) {
-      var err = null;
-
-      if (error !== null) {
-        err = error;
-      }
-
-      invokeCallback(opts.callback, [ err ]);
-    });
-  }
+  performCommand(commad, path, opts.callback);
 };
 
 Git.prototype.switchBranch = function (opts, callback) {
   opts = opts || {};
+
   var path = opts.path,
     branch = opts.branch,
     forceCreateIfNotExists = opts.forceCreateIfNotExists;
 
-  if (opts.forceSync) {
-    execSync('git checkout ' + (forceCreateIfNotExists ? ' -b ': '') + branch, { cwd: path,  env: ENV});
-  } else {
-
-    exec('git checkout ' + (forceCreateIfNotExists ? ' -b ': '') + branch, { cwd: path,  env: ENV}, function(error, stdout, stderr) {
-      var err = null;
-
-      if (error !== null) {
-        err = error.message;
-      }
-
-      invokeCallback(callback, [ err ]);
-    });
-  }
+  performCommand('git checkout ' + (forceCreateIfNotExists ? ' -b ': '') + branch, path, callback);
 };
 
 Git.prototype.getCommitCount = function (path, callback) {
@@ -499,58 +484,71 @@ Git.prototype.listRemotes = function (path, callback) {
         }
       });
 
-      this.showRemotes(path, function (err, remotes) {
+      if (Object.keys(repositoryRemotes).length > 0) {
 
-        if (!err) {
-          var remoteList = remotes.split('\n');
+        this.showRemotes(path, function (err, remotes) {
 
-          for (var remote in repositoryRemotes) {
+          if (!err) {
+            var remoteList = remotes.split('\n');
 
-            remoteList.forEach(function (remoteLine) {
+            for (var remote in repositoryRemotes) {
 
-              if (remoteLine.indexOf(remote) > -1) {
+              for (let i = 0; i < remoteList.length; i++) {
 
-                if (remoteLine.indexOf('(push)') > -1) {
-                  repositoryRemotes[remote].push = remoteLine.replace('(push)', '').replace(remote, '').trim();
-                } else if (remoteLine.indexOf('(fetch)')) {
-                  repositoryRemotes[remote].fetch = remoteLine.replace('(fetch)', '').replace(remote, '').trim();
+                if (remoteList[i].indexOf(remote) > -1) {
+
+                  if (remoteList[i].indexOf('(push)') > -1) {
+                    repositoryRemotes[remote].push = remoteList[i].replace('(push)', '').replace(remote, '').trim();
+                  } else if (remoteList[i].indexOf('(fetch)')) {
+                    repositoryRemotes[remote].fetch = remoteList[i].replace('(fetch)', '').replace(remote, '').trim();
+                  }
                 }
               }
-            });
+            }
           }
-        }
 
-        invokeCallback(callback, [ err, repositoryRemotes ]);
-      });
+          invokeCallback(callback, [ err, repositoryRemotes ]);
+        });
+      } else {
+        let error = new Error(`The repository do not have any remote`);
+
+        error.code = 'ENOREMOTE';
+
+        invokeCallback(callback, [error]);
+      }
     }
   }.bind(this));
 };
 
 Git.prototype.discartChangesInFile = function (path, opts) {
-  var command;
+  var command = '';
 
   opts = opts || {};
 
-  if (opts.isUnknow) {
-    command = 'git clean -df "'.concat(opts.file.trim()).concat('"');
-  } else {
-    command = 'git checkout -- "'.concat(opts.file.trim()).concat('"');
-  }
+  if (opts.files instanceof Array) {
 
-  if (opts.forceSync) {
-    return execSync(command, { cwd: path,  env: ENV });
-  } else {
+    for (let i = 0; i < opts.files.length; i++) {
 
-    exec(command, { cwd: path,  env: ENV}, function (error, stdout, stderr) {
-      var err = null;
-
-      if (error !== null) {
-        err = error.message;
+      if (opts.files[i].isUnknow) {
+        command = command.concat(`git clean -df "${opts.files[i].path.trim()}"`);
+      } else {
+        command = command.concat(`git checkout -- "${opts.files[i].path.trim()}"`);
       }
 
-      invokeCallback(opts.callback, [ err, stdout ]);
-    });
+      if (i != (opts.files.length - 1)) {
+        command = command.concat(' && ');
+      }
+    }
+  } else {
+
+    if (opts.files.isUnknow) {
+      command = `git clean -df "${opts.files.path.trim()}"`;
+    } else {
+      command = `git checkout -- "${opts.files.path.trim()}"`;
+    }
   }
+
+  performCommand(command, path, opts.callback);
 };
 
 Git.prototype.unstageFile = function (path, opts) {
@@ -644,36 +642,34 @@ Git.prototype.createRepository = function (opts) {
     if (errFile) {
       err = errFile.message;
 
-      if (opts.callback && typeof opts.callback == 'function') {
-        opts.callback.call(this, err);
-      }
+      invokeCallback(opts.callback, [ err ]);
     } else {
 
-      try {
-        execSync('git init', { cwd: opts.repositoryHome,  env: ENV});
+      // FIXME: Pretty callback hell :')
+      performCommand('git init', opts.repositoryHome, function (err) {
 
         this.switchBranch({
-          path: opts.repositoryHome,
-          branch: 'master',
-          forceCreateIfNotExists: true,
-          forceSync: true
-        });
+            path: opts.repositoryHome,
+            branch: 'master',
+            forceCreateIfNotExists: true
+          },
+          function (err) {
 
-        this.add(opts.repositoryHome, {
-          forceSync: true,
-          file: '.gitignore'
-        });
+            this.add(opts.repositoryHome, {
+              files: '.gitignore',
+              callback: function (err) {
 
-        this.commit(opts.repositoryHome, {
-          forceSync: true,
-          file: '.gitignore',
-          message: '.gitignore'
-        });
-      } catch (error) {
-        err = error.message;
-      }
+                this.commit(opts.repositoryHome, {
+                  message: '.gitignore',
+                  callback: opts.callback
+                });
 
-      invokeCallback(opts.callback, [ err ]);
+              }.bind(this)
+            });
+
+          }.bind(this));
+
+      }.bind(this));
     }
 
   }.bind(this));

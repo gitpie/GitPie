@@ -226,7 +226,7 @@
         };
 
         this.checkoutBranch = function (newBranch) {
-          
+
           if (newBranch) {
             var newBranchName = this.treatBranch(newBranch),
               forceCreateIfNotExists = !this.branchExists(newBranchName);
@@ -372,16 +372,15 @@
             repositoryHome = this.repositoryHome;
 
           if (repositoryName && repositoryHome) {
-            var destinyFolder;
-
-            try {
-              destinyFolder = fs.lstatSync(repositoryHome);
-
-              var noti = new GPNotification(`${MSGS['CREATING REPOSITORY IN']} <strong>${repositoryHome}</strong>`, {
+            let destinyFolder,
+              noti = new GPNotification(`${MSGS['CREATING REPOSITORY IN']} <strong>${repositoryHome}</strong>`, {
                 showLoad: true
               });
 
-              noti.pop();
+            noti.pop();
+
+            try {
+              destinyFolder = fs.lstatSync(repositoryHome);
 
               CommomService.hideHeaderMenu();
 
@@ -413,6 +412,8 @@
               });
 
             } catch (err) {
+              noti.close();
+
               alert(MSGS['The path \'{path}\' is not a folder. Pick a valid directory to create projects.'].replace('{path}', repositoryHome));
             }
           }

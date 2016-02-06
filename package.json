@@ -7,7 +7,7 @@
     "test": "npm run lint && gulp sass",
     "start": "gulp sass && electron .",
     "dev": "gulp dev",
-    "lint": "jshint app/** Gulpfile.js  index.js --exclude app/core/git.js",
+    "lint": "jshint app/** Gulpfile.js  index.js",
     "build": "gulp build",
     "build:linux32": "gulp build:linux32",
     "build:linux64": "gulp build:linux64",

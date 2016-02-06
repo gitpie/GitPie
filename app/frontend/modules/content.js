@@ -267,47 +267,51 @@
         this.commitSelectedChanges = function (commitMessage, commitDescription, event) {
 
           if (commitMessage) {
-            var hasAddedFiles;
+            let selectedFiles = [];
 
             event.target.setAttribute('disabled', true);
 
             this.commitChanges.forEach(function (file) {
-
               if (file.checked) {
-                try {
-
-                  GIT.add(selectedRepository.path, {
-                    forceSync: true,
-                    file: file.path
-                  });
-
-                  hasAddedFiles = true;
-                } catch(err) {
-                  alert(MSGS['Error adding file \'{fileName}\' Error: '].concat(err).replace('{fileName}', file.name));
-                }
+                selectedFiles.push(file.path);
               }
-            }.bind(this));
+            });
 
-            if (hasAddedFiles) {
+            if (selectedFiles.length > 0) {
 
-              try {
+              GIT.add(selectedRepository.path, {
+                files: selectedFiles,
+                callback: function (error) {
 
-                GIT.commit(selectedRepository.path, {
-                  message: commitMessage,
-                  description: commitDescription,
-                  forceSync: true
-                });
+                  if (error) {
+                    alert(`${MSGS['Error adding files. Error:']} ${error.message}`);
 
-                this.showRepositoryInfo(selectedRepository, true);
-              } catch (err) {
-                alert(MSGS['Error commiting changes. Error: '] + err);
-              }
+                    event.target.removeAttribute('disabled');
+                  } else {
 
-              $scope.commitMessage = null;
-              $scope.commitDescription = null;
+                    GIT.commit(selectedRepository.path, {
+                      message: commitMessage,
+                      description: commitDescription,
+                      callback: function (err) {
+                        if (err) {
+                          alert(MSGS['Error commiting changes. Error: '] + err);
+                        } else {
+                          this.showRepositoryInfo(selectedRepository, true);
+
+                          $scope.commitMessage = null;
+                          $scope.commitDescription = null;
+                        }
+
+                        event.target.removeAttribute('disabled');
+                      }.bind(this)
+                    });
+
+                  }
+                }.bind(this)
+              });
+            } else {
+              event.target.removeAttribute('disabled');
             }
-
-            event.target.removeAttribute('disabled');
           }
         };
 
@@ -553,38 +557,26 @@
           }
         };
 
-        this.discartChanges = function (filePath, index, isUnknow, forceSync) {
+        this.discartChanges = function (filePath, index, isUnknow) {
+          let files = {
+            path: filePath,
+            isUnknow: isUnknow,
+          };
 
-          if (forceSync) {
+          GIT.discartChangesInFile(selectedRepository.path, {
+            files: files,
+            callback: function (error) {
 
-            GIT.discartChangesInFile(selectedRepository.path, {
-              file: filePath,
-              isUnknow: isUnknow,
-              forceSync: forceSync
-            });
+              if (error) {
+                alert(error);
+              } else {
+                this.commitChanges.splice(index, 1);
+                applyScope($scope);
+              }
 
-            this.commitChanges.splice(index, 1);
-          } else {
-
-            GIT.discartChangesInFile(selectedRepository.path, {
-
-              file: filePath,
-
-              isUnknow: isUnknow,
-
-              callback: function (err) {
-
-                if (err) {
-                  alert(err);
-                } else {
-                  this.commitChanges.splice(index, 1);
-                  applyScope($scope);
-                }
-
-                $scope.$broadcast('apprefreshed', this.commitChanges);
-              }.bind(this)
-            });
-          }
+              $scope.$broadcast('apprefreshed', this.commitChanges);
+            }.bind(this)
+          });
         };
 
         this.unstageFile = function (filePath, index) {
@@ -666,21 +658,32 @@
         };
 
         this.discartAllSelected = function (fileList) {
+          let files = [];
 
           for (let i = 0; i < fileList.length; i++) {
 
             if (fileList[i].checked && !fileList[i].staged) {
-              this.discartChanges(fileList[i].path, i, (fileList[i].type == 'NEW'), true);
-
-              if (this.commitChanges.length === 0) {
-                i = 0;
-              } else {
-                i--;
-              }
+              files.push({
+                path: fileList[i].path,
+                isUnknow: (fileList[i].type == 'NEW'),
+              });
             }
           }
 
-          $scope.$broadcast('apprefreshed', this.commitChanges);
+          if (files.length > 0) {
+
+            GIT.discartChangesInFile(selectedRepository.path, {
+              files: files,
+              callback: function (error) {
+
+                if (error) {
+                  alert(error);
+                }
+
+                this.refreshRepositoryChanges();
+              }.bind(this)
+            });
+          }
         };
 
         this.refreshRepositoryChanges = function () {
