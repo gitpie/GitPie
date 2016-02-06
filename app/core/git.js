@@ -493,17 +493,17 @@ Git.prototype.listRemotes = function (path, callback) {
 
             for (var remote in repositoryRemotes) {
 
-              remoteList.forEach(function (remoteLine) {
+              for (let i = 0; i < remoteList.length; i++) {
 
-                if (remoteLine.indexOf(remote) > -1) {
+                if (remoteList[i].indexOf(remote) > -1) {
 
-                  if (remoteLine.indexOf('(push)') > -1) {
-                    repositoryRemotes[remote].push = remoteLine.replace('(push)', '').replace(remote, '').trim();
-                  } else if (remoteLine.indexOf('(fetch)')) {
-                    repositoryRemotes[remote].fetch = remoteLine.replace('(fetch)', '').replace(remote, '').trim();
+                  if (remoteList[i].indexOf('(push)') > -1) {
+                    repositoryRemotes[remote].push = remoteList[i].replace('(push)', '').replace(remote, '').trim();
+                  } else if (remoteList[i].indexOf('(fetch)')) {
+                    repositoryRemotes[remote].fetch = remoteList[i].replace('(fetch)', '').replace(remote, '').trim();
                   }
                 }
-              });
+              }
             }
           }
 
