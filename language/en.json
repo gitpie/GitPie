@@ -109,6 +109,9 @@
   "'{cloneURL}' not appears to be a git remote URL. Let's try again!": "'{cloneURL}' not appears to be a git remote URL. Let's try again!",
   "The path '{path}' is not a folder. Pick a valid directory to clone projects.": "The path '{path}' is not a folder. Pick a valid directory to clone projects.",
   "The path '{path}' is not a folder. Pick a valid directory to create projects.": "The path '{path}' is not a folder. Pick a valid directory to create projects.",
+  "Repository without remote": "Repository without remote",
+  "Add it anyway?": "Add it anyway?",
+  "The repository do not have any remote": "The repository do not have any remote",
 
   "SettingsPage": {
     "Preferences": "Preferences",

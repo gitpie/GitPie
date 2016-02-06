@@ -499,29 +499,38 @@ Git.prototype.listRemotes = function (path, callback) {
         }
       });
 
-      this.showRemotes(path, function (err, remotes) {
+      if (Object.keys(repositoryRemotes).length > 0) {
 
-        if (!err) {
-          var remoteList = remotes.split('\n');
+        this.showRemotes(path, function (err, remotes) {
 
-          for (var remote in repositoryRemotes) {
+          if (!err) {
+            var remoteList = remotes.split('\n');
 
-            remoteList.forEach(function (remoteLine) {
+            for (var remote in repositoryRemotes) {
 
-              if (remoteLine.indexOf(remote) > -1) {
+              remoteList.forEach(function (remoteLine) {
 
-                if (remoteLine.indexOf('(push)') > -1) {
-                  repositoryRemotes[remote].push = remoteLine.replace('(push)', '').replace(remote, '').trim();
-                } else if (remoteLine.indexOf('(fetch)')) {
-                  repositoryRemotes[remote].fetch = remoteLine.replace('(fetch)', '').replace(remote, '').trim();
+                if (remoteLine.indexOf(remote) > -1) {
+
+                  if (remoteLine.indexOf('(push)') > -1) {
+                    repositoryRemotes[remote].push = remoteLine.replace('(push)', '').replace(remote, '').trim();
+                  } else if (remoteLine.indexOf('(fetch)')) {
+                    repositoryRemotes[remote].fetch = remoteLine.replace('(fetch)', '').replace(remote, '').trim();
+                  }
                 }
-              }
-            });
+              });
+            }
           }
-        }
 
-        invokeCallback(callback, [ err, repositoryRemotes ]);
-      });
+          invokeCallback(callback, [ err, repositoryRemotes ]);
+        });
+      } else {
+        let error = new Error(`The repository do not have any remote`);
+
+        error.code = 'ENOREMOTE';
+
+        invokeCallback(callback, [error]);
+      }
     }
   }.bind(this));
 };
@@ -648,36 +657,34 @@ Git.prototype.createRepository = function (opts) {
     if (errFile) {
       err = errFile.message;
 
-      if (opts.callback && typeof opts.callback == 'function') {
-        opts.callback.call(this, err);
-      }
+      invokeCallback(opts.callback, [ err ]);
     } else {
 
-      try {
-        execSync('git init', { cwd: opts.repositoryHome,  env: ENV});
+      // FIXME: Pretty callback hell :')
+      performCommand('git init', opts.repositoryHome, function (err) {
 
         this.switchBranch({
-          path: opts.repositoryHome,
-          branch: 'master',
-          forceCreateIfNotExists: true,
-          forceSync: true
-        });
+            path: opts.repositoryHome,
+            branch: 'master',
+            forceCreateIfNotExists: true
+          },
+          function (err) {
 
-        this.add(opts.repositoryHome, {
-          forceSync: true,
-          file: '.gitignore'
-        });
+            this.add(opts.repositoryHome, {
+              files: '.gitignore',
+              callback: function (err) {
 
-        this.commit(opts.repositoryHome, {
-          forceSync: true,
-          file: '.gitignore',
-          message: '.gitignore'
-        });
-      } catch (error) {
-        err = error.message;
-      }
+                this.commit(opts.repositoryHome, {
+                  message: '.gitignore',
+                  callback: opts.callback
+                });
 
-      invokeCallback(opts.callback, [ err ]);
+              }.bind(this)
+            });
+
+          }.bind(this));
+
+      }.bind(this));
     }
 
   }.bind(this));

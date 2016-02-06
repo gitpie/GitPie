@@ -557,7 +557,7 @@
           }
         };
 
-        this.discartChanges = function (filePath, index, isUnknow, forceSync) {
+        this.discartChanges = function (filePath, index, isUnknow) {
           let files = {
             path: filePath,
             isUnknow: isUnknow,

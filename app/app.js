@@ -151,7 +151,38 @@ try {
             GIT.listRemotes(repositoryPath, function (err, repositoryRemotes) {
 
               if (err) {
-                alert($rootScope.MSGS['Nothing for me here.\n The folder {folder} is not a git project'].replace('{folder}', repositoryPath));
+
+                if (err.code == 'ENOREMOTE') {
+                  let dialog = remote.require('dialog');
+                  let browserWindow = remote.require('browser-window');
+                  let currentWindow = browserWindow.getFocusedWindow();
+
+                  dialog.showMessageBox(currentWindow,
+                    {
+                      type: 'warning',
+                      title: `${MSGS['Repository without remote']}`,
+                      message: `${MSGS[err.message]}. ${MSGS['Add it anyway?']}`,
+                      buttons: ['Yes', 'No']
+                    },
+                    function (response) {
+
+                      if (response === 0) {
+                        let path = require('path'),
+                          repository = this.addNewGitRepository({
+                            repositoryName: path.basename(repositoryPath),
+                            path: repositoryPath
+                          });
+
+                        if (callback && typeof callback == 'function') {
+                          callback.call(this, repository);
+                        }
+                      }
+                    }.bind(this)
+                  );
+                } else {
+                  alert($rootScope.MSGS['Nothing for me here.\n The folder {folder} is not a git project'].replace('{folder}', repositoryPath));
+                }
+
               } else {
                 let gitUrl = gitUrlParse(repositoryRemotes.origin.push),
                   type,
@@ -193,7 +224,7 @@ try {
                   callback.call(this, repository);
                 }
               }
-            });
+            }.bind(this));
           }
         }
       },
