@@ -218,14 +218,18 @@
           }.bind(this));
         };
 
-        this.checkoutBranch = function ($event, newBranch) {
+        this.checkoutBranchKeyPress = function ($event, newBranch) {
 
           if ($event.keyIdentifier == 'Enter') {
-            var newBranchName = this.treatBranch(newBranch),
-              forceCreateIfNotExists = !this.branchExists(newBranchName);
-
-            this.switchBranch(newBranchName, forceCreateIfNotExists);
+            this.checkoutBranch(newBranch);
           }
+        };
+
+        this.checkoutBranch = function (newBranch) {
+          var newBranchName = this.treatBranch(newBranch),
+            forceCreateIfNotExists = !this.branchExists(newBranchName);
+
+          this.switchBranch(newBranchName, forceCreateIfNotExists);
         };
 
         this.branchExists = function (branchName) {
