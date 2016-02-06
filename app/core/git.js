@@ -527,30 +527,34 @@ Git.prototype.listRemotes = function (path, callback) {
 };
 
 Git.prototype.discartChangesInFile = function (path, opts) {
-  var command;
+  var command = '';
 
   opts = opts || {};
 
-  if (opts.isUnknow) {
-    command = 'git clean -df "'.concat(opts.file.trim()).concat('"');
-  } else {
-    command = 'git checkout -- "'.concat(opts.file.trim()).concat('"');
-  }
+  if (opts.files instanceof Array) {
 
-  if (opts.forceSync) {
-    return execSync(command, { cwd: path,  env: ENV });
-  } else {
+    for (let i = 0; i < opts.files.length; i++) {
 
-    exec(command, { cwd: path,  env: ENV}, function (error, stdout, stderr) {
-      var err = null;
-
-      if (error !== null) {
-        err = error.message;
+      if (opts.files[i].isUnknow) {
+        command = command.concat(`git clean -df "${opts.files[i].path.trim()}"`);
+      } else {
+        command = command.concat(`git checkout -- "${opts.files[i].path.trim()}"`);
       }
 
-      invokeCallback(opts.callback, [ err, stdout ]);
-    });
+      if (i != (opts.files.length - 1)) {
+        command = command.concat(' && ');
+      }
+    }
+  } else {
+
+    if (opts.files.isUnknow) {
+      command = `git clean -df "${opts.files.path.trim()}"`;
+    } else {
+      command = `git checkout -- "${opts.files.path.trim()}"`;
+    }
   }
+
+  performCommand(command, path, opts.callback);
 };
 
 Git.prototype.unstageFile = function (path, opts) {
