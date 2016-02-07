@@ -5,11 +5,6 @@
 
 GitPie is a Multiplatform Client for [Git](https://git-scm.com/) that have the goal to be a simple and elegant solution to manage any git project don't matter what git service you use. And the best is 100% open source.
 
-## Warning
-The pie is extremely hot! Eating it can hurt!
-
-GitPie is under hard development. And can have a lot of bug and unterminated capabilities. Please go easy and be gentle.
-
 ## What's in the pie stuffing?
 
 GitPie is built on [Electron](https://github.com/atom/electron) and [Angular](https://github.com/angular/angular) to have a maintainable and organized source to anyone understand what's going on behind the scenes.

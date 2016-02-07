@@ -1,7 +1,7 @@
 {
   "name": "GitPie",
-  "version": "0.3.0",
-  "description": "A Multiplataform Client for Git",
+  "version": "0.4.0",
+  "description": "A Multiplatform Client for Git",
   "main": "index.js",
   "scripts": {
     "test": "npm run lint && gulp sass",
