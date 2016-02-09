@@ -336,9 +336,11 @@ body {
         .pointer {
           cursor: pointer;
           padding: 15px 0;
+          padding-bottom: 0;
         }
 
         .shortcut-cnt {
+          padding-top: 15px;
 
           div {
             padding: 10px 0;
