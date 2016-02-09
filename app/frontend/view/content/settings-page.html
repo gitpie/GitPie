@@ -18,6 +18,13 @@
               </select>
             </li>
             <li>
+              <section class="label-field">{{ MSGS.SettingsPage.Language }}</section>
+              <select ng-model="CONFIGS.language.code" ng-change="settingsCtrl.changeAppLanguage()">
+                <option value="{{ CONFIGS.language.code }}">{{ CONFIGS.language.description }} ({{ MSGS.SettingsPage.default }})</option>
+                <option ng-repeat="lang in settingsCtrl.languages" value="{{ lang.code }}">{{ lang.description }}</option>
+              </select>
+            </li>
+            <li>
               <section class="label-field">{{ MSGS.SettingsPage['Show repositories from'] }}</section>
               <div class="checkbox-container">
                 <input id="github" type="checkbox" ng-model="CONFIGS.showRepository.github" />

@@ -123,7 +123,6 @@
     "GitPie set some defaults configurations to setting up the mergetool. You can change this after": "GitPie set some defaults configurations to setting up the mergetool. You can change this after",
     "See how": "See how",
     "Repository": "Repository",
-    "Ignored files": "Ignored files",
     "Using ssh key": "Using ssh key",
     "About": "About",
     "License": "License",
@@ -139,7 +138,8 @@
     "Open add projects dialog": "Open add projects dialog",
     "Toggle developer tools": "Toggle developer tools",
     "Hide repositories menu": "Hide repositories menu",
-    "Show repositories menu": "Show repositories menu"
+    "Show repositories menu": "Show repositories menu",
+    "Language": "Language"
   },
 
   "Authentication required": "Authentication required",

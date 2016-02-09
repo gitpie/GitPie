@@ -38,10 +38,30 @@ process.on('uncaughtException', function(err) {
   alert(err);
 });
 
-/* Get the locale language */
+/* Get the defaults configurations of GitPie */
+let configs = JSON.parse(localStorage.getItem('configs'));
+
+if (!configs) {
+  // Set the defaults configurations of GitPie
+  configs = {
+    fontFamily: 'Roboto',
+    showRepository: {
+      github: true,
+      bitbucket: true,
+      others: true
+    },
+    language: {
+      code: 'en',
+      description: 'English'
+    }
+  };
+
+  localStorage.setItem('configs', JSON.stringify(configs));
+}
+
 try {
-  MSGS = require('./language/'.concat(LANG).concat('.json'));
-} catch (err){
+  MSGS = require('./language/'.concat(configs.language.code).concat('.json'));
+} catch (err) {
   MSGS = require('./language/en.json');
 }
 
@@ -110,19 +130,6 @@ try {
 
     // Load the application Configs
     var Configs = JSON.parse(localStorage.getItem('configs'));
-
-    if (!Configs) {
-      Configs = {
-        fontFamily: 'Roboto',
-        showRepository: {
-          github: true,
-          bitbucket: true,
-          others: true
-        }
-      };
-
-      localStorage.setItem('configs', JSON.stringify(Configs));
-    }
 
     $rootScope.CONFIGS = Configs;
 
