@@ -30,6 +30,26 @@
                 <label for="others">{{ MSGS.Others }}</label>
               </div>
             </li>
+            <li>
+              <section class="label-field">{{ MSGS.SettingsPage['Shortcuts list'] }}</section>
+              <div ng-click="showShortcuts = !showShortcuts" class="info pointer">
+                <span class="octicon octicon-keyboard"></span> {{ showShortcuts ? MSGS.SettingsPage['Hide shortcuts'] : MSGS.SettingsPage['Show shortcuts'] }}
+              </div>
+              <section ng-show="showShortcuts" class="shortcut-cnt">
+                <div>
+                  <pre>Ctrl+shift+a</pre> {{ MSGS.SettingsPage['Open add projects dialog'] }}
+                </div>
+                <div>
+                  <pre>Ctrl+shift+d</pre> {{ MSGS.SettingsPage['Toggle developer tools'] }}
+                </div>
+                <div>
+                  <pre>Ctrl+&#8678;</pre> {{ MSGS.SettingsPage['Hide repositories menu'] }}
+                </div>
+                <div>
+                  <pre>Ctrl+&#8680;</pre> {{ MSGS.SettingsPage['Show repositories menu'] }}
+                </div>
+              </section>
+            </li>
           </ul>
         </li>
 

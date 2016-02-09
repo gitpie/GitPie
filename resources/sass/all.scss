@@ -333,6 +333,35 @@ body {
         box-shadow: 4px 4px 40px #333;
         box-sizing: border-box;
 
+        .pointer {
+          cursor: pointer;
+          padding: 15px 0;
+        }
+
+        .shortcut-cnt {
+
+          div {
+            padding: 10px 0;
+
+            // Shortcut style
+            pre {
+              display: inline-block;
+              min-width: 22px;
+              text-align: center;
+              background-color: #e9e9e9;
+              background-image: linear-gradient(to bottom, #e9e9e9, #fff);
+              border: 1px solid #a5a5a5;
+              border-radius: 3px;
+              box-shadow: inset 0 1px 0 0 #fff, inset 0 -2px 0 0 #d9d9d9;
+              color: #4d4d4d;
+              font-family: $code-font;
+              margin: 3px;
+              padding: 2px 4px;
+              font-size: 0.8em;
+            }
+          }
+        }
+
         header {
           @extend #header;
           position: fixed;

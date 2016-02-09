@@ -132,7 +132,14 @@
     "GitPie is an open source git client that have the goal to be the most simple and nice client for any project and for any people": "GitPie is an open source git client that have the goal to be the most simple and nice client for any project and for any people",
     "CHANGE GLOBALS CONFIGURATIONS": "CHANGE GLOBALS CONFIGURATIONS",
     "CHANGE {repository} CONFIGURATIONS": "CHANGE {repository} CONFIGURATIONS",
-    "Show repositories from": "Show repositories from"
+    "Show repositories from": "Show repositories from",
+    "Shortcuts list": "Shortcuts list",
+    "Hide shortcuts": "Hide shortcuts",
+    "Show shortcuts": "Show shortcuts",
+    "Open add projects dialog": "Open add projects dialog",
+    "Toggle developer tools": "Toggle developer tools",
+    "Hide repositories menu": "Hide repositories menu",
+    "Show repositories menu": "Show repositories menu"
   },
 
   "Authentication required": "Authentication required",
