@@ -17,7 +17,6 @@
       templateUrl: 'app/frontend/view/header/pieHeader.html',
 
       controller: function ($scope, $element, CommomService) {
-        var MSGS = $scope.MSGS;
         let isMerging = false;
 
         let updateIsMerging = function () {

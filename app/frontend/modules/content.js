@@ -20,7 +20,6 @@
         let selectedRepository = {},
           selectedCommit = {},
           selectedCommitAncestor = null,
-          MSGS = $scope.MSGS,
           Menu = remote.require('menu'),
           MenuItem = remote.require('menu-item');
 

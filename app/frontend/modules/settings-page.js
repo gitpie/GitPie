@@ -113,6 +113,7 @@
 
           try {
             $scope.MSGS = require('./language/'.concat(newLangCode).concat('.json'));
+            MSGS = $scope.MSGS;
           } catch (err) {
             $scope.CONFIGS.language = {
               code: 'en',
