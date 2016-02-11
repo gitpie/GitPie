@@ -602,6 +602,69 @@
             }
           }.bind(this));
 
+          // Focus the Search Repository field
+          globalShortcut.register('ctrl+f', function() {
+            let filed = document.querySelector('#left > input');
+
+            filed.focus();
+          });
+
+          // Navigate between repositories top to bottom
+          globalShortcut.register('ctrl+down', function() {
+            let liList = document.querySelectorAll('#content > #left > nav ul li ul li');
+
+            if (liList.length > 0) {
+              let selectedRepository = document.querySelector('#content > #left > nav ul li.selected');
+
+              if (selectedRepository) {
+                let selectedRepositoryPosition;
+                let nextLi;
+
+                for (let i = 0; i < liList.length; i++) {
+
+                  if (liList[i].className.indexOf('selected') > -1) {
+                    nextLi = liList[ (i + 1) ];
+                    break;
+                  }
+                }
+
+                if (nextLi) {
+                  nextLi.click();
+                }
+              } else {
+                liList[0].click();
+              }
+            }
+          });
+
+          // Navigate between repositories bottom to top
+          globalShortcut.register('ctrl+up', function() {
+            let liList = document.querySelectorAll('#content > #left > nav ul li ul li');
+
+            if (liList.length > 0) {
+              let selectedRepository = document.querySelector('#content > #left > nav ul li.selected');
+
+              if (selectedRepository) {
+                let selectedRepositoryPosition;
+                let nextLi;
+
+                for (let i = 0; i < liList.length; i++) {
+
+                  if (liList[i].className.indexOf('selected') > -1) {
+                    nextLi = liList[ (i - 1) ];
+                    break;
+                  }
+                }
+
+                if (nextLi) {
+                  nextLi.click();
+                }
+              } else {
+                liList[ (liList.length - 1) ].click();
+              }
+            }
+          });
+
           // Open devTools for debug
           globalShortcut.register('ctrl+shift+d', function() {
             let Win = browserWindow.getFocusedWindow();
