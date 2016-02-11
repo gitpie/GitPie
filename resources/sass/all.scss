@@ -200,7 +200,7 @@ body {
 
       .page-overlay {
         position:absolute;
-        z-index:9999;
+        z-index: 300;
         top:0;
         left:0;
         width:100%;
@@ -210,111 +210,139 @@ body {
         transition: opacity 0.2s ease;
       }
 
-      .page-modal {
+      .page-modal-container {
         position: absolute;
-        top: 50%;
-        left: 50%;
-        background-color: #FFF;
-        padding: 15px;
-        z-index: 10000;
-        margin-top: -200px;
-        margin-left: -250px;
-        width: 500px;
-        border-radius: 3px;
-        box-shadow: 4px 4px 40px #333;
+        z-index: 400;
+        display: flex;
+        height: 100%;
+        width: 100%;
+        align-items: center;
+        justify-content: center;
+        top: 0;
+        left: 0;
 
-        .merge-modal {
+        .page-modal {
+          background-color: #FFF;
+          padding: 15px;
+          width: 500px;
+          border-radius: 3px;
+          box-shadow: 4px 4px 40px #333;
+          overflow: hidden;
+          margin-top: -10%;
 
-          .compare-box {
-            background-color: #f4f4f4;
-            padding: 5px 10px 0;
-            border-radius: 3px;
-            border: #eee 1px solid;
-            margin-bottom: 10px;
-            font-size: 0.95em;
+          .merge-modal {
 
-            .padding-side {
-              padding: 0 10px;
+            .compare-box {
+              background-color: #f4f4f4;
+              padding: 5px 10px 0;
+              border-radius: 3px;
+              border: #eee 1px solid;
+              margin-bottom: 10px;
+              font-size: 0.95em;
+
+              .padding-side {
+                padding: 0 10px;
+              }
+
+              select {
+                width: 150px;
+                min-width: 150px;
+                padding: 5px;
+              }
+
+              .octicon-git-compare {
+                padding: 7px 0;
+                float: right;
+                opacity: 0.5;
+              }
             }
 
-            select {
-              width: 150px;
-              min-width: 150px;
-              padding: 5px;
-            }
+            .diff-box {
+              max-height: 250px;
+              overflow: auto;
 
-            .octicon-git-compare {
-              padding: 7px 0;
-              float: right;
-              opacity: 0.5;
-            }
-          }
+              ul {
+                list-style: none;
+                margin: 0;
+                padding: 0;
 
-          .diff-box {
-            max-height: 250px;
-            overflow: auto;
+                li {
+                  padding: 10px 0;
+                  border-bottom: 1px solid #EEE;
 
-            ul {
-              list-style: none;
-              margin: 0;
-              padding: 0;
+                  .label {
+                    float: right;
+                    margin: 0 5px;
+                    opacity: 0.8;
+                  }
 
-              li {
-                padding: 5px 0;
+                  .label-deletions {
+                    @extend .label;
+                    color: #D7431B;
+                    font-size: 0.9em;
+                  }
 
-                .label {
-                  float: right;
-                  margin: 0 5px;
-                  opacity: 0.8;
-                }
+                  .label-additions {
+                    @extend .label;
+                    color: #58B231;
+                    font-size: 0.9em;
+                  }
 
-                .label-deletions {
-                  @extend .label;
-                  color: #D7431B;
-                  font-size: 0.9em;
-                }
-
-                .label-additions {
-                  @extend .label;
-                  color: #58B231;
-                  font-size: 0.9em;
-                }
-
-                .label-binary {
-                  @extend .label;
-                  color: #986B45;
+                  .label-binary {
+                    @extend .label;
+                    color: #986B45;
+                  }
                 }
               }
             }
+
+            .shortstat {
+              font-family: $code-font;
+              font-size: 0.9em;
+              padding-top: 15px;
+              padding-bottom: 10px;
+              color: #999;
+            }
+
+            #merge-button {
+              margin-right: 5px;
+            }
           }
 
-          .shortstat {
-            font-family: $code-font;
-            font-size: 0.9em;
-            padding-top: 20px;
-            padding-bottom: 5px;
+          h1 {
+            font-size: 1.9em;
+            color: #000;
+            font-weight: normal;
+            margin-top: 20px;
+
+            .octicon {
+              float: right;
+              font-size: 80px;
+              border-radius: 50%;
+              display: flex;
+              align-items: center;
+              justify-content: center;
+              color: rgba(71, 71, 71, 0.75);
+              width: 50px;
+              margin-top: -50px;
+              margin-right: 10px;
+            }
           }
 
-          #merge-button {
-            margin-right: 5px;
+          p {
+            display: block;
+            text-align: justify;
+            margin-bottom: 20px;
           }
-        }
 
-        h1 {
-          .octicon {
-            float: left;
-            margin-bottom: -3px;
-            margin-right: 7px;
+          input[type="text"], input[type="password"] {
+            width: 49%;
+            box-sizing: border-box;
           }
-        }
 
-        input[type="text"], input[type="password"] {
-          width: 49%;
-          box-sizing: border-box;
-        }
-
-        footer {
-          margin-top: 10px;
+          footer {
+            margin-top: 10px;
+          }
         }
       }
 
