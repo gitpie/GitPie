@@ -139,7 +139,10 @@
     "Toggle developer tools": "Abrir/Fechar developer tools",
     "Hide repositories menu": "Esconder menu de repositórios",
     "Show repositories menu": "Mostrar menu de repositórios",
-    "Language": "Idioma"
+    "Language": "Idioma",
+    "Navigate between repositories top to bottom": "Navega entre os repositórios de cima para baixo",
+    "Navigate between repositories bottom to top": "Navega entre os repositórios de baixo para cima",
+    "Add focus on the \"Search repositories\" field": "Adiciona foco no campo \"Procurar repositórios\""
   },
 
   "Authentication required": "Autenticação requerida",

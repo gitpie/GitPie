@@ -602,7 +602,7 @@
             }
           }.bind(this));
 
-          // Focus the Search Repository field
+          // Add Focus on the "Search repositories" field
           globalShortcut.register('ctrl+f', function() {
             let filed = document.querySelector('#left > input');
 
@@ -630,9 +630,11 @@
 
                 if (nextLi) {
                   nextLi.click();
+                  nextLi.scrollIntoView();
                 }
               } else {
                 liList[0].click();
+                liList[0].scrollIntoView();
               }
             }
           });
@@ -658,9 +660,11 @@
 
                 if (nextLi) {
                   nextLi.click();
+                  nextLi.scrollIntoView(true);
                 }
               } else {
                 liList[ (liList.length - 1) ].click();
+                liList[ (liList.length - 1) ].scrollIntoView(true);
               }
             }
           });
