@@ -607,7 +607,12 @@
             let filed = document.querySelector('#left > input');
 
             filed.focus();
-          });
+
+            if (!$scope.showRepositoryMenu) {
+              this.toggleRepositoryMenu();
+              applyScope($scope);
+            }
+          }.bind(this));
 
           // Navigate between repositories top to bottom
           globalShortcut.register('ctrl+down', function() {
