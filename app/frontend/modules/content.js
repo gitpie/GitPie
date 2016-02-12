@@ -2,7 +2,7 @@
 
 (function () {
   var CodeProcessor = require('./app/core/code-processor'),
-    cp = new CodeProcessor(),
+    cp = new CodeProcessor(PR.prettyPrintOne),
     path = require('path'),
     wos = require('node-wos');
 

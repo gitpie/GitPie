@@ -10,7 +10,7 @@ var getLineType = function (firstChar) {
 
   },
 
-  buildDiffTable = function (blockList) {
+  buildDiffTable = function (blockList, prettyfier) {
     var table = [
       '<table class="diff-table">',
         '<tbody>'
@@ -57,7 +57,7 @@ var getLineType = function (firstChar) {
             '<td class="line-number">',
               ( block.lines[i].type != 'MINOR' ? rightNumberColumn : '' ),
             '</td>',
-            '<td><xmp>', block.lines[i].code, '</xmp></td>',
+            '<td>', (prettyfier ? prettyfier(block.lines[i].code.replace(/</g, '&lt;').replace(/>/g, '&gt;')) : block.lines[i].code), '</td>',
           '</tr>'
         ];
 
@@ -79,8 +79,9 @@ var getLineType = function (firstChar) {
     return table.join('');
   };
 
-function CodeDiffProcessor() {
+function CodeDiffProcessor(prettyfier) {
   this.version = '0.0.1';
+  this.prettyfier = prettyfier;
 }
 
 CodeDiffProcessor.prototype.processCode = function (code) {
@@ -121,7 +122,7 @@ CodeDiffProcessor.prototype.processCode = function (code) {
     }
   }
 
-  return buildDiffTable(blocks);
+  return buildDiffTable(blocks, this.prettyfier);
 };
 
 module.exports = CodeDiffProcessor;
