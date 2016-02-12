@@ -1387,8 +1387,11 @@ body {
                         }
 
                         td.line-number {
-                          text-align: center;
+                          text-align: right;
                           color: rgba(0, 0, 0, 0.3);
+                          -webkit-user-select: none;
+                          width: 1%;
+                          min-width: 30px
                         }
                       }
                     }
