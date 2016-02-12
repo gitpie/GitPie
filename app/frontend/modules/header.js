@@ -635,11 +635,11 @@
 
                 if (nextLi) {
                   nextLi.click();
-                  nextLi.scrollIntoView();
+                  nextLi.scrollIntoViewIfNeeded();
                 }
               } else {
                 liList[0].click();
-                liList[0].scrollIntoView();
+                liList[0].scrollIntoViewIfNeeded();
               }
             }
           });
@@ -665,11 +665,11 @@
 
                 if (nextLi) {
                   nextLi.click();
-                  nextLi.scrollIntoView(true);
+                  nextLi.scrollIntoViewIfNeeded();
                 }
               } else {
                 liList[ (liList.length - 1) ].click();
-                liList[ (liList.length - 1) ].scrollIntoView(true);
+                liList[ (liList.length - 1) ].scrollIntoViewIfNeeded();
               }
             }
           });
