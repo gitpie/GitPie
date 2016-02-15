@@ -29,7 +29,7 @@
           }
 
           if ($element.attr('id') == 'chagesTabPanel') {
-            $scope.$root.appCtrl.enableCommitBlock = selectedPane.paneTitle == 'Changes';
+            $scope.$root.appCtrl.enableCommitBlock = selectedPane.paneTitle == $scope.$root.MSGS.Changes;
           }
         };
 
