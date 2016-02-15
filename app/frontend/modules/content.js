@@ -753,12 +753,12 @@
                 var changesHTML = [];
 
                 if (file.additions > 0) {
-                  changesHTML.push('<span class="plus-text">+', file.additions, '</span>');
+                  changesHTML.push('<span class="plus-text"><span class="octicon octicon-diff-added"></span>', file.additions, '</span>');
                 }
 
 
                 if (file.deletions > 0) {
-                  changesHTML.push('<span class="minor-text">-', file.deletions, '</span>');
+                  changesHTML.push('<span class="minor-text"><span class="octicon octicon-diff-removed"></span>', file.deletions, '</span>');
                 }
 
                 file.changes = $sce.trustAsHtml(changesHTML.join(''));
