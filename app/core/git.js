@@ -27,12 +27,20 @@ function Git() {
  * @private
  * @method performCommand
  * Perform commands on a standardized way
- * @param {String} command
- * @param {String} cwd
+ * @param {string} command
+ * @param {string} cwd
  * @param {function} callback
 */
 function performCommand(command, cwd, callback) {
-  exec(command, { cwd: cwd, env: ENV  }, callback);
+  let path;
+
+  if (typeof cwd == 'function') {
+    callback = cwd;
+  } else {
+    path = cwd;
+  }
+
+  exec(command, { cwd: path, env: ENV  }, callback);
 }
 
 /**
@@ -40,7 +48,7 @@ function performCommand(command, cwd, callback) {
  * @method invokeCallback
  * Verify if the callback param is a function an try to invoke it
  * @param {function} callback
- * @param {Array} args - Array of arguments
+ * @param {Array} args
 */
 function invokeCallback(callback, args, scope) {
 
@@ -57,7 +65,7 @@ function invokeCallback(callback, args, scope) {
  */
 Git.prototype.getCurrentBranch = function (path, callback) {
 
-  exec('git branch -r && git branch', { cwd: path, env: ENV }, function (error, stdout, stderr) {
+  performCommand('git branch -r && git branch', path, function (error, stdout, stderr) {
     var err = null,
       lines = stdout.split('\n'),
       currentBranch,
@@ -116,39 +124,38 @@ Git.prototype.getCurrentBranch = function (path, callback) {
 Git.prototype.getCommitHistory = function (opts, callback) {
   var emoji = require('./emoji');
 
-  exec(
+  performCommand(
     "git --no-pager log -n 50 --pretty=format:%an-gtseparator-%cr-gtseparator-%h-gtseparator-%s-gtseparator-%b-gtseparator-%ae-pieLineBreak-" + (opts.skip ? ' --skip '.concat(opts.skip) : '' ),
-
-    { cwd: opts.path, env: ENV },
-
+    opts.path,
     function (error, stdout, stderr) {
-    var lines = stdout.split('-pieLineBreak-'),
-      historyList = [],
-      err = null;
+      var lines = stdout.split('-pieLineBreak-'),
+        historyList = [],
+        err = null;
 
-    if (error !== null) {
-      err = error;
-    } else {
+      if (error !== null) {
+        err = error;
+      } else {
 
-      for (var i = 0; i < lines.length; i++) {
+        for (var i = 0; i < lines.length; i++) {
 
-        if (lines[i] !== '') {
-          var historyItem = lines[i].split('-gtseparator-');
+          if (lines[i] !== '') {
+            var historyItem = lines[i].split('-gtseparator-');
 
-          historyList.push({
-            user: historyItem[0],
-            date: historyItem[1],
-            hash: historyItem[2],
-            message: emoji.parse(historyItem[3]),
-            body: historyItem[4],
-            email: historyItem[5]
-          });
+            historyList.push({
+              user: historyItem[0],
+              date: historyItem[1],
+              hash: historyItem[2],
+              message: emoji.parse(historyItem[3]),
+              body: historyItem[4],
+              email: historyItem[5]
+            });
+          }
         }
       }
-    }
 
-    invokeCallback(callback, [err, historyList] );
-  }.bind(this));
+      invokeCallback(callback, [err, historyList] );
+    }
+  );
 };
 
 /**
@@ -159,7 +166,7 @@ Git.prototype.getCommitHistory = function (opts, callback) {
  */
 Git.prototype.getStatus = function (path, callback) {
 
-  exec('git status -sb', {cwd: path, env: ENV}, function (error, stdout, stderr) {
+  performCommand('git status -sb', path, function (error, stdout, stderr) {
     var err = null,
       syncStatus = {
         ahead: null,
@@ -268,21 +275,12 @@ Git.prototype.getStatus = function (path, callback) {
  * @param  {function} callback - Callback to be execute in error or success case
  */
 Git.prototype.fetch = function (path, callback) {
-
-  exec('git fetch --prune', {cwd: path, env: ENV}, function (error, stdout, stderr) {
-    var err = null;
-
-    if (error) {
-      err = error.message;
-    }
-
-    invokeCallback(callback, [ err ]);
-  });
+  performCommand('git fetch --prune', path, callback);
 };
 
 Git.prototype.getDiff = function (opts, callback) {
 
-  exec('git diff --numstat ' + opts.ancestorHash + ' ' + opts.hash, { cwd: opts.path, env: ENV}, function (error, stdout, stderr) {
+  performCommand(`git diff --numstat ${opts.ancestorHash} ${opts.hash}`, opts.path, function (error, stdout, stderr) {
     var err = null,
       files = [];
 
@@ -312,33 +310,15 @@ Git.prototype.getDiff = function (opts, callback) {
 
 Git.prototype.getUnsyncFileDiff = function (opts, callback) {
   opts = opts || {};
+
   var path = opts.path,
     file = opts.file;
 
-  exec('git diff HEAD "'.concat(file.trim()).concat('"'), { cwd: path,  env: ENV}, function(error, stdout, stderr) {
-    var err = null;
-
-    if (error !== null) {
-      err = error;
-    }
-
-    invokeCallback(callback, [ err, stdout ]);
-  });
+  performCommand(`git diff HEAD "${file.trim()}"`, path, callback);
 };
 
 Git.prototype.getFileDiff = function (opts, callback) {
-
-  exec('git log --format=\'%N\' -p -1 '.concat(opts.hash).concat(' -- "').concat(opts.file).concat('"'), { cwd: opts.path, env: ENV}, function (error, stdout, stderr) {
-    var err = null;
-
-    if (error !== null) {
-      err = error;
-    }
-
-    if (callback && typeof callback == 'function') {
-      invokeCallback(callback, [ err, stdout ]);
-    }
-  });
+  performCommand(`git log --format=\'%N\' -p -1 ${opts.hash} -- "${opts.file}"`, opts.path, callback);
 };
 
 Git.prototype.sync = function (opts, callback) {
@@ -363,13 +343,11 @@ Git.prototype.sync = function (opts, callback) {
       if (gitPushURL.protocol == 'https' && !opts.httpsConfigs) {
         invokeCallback(opts.noHTTPAuthcallback, [gitFetchURL, gitPushURL]);
       } else {
-        exec('git push -u '.concat(pushOrigin).concat(' ').concat(opts.branch), { cwd: opts.path,  env: ENV}, function (error) {
-          invokeCallback(callback, [ error ]);
-        });
+        performCommand(`git push -u ${pushOrigin} ${opts.branch}`, opts.path, callback);
       }
     } else {
 
-      exec('git pull '.concat(fetchOrigin), { cwd: opts.path,  env: ENV}, function (error, stdout, stderr) {
+      performCommand(`git pull ${fetchOrigin}`, opts.path, function (error, stdout, stderr) {
 
         if (error) {
 
@@ -379,9 +357,7 @@ Git.prototype.sync = function (opts, callback) {
           if (gitPushURL.protocol == 'https' && !opts.httpsConfigs) {
             invokeCallback(opts.noHTTPAuthcallback, [gitFetchURL, gitPushURL]);
           } else {
-            exec('git push '.concat(pushOrigin).concat(' ').concat(opts.branch), { cwd: opts.path,  env: ENV}, function (error) {
-              invokeCallback(callback, [ error ]);
-            });
+            performCommand(`git push ${pushOrigin} ${opts.branch}`, opts.path, callback);
           }
         } else {
 
@@ -439,34 +415,16 @@ Git.prototype.switchBranch = function (opts, callback) {
 };
 
 Git.prototype.getCommitCount = function (path, callback) {
-
-  exec('git rev-list HEAD --count', { cwd: path,  env: ENV}, function  (error, stdout, stderr){
-    var err = null;
-
-    if (error !== null) {
-      err = error.message;
-    }
-
-    invokeCallback(callback, [ err, stdout ]);
-  });
+  performCommand('git rev-list HEAD --count', path, callback);
 };
 
 Git.prototype.showRemotes = function (path, callback) {
-
-  exec('git remote -v', { cwd: path,  env: ENV}, function (error, stdout, stderr) {
-    var err = null;
-
-    if (error !== null) {
-      err = error.message;
-    }
-
-    invokeCallback(callback, [ err, stdout ]);
-  });
+  performCommand('git remote -v', path, callback);
 };
 
 Git.prototype.listRemotes = function (path, callback) {
 
-  exec('git remote show', { cwd: path,  env: ENV}, function (error, stdout, stderr) {
+  performCommand('git remote show', path, function (error, stdout, stderr) {
     var err = null,
       repositoryRemotes = {};
 
@@ -554,22 +512,12 @@ Git.prototype.discartChangesInFile = function (path, opts) {
 Git.prototype.unstageFile = function (path, opts) {
   opts = opts || {};
 
-  var command = 'git reset "'.concat(opts.file.trim()).concat('"');
-
-  exec(command, { cwd: path,  env: ENV}, function (error, stdout, stderr) {
-    var err = null;
-
-    if (error !== null) {
-      err = error.message;
-    }
-
-    invokeCallback(opts.callback, [ err, stdout ]);
-  });
+  performCommand(`git reset "${opts.file.trim()}"`, path, opts.callback);
 };
 
 Git.prototype.getTag = function (path, callback) {
 
-  exec('git tag', { cwd: path,  env: ENV}, function (error, stdout, stderr) {
+  performCommand('git tag', path, function (error, stdout, stderr) {
     var err = null,
       tags = [];
 
@@ -591,43 +539,18 @@ Git.prototype.getTag = function (path, callback) {
 };
 
 Git.prototype.assumeUnchanged = function (path, opts) {
-
-  exec(' git update-index --assume-unchanged "'.concat(opts.file).concat('"'), { cwd: path,  env: ENV}, function (error, stdout, stderr) {
-    var err = null;
-
-    if (error !== null) {
-      err = error.message;
-    }
-
-    invokeCallback(opts.callback, [ err ]);
-  });
+  performCommand(`git update-index --assume-unchanged "${opts.file}"`, path, opts.callback);
 };
 
 Git.prototype.clone = function (opts) {
   opts = opts || {};
 
-  exec('git clone --recursive '.concat(opts.cloneURL), { cwd: opts.destinyFolder,  env: ENV}, function (error, stdout, stderr) {
-    var err = null;
-
-    if (error !== null) {
-      err = error.message;
-    }
-
-    invokeCallback(opts.callback, [ err ]);
-  });
+  performCommand(`git clone --recursive ${opts.cloneURL}`, opts.destinyFolder, opts.callback);
 };
 
 Git.prototype.reset = function (path, opts) {
 
-  exec('git reset --soft '.concat(opts.hash), { cwd: path,  env: ENV}, function (error, stdout, stderr) {
-    var err = null;
-
-    if (error !== null) {
-      err = error.message;
-    }
-
-    invokeCallback(opts.callback, [ err ]);
-  });
+  performCommand(`git reset --soft ${opts.hash}`, path, opts.callback);
 };
 
 Git.prototype.createRepository = function (opts) {
@@ -677,7 +600,7 @@ Git.prototype.createRepository = function (opts) {
 
 Git.prototype.getStashList = function (path, callback) {
 
-  exec('git stash list --pretty=format:%gd-gtseparator-%gn-gtseparator-%gs', { cwd: path,  env: ENV}, function (error, stdout, stderr) {
+  performCommand('git stash list --pretty=format:%gd-gtseparator-%gn-gtseparator-%gs', path, function (error, stdout, stderr) {
     var err = null,
       stashs = [];
 
@@ -705,29 +628,20 @@ Git.prototype.getStashList = function (path, callback) {
 };
 
 Git.prototype.stashChanges = function (path, callback) {
-
-  exec('git stash', {cwd: path, env: ENV}, function (error) {
-    invokeCallback(callback, [ error ]);
-  });
+  performCommand('git stash', path, callback);
 };
 
 Git.prototype.dropStash = function (path, opts) {
-
-  exec('git stash drop '.concat(opts.reflogSelector), {cwd: path, env: ENV}, function (error) {
-    invokeCallback(opts.callback, [ error ]);
-  });
+  performCommand(`git stash drop ${opts.reflogSelector}`, path, opts.callback);
 };
 
 Git.prototype.popStash = function (path, opts) {
-
-  exec('git stash pop '.concat(opts.reflogSelector), {cwd: path, env: ENV}, function (error) {
-    invokeCallback(opts.callback, [ error ]);
-  });
+  performCommand(`git stash pop ${opts.reflogSelector}`, path, opts.callback);
 };
 
 Git.prototype.showStash = function (path, opts) {
 
-  exec('git stash show '.concat(opts.reflogSelector).concat(' --numstat'), {cwd: path, env: ENV}, function (error, stdout) {
+  performCommand(`git stash show ${opts.reflogSelector} --numstat`, path, function (error, stdout) {
     var lines = stdout.split('\n'),
       files = [];
 
@@ -750,15 +664,12 @@ Git.prototype.showStash = function (path, opts) {
 };
 
 Git.prototype.diffStashFile = function (path, opts) {
-
-  exec('git diff '.concat(opts.reflogSelector).concat(' -- "').concat(opts.fileName.trim()).concat('"'), {cwd: path, env: ENV}, function (error, stdout) {
-    invokeCallback(opts.callback, [ error, stdout ]);
-  });
+  performCommand(`git diff ${opts.reflogSelector} -- "${opts.fileName.trim()}"`, path, opts.callback);
 };
 
 Git.prototype.getGlobalConfigs = function (callback) {
 
-  exec('git config --global -l', {env: ENV}, function (error, stdout) {
+  performCommand('git config --global -l', function (error, stdout) {
     var err,
       configs = {};
 
@@ -783,7 +694,7 @@ Git.prototype.getGlobalConfigs = function (callback) {
 
 Git.prototype.getLocalConfigs = function (path, callback) {
 
-  exec('git config -l', {cwd: path, env: ENV}, function (error, stdout) {
+  performCommand('git config -l', path, function (error, stdout) {
     var err,
       configs = {};
 
@@ -853,42 +764,32 @@ Git.prototype.alterGitConfig = function (path, opts) {
   }
 
   if (command) {
-
-    exec(command, execOpts, function (error) {
-      invokeCallback(opts.callback, [  ]);
-    });
+    performCommand(command, execOpts.cwd, opts.callback);
   }
 };
 
 Git.prototype.useOurs = function (path, opts) {
   opts = opts || {};
 
-  exec('git checkout --ours '.concat(opts.fileName), {cwd: path, env: ENV}, function (error) {
-    invokeCallback(opts.callback, [ error ]);
-  });
+  performCommand(`git checkout --ours "${opts.fileName}"`, path, opts.callback);
 };
 
 Git.prototype.useTheirs = function (path, opts) {
   opts = opts || {};
 
-  exec('git checkout --theirs '.concat(opts.fileName), {cwd: path, env: ENV}, function (error) {
-    invokeCallback(opts.callback, [ error ]);
-  });
+  performCommand(`git checkout --theirs "${opts.fileName}"`, path, opts.callback);
 };
 
 Git.prototype.deleteBranch = function (path, opts) {
   opts = opts || {};
 
-  exec('git branch -D '.concat(opts.branchName), {cwd: path, env: ENV}, function (error) {
-    invokeCallback(opts.callback, [ error ]);
-  });
+  performCommand(`git branch -D ${opts.branchName}`, path, opts.callback);
 };
 
 Git.prototype.geDiffMerge = function (path, opts) {
   opts = opts || {};
 
-  exec('git diff '.concat(opts.branchBase).concat('...').concat(opts.branchCompare).concat(' --numstat --shortstat'), {cwd: path, env: ENV}, function (error, stdout) {
-
+  performCommand(`git diff ${opts.branchBase}...${opts.branchCompare} --numstat --shortstat`, path, function (error, stdout) {
     if (error) {
       invokeCallback(opts.callback, [ error ]);
     } else {
@@ -922,7 +823,7 @@ Git.prototype.geDiffMerge = function (path, opts) {
 Git.prototype.merge = function (path, opts) {
   opts = opts || {};
 
-  exec('git merge '.concat(opts.branchCompare), {cwd: path, env: ENV}, function (error, stdout, stderr) {
+  performCommand(`git merge ${opts.branchCompare}`, path, function (error, stdout, stderr) {
     let isConflituosMerge = false;
 
     if (error && stdout.toString().indexOf('Automatic merge failed') > -1) {
@@ -934,10 +835,7 @@ Git.prototype.merge = function (path, opts) {
 };
 
 Git.prototype.mergeAbort = function (path, callback) {
-
-  exec('git merge --abort', {cwd: path, env: ENV}, function (error) {
-    invokeCallback(callback, [ error ]);
-  });
+  performCommand('git merge --abort', path, callback);
 };
 
 Git.prototype.isMerging = function (path) {
@@ -954,10 +852,7 @@ Git.prototype.isMerging = function (path) {
 };
 
 Git.prototype.mergeTool = function (path, callback) {
-
-  exec('git mergetool -y', {cwd: path, env: ENV}, function (error) {
-    invokeCallback(callback, [ error ]);
-  });
+  performCommand('git mergetool -y', path, callback);
 };
 
 module.exports = new Git();
