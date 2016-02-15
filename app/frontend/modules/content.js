@@ -490,7 +490,7 @@
               label: MSGS['Stage file'],
               click: function () {
                 GIT.add(selectedRepository.path, {
-                  file: dir,
+                  files: dir,
                   callback: function (err) {
                     if (err) {
                       alert(err);
