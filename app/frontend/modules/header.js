@@ -699,6 +699,16 @@
 
         }.bind(this);
 
+        // Close All opened dialogs
+        globalShortcut.register('esc', function () {
+          this.hideAllMenu();
+          $scope.settingsCtrl.hideSettingsPage();
+          $scope.modalCtrl.hideDialog();
+          $scope.mergeCtrl.hideDialog();
+
+          applyScope($scope);
+        }.bind(this));
+
         registerShortcuts();
 
         WIN.on('blur', function () {
