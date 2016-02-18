@@ -197,70 +197,60 @@ Git.prototype.getStatus = function (path, callback) {
     });
 
     for (var i = 1; i < lines.length; i++) {
-      let staged = false,
-        referenceChar;
 
-      if (lines[i][0] != ' ' && lines[i][0] != '?') {
-        referenceChar = lines[i][0];
-        staged = true;
-      } else {
-        referenceChar = lines[i][1];
-      }
+      if (lines[i]) {
+        let staged = false,
+          referenceChar,
+          X = lines[i][0],
+          Y = lines[i][1],
+          statusItem;
 
-      switch (referenceChar) {
-        case 'R':
-          files.push({
-            type: 'RENAMED',
-            displayPath: lines[i].replace('R', '').replace(/"/g, '').trim(),
-            path: lines[i].replace('R', '').replace(/"/g, '').split('->')[1].trim(),
-            staged: staged
-          });
-          break;
+        if (lines[i][0] != ' ' && lines[i][0] != '?') {
+          referenceChar = lines[i][0];
+          staged = true;
+        } else {
+          referenceChar = lines[i][1];
+        }
 
-        case 'M':
-          files.push({
-            type: 'MODIFIED',
-            displayPath: lines[i].replace('M', '').replace(/"/g, '').trim(),
-            path: lines[i].replace('M', '').replace(/"/g, '').trim(),
-            staged: staged
-          });
-          break;
+        lines[i] = lines[i].substring(2).replace(/"/g, '').trim();
 
-          case '?':
-            files.push({
-              type: 'NEW', //UNTRACKED
-              displayPath: lines[i].replace('??', '').replace(/"/g, '').trim(),
-              path: lines[i].replace('??', '').replace(/"/g, '').trim(),
-              staged: staged
-            });
+        statusItem = {
+          displayPath: lines[i],
+          path: lines[i],
+          staged: staged,
+          X: X,
+          Y: Y
+        };
+
+        switch (referenceChar) {
+          case 'R':
+            statusItem.type = 'RENAMED';
+            status.path = lines[i].split('->')[1].trim();
             break;
 
-          case 'A':
-            files.push({
-              type: 'ADDED',
-              displayPath: lines[i].replace('A', '').replace(/"/g, '').trim(),
-              path: lines[i].replace('A', '').replace(/"/g, '').trim(),
-              staged: staged
-            });
+          case 'M':
+            statusItem.type = 'MODIFIED';
             break;
 
-          case 'D':
-            files.push({
-              type: 'DELETED',
-              displayPath: lines[i].replace('D', '').replace(/"/g, '').trim(),
-              path: lines[i].replace('D', '').replace(/"/g, '').trim(),
-              staged: staged
-            });
-            break;
+            case '?':
+              statusItem.type = 'NEW'; //UNTRACKED
+              break;
 
-          case 'U':
-            files.push({
-              type: 'UNMERGED',
-              displayPath: lines[i].replace('UU', '').replace(/"/g, '').trim(),
-              path: lines[i].replace('UU', '').replace(/"/g, '').trim(),
-              // staged: staged TODO: Improve indicators to UNMERGED files
-            });
-            break;
+            case 'A':
+              statusItem.type = 'ADDED';
+              break;
+
+            case 'D':
+              statusItem.type = 'DELETED';
+              break;
+
+            case 'U':
+              statusItem.type = 'UNMERGED';
+              statusItem.staged = false; // TODO: Improve indicators to UNMERGED files
+              break;
+        }
+
+        files.push(statusItem);
       }
     }
 
