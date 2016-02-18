@@ -1,3 +1,5 @@
+var path = require('path');
+
 var getLineType = function (firstChar) {
 
     if (firstChar == '+') {
@@ -10,7 +12,7 @@ var getLineType = function (firstChar) {
 
   },
 
-  buildDiffTable = function (blockList, prettyfier) {
+  buildDiffTable = function (blockList, lang) {
     var table = [
       '<table class="diff-table">',
         '<tbody>'
@@ -57,7 +59,11 @@ var getLineType = function (firstChar) {
             '<td class="line-number">',
               ( block.lines[i].type != 'MINOR' ? rightNumberColumn : '' ),
             '</td>',
-            '<td>', (prettyfier ? prettyfier(block.lines[i].code.replace(/</g, '&lt;').replace(/>/g, '&gt;')) : block.lines[i].code), '</td>',
+            '<td>',
+              '<code class="prettyprint ', ( lang ? lang : '' ),'">',
+                block.lines[i].code.replace(/</g, '&lt;').replace(/>/g, '&gt;'),
+              '</code>',
+            '</td>',
           '</tr>'
         ];
 
@@ -79,15 +85,15 @@ var getLineType = function (firstChar) {
     return table.join('');
   };
 
-function CodeDiffProcessor(prettyfier) {
+function CodeDiffProcessor() {
   this.version = '0.0.1';
-  this.prettyfier = prettyfier;
 }
 
-CodeDiffProcessor.prototype.processCode = function (code) {
+CodeDiffProcessor.prototype.processCode = function (code, filePath) {
   var lines,
     blocks = [],
-    currentBlockIndex;
+    currentBlockIndex,
+    extName;
 
   lines = code.split('\n');
 
@@ -122,7 +128,12 @@ CodeDiffProcessor.prototype.processCode = function (code) {
     }
   }
 
-  return buildDiffTable(blocks, this.prettyfier);
+  if (filePath) {
+    extName = 'lang-'.concat( path.extname(filePath).replace('.', '') );
+    extName = extName.replace(/(scss|less)/, 'css');
+  }
+
+  return buildDiffTable(blocks, extName);
 };
 
 module.exports = CodeDiffProcessor;

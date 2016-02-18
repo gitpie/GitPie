@@ -1354,10 +1354,20 @@ body {
 
                       tr.minor {
                         background-color: #FFECEC;
+
+                        td.line-number {
+                          background-color: #ffdddd;
+                          border-color: #f1c0c0;
+                        }
                       }
 
                       tr.plus {
                         background-color: #EAFFEA;
+
+                        td.line-number {
+                          background-color: #dbffdb;
+                          border-color: #c1e9c1;
+                        }
                       }
 
                       tr.chunk {
@@ -1375,14 +1385,42 @@ body {
                           border-right: 1px solid #DDD;
                           white-space: pre;
                           word-wrap: normal;
-                          padding: 6px;
+                          padding: 5px;
 
-                          xmp {
-                            margin: 0;
-                            white-space: inherit;
-                            display: inherit;
-                            font-family: inherit;
-                            padding: 0;
+                          .kwd, .lit {
+                            color: #a71d5d !important;
+                          }
+
+                          .tag {
+                            color: #63a35c;
+                          }
+
+                          .atn {
+                            color: #795da3;
+                          }
+
+                          .atv {
+                            color: #183691;
+                          }
+
+                          .pln {
+                            color: #222;
+                          }
+
+                          .typ {
+                            color: #795da3;
+                          }
+
+                          .str {
+                            color: #183691;
+                          }
+
+                          .com {
+                            color: #93a1a1;
+                          }
+
+                          .pun {
+                            color: #222;
                           }
                         }
 
