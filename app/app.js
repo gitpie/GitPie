@@ -13,12 +13,6 @@ var
   // Git class that perfoms git commands
   GIT = require('./app/core/git'),
 
-  // Updater module for GitPie
-  UpdaterModule = require('./app/core/updater/updater'),
-
-  // Updater instance
-  updater = new UpdaterModule(),
-
   // Messages and labels of the application
   MSGS,
 
