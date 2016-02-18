@@ -763,7 +763,7 @@
 
                 file.changes = $sce.trustAsHtml(changesHTML.join(''));
               } else {
-                file.changes = $sce.trustAsHtml('<span class="label-binary">' + MSGS.BINARY + '</span>');
+                file.changes = $sce.trustAsHtml(`<span class="label-binary no-background"><span class="octicon octicon-file-binary"></span> ${MSGS.BINARY}</span>`);
               }
 
               this.stash.files.push(file);

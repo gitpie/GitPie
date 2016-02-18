@@ -118,7 +118,7 @@
 
             <li ng-repeat="history in appCtrl.commitHistory" ng-right-click="appCtrl.openHistoryContextualMenu($event, history, $index)">
               <header>
-                <span ng-click="appCtrl.showFileDiff(history)"
+                <span ng-click="appCtrl.showFileDiff(history)" ng-hide="history.isBinary"
                   ng-class="{ 'octicon-triangle-right': !history.showCode, 'octicon-triangle-down': history.showCode}" class="octicon octicon-triangle-right"></span>
                 <span title="{{ history.name.length > 50 ? history.name : '' }}">{{ history.name.length > 50 ? '...' : ''}}{{ history.name | limitTo: - 50 }}</span>
                 <menuitem ng-bind-html="history.changes"></menuitem>
@@ -192,10 +192,10 @@
 
             <li ng-repeat="stashFile in appCtrl.stash.files">
               <header>
-                <span ng-click="appCtrl.showStashFileDiff(stashFile)"
+                <span ng-click="appCtrl.showStashFileDiff(stashFile)" ng-hide="stashFile.isBinary"
                   ng-class="{ 'octicon-triangle-right': !stashFile.showCode, 'octicon-triangle-down': stashFile.showCode}"
                   class="octicon octicon-triangle-right"></span>
-                <span title="{{ stashFile.name.length > 50 ? stashFile.name : '' }}">{{ stashFile.stashFile.length > 50 ? '...' : ''}} {{ stashFile.name | limitTo: - 50 }}</span>
+                <span title="{{ stashFile.name.length > 50 ? stashFile.name : '' }}">{{ stashFile.name.length > 50 ? '...' : ''}}{{ stashFile.name | limitTo: - 50 }}</span>
                 <menuitem ng-bind-html="stashFile.changes"></menuitem>
               </header>
               <code ng-show="stashFile.showCode" ng-bind-html="stashFile.code"></code>

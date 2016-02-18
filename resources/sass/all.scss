@@ -1326,6 +1326,10 @@ body {
                     background-color: #FFF !important;
                     padding: 0 3px !important;
                     opacity: 0.8;
+
+                    .octicon {
+                      cursor: default !important;
+                    }
                   }
                 }
 
