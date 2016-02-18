@@ -62,7 +62,7 @@
         this.stashableFiles = [];
 
         this.toggleMenu = function (menuIndex) {
-          this.hideAllMenu();
+          this.hideAllMenu(menuIndex);
 
           switch (menuIndex) {
             case 1:
@@ -80,11 +80,21 @@
           }
         };
 
-        this.hideAllMenu = function () {
-          this.showAddMenu = false;
-          this.showBranchMenu = false;
-          this.showSettingsMenu = false;
-          this.showStashMenu = false;
+        this.hideAllMenu = function (ignoreMenu) {
+          let dictionary = {
+            '1': 'showAddMenu',
+            '2': 'showBranchMenu',
+            '3': 'showSettingsMenu',
+            '4': 'showStashMenu'
+          };
+
+          ignoreMenu = ignoreMenu || 0;
+
+          for (let menu in dictionary) {
+            if (menu != ignoreMenu.toString()) {
+              this[ dictionary[menu] ] = false;
+            }
+          }
         };
 
         CommomService.hideHeaderMenu = this.hideAllMenu.bind(this);
@@ -697,17 +707,17 @@
             }.bind(this));
           }.bind(this));
 
+          // Close All opened dialogs
+          globalShortcut.register('esc', function () {
+            this.hideAllMenu();
+            $scope.settingsCtrl.hideSettingsPage();
+            $scope.modalCtrl.hideDialog();
+            $scope.mergeCtrl.hideDialog();
+
+            applyScope($scope);
+          }.bind(this));
+
         }.bind(this);
-
-        // Close All opened dialogs
-        globalShortcut.register('esc', function () {
-          this.hideAllMenu();
-          $scope.settingsCtrl.hideSettingsPage();
-          $scope.modalCtrl.hideDialog();
-          $scope.mergeCtrl.hideDialog();
-
-          applyScope($scope);
-        }.bind(this));
 
         registerShortcuts();
 
