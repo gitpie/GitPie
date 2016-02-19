@@ -1,3 +1,5 @@
+var path = require('path');
+
 var getLineType = function (firstChar) {
 
     if (firstChar == '+') {
@@ -10,7 +12,7 @@ var getLineType = function (firstChar) {
 
   },
 
-  buildDiffTable = function (blockList) {
+  buildDiffTable = function (blockList, lang) {
     var table = [
       '<table class="diff-table">',
         '<tbody>'
@@ -44,11 +46,17 @@ var getLineType = function (firstChar) {
       table.push([
         '<tr class="chunk">',
           '<td class="diff-icon" colspan="2"><span class="octicon octicon-diff"></span></td>',
-          '<td>', block.header, '</td>',
+          '<td colspan="2">', block.header, '</td>',
         '</tr>'
       ].join(''));
 
       for (var i = 0; i < block.lines.length; i++) {
+        var lineCode = block.lines[i].code.replace(/</g, '&lt;').replace(/>/g, '&gt;');
+
+        if (block.lines[i].type != 'UNCHANGED') {
+          lineCode = lineCode.substr(1);
+        }
+
         var tbLine = [
           '<tr class="' + block.lines[i].type.toLowerCase() + '">',
             '<td class="line-number">',
@@ -57,7 +65,14 @@ var getLineType = function (firstChar) {
             '<td class="line-number">',
               ( block.lines[i].type != 'MINOR' ? rightNumberColumn : '' ),
             '</td>',
-            '<td><xmp>', block.lines[i].code, '</xmp></td>',
+            '<td class="indicator">',
+              ( block.lines[i].type == 'MINOR' ? '-' : '+' ),
+            '</td>',
+            '<td>',
+              '<code class="prettyprint ', ( lang ? lang : '' ),'">',
+                lineCode,
+              '</code>',
+            '</td>',
           '</tr>'
         ];
 
@@ -83,10 +98,11 @@ function CodeDiffProcessor() {
   this.version = '0.0.1';
 }
 
-CodeDiffProcessor.prototype.processCode = function (code) {
+CodeDiffProcessor.prototype.processCode = function (code, filePath) {
   var lines,
     blocks = [],
-    currentBlockIndex;
+    currentBlockIndex,
+    extName;
 
   lines = code.split('\n');
 
@@ -121,7 +137,12 @@ CodeDiffProcessor.prototype.processCode = function (code) {
     }
   }
 
-  return buildDiffTable(blocks);
+  if (filePath) {
+    extName = 'lang-'.concat( path.extname(filePath).replace('.', '') );
+    extName = extName.replace(/(scss|less)/, 'css');
+  }
+
+  return buildDiffTable(blocks, extName);
 };
 
 module.exports = CodeDiffProcessor;

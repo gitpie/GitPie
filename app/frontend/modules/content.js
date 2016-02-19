@@ -195,7 +195,7 @@
                 if (err) {
                   alert(err.message);
                 } else {
-                  change.code = $sce.trustAsHtml(cp.processCode( stdout ));
+                  change.code = $sce.trustAsHtml(cp.processCode( stdout, change.path ));
 
                   if (change.showCode) {
                     change.showCode = false;
@@ -204,6 +204,7 @@
                   }
 
                   applyScope($scope);
+                  PR.prettyPrint();
                 }
               });
             } else if (change.type != 'DELETED') {
@@ -217,7 +218,7 @@
                 if (err) {
                   alert(err);
                 } else {
-                  change.code = $sce.trustAsHtml(cp.processCode( diff ));
+                  change.code = $sce.trustAsHtml(cp.processCode( diff, change.path ));
 
                   if (!forceReload) {
                     change.showCode = !change.showCode;
@@ -225,6 +226,7 @@
                 }
 
                 applyScope($scope);
+                PR.prettyPrint();
               });
             }
 
@@ -245,7 +247,7 @@
                 if (err) {
                   alert(err);
                 } else {
-                  stashFile.code = $sce.trustAsHtml(cp.processCode( diff ));
+                  stashFile.code = $sce.trustAsHtml(cp.processCode( diff, stashFile.path ));
 
                   if (stashFile.showCode) {
                     stashFile.showCode = false;
@@ -255,6 +257,7 @@
                 }
 
                 applyScope($scope);
+                PR.prettyPrint();
               }
             });
 

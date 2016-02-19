@@ -1358,10 +1358,20 @@ body {
 
                       tr.minor {
                         background-color: #FFECEC;
+
+                        td.line-number {
+                          background-color: #ffdddd;
+                          border-color: #f1c0c0;
+                        }
                       }
 
                       tr.plus {
                         background-color: #EAFFEA;
+
+                        td.line-number {
+                          background-color: #dbffdb;
+                          border-color: #c1e9c1;
+                        }
                       }
 
                       tr.chunk {
@@ -1379,14 +1389,54 @@ body {
                           border-right: 1px solid #DDD;
                           white-space: pre;
                           word-wrap: normal;
-                          padding: 6px;
+                          padding: 5px;
 
-                          xmp {
-                            margin: 0;
-                            white-space: inherit;
-                            display: inherit;
-                            font-family: inherit;
-                            padding: 0;
+                          .pln {
+                            color: #222;
+                          }
+
+                          .str {
+                            color: #183691;
+                          }
+
+                          .kwd {
+                            color: #a71d5d;
+                          }
+
+                          .com {
+                            color: #93a1a1;
+                          }
+
+                          .typ {
+                            color: #795da3;
+                          }
+
+                          .lit{
+                            color:#0086b3;
+                          }
+
+                          .pun, .opn, .clo {
+                            color: #222;
+                          }
+
+                          .tag {
+                            color: #63a35c;
+                          }
+
+                          .atn {
+                            color: #795da3;
+                          }
+
+                          .atv {
+                            color: #183691;
+                          }
+
+                          .dec, .var {
+                            color: #606;
+                          }
+
+                          .fun {
+                            color: red;
                           }
                         }
 
@@ -1396,6 +1446,12 @@ body {
                           -webkit-user-select: none;
                           width: 1%;
                           min-width: 30px
+                        }
+                        
+                        td.indicator {
+                          width: 18px;
+                          border: 0;
+                          font-size: 0.9em;
                         }
                       }
                     }
