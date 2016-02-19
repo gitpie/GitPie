@@ -46,11 +46,17 @@ var getLineType = function (firstChar) {
       table.push([
         '<tr class="chunk">',
           '<td class="diff-icon" colspan="2"><span class="octicon octicon-diff"></span></td>',
-          '<td>', block.header, '</td>',
+          '<td colspan="2">', block.header, '</td>',
         '</tr>'
       ].join(''));
 
       for (var i = 0; i < block.lines.length; i++) {
+        var lineCode = block.lines[i].code.replace(/</g, '&lt;').replace(/>/g, '&gt;');
+
+        if (block.lines[i].type != 'UNCHANGED') {
+          lineCode = lineCode.substr(1);
+        }
+
         var tbLine = [
           '<tr class="' + block.lines[i].type.toLowerCase() + '">',
             '<td class="line-number">',
@@ -59,9 +65,12 @@ var getLineType = function (firstChar) {
             '<td class="line-number">',
               ( block.lines[i].type != 'MINOR' ? rightNumberColumn : '' ),
             '</td>',
+            '<td class="indicator">',
+              ( block.lines[i].type == 'MINOR' ? '-' : '+' ),
+            '</td>',
             '<td>',
               '<code class="prettyprint ', ( lang ? lang : '' ),'">',
-                block.lines[i].code.replace(/</g, '&lt;').replace(/>/g, '&gt;'),
+                lineCode,
               '</code>',
             '</td>',
           '</tr>'

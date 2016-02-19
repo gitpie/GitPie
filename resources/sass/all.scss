@@ -1443,6 +1443,12 @@ body {
                           width: 1%;
                           min-width: 30px
                         }
+                        
+                        td.indicator {
+                          width: 18px;
+                          border: 0;
+                          font-size: 0.9em;
+                        }
                       }
                     }
                   }
