@@ -17,7 +17,6 @@
       templateUrl: 'app/frontend/view/header/pieHeader.html',
 
       controller: function ($scope, $element, CommomService) {
-        var MSGS = $scope.MSGS;
         let isMerging = false;
 
         let updateIsMerging = function () {
@@ -63,7 +62,7 @@
         this.stashableFiles = [];
 
         this.toggleMenu = function (menuIndex) {
-          this.hideAllMenu();
+          this.hideAllMenu(menuIndex);
 
           switch (menuIndex) {
             case 1:
@@ -81,11 +80,21 @@
           }
         };
 
-        this.hideAllMenu = function () {
-          this.showAddMenu = false;
-          this.showBranchMenu = false;
-          this.showSettingsMenu = false;
-          this.showStashMenu = false;
+        this.hideAllMenu = function (ignoreMenu) {
+          let dictionary = {
+            '1': 'showAddMenu',
+            '2': 'showBranchMenu',
+            '3': 'showSettingsMenu',
+            '4': 'showStashMenu'
+          };
+
+          ignoreMenu = ignoreMenu || 0;
+
+          for (let menu in dictionary) {
+            if (menu != ignoreMenu.toString()) {
+              this[ dictionary[menu] ] = false;
+            }
+          }
         };
 
         CommomService.hideHeaderMenu = this.hideAllMenu.bind(this);
@@ -603,6 +612,78 @@
             }
           }.bind(this));
 
+          // Add Focus on the "Search repositories" field
+          globalShortcut.register('ctrl+f', function() {
+            let filed = document.querySelector('#left > input');
+
+            filed.focus();
+
+            if (!$scope.showRepositoryMenu) {
+              this.toggleRepositoryMenu();
+              applyScope($scope);
+            }
+          }.bind(this));
+
+          // Navigate between repositories top to bottom
+          globalShortcut.register('ctrl+down', function() {
+            let liList = document.querySelectorAll('#content > #left > nav ul li ul li');
+
+            if (liList.length > 0) {
+              let selectedRepository = document.querySelector('#content > #left > nav ul li.selected');
+
+              if (selectedRepository) {
+                let selectedRepositoryPosition;
+                let nextLi;
+
+                for (let i = 0; i < liList.length; i++) {
+
+                  if (liList[i].className.indexOf('selected') > -1) {
+                    nextLi = liList[ (i + 1) ];
+                    break;
+                  }
+                }
+
+                if (nextLi) {
+                  nextLi.click();
+                  nextLi.scrollIntoViewIfNeeded();
+                }
+              } else {
+                liList[0].click();
+                liList[0].scrollIntoViewIfNeeded();
+              }
+            }
+          });
+
+          // Navigate between repositories bottom to top
+          globalShortcut.register('ctrl+up', function() {
+            let liList = document.querySelectorAll('#content > #left > nav ul li ul li');
+
+            if (liList.length > 0) {
+              let selectedRepository = document.querySelector('#content > #left > nav ul li.selected');
+
+              if (selectedRepository) {
+                let selectedRepositoryPosition;
+                let nextLi;
+
+                for (let i = 0; i < liList.length; i++) {
+
+                  if (liList[i].className.indexOf('selected') > -1) {
+                    nextLi = liList[ (i - 1) ];
+                    break;
+                  }
+                }
+
+                if (nextLi) {
+                  nextLi.click();
+                  nextLi.scrollIntoViewIfNeeded();
+                }
+              } else {
+                liList[ (liList.length - 1) ].click();
+                liList[ (liList.length - 1) ].scrollIntoViewIfNeeded();
+              }
+            }
+          });
+
           // Open devTools for debug
           globalShortcut.register('ctrl+shift+d', function() {
             let Win = browserWindow.getFocusedWindow();
@@ -624,6 +705,16 @@
                 this.addRepository(filenames[0]);
               }
             }.bind(this));
+          }.bind(this));
+
+          // Close All opened dialogs
+          globalShortcut.register('esc', function () {
+            this.hideAllMenu();
+            $scope.settingsCtrl.hideSettingsPage();
+            $scope.modalCtrl.hideDialog();
+            $scope.mergeCtrl.hideDialog();
+
+            applyScope($scope);
           }.bind(this));
 
         }.bind(this);

@@ -20,6 +20,10 @@
           'user.email': '',
           'merge.tool': ''
         };
+        this.languages = [
+          { code: 'en', description: 'English'},
+          { code: 'pt-BR', description: 'Portuguese (Brazil)'}
+        ];
 
         this.hideSettingsPage = function () {
           this.showSettingsPage = false;
@@ -94,6 +98,28 @@
           const shell = require('shell');
 
           shell.openExternal('https://gist.github.com/mapaiva/c77bd11de94014a9d865');
+        };
+
+        this.changeAppLanguage = function (language) {
+          var newLangCode = $scope.CONFIGS.language.code;
+
+          for (var i = 0; i < this.languages.length; i++) {
+
+            if (newLangCode == this.languages[i].code) {
+              $scope.CONFIGS.language.description = this.languages[i].description;
+              break;
+            }
+          }
+
+          try {
+            $scope.MSGS = require('./language/'.concat(newLangCode).concat('.json'));
+            MSGS = $scope.MSGS;
+          } catch (err) {
+            $scope.CONFIGS.language = {
+              code: 'en',
+              description: 'English'
+            };
+          }
         };
 
         $scope.$on('repositorychanged', function (event, repository) {

@@ -20,7 +20,6 @@
         let selectedRepository = {},
           selectedCommit = {},
           selectedCommitAncestor = null,
-          MSGS = $scope.MSGS,
           Menu = remote.require('menu'),
           MenuItem = remote.require('menu-item');
 
@@ -196,7 +195,7 @@
                 if (err) {
                   alert(err.message);
                 } else {
-                  change.code = $sce.trustAsHtml(cp.processCode( stdout ));
+                  change.code = $sce.trustAsHtml(cp.processCode( stdout, change.path ));
 
                   if (change.showCode) {
                     change.showCode = false;
@@ -205,6 +204,7 @@
                   }
 
                   applyScope($scope);
+                  PR.prettyPrint();
                 }
               });
             } else if (change.type != 'DELETED') {
@@ -218,7 +218,7 @@
                 if (err) {
                   alert(err);
                 } else {
-                  change.code = $sce.trustAsHtml(cp.processCode( diff ));
+                  change.code = $sce.trustAsHtml(cp.processCode( diff, change.path ));
 
                   if (!forceReload) {
                     change.showCode = !change.showCode;
@@ -226,6 +226,7 @@
                 }
 
                 applyScope($scope);
+                PR.prettyPrint();
               });
             }
 
@@ -246,7 +247,7 @@
                 if (err) {
                   alert(err);
                 } else {
-                  stashFile.code = $sce.trustAsHtml(cp.processCode( diff ));
+                  stashFile.code = $sce.trustAsHtml(cp.processCode( diff, stashFile.path ));
 
                   if (stashFile.showCode) {
                     stashFile.showCode = false;
@@ -256,6 +257,7 @@
                 }
 
                 applyScope($scope);
+                PR.prettyPrint();
               }
             });
 
@@ -491,7 +493,7 @@
               label: MSGS['Stage file'],
               click: function () {
                 GIT.add(selectedRepository.path, {
-                  file: dir,
+                  files: dir,
                   callback: function (err) {
                     if (err) {
                       alert(err);
@@ -754,17 +756,17 @@
                 var changesHTML = [];
 
                 if (file.additions > 0) {
-                  changesHTML.push('<span class="plus-text">+', file.additions, '</span>');
+                  changesHTML.push('<span class="plus-text"><span class="octicon octicon-diff-added"></span>', file.additions, '</span>');
                 }
 
 
                 if (file.deletions > 0) {
-                  changesHTML.push('<span class="minor-text">-', file.deletions, '</span>');
+                  changesHTML.push('<span class="minor-text"><span class="octicon octicon-diff-removed"></span>', file.deletions, '</span>');
                 }
 
                 file.changes = $sce.trustAsHtml(changesHTML.join(''));
               } else {
-                file.changes = $sce.trustAsHtml('<span class="label-binary">' + MSGS.BINARY + '</span>');
+                file.changes = $sce.trustAsHtml(`<span class="label-binary no-background"><span class="octicon octicon-file-binary"></span> ${MSGS.BINARY}</span>`);
               }
 
               this.stash.files.push(file);

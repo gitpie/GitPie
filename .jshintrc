@@ -6,10 +6,10 @@
   "globals": {
     "angular": true,
     "GIT": true,
-    "updater": true,
     "WIN": true,
     "applyScope": true,
     "GPNotification": true,
-    "MSGS": true
+    "MSGS": true,
+    "PR": true
   }
 }
