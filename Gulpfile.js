@@ -191,7 +191,7 @@ gulp.task('pack:win64', function () {
   electronBuilder.init().build({
     appPath: path.join(BUILD_FOLDER, WINDOWS, ARCH_64, 'GitPie-win32-x64'),
     platform: 'win',
-    config: 'app/core/packager/config.json',
+    config: require('./app/core/packager/config'),
     out: releasePath
   },
   function (err) {
@@ -224,7 +224,7 @@ gulp.task('pack:win32', function () {
   electronBuilder.init().build({
     appPath: path.join(BUILD_FOLDER, WINDOWS, ARCH_32, 'GitPie-win32-ia32'),
     platform: 'win',
-    config: 'app/core/packager/config.json',
+    config: require('./app/core/packager/config'),
     out: releasePath
   },
   function (err) {
@@ -330,7 +330,7 @@ gulp.task('pack:osx64', function () {
     electronBuilder.init().build({
       appPath: path.join(BUILD_FOLDER, MAC, ARCH_64, 'GitPie-darwin-x64', 'GitPie.app'),
       platform: 'osx',
-      config: 'app/core/packager/config.json',
+      config: require('./app/core/packager/config'),
       out: releasePath
     },
     function (err) {
