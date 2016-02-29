@@ -579,6 +579,22 @@ body {
       .content {
         flex: 1 1 auto;
       }
+      
+      .close-button {
+        padding: 0;
+        padding-left: 20px;
+        padding-right: 10px;
+        color: #FFF;
+        background-color: #404040;
+        border: 0;
+        box-shadow: none;
+        cursor: pointer;
+        transition: color ease 0.2s;
+        
+        &:hover {
+          color: rgba(255, 255, 255, 0.7);  
+        }
+      }
     }
 
     /* Header of the application */

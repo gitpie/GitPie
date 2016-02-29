@@ -98,6 +98,8 @@
   "It happends with me all the time too. But lets's try find your project again!": "It happends with me all the time too. But let's try find your project again!",
   "Start adding, clonning or creating some awesome things": "Start adding, clonning or creating some awesome things",
   "Nothing for me here.\n The folder {folder} is not a git project": "Nothing for me here.\n The folder {folder} is not a git project",
+  "Close": "Close",
+  "It seems that a git username and email are not set globally. You can fix this accessing the Settings menu": "It seems that a git username and email are not set globally. You can fix this accessing the Settings menu",
 
   "Error counting commits. Error: ": "Error counting commits. Error: ",
   "Error adding files. Error:": "Error adding files. Error:",
