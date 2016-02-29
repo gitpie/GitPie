@@ -145,7 +145,8 @@
     "Navigate between repositories top to bottom": "Navigate between repositories top to bottom",
     "Navigate between repositories bottom to top": "Navigate between repositories bottom to top",
     "Add focus on the \"Search repositories\" field": "Add focus on the \"Search repositories\" field",
-    "Close modal windows and header menus": "Close modal windows and header menus"
+    "Close modal windows and header menus": "Close modal windows and header menus",
+    "Version": "Version"
   },
 
   "Authentication required": "Authentication required",

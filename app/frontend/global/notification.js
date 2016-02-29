@@ -62,7 +62,7 @@ class GPNotification {
           let closeBtn = document.createElement('button');
           
           closeBtn.className = 'close-button';
-          closeBtn.title = MSGS['Close'];
+          closeBtn.title = MSGS.Close;
           closeBtn.innerHTML = '<span class="octicon octicon-x"></span>';
           closeBtn.onclick = function () {
               this.close();

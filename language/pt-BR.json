@@ -145,7 +145,8 @@
     "Navigate between repositories top to bottom": "Navega entre os repositórios de cima para baixo",
     "Navigate between repositories bottom to top": "Navega entre os repositórios de baixo para cima",
     "Add focus on the \"Search repositories\" field": "Adiciona foco no campo \"Procurar repositórios\"",
-    "Close modal windows and header menus": "Fecha janelas modais e menus de cabeçalho"
+    "Close modal windows and header menus": "Fecha janelas modais e menus de cabeçalho",
+    "Version": "Versão"
   },
 
   "Authentication required": "Autenticação requerida",

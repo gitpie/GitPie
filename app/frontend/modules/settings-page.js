@@ -26,6 +26,8 @@
           { code: 'en', description: 'English'},
           { code: 'pt-BR', description: 'Portuguese (Brazil)'}
         ];
+        
+        this.appVersion = require('./package').version;
 
         this.hideSettingsPage = function () {
           this.showSettingsPage = false;
