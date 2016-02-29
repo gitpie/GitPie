@@ -1,3 +1,5 @@
+'use strict';
+
 (function () {
 
   angular.module('settings', []).directive('settingsPage', function () {
@@ -24,6 +26,8 @@
           { code: 'en', description: 'English'},
           { code: 'pt-BR', description: 'Portuguese (Brazil)'}
         ];
+        
+        this.appVersion = require('./package').version;
 
         this.hideSettingsPage = function () {
           this.showSettingsPage = false;
@@ -36,9 +40,9 @@
 
         this.getGlobalGitConfigs = function () {
           GIT.getGlobalConfigs(function (err, configs) {
-
+              
             if (err) {
-              alert(err.message);
+              new GPNotification(MSGS['It seems that a git username and email are not set globally. You can fix this accessing the Settings menu'], { closable: true }).pop();
             } else {
               this.globalGitConfigs = configs;
             }
