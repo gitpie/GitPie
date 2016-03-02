@@ -57,7 +57,7 @@
                 <li ng-repeat="file in mergeCtrl.diffInformation.files">
                   <span class="octicon octicon-file-code" ng-hide="file.isBinary"></span>
                   <span class="octicon octicon-file-binary" ng-show="file.isBinary"></span>
-                  <span title="{{ file.name.length > 50 ? file.name : '' }}">
+                  <span title="{{ file.name.length > 80 ? file.name : '' }}">
                     {{ file.name.length > 80 ? '...' : ''}}{{ file.name | limitTo: - 80 }}
                   </span>
 
