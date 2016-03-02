@@ -23,26 +23,57 @@
           </p>
         </section>
 
-        <section class="diff-box">
-          <ul>
-            <li ng-repeat="file in mergeCtrl.diffInformation.files">
-              <span class="octicon octicon-file-code" ng-hide="file.isBinary"></span>
-              <span class="octicon octicon-file-binary" ng-show="file.isBinary"></span>
-              <span title="{{ file.name.length > 50 ? file.name : '' }}">
-                {{ file.name.length > 50 ? '...' : ''}}{{ file.name | limitTo: - 50 }}
-              </span>
+        <tabs ng-show="mergeCtrl.diffInformation.files && mergeCtrl.diffInformation.files.length > 0">
+          <pane pane-title="Commits" icon="octicon octicon-git-commit">
+            <table ng-show="mergeCtrl.commitDiffList.length > 0">
+              <tbody>
+                <tr ng-repeat="commit in mergeCtrl.commitDiffList">
+                  <td class="thumbnail">
+                    <div class="thumb {{ commit.author.trim().toLowerCase()[0] }}">
+                      {{ commit.author.trim()[0] }}
+                    </div>
+                  </td>
+                  <td class="author">
+                    {{ commit.author }}
+                  </td>
+                  <td>
+                    <span title="{{ commit.message.length > 100 ? commit.message : ''}}">
+                      {{ commit.message | limitTo: 100  }}{{ commit.message.length > 100 ? '...' : ''}}
+                    </span>
+                  </td>
+                  <td class="hash">
+                    {{ commit.hash }}
+                  </td>
+                  <td class="date">
+                    {{ commit.date.toLocaleString() }}
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </pane>
+          <pane pane-title="{{ MSGS['Files changed'] }}" icon="octicon octicon-diff">
+            <section class="diff-box">
+              <ul>
+                <li ng-repeat="file in mergeCtrl.diffInformation.files">
+                  <span class="octicon octicon-file-code" ng-hide="file.isBinary"></span>
+                  <span class="octicon octicon-file-binary" ng-show="file.isBinary"></span>
+                  <span title="{{ file.name.length > 50 ? file.name : '' }}">
+                    {{ file.name.length > 80 ? '...' : ''}}{{ file.name | limitTo: - 80 }}
+                  </span>
 
-              <span class="label-deletions" ng-show="file.deletions">
-                <span class="octicon octicon-diff-removed"></span> {{ file.deletions }}
-              </span>
-              <span class="label-additions" ng-show="file.additions">
-                <span class="octicon octicon-diff-added"></span> {{ file.additions }}
-              </span>
-              <span ng-show="file.isBinary" class="octicon octicon-file-binary label-binary" title="{{ MSGS.BINARY }}"></span>
-            </li>
-          </ul>
-        </section>
-        <section class="shortstat" ng-show="mergeCtrl.diffInformation.shortstat">{{ mergeCtrl.diffInformation.shortstat }}</section>
+                  <span class="label-deletions" ng-show="file.deletions">
+                    <span class="octicon octicon-diff-removed"></span> {{ file.deletions }}
+                  </span>
+                  <span class="label-additions" ng-show="file.additions">
+                    <span class="octicon octicon-diff-added"></span> {{ file.additions }}
+                  </span>
+                  <span ng-show="file.isBinary" class="octicon octicon-file-binary label-binary" title="{{ MSGS.BINARY }}"></span>
+                </li>
+              </ul>
+            </section>
+            <section class="shortstat" ng-show="mergeCtrl.diffInformation.shortstat">{{ mergeCtrl.diffInformation.shortstat }}</section>
+          </pane>
+        </tabs>
 
         <footer><input id="merge-button" type="submit" class="featured" disabled value="{{ MSGS.MERGE }}"
             ng-click="mergeCtrl.mergeBranches()"/><button type="button" ng-click="mergeCtrl.hideDialog()">{{ MSGS.CANCEL }}</button></footer>

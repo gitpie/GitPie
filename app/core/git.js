@@ -776,6 +776,37 @@ Git.prototype.deleteBranch = function (path, opts) {
   performCommand(`git branch -D ${opts.branchName}`, path, opts.callback);
 };
 
+Git.prototype.getCommitDiff = function (path, opts) {
+  opts = opts || {};
+  let command = `git log --pretty=%an-gtseparator-%h-gtseparator-%s-gtseparator-%aD ${opts.branchBase.trim()}..${opts.branchCompare.trim()}`;
+
+  performCommand(command, path, function (error, stdout) {
+    let commits;
+
+    if (!error) {
+      commits = [];
+
+      let lines = stdout.split('\n');
+
+      for (let i = 0; i < lines.length; i++) {
+
+        if (lines[i]) {
+          let commitInfo = lines[i].split('-gtseparator-');
+
+          commits.push({
+            author: commitInfo[0],
+            hash: commitInfo[1],
+            message: commitInfo[2],
+            date: new Date(commitInfo[3])
+          });
+        }
+      }
+    }
+
+    invokeCallback(opts.callback, [ error, commits ]);
+  });
+};
+
 Git.prototype.geDiffMerge = function (path, opts) {
   opts = opts || {};
 

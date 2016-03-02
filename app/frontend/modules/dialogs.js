@@ -75,6 +75,7 @@ angular.module('dialogs', [])
       this.remoteBranches = [];
       this.localBranches = [];
       this.diffInformation = {};
+      this.commitDiffList = [];
 
       this.hideDialog = function () {
         this.showDialog = false;
@@ -131,6 +132,20 @@ angular.module('dialogs', [])
               }
             }.bind(this)
           });
+
+          GIT.getCommitDiff(header.selectedRepository.path, {
+            branchCompare: this.branchCompare,
+            branchBase: header.currentBranch,
+            callback: function (err, commits) {
+
+              if (err) {
+                alert(err);
+              } else {
+                this.commitDiffList = commits;
+              }
+            }.bind(this)
+          });
+
         } else {
           this.showIsUpToDateMsg = true;
         }
