@@ -58,6 +58,9 @@
             let notification;
 
             if (!forceReload) {
+              this.setCommitMessage(null);
+              this.setCommitDescription(null);
+              
               notification = new GPNotification(`${MSGS['Opening repository']} <strong>${repository.name}</strong>`, { showLoad: true });
 
               notification.pop();
@@ -300,8 +303,8 @@
                         } else {
                           this.showRepositoryInfo(selectedRepository, true);
 
-                          $scope.commitMessage = null;
-                          $scope.commitDescription = null;
+                          this.setCommitMessage(null);
+                          this.setCommitDescription(null);
                         }
 
                         event.target.removeAttribute('disabled');
@@ -315,6 +318,14 @@
               event.target.removeAttribute('disabled');
             }
           }
+        };
+
+        this.setCommitMessage = function (value) {
+          $scope.commitMessage = value;
+        };
+
+        this.setCommitDescription = function (value) {
+          $scope.commitDescription = value;
         };
 
         this.loadMoreCommits = function ($event) {

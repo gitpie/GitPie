@@ -142,6 +142,8 @@ angular.module('dialogs', [])
                 alert(err);
               } else {
                 this.commitDiffList = commits;
+
+                applyScope($scope);
               }
             }.bind(this)
           });
@@ -210,14 +212,17 @@ angular.module('dialogs', [])
                       $scope.$broadcast('changedbranch', header.selectedRepository);
                     });
                   } else {
+                    $scope.appCtrl.setCommitMessage(`Merge branch '${branchCompare}' into '${header.currentBranch}'`);
+                    $scope.appCtrl.setCommitDescription( this.commitDiffList.map((commit) => { return `- ${commit.message}`; }).join('\n') );
+
                     $scope.$broadcast('changedbranch', header.selectedRepository);
                   }
-                }
+                }.bind(this)
               );
             } else {
               $scope.$broadcast('changedbranch', header.selectedRepository);
             }
-          }
+          }.bind(this)
         });
       };
 
