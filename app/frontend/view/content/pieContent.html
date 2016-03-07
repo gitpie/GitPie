@@ -64,9 +64,9 @@
       </button>
     </section>
 
-    <section class="getting-start-message" ng-show="appCtrl.showNoMatchFilterMessage">
+    <section class="getting-start-message" style="overflow:hidden" ng-show="appCtrl.showNoMatchFilterMessage">
       <span class="mega-octicon octicon-telescope"></span>
-      <h1>No match for the filter<h1>
+      <h1>{{ MSGS['No match for the filter'] }}<h1>
     </section>
 
     <form name="commitForm" class="commit-block {{ appCtrl.enableCommitBlock ? 'enable-commit-form' : ''}}"
