@@ -792,10 +792,13 @@
           if (this.searchCommitFilter.text) {
             cleanCommitHistory();
 
+            let noti = new GPNotification(`${MSGS['Searching for']} "${this.searchCommitFilter.text}"`, {showLoad: true}).pop();
+
             GIT.getCommitHistory({
               path: selectedRepository.path,
               filter: this.searchCommitFilter
             }, function (err, historyList) {
+              noti.close();
 
               if (err) {
                 alert(MSGS['Error getting more history. Error: '] + err.message);

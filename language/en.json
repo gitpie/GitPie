@@ -109,6 +109,7 @@
   "FILE": "File",
   "AUTHOR": "Author",
   "No match for the filter": "No match for the filter",
+  "Searching for": "Searching for",
 
   "Error counting commits. Error: ": "Error counting commits. Error: ",
   "Error adding files. Error:": "Error adding files. Error:",
