@@ -60,7 +60,12 @@
             if (!forceReload) {
               this.setCommitMessage(null);
               this.setCommitDescription(null);
-              
+
+              // Reset filter info
+              this.searchCommitFilter.text = null;
+              this.showNoMatchFilterMessage = false;
+              this.enableSearchBlock = false;
+
               notification = new GPNotification(`${MSGS['Opening repository']} <strong>${repository.name}</strong>`, { showLoad: true });
 
               notification.pop();
@@ -107,15 +112,13 @@
           }
         };
 
-        this.showCommitChanges = function (commit, commitIndex) {
-          var ancestorCommit = this.repositoryHistory[commitIndex+1] || {},
-            opts = {
+        this.showCommitChanges = function (commit) {
+          var opts = {
               hash: commit.hash,
-              ancestorHash: ancestorCommit.hash || '',
+              ancestorHash: commit.parentHash,
               path: selectedRepository.path
             };
 
-          selectedCommitAncestor = ancestorCommit;
           CommomService.selectedCommit = commit;
 
           this.loadingChanges = true;
@@ -336,7 +339,8 @@
 
             GIT.getCommitHistory({
               path: selectedRepository.path,
-              skip: this.repositoryHistory.length
+              skip: this.repositoryHistory.length,
+              filter: this.searchCommitFilter
             }, function (err, historyList) {
 
               if (err) {
@@ -752,6 +756,74 @@
 
         this.isRepositoryListEmpty = function () {
           return CommomService.isRepoListEmpty();
+        };
+
+        this.enableSearchBlock = false;
+
+        this.searchCommitFilter = {
+          types: [
+            'MESSAGE',
+            'FILE',
+            'AUTHOR'
+          ],
+          type: 'MESSAGE',
+          text: null
+        };
+
+        this.showNoMatchFilterMessage = false;
+
+        this.toogleSearchBlock = function () {
+          this.enableSearchBlock = !this.enableSearchBlock;
+
+          if (!this.enableSearchBlock) {
+            this.repositoryHistory = [];
+            this.searchCommitFilter.text = null;
+            this.showNoMatchFilterMessage = false;
+
+            GIT.getCommitHistory({
+              path: selectedRepository.path
+            }, function (err, historyList) {
+
+              if (err) {
+                alert(MSGS['Error getting more history. Error: '] + err.message);
+              } else {
+                this.repositoryHistory = historyList;
+
+                applyScope($scope);
+              }
+
+            }.bind(this));
+          }
+        }.bind(this);
+
+        this.filterCommits = function () {
+
+          if (this.searchCommitFilter.text) {
+            this.commitHistory = [];
+            selectedCommit = null;
+
+            GIT.getCommitHistory({
+              path: selectedRepository.path,
+              filter: this.searchCommitFilter
+            }, function (err, historyList) {
+
+              if (err) {
+                alert(MSGS['Error getting more history. Error: '] + err.message);
+              } else {
+
+                if (historyList.length > 0) {
+                  this.showNoMatchFilterMessage = false;
+
+                  this.repositoryHistory = historyList;
+                } else {
+                  this.showNoMatchFilterMessage = true;
+                }
+
+                applyScope($scope);
+              }
+
+            }.bind(this));
+          }
         };
 
         // Listener to "showStashDiff" event fired on click View file on a Stash

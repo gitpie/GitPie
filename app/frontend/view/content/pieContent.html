@@ -51,7 +51,26 @@
 
   <section id="center" ng-show="appCtrl.repositoryHistory.length > 0">
 
-    <form name="commitForm" class="commit-block {{ appCtrl.enableCommitBlock ? 'enable-commit-form' : ''}}" ng-show="appCtrl.commitChanges.length > 0">
+    <section class="column-block" ng-show="appCtrl.enableSearchBlock">
+      <label style="margin-top:0">Filter</label>
+      <input id="search-commit-input" type="text" placeholder="Search commits" autofocus
+        ng-model="appCtrl.searchCommitFilter.text"  ng-enter="appCtrl.filterCommits(searchValue)" />
+      <label>Filter by</label>
+      <select ng-model="appCtrl.searchCommitFilter.type">
+        <option ng-repeat="filterType in appCtrl.searchCommitFilter.types" value="{{ filterType }}">{{ filterType }}</option>
+      </select>
+      <button class="no-shadow" type="button" title="Search" ng-click="appCtrl.filterCommits(searchValue)">
+        <span class="octicon octicon-search"></span>
+      </button>
+    </section>
+
+    <section class="getting-start-message" ng-show="appCtrl.showNoMatchFilterMessage">
+      <span class="mega-octicon octicon-telescope"></span>
+      <h1>No match for the filter<h1>
+    </section>
+
+    <form name="commitForm" class="commit-block {{ appCtrl.enableCommitBlock ? 'enable-commit-form' : ''}}"
+      ng-show="appCtrl.commitChanges.length > 0 && !appCtrl.showNoMatchFilterMessage">
       <h3><span class="octicon octicon-diff"></span> {{ MSGS["Commit changes"] }}</h3>
       <div class="input-wraper">
         <input type="text" ng-model="commitMessage" ng-focus="appCtrl.onFocusCommitMessageInput()" placeholder="{{ MSGS['Type a message for your commit'] }}" required />
@@ -61,7 +80,7 @@
       <button type="button" class="featured" ng-click="appCtrl.commitSelectedChanges(commitMessage, commitDescription, $event)"><span class="octicon octicon-cloud-upload"></span> {{ MSGS.COMMIT }}</button>
     </form>
 
-    <nav ng-scroll="appCtrl.loadMoreCommits($event)">
+    <nav ng-scroll="appCtrl.loadMoreCommits($event)" ng-hide="appCtrl.showNoMatchFilterMessage">
       <ul>
         <li class="commit-number">
           <div ng-show="appCtrl.commitNumber != 'counting' && appCtrl.commitNumber.length > 0">
@@ -72,7 +91,7 @@
           </div>
         </li>
         <li ng-repeat="commit in appCtrl.repositoryHistory" ng-class="{ selected:commit.selected }"
-          ng-click="appCtrl.showCommitChanges(commit, $index)">
+          ng-click="appCtrl.showCommitChanges(commit)">
           <div class="{{ commit.user.trim().toLowerCase()[0] }} thumb">
             {{ commit.user.trim()[0] }}
           </div>

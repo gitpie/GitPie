@@ -1021,11 +1021,37 @@ body {
   					.input-wraper {
   						padding: 10px;
 
-  						input {
+  						input, h3 {
   						  width: 100%;
   						  box-sizing: border-box;
                 margin-bottom: 20px;
   						}
+            }
+          }
+
+          .column-block {
+            display: flex;
+            padding: 10px;
+            border-bottom: #EEE 1px solid;
+            box-shadow: 0 4px 10px -2px rgba(1, 1, 1, 0.3);
+            flex-direction: column;
+
+            label {
+              font-weight: bold;
+              color: #333;
+              margin: 10px 0;
+              font-size: 0.85em;
+            }
+
+            input {
+              margin: 0;
+              box-sizing: border-box;
+              width: 100%;
+              flex: 1;
+            }
+
+            select {
+              min-width: inherit;
             }
           }
   		  }
