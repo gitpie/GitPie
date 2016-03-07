@@ -101,6 +101,13 @@
   "Nothing for me here.\n The folder {folder} is not a git project": "Nothing for me here.\n The folder {folder} is not a git project",
   "Close": "Close",
   "It seems that a git username and email are not set globally. You can fix this accessing the Settings menu": "It seems that a git username and email are not set globally. You can fix this accessing the Settings menu",
+  "Filter": "Filter",
+  "Filter by": "Filter by",
+  "Search commits": "Search commits",
+  "Search": "Search",
+  "MESSAGE": "Message",
+  "FILE": "File",
+  "AUTHOR": "Author",
 
   "Error counting commits. Error: ": "Error counting commits. Error: ",
   "Error adding files. Error:": "Error adding files. Error:",

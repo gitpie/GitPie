@@ -101,6 +101,13 @@
   "Nothing for me here.\n The folder {folder} is not a git project": "Nada pra mim aqui.\n A pasta {folder} não é um projeto git",
   "Close": "Fechar",
   "It seems that a git username and email are not set globally. You can fix this accessing the Settings menu": "Parece que um usuário e email git não estão definidos globalmente. Você pode corrigir isso acessando o menu de Configurações",
+  "Filter": "Filtro",
+  "Filter by": "Filtrar por",
+  "Search commits": "Buscar commits",
+  "Search": "Buscar",
+  "MESSAGE": "Mensagem",
+  "FILE": "Arquivo",
+  "AUTHOR": "Autor",
 
   "Error counting commits. Error: ": "Erro contando commits. Erro: ",
   "Error adding files. Error:": "Erro adicionando arquivos. Erro:",

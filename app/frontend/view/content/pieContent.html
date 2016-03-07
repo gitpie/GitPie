@@ -52,14 +52,14 @@
   <section id="center" ng-show="appCtrl.repositoryHistory.length > 0">
 
     <section class="column-block" ng-show="appCtrl.enableSearchBlock">
-      <label style="margin-top:0">Filter</label>
-      <input id="search-commit-input" type="text" placeholder="Search commits" autofocus
+      <label style="margin-top:0">{{ MSGS['Filter'] }}</label>
+      <input id="search-commit-input" type="text" placeholder="{{ MSGS['Search commits'] }}" autofocus
         ng-model="appCtrl.searchCommitFilter.text"  ng-enter="appCtrl.filterCommits(searchValue)" />
-      <label>Filter by</label>
+      <label>{{ MSGS['Filter by'] }}</label>
       <select ng-model="appCtrl.searchCommitFilter.type">
-        <option ng-repeat="filterType in appCtrl.searchCommitFilter.types" value="{{ filterType }}">{{ filterType }}</option>
+        <option ng-repeat="filterType in appCtrl.searchCommitFilter.types" value="{{ filterType }}">{{ MSGS[filterType] }}</option>
       </select>
-      <button class="no-shadow" type="button" title="Search" ng-click="appCtrl.filterCommits(searchValue)">
+      <button class="no-shadow" type="button" title="{{ MSGS['Search'] }}" ng-click="appCtrl.filterCommits(searchValue)">
         <span class="octicon octicon-search"></span>
       </button>
     </section>
