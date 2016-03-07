@@ -18,10 +18,14 @@
         const shell = require('shell');
 
         let selectedRepository = {},
-          selectedCommit = {},
-          selectedCommitAncestor = null,
           Menu = remote.require('menu'),
-          MenuItem = remote.require('menu-item');
+          MenuItem = remote.require('menu-item'),
+          cleanCommitHistory = function () {
+            this.selectedCommit = {};
+            this.commitHistory = [];
+          }.bind(this);
+
+        this.selectedCommit = {};
 
         this.loadingHistory = false;
 
@@ -78,9 +82,10 @@
             repository.selected = true;
             selectedRepository = repository;
             this.commitChanges = [];
-            this.commitHistory = [];
-            selectedCommit = {};
+
+            cleanCommitHistory();
             CommomService.selectedCommit = null;
+
             this.hideStashTab();
 
             GIT.getCommitHistory({
@@ -123,12 +128,12 @@
 
           this.loadingChanges = true;
 
-          if (selectedCommit) {
-            selectedCommit.selected = false;
+          if (this.selectedCommit) {
+            this.selectedCommit.selected = false;
           }
 
           commit.selected = true;
-          selectedCommit = commit;
+          this.selectedCommit = commit;
 
           CommomService.changesTabPanel.select(0);
 
@@ -169,22 +174,6 @@
           }.bind(this));
         };
 
-        this.getCommitMessage = function () {
-          return selectedCommit.message;
-        };
-
-        this.getCommitHash = function () {
-          return selectedCommit.hash;
-        };
-
-        this.getCommitUser = function () {
-          return selectedCommit.user;
-        };
-
-        this.getCommitBody = function () {
-          return selectedCommit.body;
-        };
-
         this.showFileDiff = function (change, forceReload) {
 
           if (!change.code || forceReload) {
@@ -193,7 +182,7 @@
               GIT.getFileDiff({
 
                 file: change.name,
-                hash: selectedCommit.hash,
+                hash: this.selectedCommit.hash,
                 path: selectedRepository.path
 
               }, function (err, stdout) {
@@ -780,6 +769,8 @@
             this.searchCommitFilter.text = null;
             this.showNoMatchFilterMessage = false;
 
+            cleanCommitHistory();
+
             GIT.getCommitHistory({
               path: selectedRepository.path
             }, function (err, historyList) {
@@ -799,8 +790,7 @@
         this.filterCommits = function () {
 
           if (this.searchCommitFilter.text) {
-            this.commitHistory = [];
-            selectedCommit = null;
+            cleanCommitHistory();
 
             GIT.getCommitHistory({
               path: selectedRepository.path,

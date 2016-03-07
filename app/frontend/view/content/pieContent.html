@@ -108,21 +108,21 @@
     <tabs id="chagesTabPanel">
       <pane pane-title="{{ MSGS.History }}" icon="octicon octicon-history">
 
-        <section class="getting-start-message" ng-hide="appCtrl.getCommitMessage()">
+        <section class="getting-start-message" ng-hide="appCtrl.selectedCommit.message">
           <span class="mega-octicon octicon-hourglass"></span>
           {{ MSGS['Click on a commit to see what happend there'] }}
         </section>
 
-        <header class="commit-message" ng-show="appCtrl.getCommitMessage()">
-          <h2 ng-bind-html="appCtrl.getCommitMessage() | trustAsHtml"></h2>
-          <p class="commit-body" ng-show="appCtrl.getCommitBody()"
-            ng-bind-html="appCtrl.getCommitBody() | trustAsHtml"></p>
+        <header class="commit-message" ng-show="appCtrl.selectedCommit.message">
+          <h2 ng-bind-html="appCtrl.selectedCommit.message | trustAsHtml"></h2>
+          <p class="commit-body" ng-show="appCtrl.selectedCommit.body"
+            ng-bind-html="appCtrl.selectedCommit.body | trustAsHtml"></p>
 
-          <h4 ng-show="appCtrl.getCommitUser()">
-            <span class="octicon octicon-person"></span> {{ appCtrl.getCommitUser() }}
+          <h4 ng-show="appCtrl.selectedCommit.user">
+            <span class="octicon octicon-person"></span> {{ appCtrl.selectedCommit.user }}
           </h4>
           <h4 ng-show="appCtrl.getCommitHash()">
-            <span class="octicon octicon-git-commit"></span> {{ appCtrl.getCommitHash() }}
+            <span class="octicon octicon-git-commit"></span> {{ appCtrl.selectedCommit.hash }}
           </h4>
           <h4 style="float: right; cursor: pointer" ng-click="appCtrl.expandAll(appCtrl.commitHistory)">
             <span class="octicon octicon-unfold"></span> {{ MSGS['Expand all'] }}
