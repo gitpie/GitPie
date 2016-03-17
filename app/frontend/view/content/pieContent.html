@@ -121,7 +121,7 @@
           <h4 ng-show="appCtrl.selectedCommit.user">
             <span class="octicon octicon-person"></span> {{ appCtrl.selectedCommit.user }}
           </h4>
-          <h4 ng-show="appCtrl.getCommitHash()">
+          <h4 ng-show="appCtrl.selectedCommit.hash">
             <span class="octicon octicon-git-commit"></span> {{ appCtrl.selectedCommit.hash }}
           </h4>
           <h4 style="float: right; cursor: pointer" ng-click="appCtrl.expandAll(appCtrl.commitHistory)">
