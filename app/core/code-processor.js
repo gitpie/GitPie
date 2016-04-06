@@ -51,7 +51,7 @@ var getLineType = function (firstChar) {
       ].join(''));
 
       for (var i = 0; i < block.lines.length; i++) {
-        var lineCode = block.lines[i].code.replace(/</g, '&lt;').replace(/>/g, '&gt;'),
+        var lineCode = block.lines[i].code.replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/&/g, '&amp;'),
           indicator;
 
         switch (block.lines[i].type) {
