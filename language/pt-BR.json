@@ -18,6 +18,7 @@
   "Add local git projects to GitPie": "Adicionar projetos git locais ao GitPie",
   "Search repositories": "Procurar repositórios",
   "COMMIT": "COMMIT",
+  "CREATING COMMIT...": "CRIANDO COMMIT...",
   "Clone URL": "URL de clone",
   "cloned": "clonado",
   "with success": "com sucesso",

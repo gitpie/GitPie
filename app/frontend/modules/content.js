@@ -266,13 +266,15 @@
           if (commitMessage) {
             let selectedFiles = [];
 
-            event.target.setAttribute('disabled', true);
+            event.target.parentNode.setAttribute('disabled', true);
 
             this.commitChanges.forEach(function (file) {
               if (file.checked) {
                 selectedFiles.push(file.path);
               }
             });
+
+            this.isCreatingCommit = true;
 
             if (selectedFiles.length > 0) {
 
@@ -281,9 +283,10 @@
                 callback: function (error) {
 
                   if (error) {
-                    alert(`${MSGS['Error adding files. Error:']} ${error.message}`);
+                    event.target.parentNode.removeAttribute('disabled');
+                    this.isCreatingCommit = false;
 
-                    event.target.removeAttribute('disabled');
+                    alert(`${MSGS['Error adding files. Error:']} ${error.message}`);
                   } else {
 
                     GIT.commit(selectedRepository.path, {
@@ -299,7 +302,8 @@
                           this.setCommitDescription(null);
                         }
 
-                        event.target.removeAttribute('disabled');
+                        event.target.parentNode.removeAttribute('disabled');
+                        this.isCreatingCommit = false;
                       }.bind(this)
                     });
 
@@ -307,7 +311,8 @@
                 }.bind(this)
               });
             } else {
-              event.target.removeAttribute('disabled');
+              event.target.parentNode.removeAttribute('disabled');
+              this.isCreatingCommit = false;
             }
           }
         };
