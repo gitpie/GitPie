@@ -2,7 +2,6 @@
   angular.module('attributes', [])
 
   .directive('ngRightClick', function($parse) {
-
     return function(scope, element, attrs) {
       var fn = $parse(attrs.ngRightClick);
 
@@ -17,7 +16,6 @@
   })
 
   .directive('ngScroll', function ($parse) {
-
     return function (scope, element, attrs) {
       var fn = $parse(attrs.ngScroll);
 
@@ -31,22 +29,17 @@
     };
   })
 
-  .directive('ngInputChange', function ($parse) {
+  .directive('ngEnter', function() {
+    return function(scope, element, attrs) {
 
-    return {
-      restrict: 'A',
-      require: '?ngModel',
+      element.bind("keydown keypress", function(event) {
 
-      link: function(scope, element, attrs, ngModel) {
-
-        element.on('change', function (e) {
-
-          if (ngModel) {
-            ngModel.$setViewValue(e.srcElement.value);
-          }
-        });
-      }
+        if (event.which === 13) {
+          scope.$apply(function() {
+            scope.$eval(attrs.ngEnter);
+          });
+        }
+      });
     };
   });
-
 })();

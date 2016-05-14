@@ -123,3 +123,150 @@
     top: -5px;
   }
 }
+
+@mixin thumbnail {
+  .thumb {
+    background-color: #bd6eca;
+    border-radius: 50%;
+    display: inline-block;
+    width: 40px;
+    color: rgba(255, 255, 255, 0.75);
+    float: left;
+    margin-right: 10px;
+    height: 40px;
+    text-align: center;
+    line-height: 40px;
+    text-transform: uppercase;
+    font-weight: bold;
+  }
+
+  .a {
+    @extend .thumb;
+    background-color: #e06055 !important;
+  }
+
+  .b {
+    @extend .thumb;
+    background-color: #f06e9a !important;
+  }
+
+  .c {
+    @extend .thumb;
+    background-color: #bd6eca !important;
+  }
+
+  .d {
+    @extend .thumb;
+    background-color: #9575cd !important;
+  }
+
+  .e {
+    @extend .thumb;
+    background-color: #7986cb !important;
+  }
+
+  .f {
+    @extend .thumb;
+    background-color: #5e97f6 !important;
+  }
+
+  .g {
+    @extend .thumb;
+    background-color: #4fc3f7 !important;
+  }
+
+  .h {
+    @extend .thumb;
+    background-color: #4dd0e1 !important;
+  }
+
+  .i {
+    @extend .thumb;
+    background-color: #fdd835 !important;
+  }
+
+  .j {
+    @extend .thumb;
+    background-color: #57bb8a !important;
+  }
+
+  .k {
+    @extend .thumb;
+    background-color: #9ccc65 !important;
+  }
+
+  .l {
+    @extend .thumb;
+    background-color: #d4e157 !important;
+  }
+
+  .m {
+    @extend .thumb;
+    background-color: #4db6ac !important;
+  }
+
+  .n {
+    @extend .thumb;
+    background-color: #fdd835 !important;
+  }
+
+  .o {
+    @extend .thumb;
+    background-color: #ffa726 !important;
+  }
+
+  .p {
+    @extend .thumb;
+    background-color: #ff8a65 !important;
+  }
+
+  .q {
+    @extend .thumb;
+    background-color: #C2C2C2 !important;
+  }
+
+  .r {
+    @extend .thumb;
+    background-color: #90a4ae !important;
+  }
+
+  .s {
+    @extend .thumb;
+    background-color: #a1887f !important;
+  }
+
+  .t {
+    @extend .thumb;
+    background-color: #a3a3a3 !important;
+  }
+
+  .u {
+    @extend .thumb;
+    background-color: #afb6e0 !important;
+  }
+
+  .v {
+    @extend .thumb;
+    background-color: #b39ddb !important;
+  }
+
+  .x {
+    @extend .thumb;
+    background-color: #80DEEA !important;
+  }
+
+  .y {
+    @extend .thumb;
+    background-color: #bcaaa4 !important;
+  }
+
+  .w {
+    @extend .thumb;
+    background-color: #c2c2c2 !important;
+  }
+
+  .z {
+    @extend .thumb;
+    background-color: #AED581 !important;
+  }
+}

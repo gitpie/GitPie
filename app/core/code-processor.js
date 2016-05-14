@@ -51,7 +51,20 @@ var getLineType = function (firstChar) {
       ].join(''));
 
       for (var i = 0; i < block.lines.length; i++) {
-        var lineCode = block.lines[i].code.replace(/</g, '&lt;').replace(/>/g, '&gt;');
+        var lineCode = block.lines[i].code.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;'),
+          indicator;
+
+        switch (block.lines[i].type) {
+          case 'PLUS':
+            indicator = '+';
+            break;
+          case 'MINOR':
+            indicator = '-';
+            break;
+          default:
+            indicator = '';
+            break;
+        }
 
         if (block.lines[i].type != 'UNCHANGED') {
           lineCode = lineCode.substr(1);
@@ -66,7 +79,7 @@ var getLineType = function (firstChar) {
               ( block.lines[i].type != 'MINOR' ? rightNumberColumn : '' ),
             '</td>',
             '<td class="indicator">',
-              ( block.lines[i].type == 'MINOR' ? '-' : '+' ),
+              indicator,
             '</td>',
             '<td>',
               '<code class="prettyprint ', ( lang ? lang : '' ),'">',

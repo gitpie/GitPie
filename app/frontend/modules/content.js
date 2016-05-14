@@ -18,10 +18,14 @@
         const shell = require('shell');
 
         let selectedRepository = {},
-          selectedCommit = {},
-          selectedCommitAncestor = null,
           Menu = remote.require('menu'),
-          MenuItem = remote.require('menu-item');
+          MenuItem = remote.require('menu-item'),
+          cleanCommitHistory = function () {
+            this.selectedCommit = {};
+            this.commitHistory = [];
+          }.bind(this);
+
+        this.selectedCommit = {};
 
         this.loadingHistory = false;
 
@@ -58,6 +62,14 @@
             let notification;
 
             if (!forceReload) {
+              this.setCommitMessage(null);
+              this.setCommitDescription(null);
+
+              // Reset filter info
+              this.searchCommitFilter.text = null;
+              this.showNoMatchFilterMessage = false;
+              this.enableSearchBlock = false;
+
               notification = new GPNotification(`${MSGS['Opening repository']} <strong>${repository.name}</strong>`, { showLoad: true });
 
               notification.pop();
@@ -70,9 +82,10 @@
             repository.selected = true;
             selectedRepository = repository;
             this.commitChanges = [];
-            this.commitHistory = [];
-            selectedCommit = {};
+
+            cleanCommitHistory();
             CommomService.selectedCommit = null;
+
             this.hideStashTab();
 
             GIT.getCommitHistory({
@@ -104,25 +117,23 @@
           }
         };
 
-        this.showCommitChanges = function (commit, commitIndex) {
-          var ancestorCommit = this.repositoryHistory[commitIndex+1] || {},
-            opts = {
+        this.showCommitChanges = function (commit) {
+          var opts = {
               hash: commit.hash,
-              ancestorHash: ancestorCommit.hash || '',
+              ancestorHash: commit.parentHash,
               path: selectedRepository.path
             };
 
-          selectedCommitAncestor = ancestorCommit;
           CommomService.selectedCommit = commit;
 
           this.loadingChanges = true;
 
-          if (selectedCommit) {
-            selectedCommit.selected = false;
+          if (this.selectedCommit) {
+            this.selectedCommit.selected = false;
           }
 
           commit.selected = true;
-          selectedCommit = commit;
+          this.selectedCommit = commit;
 
           CommomService.changesTabPanel.select(0);
 
@@ -163,22 +174,6 @@
           }.bind(this));
         };
 
-        this.getCommitMessage = function () {
-          return selectedCommit.message;
-        };
-
-        this.getCommitHash = function () {
-          return selectedCommit.hash;
-        };
-
-        this.getCommitUser = function () {
-          return selectedCommit.user;
-        };
-
-        this.getCommitBody = function () {
-          return selectedCommit.body;
-        };
-
         this.showFileDiff = function (change, forceReload) {
 
           if (!change.code || forceReload) {
@@ -187,7 +182,7 @@
               GIT.getFileDiff({
 
                 file: change.name,
-                hash: selectedCommit.hash,
+                hash: this.selectedCommit.hash,
                 path: selectedRepository.path
 
               }, function (err, stdout) {
@@ -271,13 +266,15 @@
           if (commitMessage) {
             let selectedFiles = [];
 
-            event.target.setAttribute('disabled', true);
+            event.target.parentNode.setAttribute('disabled', true);
 
             this.commitChanges.forEach(function (file) {
               if (file.checked) {
                 selectedFiles.push(file.path);
               }
             });
+
+            this.isCreatingCommit = true;
 
             if (selectedFiles.length > 0) {
 
@@ -286,9 +283,10 @@
                 callback: function (error) {
 
                   if (error) {
-                    alert(`${MSGS['Error adding files. Error:']} ${error.message}`);
+                    event.target.parentNode.removeAttribute('disabled');
+                    this.isCreatingCommit = false;
 
-                    event.target.removeAttribute('disabled');
+                    alert(`${MSGS['Error adding files. Error:']} ${error.message}`);
                   } else {
 
                     GIT.commit(selectedRepository.path, {
@@ -300,11 +298,12 @@
                         } else {
                           this.showRepositoryInfo(selectedRepository, true);
 
-                          $scope.commitMessage = null;
-                          $scope.commitDescription = null;
+                          this.setCommitMessage(null);
+                          this.setCommitDescription(null);
                         }
 
-                        event.target.removeAttribute('disabled');
+                        event.target.parentNode.removeAttribute('disabled');
+                        this.isCreatingCommit = false;
                       }.bind(this)
                     });
 
@@ -312,9 +311,18 @@
                 }.bind(this)
               });
             } else {
-              event.target.removeAttribute('disabled');
+              event.target.parentNode.removeAttribute('disabled');
+              this.isCreatingCommit = false;
             }
           }
+        };
+
+        this.setCommitMessage = function (value) {
+          $scope.commitMessage = value;
+        };
+
+        this.setCommitDescription = function (value) {
+          $scope.commitDescription = value;
         };
 
         this.loadMoreCommits = function ($event) {
@@ -325,7 +333,8 @@
 
             GIT.getCommitHistory({
               path: selectedRepository.path,
-              skip: this.repositoryHistory.length
+              skip: this.repositoryHistory.length,
+              filter: this.searchCommitFilter
             }, function (err, historyList) {
 
               if (err) {
@@ -741,6 +750,78 @@
 
         this.isRepositoryListEmpty = function () {
           return CommomService.isRepoListEmpty();
+        };
+
+        this.enableSearchBlock = false;
+
+        this.searchCommitFilter = {
+          types: [
+            'MESSAGE',
+            'FILE',
+            'AUTHOR'
+          ],
+          type: 'MESSAGE',
+          text: null
+        };
+
+        this.showNoMatchFilterMessage = false;
+
+        this.toogleSearchBlock = function () {
+          this.enableSearchBlock = !this.enableSearchBlock;
+
+          if (!this.enableSearchBlock) {
+            this.repositoryHistory = [];
+            this.searchCommitFilter.text = null;
+            this.showNoMatchFilterMessage = false;
+
+            cleanCommitHistory();
+
+            GIT.getCommitHistory({
+              path: selectedRepository.path
+            }, function (err, historyList) {
+
+              if (err) {
+                alert(MSGS['Error getting more history. Error: '] + err.message);
+              } else {
+                this.repositoryHistory = historyList;
+
+                applyScope($scope);
+              }
+
+            }.bind(this));
+          }
+        }.bind(this);
+
+        this.filterCommits = function () {
+
+          if (this.searchCommitFilter.text) {
+            cleanCommitHistory();
+
+            let noti = new GPNotification(`${MSGS['Searching for']} "${this.searchCommitFilter.text}"`, {showLoad: true}).pop();
+
+            GIT.getCommitHistory({
+              path: selectedRepository.path,
+              filter: this.searchCommitFilter
+            }, function (err, historyList) {
+              noti.close();
+
+              if (err) {
+                alert(MSGS['Error getting more history. Error: '] + err.message);
+              } else {
+
+                if (historyList.length > 0) {
+                  this.showNoMatchFilterMessage = false;
+
+                  this.repositoryHistory = historyList;
+                } else {
+                  this.showNoMatchFilterMessage = true;
+                }
+
+                applyScope($scope);
+              }
+
+            }.bind(this));
+          }
         };
 
         // Listener to "showStashDiff" event fired on click View file on a Stash

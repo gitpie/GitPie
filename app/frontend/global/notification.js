@@ -57,17 +57,17 @@ class GPNotification {
       }
 
       this.notificationElement.innerHTML += `<section class="content">${bodyText || titleText}</section>`;
-      
+
       if (this.closable) {
           let closeBtn = document.createElement('button');
-          
+
           closeBtn.className = 'close-button';
           closeBtn.title = MSGS.Close;
           closeBtn.innerHTML = '<span class="octicon octicon-x"></span>';
           closeBtn.onclick = function () {
               this.close();
           }.bind(this);
-          
+
           this.notificationElement.appendChild(closeBtn);
       }
 
@@ -82,6 +82,8 @@ class GPNotification {
           this.close();
         }.bind(this), 3000);
       }
+
+      return this;
     }
   }
 

@@ -18,6 +18,7 @@
   "Add local git projects to GitPie": "Add local git projects to GitPie",
   "Search repositories": "Search repositories",
   "COMMIT": "COMMIT",
+  "CREATING COMMIT...": "CREATING COMMIT...",
   "Clone URL": "Clone URL",
   "cloned": "cloned",
   "with success": "with success",
@@ -86,6 +87,7 @@
   "Discart all selected": "Discart all selected",
   "Close stash tab": "Close stash tab",
   "View files": "View files",
+  "Files changed": "Files changed",
   "Select or create a new branch": "Select or create a new branch",
   "Hide menu": "Hide menu",
   "Show menu": "Show menu",
@@ -100,6 +102,15 @@
   "Nothing for me here.\n The folder {folder} is not a git project": "Nothing for me here.\n The folder {folder} is not a git project",
   "Close": "Close",
   "It seems that a git username and email are not set globally. You can fix this accessing the Settings menu": "It seems that a git username and email are not set globally. You can fix this accessing the Settings menu",
+  "Filter": "Filter",
+  "Filter by": "Filter by",
+  "Search commits": "Search commits",
+  "Search": "Search",
+  "MESSAGE": "Message",
+  "FILE": "File",
+  "AUTHOR": "Author",
+  "No match for the filter": "No match for the filter",
+  "Searching for": "Searching for",
 
   "Error counting commits. Error: ": "Error counting commits. Error: ",
   "Error adding files. Error:": "Error adding files. Error:",
@@ -146,7 +157,8 @@
     "Navigate between repositories bottom to top": "Navigate between repositories bottom to top",
     "Add focus on the \"Search repositories\" field": "Add focus on the \"Search repositories\" field",
     "Close modal windows and header menus": "Close modal windows and header menus",
-    "Version": "Version"
+    "Version": "Version",
+    "Toogle \"Search Commit\" Block": "Toogle \"Search Commit\" Block"
   },
 
   "Authentication required": "Authentication required",

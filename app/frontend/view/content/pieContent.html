@@ -10,7 +10,8 @@
           <div class="label">Github</div>
           <ul>
             <li ng-repeat="repository in appCtrl.repositories.github | filter:searchRepoFilter" ng-class="{ selected:repository.selected }"
-              ng-click="appCtrl.showRepositoryInfo(repository)" ng-right-click="appCtrl.openRepositoryContextualMenu($event, repository, $index)">
+              ng-click="appCtrl.showRepositoryInfo(repository)" ng-right-click="appCtrl.openRepositoryContextualMenu($event, repository, $index)"
+              title="{{repository.path}}">
               <span class="octicon octicon-repo"></span> {{ repository.name }}
             </li>
           </ul>
@@ -19,7 +20,8 @@
           <div class="label">Bitbucket</div>
           <ul>
             <li ng-repeat="repository in appCtrl.repositories.bitbucket | filter:searchRepoFilter" ng-class="{ selected:repository.selected }"
-              ng-click="appCtrl.showRepositoryInfo(repository)" ng-right-click="appCtrl.openRepositoryContextualMenu($event, repository, $index)">
+              ng-click="appCtrl.showRepositoryInfo(repository)" ng-right-click="appCtrl.openRepositoryContextualMenu($event, repository, $index)"
+              title="{{repository.path}}">
               <i class="fa fa-bitbucket"></i> {{ repository.name }}
             </li>
           </ul>
@@ -28,7 +30,8 @@
           <div class="label">{{ MSGS.Others }}</div>
           <ul>
             <li ng-repeat="repository in appCtrl.repositories.others | filter:searchRepoFilter" ng-class="{ selected:repository.selected }"
-              ng-click="appCtrl.showRepositoryInfo(repository)" ng-right-click="appCtrl.openRepositoryContextualMenu($event, repository, $index)">
+              ng-click="appCtrl.showRepositoryInfo(repository)" ng-right-click="appCtrl.openRepositoryContextualMenu($event, repository, $index)"
+              title="{{repository.path}}">
               <i class="fa fa-git-square"></i> {{ repository.name }}
             </li>
           </ul>
@@ -51,17 +54,38 @@
 
   <section id="center" ng-show="appCtrl.repositoryHistory.length > 0">
 
-    <form name="commitForm" class="commit-block {{ appCtrl.enableCommitBlock ? 'enable-commit-form' : ''}}" ng-show="appCtrl.commitChanges.length > 0">
+    <section class="column-block" ng-show="appCtrl.enableSearchBlock">
+      <label style="margin-top:0">{{ MSGS['Filter'] }}</label>
+      <input id="search-commit-input" type="text" placeholder="{{ MSGS['Search commits'] }}" autofocus
+        ng-model="appCtrl.searchCommitFilter.text"  ng-enter="appCtrl.filterCommits(searchValue)" />
+      <label>{{ MSGS['Filter by'] }}</label>
+      <select ng-model="appCtrl.searchCommitFilter.type">
+        <option ng-repeat="filterType in appCtrl.searchCommitFilter.types" value="{{ filterType }}">{{ MSGS[filterType] }}</option>
+      </select>
+      <button class="no-shadow" type="button" title="{{ MSGS['Search'] }}" ng-click="appCtrl.filterCommits(searchValue)">
+        <span class="octicon octicon-search"></span>
+      </button>
+    </section>
+
+    <section class="getting-start-message" style="overflow:hidden" ng-show="appCtrl.showNoMatchFilterMessage">
+      <span class="mega-octicon octicon-telescope"></span>
+      <h1>{{ MSGS['No match for the filter'] }}<h1>
+    </section>
+
+    <form name="commitForm" class="commit-block {{ appCtrl.enableCommitBlock ? 'enable-commit-form' : ''}}"
+      ng-show="appCtrl.commitChanges.length > 0 && !appCtrl.showNoMatchFilterMessage">
       <h3><span class="octicon octicon-diff"></span> {{ MSGS["Commit changes"] }}</h3>
       <div class="input-wraper">
         <input type="text" ng-model="commitMessage" ng-focus="appCtrl.onFocusCommitMessageInput()" placeholder="{{ MSGS['Type a message for your commit'] }}" required />
         <textarea ng-model="commitDescription"
           placeholder="{{ MSGS['Give a description to the commit. Tell more about your changes...'] }}"></textarea>
       </div>
-      <button type="button" class="featured" ng-click="appCtrl.commitSelectedChanges(commitMessage, commitDescription, $event)"><span class="octicon octicon-cloud-upload"></span> {{ MSGS.COMMIT }}</button>
+      <button type="button" class="featured" ng-click="appCtrl.commitSelectedChanges(commitMessage, commitDescription, $event)">
+        <span class="octicon octicon-cloud-upload"></span> {{ appCtrl.isCreatingCommit ? MSGS["CREATING COMMIT..."] : MSGS.COMMIT }}
+      </button>
     </form>
 
-    <nav ng-scroll="appCtrl.loadMoreCommits($event)">
+    <nav ng-scroll="appCtrl.loadMoreCommits($event)" ng-hide="appCtrl.showNoMatchFilterMessage">
       <ul>
         <li class="commit-number">
           <div ng-show="appCtrl.commitNumber != 'counting' && appCtrl.commitNumber.length > 0">
@@ -72,7 +96,7 @@
           </div>
         </li>
         <li ng-repeat="commit in appCtrl.repositoryHistory" ng-class="{ selected:commit.selected }"
-          ng-click="appCtrl.showCommitChanges(commit, $index)">
+          ng-click="appCtrl.showCommitChanges(commit)">
           <div class="{{ commit.user.trim().toLowerCase()[0] }} thumb">
             {{ commit.user.trim()[0] }}
           </div>
@@ -89,21 +113,21 @@
     <tabs id="chagesTabPanel">
       <pane pane-title="{{ MSGS.History }}" icon="octicon octicon-history">
 
-        <section class="getting-start-message" ng-hide="appCtrl.getCommitMessage()">
+        <section class="getting-start-message" ng-hide="appCtrl.selectedCommit.message">
           <span class="mega-octicon octicon-hourglass"></span>
           {{ MSGS['Click on a commit to see what happend there'] }}
         </section>
 
-        <header class="commit-message" ng-show="appCtrl.getCommitMessage()">
-          <h2 ng-bind-html="appCtrl.getCommitMessage() | trustAsHtml"></h2>
-          <p class="commit-body" ng-show="appCtrl.getCommitBody()"
-            ng-bind-html="appCtrl.getCommitBody() | trustAsHtml"></p>
+        <header class="commit-message" ng-show="appCtrl.selectedCommit.message">
+          <h2 ng-bind-html="appCtrl.selectedCommit.message | trustAsHtml"></h2>
+          <p class="commit-body" ng-show="appCtrl.selectedCommit.body"
+            ng-bind-html="appCtrl.selectedCommit.body | trustAsHtml"></p>
 
-          <h4 ng-show="appCtrl.getCommitUser()">
-            <span class="octicon octicon-person"></span> {{ appCtrl.getCommitUser() }}
+          <h4 ng-show="appCtrl.selectedCommit.user">
+            <span class="octicon octicon-person"></span> {{ appCtrl.selectedCommit.user }}
           </h4>
-          <h4 ng-show="appCtrl.getCommitHash()">
-            <span class="octicon octicon-git-commit"></span> {{ appCtrl.getCommitHash() }}
+          <h4 ng-show="appCtrl.selectedCommit.hash">
+            <span class="octicon octicon-git-commit"></span> {{ appCtrl.selectedCommit.hash }}
           </h4>
           <h4 style="float: right; cursor: pointer" ng-click="appCtrl.expandAll(appCtrl.commitHistory)">
             <span class="octicon octicon-unfold"></span> {{ MSGS['Expand all'] }}

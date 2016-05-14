@@ -717,6 +717,13 @@
             applyScope($scope);
           }.bind(this));
 
+          // Toggle search commits block
+          globalShortcut.register('ctrl+shift+f', function () {
+            $scope.appCtrl.toogleSearchBlock();
+
+            applyScope($scope);
+          }.bind(this));
+
         }.bind(this);
 
         registerShortcuts();

@@ -14,7 +14,8 @@
           'Comic Sans MS',
           'Ubuntu',
           'Droid Sans',
-          'Roboto'
+          'Roboto',
+          'Helvetica'
         ];
         this.selectedRepository = null;
         this.globalGitConfigs = {
@@ -26,7 +27,7 @@
           { code: 'en', description: 'English'},
           { code: 'pt-BR', description: 'Portuguese (Brazil)'}
         ];
-        
+
         this.appVersion = require('./package').version;
 
         this.hideSettingsPage = function () {
@@ -40,7 +41,7 @@
 
         this.getGlobalGitConfigs = function () {
           GIT.getGlobalConfigs(function (err, configs) {
-              
+            
             if (err) {
               new GPNotification(MSGS['It seems that a git username and email are not set globally. You can fix this accessing the Settings menu'], { closable: true }).pop();
             } else {

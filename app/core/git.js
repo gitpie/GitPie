@@ -122,12 +122,29 @@ Git.prototype.getCurrentBranch = function (path, callback) {
  * @param  {function} callback - Callback to be execute in error or success case
  */
 Git.prototype.getCommitHistory = function (opts, callback) {
-  var emoji = require('./emoji');
+  let emoji = require('./emoji'),
+    skip = (opts.skip ? `--skip ${opts.skip}` : ''),
+    filter = '',
+    command;
 
-  performCommand(
-    "git --no-pager log -n 50 --pretty=format:%an-gtseparator-%cr-gtseparator-%h-gtseparator-%s-gtseparator-%b-gtseparator-%ae-pieLineBreak-" + (opts.skip ? ' --skip '.concat(opts.skip) : '' ),
-    opts.path,
-    function (error, stdout, stderr) {
+  if (opts.filter && opts.filter.text) {
+
+    switch (opts.filter.type) {
+      case 'MESSAGE':
+        filter = `--grep="${opts.filter.text}"`;
+        break;
+      case 'AUTHOR':
+        filter = `--author="${opts.filter.text}"`;
+        break;
+      case 'FILE':
+        filter = `-- ${opts.filter.text}`;
+        break;
+    }
+  }
+
+  command = `git --no-pager log -n 25 --pretty=format:%an-gtseparator-%cr-gtseparator-%h-gtseparator-%s-gtseparator-%b-gtseparator-%ae-gtseparator-%p-pieLineBreak- ${skip} ${filter}`;
+
+  performCommand(command, opts.path, function (error, stdout, stderr) {
       var lines = stdout.split('-pieLineBreak-'),
         historyList = [],
         err = null;
@@ -147,7 +164,8 @@ Git.prototype.getCommitHistory = function (opts, callback) {
               hash: historyItem[2],
               message: emoji.parse(historyItem[3]),
               body: historyItem[4],
-              email: historyItem[5]
+              email: historyItem[5],
+              parentHash: historyItem[6]
             });
           }
         }
@@ -774,6 +792,37 @@ Git.prototype.deleteBranch = function (path, opts) {
   opts = opts || {};
 
   performCommand(`git branch -D ${opts.branchName}`, path, opts.callback);
+};
+
+Git.prototype.getCommitDiff = function (path, opts) {
+  opts = opts || {};
+  let command = `git log --pretty=%an-gtseparator-%h-gtseparator-%s-gtseparator-%aD ${opts.branchBase.trim()}..${opts.branchCompare.trim()}`;
+
+  performCommand(command, path, function (error, stdout) {
+    let commits;
+
+    if (!error) {
+      commits = [];
+
+      let lines = stdout.split('\n');
+
+      for (let i = 0; i < lines.length; i++) {
+
+        if (lines[i]) {
+          let commitInfo = lines[i].split('-gtseparator-');
+
+          commits.push({
+            author: commitInfo[0],
+            hash: commitInfo[1],
+            message: commitInfo[2],
+            date: new Date(commitInfo[3])
+          });
+        }
+      }
+    }
+
+    invokeCallback(opts.callback, [ error, commits ]);
+  });
 };
 
 Git.prototype.geDiffMerge = function (path, opts) {

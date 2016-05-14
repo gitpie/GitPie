@@ -75,6 +75,7 @@ angular.module('dialogs', [])
       this.remoteBranches = [];
       this.localBranches = [];
       this.diffInformation = {};
+      this.commitDiffList = [];
 
       this.hideDialog = function () {
         this.showDialog = false;
@@ -131,6 +132,22 @@ angular.module('dialogs', [])
               }
             }.bind(this)
           });
+
+          GIT.getCommitDiff(header.selectedRepository.path, {
+            branchCompare: this.branchCompare,
+            branchBase: header.currentBranch,
+            callback: function (err, commits) {
+
+              if (err) {
+                alert(err);
+              } else {
+                this.commitDiffList = commits;
+
+                applyScope($scope);
+              }
+            }.bind(this)
+          });
+
         } else {
           this.showIsUpToDateMsg = true;
         }
@@ -195,14 +212,17 @@ angular.module('dialogs', [])
                       $scope.$broadcast('changedbranch', header.selectedRepository);
                     });
                   } else {
+                    $scope.appCtrl.setCommitMessage(`Merge branch '${branchCompare}' into '${header.currentBranch}'`);
+                    $scope.appCtrl.setCommitDescription( this.commitDiffList.map((commit) => { return `- ${commit.message}`; }).join('\n') );
+
                     $scope.$broadcast('changedbranch', header.selectedRepository);
                   }
-                }
+                }.bind(this)
               );
             } else {
               $scope.$broadcast('changedbranch', header.selectedRepository);
             }
-          }
+          }.bind(this)
         });
       };
 
