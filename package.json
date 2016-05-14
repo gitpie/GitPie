@@ -1,6 +1,6 @@
 {
   "name": "GitPie",
-  "version": "0.5.1",
+  "version": "0.6.0",
   "description": "A Multiplatform Client for Git",
   "main": "index.js",
   "scripts": {
