@@ -105,4 +105,4 @@ npm run pack:win64
 ```
 
 ## License
-Copyright (c) 2015 Matheus Paiva (MIT) The MIT License
+Copyright (c) 2016 Matheus Paiva (MIT) The MIT License
