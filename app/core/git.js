@@ -486,7 +486,7 @@ Git.prototype.listRemotes = function (path, callback) {
   }.bind(this));
 };
 
-Git.prototype.discartChangesInFile = function (path, opts) {
+Git.prototype.discardChangesInFile = function (path, opts) {
   var command = '';
 
   opts = opts || {};

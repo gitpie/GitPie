@@ -515,9 +515,9 @@
             }));
           } else {
             menu.append(new MenuItem({
-              label: MSGS.Discart,
+              label: MSGS.Discard,
               click : function () {
-                this.discartChanges(dir, index, isUnknowChange);
+                this.discardChanges(dir, index, isUnknowChange);
               }.bind(this)
             }));
 
@@ -568,13 +568,13 @@
           }
         };
 
-        this.discartChanges = function (filePath, index, isUnknow) {
+        this.discardChanges = function (filePath, index, isUnknow) {
           let files = {
             path: filePath,
             isUnknow: isUnknow,
           };
 
-          GIT.discartChangesInFile(selectedRepository.path, {
+          GIT.discardChangesInFile(selectedRepository.path, {
             files: files,
             callback: function (error) {
 
@@ -668,7 +668,7 @@
           }.bind(this));
         };
 
-        this.discartAllSelected = function (fileList) {
+        this.discardAllSelected = function (fileList) {
           let files = [];
 
           for (let i = 0; i < fileList.length; i++) {
@@ -683,7 +683,7 @@
 
           if (files.length > 0) {
 
-            GIT.discartChangesInFile(selectedRepository.path, {
+            GIT.discardChangesInFile(selectedRepository.path, {
               files: files,
               callback: function (error) {
 
