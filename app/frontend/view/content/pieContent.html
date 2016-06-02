@@ -73,7 +73,7 @@
     </section>
 
     <form name="commitForm" class="commit-block {{ appCtrl.enableCommitBlock ? 'enable-commit-form' : ''}}"
-      ng-show="appCtrl.commitChanges.length > 0 && !appCtrl.showNoMatchFilterMessage">
+      ng-show="appCtrl.commitChanges.length > 0 && !appCtrl.enableSearchBlock">
       <h3><span class="octicon octicon-diff"></span> {{ MSGS["Commit changes"] }}</h3>
       <div class="input-wraper">
         <input type="text" ng-model="commitMessage" ng-focus="appCtrl.onFocusCommitMessageInput()" placeholder="{{ MSGS['Type a message for your commit'] }}" required />
