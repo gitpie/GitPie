@@ -1285,7 +1285,7 @@ body {
 
                 code {
                   font-family: $code-font;
-                  white-space: pre;
+                  white-space: pre-wrap;
                   font-size: 0.9em;
                   word-wrap: normal;
                   word-break: break-word;
