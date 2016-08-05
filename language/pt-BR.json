@@ -166,5 +166,8 @@
   "and a username and password are required. Please type it and let us publish your changes LOL": "e um usuário e senha são requeridos. Por favor, digite eles e deixe-nos publicar suas mudanças LOL",
   "Password": "Senha",
   "SUBMIT": "SUBMETER",
-  "CANCEL": "CANCELAR"
+  "CANCEL": "CANCELAR",
+  "Stashing changes...": "Fazendo stash de alterações...",
+  "Removing stash...": "Removendo stash...",
+  "Poping stash...": "Expandindo stash..."
 }

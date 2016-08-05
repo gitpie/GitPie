@@ -166,5 +166,8 @@
   "and a username and password are required. Please type it and let us publish your changes LOL": "and a username and password are required. Please type it and let us publish your changes LOL",
   "Password": "Password",
   "SUBMIT": "SUBMIT",
-  "CANCEL": "CANCEL"
+  "CANCEL": "CANCEL",
+  "Stashing changes...": "Stashing changes...",
+  "Removing stash...": "Removing stash...",
+  "Poping stash...": "Poping stash..."
 }

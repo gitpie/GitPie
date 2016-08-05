@@ -438,7 +438,7 @@
         };
 
         this.stashChanges = function () {
-           let notification = new GPNotification(`Stashing changes...`, { showLoad: true });
+           let notification = new GPNotification(`${MSGS['Stashing changes...']}`, { showLoad: true });
 
            notification.pop();
 
@@ -457,7 +457,7 @@
         this.removeStash = function (reflogSelector) {
           CommomService.hideHeaderMenu();
 
-          let notification = new GPNotification(`Removing stash...`, { showLoad: true });
+          let notification = new GPNotification(`${MSGS['Removing stash...']}`, { showLoad: true });
 
           notification.pop();
 
@@ -479,7 +479,7 @@
         this.popStash = function (reflogSelector) {
           CommomService.hideHeaderMenu();
 
-          let notification = new GPNotification(`Poping stash...`, { showLoad: true });
+          let notification = new GPNotification(`${MSGS['Poping stash...']}`, { showLoad: true });
 
           notification.pop();
 
