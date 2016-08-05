@@ -438,19 +438,28 @@
         };
 
         this.stashChanges = function () {
+           let notification = new GPNotification(`Stashing changes...`, { showLoad: true });
 
-          GIT.stashChanges(this.selectedRepository.path, function (err) {
+           notification.pop();
 
-            if (err) {
-              alert(err);
-            } else {
-              $scope.$broadcast('changedbranch', this.selectedRepository);
-            }
-          }.bind(this));
+           GIT.stashChanges(this.selectedRepository.path, function (err) {
+
+              if (err) {
+                alert(err);
+              } else {
+                $scope.$broadcast('changedbranch', this.selectedRepository);
+              }
+
+              notification.close();
+           }.bind(this));
         };
 
         this.removeStash = function (reflogSelector) {
           CommomService.hideHeaderMenu();
+
+          let notification = new GPNotification(`Removing stash...`, { showLoad: true });
+
+          notification.pop();
 
           GIT.dropStash(this.selectedRepository.path, {
             reflogSelector: reflogSelector,
@@ -461,12 +470,18 @@
               } else {
                 $scope.$broadcast('changedbranch', this.selectedRepository);
               }
+
+              notification.close();
             }.bind(this)
           });
         };
 
         this.popStash = function (reflogSelector) {
           CommomService.hideHeaderMenu();
+
+          let notification = new GPNotification(`Poping stash...`, { showLoad: true });
+
+          notification.pop();
 
           GIT.popStash(this.selectedRepository.path, {
             reflogSelector: reflogSelector,
@@ -477,6 +492,8 @@
               } else {
                 $scope.$broadcast('changedbranch', this.selectedRepository);
               }
+
+              notification.close();
             }.bind(this)
           });
         };
