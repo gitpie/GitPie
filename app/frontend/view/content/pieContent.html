@@ -97,9 +97,6 @@
         </li>
         <li ng-repeat="commit in appCtrl.repositoryHistory" ng-class="{ selected:commit.selected }"
           ng-click="appCtrl.showCommitChanges(commit)">
-          <!-- <div class="{{ commit.user.trim().toLowerCase()[0] }} thumb">
-            {{ commit.user.trim()[0] }}
-          </div> -->
           <div class="{{ commit.user.trim().toLowerCase()[0] }} thumb"
             style="background: url({{ appCtrl.getUserAvatar(commit) }})"></div>
           <div class="commit-message" ng-bind-html="commit.message | trustAsHtml"></div>
