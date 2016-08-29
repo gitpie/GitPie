@@ -4,7 +4,8 @@
   var CodeProcessor = require('./app/core/code-processor'),
     cp = new CodeProcessor(),
     path = require('path'),
-    wos = require('node-wos');
+    wos = require('node-wos'),
+    md5 = require('js-md5');
 
   angular.module('content', [])
 
@@ -858,6 +859,17 @@
 
           applyScope($scope);
         }.bind(this));
+
+        this.getUserAvatar = function (commit) {
+
+            if (!commit.avatarURL) {
+                var md5Hash = md5(commit.email);
+
+                commit.avatarURL = `http://gravatar.com/avatar/${md5Hash}?d=retro&s=40`;
+            }
+
+            return commit.avatarURL;
+        };
 
         /* Update the changed files ever time the application is focused */
         WIN.on('focus', function () {
